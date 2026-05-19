@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma App</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f5c842">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cronograma IA">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #222;
+  --border: #2a2a2a;
+  --text: #e8e8e8;
+  --muted: #666;
+  --yellow: #f5c842;
+  --blue: #4a9eff;
+  --green: #3ecf8e;
+  --orange: #ff7a45;
+  --red: #ff5c5c;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+/* ── LEFT PANEL ── */
+.panel-left {
+  padding: 32px 28px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100vh;
+}
+
+.app-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.app-logo-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: var(--text);
+}
+
+.app-logo-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--yellow);
+  border: 1px solid var(--yellow);
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* Date row */
+.date-row {
+  display: flex;
+  gap: 10px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.field-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+input[type="text"], input[type="date"] {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+input:focus { border-color: var(--yellow); }
+
+/* Textarea */
+textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 14px 16px;
+  outline: none;
+  resize: vertical;
+  min-height: 280px;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+textarea::placeholder { color: var(--muted); }
+textarea:focus { border-color: var(--yellow); }
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--yellow);
+  color: #0f0f0f;
+  font-weight: 600;
+  flex: 1;
+  justify-content: center;
+}
+.btn-primary:hover { background: #f7d060; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+}
+.btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+.btn-pdf {
+  background: transparent;
+  color: var(--green);
+  border-color: var(--green);
+}
+.btn-pdf:hover { background: var(--green); color: #0f0f0f; }
+.btn-pdf:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Status */
+.status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  min-height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status.loading { color: var(--yellow); }
+.status.error   { color: var(--red); }
+.status.ok      { color: var(--green); }
+
+.spinner {
+  width: 12px; height: 12px;
+  border: 2px solid var(--yellow);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── RIGHT PANEL — PREVIEW ── */
+.panel-right {
+  padding: 32px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+}
+
+.preview-header {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 18px;
+}
+
+.preview-day {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.preview-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.preview-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--yellow);
+  letter-spacing: 2px;
+}
+.preview-sub {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Cards */
+.cards { display: flex; flex-direction: column; gap: 14px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  animation: fadeUp 0.35s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.card-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex: 1;
+}
+.card-title { font-size: 15px; font-weight: 600; }
+
+.card-tasks { padding: 12px 18px; display: flex; flex-direction: column; gap: 8px; }
+
+.task-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 9px 12px;
+  background: rgba(255,255,255,0.025);
+  border-radius: 5px;
+  border-left: 2px solid transparent;
+}
+.task-arrow { font-size: 13px; flex-shrink: 0; margin-top: 2px; }
+.task-text  { font-size: 13px; line-height: 1.5; color: #ccc; }
+.task-obs   {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  background: rgba(255,255,255,0.055);
+  border-radius: 3px;
+  padding: 1px 6px;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 18px 12px; }
+.tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid;
+  text-transform: uppercase;
+}
+
+/* Empty state */
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 60px 0;
+  text-align: center;
+  opacity: 0.5;
+}
+.empty svg { opacity: 0.3; }
+
+/* PDF print styles */
+@media print {
+  body { display: block; background: #fff; color: #111; }
+  .panel-left { display: none; }
+  .panel-right { padding: 24px 32px; }
+  .preview-day { color: #111; }
+  .preview-date { color: #b8932a; }
+  .card { background: #f5f5f5; border-color: #ddd; }
+  .card-head { border-color: #ddd; }
+  .task-item { background: rgba(0,0,0,0.04); }
+  .task-text { color: #333; }
+  .btn-row, .app-logo, .status, .field-group, textarea, .date-row { display: none !important; }
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  body { grid-template-columns: 1fr; }
+  .panel-left { border-right: none; border-bottom: 1px solid var(--border); min-height: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── LEFT: INPUT ── -->
+<div class="panel-left">
+  <div class="app-logo">
+    <span class="app-logo-title">CRONOGRAMA</span>
+    <span class="app-logo-badge">IA</span>
+  </div>
+
+  <div class="field-group">
+    <span class="field-label">Chave de API (Anthropic)</span>
+    <input type="text" id="apiKey" placeholder="sk-ant-..." style="font-size:11px;" />
+  </div>
+
+  <div class="date-row">
+    <div class="field-group">
+      <span class="field-label">Dia da semana</span>
+      <input type="text" id="weekday" placeholder="Ex: Terça-feira" />
+    </div>
+    <div class="field-group">
+      <span class="field-label">Data</span>
+      <input type="date" id="dateInput" />
+    </div>
+  </div>
+
+  <div class="field-group">
+    <span class="field-label">Cole o cronograma (texto livre)</span>
+    <textarea id="rawText" placeholder="Cole aqui o cronograma como digitado, com erros ou abreviações. A IA vai formatar, corrigir e organizar em blocos..."></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="btnGenerate">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Formatar com IA
+    </button>
+    <button class="btn btn-ghost" id="btnClear">Limpar</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="btn-row" style="margin-top: auto;">
+    <button class="btn btn-pdf" id="btnPdf" disabled>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Exportar PDF
+    </button>
+  </div>
+</div>
+
+<!-- ── RIGHT: PREVIEW ── -->
+<div class="panel-right" id="preview">
+  <div class="empty" id="emptyState">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>Cole o cronograma e clique<br>em "Formatar com IA"</span>
+  </div>
+</div>
+
+<script>
+const COLORS = [
+  { key: 'yellow', dot: '#f5c842', label: '#f5c84299', border: '#f5c84255', arrow: '#f5c842', tag: '#f5c842' },
+  { key: 'blue',   dot: '#4a9eff', label: '#4a9eff99', border: '#4a9eff55', arrow: '#4a9eff', tag: '#4a9eff' },
+  { key: 'orange', dot: '#ff7a45', label: '#ff7a4599', border: '#ff7a4555', arrow: '#ff7a45', tag: '#ff7a45' },
+  { key: 'green',  dot: '#3ecf8e', label: '#3ecf8e99', border: '#3ecf8e55', arrow: '#3ecf8e', tag: '#3ecf8e' },
+  { key: 'purple', dot: '#a78bfa', label: '#a78bfa99', border: '#a78bfa55', arrow: '#a78bfa', tag: '#a78bfa' },
+];
+
+const WEEKDAYS = {
+  '0':'Domingo','1':'Segunda-Feira','2':'Terça-Feira',
+  '3':'Quarta-Feira','4':'Quinta-Feira','5':'Sexta-Feira','6':'Sábado'
+};
+
+// Pre-fill today's date
+const today = new Date();
+document.getElementById('dateInput').value = today.toISOString().split('T')[0];
+document.getElementById('weekday').value = WEEKDAYS[today.getDay()];
+
+// Persist API key across sessions
+const apiKeyEl = document.getElementById('apiKey');
+const savedKey = localStorage.getItem('anthropic_key');
+if (savedKey) apiKeyEl.value = savedKey;
+apiKeyEl.addEventListener('input', () => localStorage.setItem('anthropic_key', apiKeyEl.value.trim()));
+
+let currentData = null;
+
+document.getElementById('btnGenerate').addEventListener('click', generate);
+document.getElementById('btnClear').addEventListener('click', () => {
+  document.getElementById('rawText').value = '';
+  document.getElementById('emptyState').style.display = 'flex';
+  document.getElementById('btnPdf').disabled = true;
+  currentData = null;
+  // remove old preview content except empty state
+  const preview = document.getElementById('preview');
+  [...preview.children].forEach(c => { if (c.id !== 'emptyState') c.remove(); });
+  setStatus('');
+});
+
+document.getElementById('btnPdf').addEventListener('click', () => {
+  window.print();
+});
+
+function setStatus(msg, type='') {
+  const el = document.getElementById('status');
+  el.className = 'status' + (type ? ' ' + type : '');
+  if (type === 'loading') {
+    el.innerHTML = `<div class="spinner"></div>${msg}`;
+  } else {
+    el.textContent = msg;
+  }
+}
+
+async function generate() {
+  const raw = document.getElementById('rawText').value.trim();
+  if (!raw) { setStatus('Cole o texto do cronograma primeiro.', 'error'); return; }
+
+  const btn = document.getElementById('btnGenerate');
+  btn.disabled = true;
+  setStatus('Formatando com IA...', 'loading');
+
+  const prompt = `Você é um assistente de produção industrial de móveis. Receberá um cronograma diário escrito de forma rápida, com possíveis erros de digitação, abreviações e linguagem informal (português do Brasil).
+
+Sua tarefa:
+1. Corrigir todos os erros de digitação e ortografia
+2. Completar abreviações óbvias (ex: "mdf" → "MDF", "pre-mont" → "pré-montagem")
+3. Organizar em blocos/equipes distintos
+4. Para cada bloco identificar: equipe/responsável, tipo (logística, produção interna, corte, externo, etc.), tarefas e pessoas envolvidas
+5. Retornar APENAS um JSON válido, sem markdown, sem explicações
+
+Formato JSON esperado:
+{
+  "blocos": [
+    {
+      "equipe": "Nome do responsável ou equipe",
+      "tipo": "Tipo (ex: Logística, Equipe Interna, Corte, Equipe Externa)",
+      "tarefas": [
+        { "texto": "Descrição clara da tarefa", "obs": "observação opcional como período manhã/tarde ou instrução" }
+      ],
+      "pessoas": ["nome1", "nome2"]
+    }
+  ]
+}
+
+O campo "obs" deve estar vazio "" se não houver observação. O campo "pessoas" é uma lista de nomes de colaboradores mencionados (pode estar vazio []).
+
+Cronograma para processar:
+${raw}`;
+
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) { setStatus('Informe a chave de API Anthropic.', 'error'); btn.disabled = false; return; }
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-5',
+        max_tokens: 2048,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      const msg = data.error?.message || JSON.stringify(data);
+      setStatus('Erro API: ' + msg, 'error');
+      return;
+    }
+
+    let text = (data.content || []).map(b => b.text || '').join('');
+    text = text.replace(/```json[\s\S]*?```|```[\s\S]*?```/g, m => m.replace(/```json|```/g, '')).trim();
+
+    const parsed = JSON.parse(text);
+    currentData = parsed;
+    renderPreview(parsed);
+    setStatus('Cronograma formatado com sucesso.', 'ok');
+    document.getElementById('btnPdf').disabled = false;
+  } catch (e) {
+    console.error(e);
+    setStatus('Erro: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const [y, m, d] = dateStr.split('-');
+  return `${d} / ${m} / ${y}`;
+}
+
+function renderPreview(data) {
+  const preview = document.getElementById('preview');
+  // Clear old content except empty state
+  [...preview.children].forEach(c => { if (c.id !== 'emptyState') c.remove(); });
+  document.getElementById('emptyState').style.display = 'none';
+
+  const weekday = document.getElementById('weekday').value || 'CRONOGRAMA';
+  const dateVal = document.getElementById('dateInput').value;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'preview-header';
+  header.innerHTML = `
+    <div class="preview-day">${weekday.toUpperCase().split('-')[0].trim()}</div>
+    <div class="preview-meta">
+      <span class="preview-date">${formatDate(dateVal)}</span>
+      <span class="preview-sub">Cronograma de Produção</span>
+    </div>
+  `;
+  preview.appendChild(header);
+
+  // Cards
+  const cards = document.createElement('div');
+  cards.className = 'cards';
+
+  (data.blocos || []).forEach((bloco, i) => {
+    const c = COLORS[i % COLORS.length];
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${i * 0.07}s`;
+
+    // Head
+    const head = document.createElement('div');
+    head.className = 'card-head';
+    head.innerHTML = `
+      <div class="card-dot" style="background:${c.dot}"></div>
+      <span class="card-label" style="color:${c.label}">${bloco.tipo || ''}</span>
+      <span class="card-title">${bloco.equipe || ''}</span>
+    `;
+    card.appendChild(head);
+
+    // Tasks
+    const tasksDiv = document.createElement('div');
+    tasksDiv.className = 'card-tasks';
+    (bloco.tarefas || []).forEach(t => {
+      const item = document.createElement('div');
+      item.className = 'task-item';
+      item.style.borderLeftColor = c.border;
+      item.innerHTML = `
+        <span class="task-arrow" style="color:${c.arrow}">→</span>
+        <span class="task-text">${t.texto}${t.obs ? `<span class="task-obs">${t.obs}</span>` : ''}</span>
+      `;
+      tasksDiv.appendChild(item);
+    });
+    card.appendChild(tasksDiv);
+
+    // Tags (people)
+    if (bloco.pessoas && bloco.pessoas.length) {
+      const tags = document.createElement('div');
+      tags.className = 'card-tags';
+      bloco.pessoas.forEach(p => {
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.style.color = c.tag;
+        tag.style.borderColor = c.border;
+        tag.textContent = p;
+        tags.appendChild(tag);
+      });
+      card.appendChild(tags);
+    }
+
+    cards.appendChild(card);
+  });
+
+  preview.appendChild(cards);
+}
+  // Register service worker for PWA
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
