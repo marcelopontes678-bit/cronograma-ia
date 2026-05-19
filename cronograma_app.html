@@ -361,7 +361,10 @@ textarea:focus { border-color: var(--yellow); }
 
   <div class="field-group">
     <span class="field-label">Chave de API (Anthropic)</span>
-    <input type="text" id="apiKey" placeholder="sk-ant-..." style="font-size:11px;" />
+    <div style="display:flex;gap:6px;">
+      <input type="password" id="apiKey" placeholder="sk-ant-api03-..." style="font-size:11px;flex:1;" />
+      <button class="btn btn-ghost" id="btnClearKey" style="padding:9px 12px;font-size:10px;" title="Limpar chave salva">✕</button>
+    </div>
   </div>
 
   <div class="date-row">
@@ -431,6 +434,13 @@ const savedKey = localStorage.getItem('anthropic_key');
 if (savedKey) apiKeyEl.value = savedKey;
 apiKeyEl.addEventListener('input', () => localStorage.setItem('anthropic_key', apiKeyEl.value.trim()));
 
+document.getElementById('btnClearKey').addEventListener('click', () => {
+  localStorage.removeItem('anthropic_key');
+  apiKeyEl.value = '';
+  apiKeyEl.focus();
+  setStatus('Chave removida. Cole a chave sk-ant-api03-...', 'error');
+});
+
 let currentData = null;
 
 document.getElementById('btnGenerate').addEventListener('click', generate);
@@ -497,6 +507,7 @@ ${raw}`;
 
   const apiKey = document.getElementById('apiKey').value.trim();
   if (!apiKey) { setStatus('Informe a chave de API Anthropic.', 'error'); btn.disabled = false; return; }
+  if (!apiKey.startsWith('sk-ant-')) { setStatus('Chave inválida. Deve começar com sk-ant-...', 'error'); btn.disabled = false; return; }
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
