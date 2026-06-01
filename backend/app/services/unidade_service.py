@@ -32,8 +32,10 @@ async def create_unidade(db: AsyncSession, data: UnidadeCreate) -> Unidade:
     unidade = Unidade(**data.model_dump())
     db.add(unidade)
     await db.commit()
-    await db.refresh(unidade)
-    return unidade
+    result = await db.execute(
+        select(Unidade).options(selectinload(Unidade.empresa)).where(Unidade.id == unidade.id)
+    )
+    return result.scalar_one()
 
 
 async def get_unidade(
@@ -69,8 +71,10 @@ async def list_unidades(
     ):
         raise forbidden_exception
 
-    query = select(Unidade).where(
-        Unidade.empresa_id == empresa_id, Unidade.is_active.is_(True)
+    query = (
+        select(Unidade)
+        .options(selectinload(Unidade.empresa))
+        .where(Unidade.empresa_id == empresa_id, Unidade.is_active.is_(True))
     )
     if tipo:
         query = query.where(Unidade.tipo == tipo)
