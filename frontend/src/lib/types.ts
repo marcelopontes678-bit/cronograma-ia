@@ -24,6 +24,8 @@ export interface Empresa {
   telefone: string | null;
   cidade: string | null;
   estado: string | null;
+  cep: string | null;
+  dias_funcionamento: string[] | null;
   is_active: boolean;
   unidades: UnidadeSummary[];
 }

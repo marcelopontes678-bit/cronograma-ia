@@ -6,11 +6,7 @@ export const metadata: Metadata = {
   description: "ERP para marcenarias e fábricas de móveis planejados",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
       <body>{children}</body>

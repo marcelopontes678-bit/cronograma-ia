@@ -3,16 +3,55 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --border: #2a2a2a;
-  --text: #e8e8e8;
-  --muted: #666;
-  --yellow: #f5c842;
+  --bg: #F5F6FA;
+  --surface: #FFFFFF;
+  --surface2: #F0F2F8;
+  --border: #E8EBF0;
+  --text: #1C1C2E;
+  --muted: #9CA3AF;
+  --primary: #F04C23;
+  --primary-light: #FEF0EC;
+  --primary-dark: #C93A18;
+  --green: #10B981;
+  --green-light: #ECFDF5;
+  --yellow: #F59E0B;
+  --yellow-light: #FFFBEB;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --red: #EF4444;
+  --sidebar-w: 64px;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.card {
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.badge-green  { background: var(--green-light);  color: #059669; }
+.badge-yellow { background: var(--yellow-light); color: #D97706; }
+.badge-blue   { background: var(--blue-light);   color: #2563EB; }
+.badge-gray   { background: var(--surface2);     color: var(--muted); }
+.badge-red    { background: #FEF2F2;             color: #DC2626; }
+.badge-orange { background: var(--primary-light); color: var(--primary); }

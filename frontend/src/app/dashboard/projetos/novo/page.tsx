@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
-import { api } from "@/lib/api";
+import { api, extractErrorMessage } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { extractErrorMessage } from "@/lib/api";
+import { Topbar } from "@/components/layout/Topbar";
 
 const schema = z.object({
   codigo: z.string().min(1, "Código obrigatório"),
@@ -18,15 +18,24 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="block text-sm font-medium mb-1.5" style={{ color: "#374151" }}>{label}</label>
+      {children}
+      {error && <p className="text-xs mt-1 text-red-500">{error}</p>}
+    </div>
+  );
+}
+
+const inputClass = "w-full rounded-xl px-4 py-3 text-sm outline-none transition";
+const inputStyle = { background: "#F9FAFB", border: "1.5px solid #E8EBF0", color: "#1C1C2E" };
+
 export default function NovoProjetoPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [error, setError] = useState("");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { prioridade: 3 },
   });
@@ -47,100 +56,84 @@ export default function NovoProjetoPage() {
   };
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold mb-6">Novo Projeto</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm mb-1 text-gray-300">Código *</label>
-            <input
-              {...register("codigo")}
-              className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500"
-              placeholder="OP-2024-001"
-            />
-            {errors.codigo && (
-              <p className="text-red-400 text-xs mt-1">{errors.codigo.message}</p>
+    <div>
+      <Topbar title="Novo Projeto" subtitle="Preencha os dados do projeto" />
+
+      <div className="max-w-2xl">
+        <div className="card p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Código *" error={errors.codigo?.message}>
+                <input {...register("codigo")} className={inputClass} style={inputStyle}
+                       placeholder="OP-2026-001" />
+              </Field>
+              <Field label="Prioridade">
+                <select {...register("prioridade")} className={inputClass} style={inputStyle}>
+                  <option value={1}>1 — Urgente</option>
+                  <option value={2}>2 — Alta</option>
+                  <option value={3}>3 — Normal</option>
+                  <option value={4}>4 — Baixa</option>
+                  <option value={5}>5 — Mínima</option>
+                </select>
+              </Field>
+            </div>
+
+            <Field label="Nome *" error={errors.nome?.message}>
+              <input {...register("nome")} className={inputClass} style={inputStyle}
+                     placeholder="Ex: Cozinha planejada — Residência Alves" />
+            </Field>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="Cliente">
+                <input {...register("cliente_nome")} className={inputClass} style={inputStyle}
+                       placeholder="Nome do cliente" />
+              </Field>
+              <Field label="Previsão de entrega">
+                <input {...register("data_entrega_prevista")} type="date"
+                       className={inputClass} style={inputStyle} />
+              </Field>
+            </div>
+
+            <Field label="Descrição">
+              <textarea {...register("descricao")} rows={3}
+                        className={inputClass} style={{ ...inputStyle, resize: "none" }}
+                        placeholder="Detalhes adicionais do projeto..." />
+            </Field>
+
+            {error && (
+              <div className="rounded-xl px-4 py-3 text-sm flex items-center gap-2"
+                   style={{ background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA" }}>
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {error}
+              </div>
             )}
-          </div>
-          <div>
-            <label className="block text-sm mb-1 text-gray-300">Prioridade</label>
-            <select
-              {...register("prioridade")}
-              className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500"
-            >
-              <option value={1}>1 — Urgente</option>
-              <option value={2}>2 — Alta</option>
-              <option value={3}>3 — Normal</option>
-              <option value={4}>4 — Baixa</option>
-              <option value={5}>5 — Mínima</option>
-            </select>
-          </div>
-        </div>
 
-        <div>
-          <label className="block text-sm mb-1 text-gray-300">Nome *</label>
-          <input
-            {...register("nome")}
-            className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500"
-            placeholder="Quarto casal — Cozinha planejada"
-          />
-          {errors.nome && (
-            <p className="text-red-400 text-xs mt-1">{errors.nome.message}</p>
-          )}
+            <div className="flex gap-3 pt-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex items-center gap-2 text-sm font-semibold px-6 py-3 rounded-xl text-white transition"
+                style={{ background: "#F04C23", boxShadow: "0 4px 12px rgba(240,76,35,.25)", opacity: isSubmitting ? 0.7 : 1 }}
+              >
+                {isSubmitting && (
+                  <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                )}
+                {isSubmitting ? "Salvando..." : "Criar Projeto"}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="text-sm font-medium px-6 py-3 rounded-xl transition"
+                style={{ background: "#F5F6FA", color: "#6B7280", border: "1.5px solid #E8EBF0" }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
         </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm mb-1 text-gray-300">Cliente</label>
-            <input
-              {...register("cliente_nome")}
-              className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500"
-              placeholder="Nome do cliente"
-            />
-          </div>
-          <div>
-            <label className="block text-sm mb-1 text-gray-300">Previsão de entrega</label>
-            <input
-              {...register("data_entrega_prevista")}
-              type="date"
-              className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1 text-gray-300">Descrição</label>
-          <textarea
-            {...register("descricao")}
-            rows={3}
-            className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-4 py-3 focus:outline-none focus:border-brand-500 resize-none"
-            placeholder="Detalhes do projeto..."
-          />
-        </div>
-
-        {error && (
-          <div className="bg-red-900/30 border border-red-700 rounded-lg px-4 py-3 text-red-300 text-sm">
-            {error}
-          </div>
-        )}
-
-        <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-brand-500 text-black font-semibold px-6 py-3 rounded-lg hover:bg-brand-600 transition disabled:opacity-50"
-          >
-            {isSubmitting ? "Salvando..." : "Criar Projeto"}
-          </button>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="border border-[#2a2a2a] text-gray-400 px-6 py-3 rounded-lg hover:border-[#444] hover:text-white transition"
-          >
-            Cancelar
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
