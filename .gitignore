@@ -1,2 +1,22 @@
 ﻿.claude/
 
+# Backend Python
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/.env
+backend/alembic.ini.local
+
+# Frontend Node
+frontend/.next/
+frontend/node_modules/
+frontend/.env.local
+frontend/.env
+
+# Docker / env
+.env
+
+# OS
+.DS_Store
+
