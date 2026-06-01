@@ -18,211 +18,129 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # Enums
-    tipounidade = postgresql.ENUM(
-        "fabrica", "centro_distribuicao", "escritorio", name="tipounidade"
-    )
-    tipounidade.create(op.get_bind(), checkfirst=True)
+    conn = op.get_bind()
 
-    roleusuario = postgresql.ENUM(
-        "admin", "gerente", "operador", "visualizador", name="roleusuario"
-    )
-    roleusuario.create(op.get_bind(), checkfirst=True)
+    # Criar ENUMs via SQL puro (idempotente)
+    conn.execute(sa.text("CREATE TYPE tipounidade AS ENUM ('fabrica', 'centro_distribuicao', 'escritorio')"))
+    conn.execute(sa.text("CREATE TYPE roleusuario AS ENUM ('admin', 'gerente', 'operador', 'visualizador')"))
+    conn.execute(sa.text("CREATE TYPE statusprojeto AS ENUM ('rascunho', 'aguardando_aprovacao', 'em_producao', 'concluido', 'cancelado')"))
 
-    statusprojeto = postgresql.ENUM(
-        "rascunho",
-        "aguardando_aprovacao",
-        "em_producao",
-        "concluido",
-        "cancelado",
-        name="statusprojeto",
-    )
-    statusprojeto.create(op.get_bind(), checkfirst=True)
+    conn.execute(sa.text("""
+        CREATE TABLE empresas (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            nome VARCHAR(200) NOT NULL,
+            nome_fantasia VARCHAR(200),
+            cnpj VARCHAR(18) NOT NULL UNIQUE,
+            email VARCHAR(254) NOT NULL,
+            telefone VARCHAR(20),
+            cep VARCHAR(9),
+            logradouro VARCHAR(300),
+            numero VARCHAR(20),
+            complemento VARCHAR(100),
+            bairro VARCHAR(100),
+            cidade VARCHAR(100),
+            estado VARCHAR(2),
+            horario_inicio TIME,
+            horario_fim TIME,
+            dias_funcionamento VARCHAR[],
+            logo_url VARCHAR(500),
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            is_active BOOLEAN NOT NULL DEFAULT TRUE
+        )
+    """))
 
-    # Tabela empresas
-    op.create_table(
-        "empresas",
-        sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("nome", sa.String(200), nullable=False),
-        sa.Column("nome_fantasia", sa.String(200), nullable=True),
-        sa.Column("cnpj", sa.String(18), nullable=False),
-        sa.Column("email", sa.String(254), nullable=False),
-        sa.Column("telefone", sa.String(20), nullable=True),
-        sa.Column("cep", sa.String(9), nullable=True),
-        sa.Column("logradouro", sa.String(300), nullable=True),
-        sa.Column("numero", sa.String(20), nullable=True),
-        sa.Column("complemento", sa.String(100), nullable=True),
-        sa.Column("bairro", sa.String(100), nullable=True),
-        sa.Column("cidade", sa.String(100), nullable=True),
-        sa.Column("estado", sa.String(2), nullable=True),
-        sa.Column("horario_inicio", sa.Time(), nullable=True),
-        sa.Column("horario_fim", sa.Time(), nullable=True),
-        sa.Column("dias_funcionamento", sa.ARRAY(sa.String()), nullable=True),
-        sa.Column("logo_url", sa.String(500), nullable=True),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("cnpj"),
-    )
+    conn.execute(sa.text("""
+        CREATE TABLE unidades (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
+            nome VARCHAR(200) NOT NULL,
+            tipo tipounidade NOT NULL,
+            codigo VARCHAR(20),
+            email VARCHAR(254),
+            telefone VARCHAR(20),
+            cep VARCHAR(9),
+            logradouro VARCHAR(300),
+            numero VARCHAR(20),
+            complemento VARCHAR(100),
+            bairro VARCHAR(100),
+            cidade VARCHAR(100),
+            estado VARCHAR(2),
+            is_sede BOOLEAN NOT NULL DEFAULT FALSE,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            is_active BOOLEAN NOT NULL DEFAULT TRUE
+        )
+    """))
 
-    # Tabela unidades
-    op.create_table(
-        "unidades",
-        sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("empresa_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("nome", sa.String(200), nullable=False),
-        sa.Column(sa.Enum("fabrica", "centro_distribuicao", "escritorio", name="tipounidade"), name="tipo", nullable=False),
-        sa.Column("codigo", sa.String(20), nullable=True),
-        sa.Column("email", sa.String(254), nullable=True),
-        sa.Column("telefone", sa.String(20), nullable=True),
-        sa.Column("cep", sa.String(9), nullable=True),
-        sa.Column("logradouro", sa.String(300), nullable=True),
-        sa.Column("numero", sa.String(20), nullable=True),
-        sa.Column("complemento", sa.String(100), nullable=True),
-        sa.Column("bairro", sa.String(100), nullable=True),
-        sa.Column("cidade", sa.String(100), nullable=True),
-        sa.Column("estado", sa.String(2), nullable=True),
-        sa.Column("is_sede", sa.Boolean(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.ForeignKeyConstraint(["empresa_id"], ["empresas.id"], ondelete="CASCADE"),
-        sa.PrimaryKeyConstraint("id"),
-    )
+    conn.execute(sa.text("""
+        CREATE TABLE usuarios (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE RESTRICT,
+            unidade_id UUID REFERENCES unidades(id) ON DELETE SET NULL,
+            nome VARCHAR(200) NOT NULL,
+            email VARCHAR(254) NOT NULL UNIQUE,
+            hashed_password VARCHAR(255) NOT NULL,
+            role roleusuario NOT NULL,
+            telefone VARCHAR(20),
+            avatar_url VARCHAR(500),
+            last_login_at TIMESTAMPTZ,
+            must_change_password BOOLEAN NOT NULL DEFAULT FALSE,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            is_active BOOLEAN NOT NULL DEFAULT TRUE
+        )
+    """))
 
-    # Tabela usuarios
-    op.create_table(
-        "usuarios",
-        sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("empresa_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("unidade_id", postgresql.UUID(as_uuid=True), nullable=True),
-        sa.Column("nome", sa.String(200), nullable=False),
-        sa.Column("email", sa.String(254), nullable=False),
-        sa.Column("hashed_password", sa.String(255), nullable=False),
-        sa.Column(sa.Enum("admin", "gerente", "operador", "visualizador", name="roleusuario"), name="role", nullable=False),
-        sa.Column("telefone", sa.String(20), nullable=True),
-        sa.Column("avatar_url", sa.String(500), nullable=True),
-        sa.Column("last_login_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("must_change_password", sa.Boolean(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.ForeignKeyConstraint(["empresa_id"], ["empresas.id"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["unidade_id"], ["unidades.id"], ondelete="SET NULL"),
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("email"),
-    )
+    conn.execute(sa.text("""
+        CREATE TABLE refresh_tokens (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            usuario_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+            token_hash VARCHAR(255) NOT NULL UNIQUE,
+            expires_at TIMESTAMPTZ NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            revoked_at TIMESTAMPTZ,
+            user_agent VARCHAR(500),
+            ip_address VARCHAR(45)
+        )
+    """))
 
-    # Tabela refresh_tokens
-    op.create_table(
-        "refresh_tokens",
-        sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("usuario_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("token_hash", sa.String(255), nullable=False),
-        sa.Column("expires_at", sa.DateTime(timezone=True), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column("revoked_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("user_agent", sa.String(500), nullable=True),
-        sa.Column("ip_address", sa.String(45), nullable=True),
-        sa.ForeignKeyConstraint(["usuario_id"], ["usuarios.id"], ondelete="CASCADE"),
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("token_hash"),
-    )
+    conn.execute(sa.text("""
+        CREATE TABLE projetos (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE RESTRICT,
+            unidade_id UUID REFERENCES unidades(id) ON DELETE SET NULL,
+            criado_por_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+            responsavel_id UUID REFERENCES usuarios(id) ON DELETE SET NULL,
+            codigo VARCHAR(50) NOT NULL,
+            nome VARCHAR(300) NOT NULL,
+            descricao TEXT,
+            status statusprojeto NOT NULL DEFAULT 'rascunho',
+            cliente_nome VARCHAR(200),
+            cliente_contato VARCHAR(200),
+            data_entrada DATE,
+            data_entrega_prevista DATE,
+            data_entrega_real DATE,
+            prioridade SMALLINT NOT NULL DEFAULT 3,
+            observacoes TEXT,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+            is_active BOOLEAN NOT NULL DEFAULT TRUE,
+            UNIQUE(empresa_id, codigo)
+        )
+    """))
 
-    # Tabela projetos
-    op.create_table(
-        "projetos",
-        sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("empresa_id", postgresql.UUID(as_uuid=True), nullable=False),
-        sa.Column("unidade_id", postgresql.UUID(as_uuid=True), nullable=True),
-        sa.Column("criado_por_id", postgresql.UUID(as_uuid=True), nullable=True),
-        sa.Column("responsavel_id", postgresql.UUID(as_uuid=True), nullable=True),
-        sa.Column("codigo", sa.String(50), nullable=False),
-        sa.Column("nome", sa.String(300), nullable=False),
-        sa.Column("descricao", sa.Text(), nullable=True),
-        sa.Column(
-            sa.Enum(
-                "rascunho",
-                "aguardando_aprovacao",
-                "em_producao",
-                "concluido",
-                "cancelado",
-                name="statusprojeto",
-            ),
-            name="status",
-            nullable=False,
-        ),
-        sa.Column("cliente_nome", sa.String(200), nullable=True),
-        sa.Column("cliente_contato", sa.String(200), nullable=True),
-        sa.Column("data_entrada", sa.Date(), nullable=True),
-        sa.Column("data_entrega_prevista", sa.Date(), nullable=True),
-        sa.Column("data_entrega_real", sa.Date(), nullable=True),
-        sa.Column("prioridade", sa.SmallInteger(), nullable=False),
-        sa.Column("observacoes", sa.Text(), nullable=True),
-        sa.Column(
-            "created_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(timezone=True),
-            server_default=sa.text("now()"),
-            nullable=False,
-        ),
-        sa.Column("is_active", sa.Boolean(), nullable=False),
-        sa.ForeignKeyConstraint(["criado_por_id"], ["usuarios.id"], ondelete="SET NULL"),
-        sa.ForeignKeyConstraint(["empresa_id"], ["empresas.id"], ondelete="RESTRICT"),
-        sa.ForeignKeyConstraint(["responsavel_id"], ["usuarios.id"], ondelete="SET NULL"),
-        sa.ForeignKeyConstraint(["unidade_id"], ["unidades.id"], ondelete="SET NULL"),
-        sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("empresa_id", "codigo", name="uq_projeto_codigo_empresa"),
-    )
+    # Registrar a migração na tabela de controle do Alembic
+    # (feito automaticamente pelo alembic)
 
 
 def downgrade() -> None:
-    op.drop_table("projetos")
-    op.drop_table("refresh_tokens")
-    op.drop_table("usuarios")
-    op.drop_table("unidades")
-    op.drop_table("empresas")
-    op.execute("DROP TYPE IF EXISTS statusprojeto")
-    op.execute("DROP TYPE IF EXISTS roleusuario")
-    op.execute("DROP TYPE IF EXISTS tipounidade")
+    conn = op.get_bind()
+    conn.execute(sa.text("DROP TABLE IF EXISTS projetos"))
+    conn.execute(sa.text("DROP TABLE IF EXISTS refresh_tokens"))
+    conn.execute(sa.text("DROP TABLE IF EXISTS usuarios"))
+    conn.execute(sa.text("DROP TABLE IF EXISTS unidades"))
+    conn.execute(sa.text("DROP TABLE IF EXISTS empresas"))
+    conn.execute(sa.text("DROP TYPE IF EXISTS statusprojeto"))
+    conn.execute(sa.text("DROP TYPE IF EXISTS roleusuario"))
+    conn.execute(sa.text("DROP TYPE IF EXISTS tipounidade"))
