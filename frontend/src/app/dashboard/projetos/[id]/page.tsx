@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { api, extractErrorMessage } from "@/lib/api";
 import { Ambiente, EngenhariaResumo, Material, Modulo, Projeto } from "@/lib/types";
 import { Topbar } from "@/components/layout/Topbar";
+import { PlanoCorteViewer } from "@/components/engenharia/PlanoCorteViewer";
 
 const inputClass = "rounded-lg px-3 py-2 text-sm outline-none";
 const inputStyle = { background: "#FFFFFF", border: "1.5px solid #E8EBF0", color: "#1C1C2E" };
@@ -269,6 +270,8 @@ export default function ProjetoDetalhePage() {
           </div>
         )}
       </div>
+
+      <PlanoCorteViewer projetoId={id} />
     </div>
   );
 }

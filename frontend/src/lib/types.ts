@@ -170,3 +170,40 @@ export interface EngenhariaResumo {
   materiais: ResumoMaterial[];
   ambientes: Ambiente[];
 }
+
+// ── Sprint 3: Plano de corte ─────────────────────────────────────────────────
+
+export interface PecaPosicionada {
+  ref: string;
+  nome: string;
+  x_mm: number;
+  y_mm: number;
+  comprimento_mm: number;
+  largura_mm: number;
+  rotacionada: boolean;
+}
+
+export interface ChapaCorte {
+  indice: number;
+  aproveitamento_pct: number;
+  pecas: PecaPosicionada[];
+}
+
+export interface PlanoMaterial {
+  material_id: string;
+  material_nome: string;
+  chapa_comprimento_mm: number;
+  chapa_largura_mm: number;
+  total_chapas: number;
+  aproveitamento_medio_pct: number;
+  chapas: ChapaCorte[];
+  nao_alocadas: string[];
+}
+
+export interface PlanoCorte {
+  projeto_id: string;
+  kerf_mm: number;
+  total_pecas_alocadas: number;
+  materiais: PlanoMaterial[];
+  pecas_ignoradas: { nome: string; motivo: string }[];
+}

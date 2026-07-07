@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_current_user, get_db, require_role
@@ -17,7 +17,8 @@ from app.schemas.engenharia import (
     PecaResponse,
     PecaUpdate,
 )
-from app.services import engenharia_service
+from app.schemas.plano_corte import PlanoCorteOut
+from app.services import engenharia_service, plano_corte_service
 
 router = APIRouter(tags=["engenharia"])
 
@@ -60,6 +61,20 @@ async def resumo_engenharia(
     current_user: Usuario = Depends(get_current_user),
 ):
     return await engenharia_service.resumo_engenharia(db, projeto_id, current_user)
+
+
+@router.get(
+    "/projetos/{projeto_id}/plano-corte", response_model=PlanoCorteOut
+)
+async def plano_corte(
+    projeto_id: uuid.UUID,
+    kerf_mm: int = Query(3, ge=0, le=20),
+    db: AsyncSession = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user),
+):
+    return await plano_corte_service.gerar_plano_corte(
+        db, projeto_id, current_user, kerf_mm
+    )
 
 
 @router.put("/ambientes/{ambiente_id}", response_model=AmbienteResponse)
