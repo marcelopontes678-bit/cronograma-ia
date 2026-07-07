@@ -24,7 +24,8 @@ class UnidadeBase(BaseModel):
 
 
 class UnidadeCreate(UnidadeBase):
-    empresa_id: uuid.UUID
+    # Sempre sobrescrito pelo router com o empresa_id do path
+    empresa_id: Optional[uuid.UUID] = None
 
 
 class UnidadeUpdate(BaseModel):

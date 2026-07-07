@@ -1,3 +1,4 @@
+import re
 import uuid
 from datetime import datetime
 from typing import Optional
@@ -5,6 +6,16 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 
 from app.models.usuario import RoleUsuario
+
+
+def validate_password_strength(v: str) -> str:
+    if len(v) < 8:
+        raise ValueError("Senha deve ter pelo menos 8 caracteres")
+    if len(v.encode("utf-8")) > 72:
+        raise ValueError("Senha muito longa (máximo 72 bytes)")
+    if not re.search(r"[A-Za-z]", v) or not re.search(r"\d", v):
+        raise ValueError("Senha deve conter letras e números")
+    return v
 
 
 class UsuarioBase(BaseModel):
@@ -24,9 +35,7 @@ class UsuarioCreate(UsuarioBase):
     @field_validator("password")
     @classmethod
     def validate_password(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Senha deve ter pelo menos 8 caracteres")
-        return v
+        return validate_password_strength(v)
 
 
 class UsuarioUpdate(BaseModel):
@@ -45,9 +54,7 @@ class PasswordChange(BaseModel):
     @field_validator("new_password")
     @classmethod
     def validate_new_password(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Senha deve ter pelo menos 8 caracteres")
-        return v
+        return validate_password_strength(v)
 
 
 class UsuarioSummary(BaseModel):

@@ -9,11 +9,16 @@ from app.core.security import (
     create_access_token,
     create_refresh_token,
     get_token_hash,
+    hash_password,
     refresh_token_expires_at,
     verify_password,
 )
 from app.models.usuario import RefreshToken, Usuario
 from app.schemas.auth import TokenResponse
+
+# Hash fixo verificado quando o e-mail não existe, para que a resposta
+# demore o mesmo tempo com ou sem usuário (evita enumeração por timing).
+_DUMMY_HASH = hash_password("timing-equalizer-dummy")
 
 
 async def login(db: AsyncSession, email: str, password: str) -> TokenResponse:
@@ -22,7 +27,11 @@ async def login(db: AsyncSession, email: str, password: str) -> TokenResponse:
     )
     usuario = result.scalar_one_or_none()
 
-    if not usuario or not verify_password(password, usuario.hashed_password):
+    if not usuario:
+        verify_password(password, _DUMMY_HASH)
+        raise credentials_exception
+
+    if not verify_password(password, usuario.hashed_password):
         raise credentials_exception
 
     await db.execute(
@@ -58,14 +67,27 @@ async def login(db: AsyncSession, email: str, password: str) -> TokenResponse:
 async def refresh_access_token(db: AsyncSession, raw_refresh: str) -> TokenResponse:
     token_hash = get_token_hash(raw_refresh)
     result = await db.execute(
-        select(RefreshToken).where(
-            RefreshToken.token_hash == token_hash,
-            RefreshToken.revoked_at.is_(None),
-            RefreshToken.expires_at > datetime.now(timezone.utc),
-        )
+        select(RefreshToken).where(RefreshToken.token_hash == token_hash)
     )
     rt = result.scalar_one_or_none()
     if not rt:
+        raise credentials_exception
+
+    # Reuso de token já rotacionado = provável roubo de token.
+    # Revoga TODAS as sessões do usuário e força novo login.
+    if rt.revoked_at is not None:
+        await db.execute(
+            update(RefreshToken)
+            .where(
+                RefreshToken.usuario_id == rt.usuario_id,
+                RefreshToken.revoked_at.is_(None),
+            )
+            .values(revoked_at=datetime.now(timezone.utc))
+        )
+        await db.commit()
+        raise credentials_exception
+
+    if rt.expires_at <= datetime.now(timezone.utc):
         raise credentials_exception
 
     user_result = await db.execute(

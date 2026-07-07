@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dependencies import get_current_user, get_db, require_role
@@ -11,7 +11,7 @@ from app.services import empresa_service
 router = APIRouter(prefix="/empresas", tags=["empresas"])
 
 
-@router.post("/", response_model=EmpresaResponse, status_code=201)
+@router.post("", response_model=EmpresaResponse, status_code=201)
 async def create_empresa(
     data: EmpresaCreate,
     db: AsyncSession = Depends(get_db),
@@ -20,10 +20,10 @@ async def create_empresa(
     return await empresa_service.create_empresa(db, data)
 
 
-@router.get("/", response_model=list[EmpresaResponse])
+@router.get("", response_model=list[EmpresaResponse])
 async def list_empresas(
-    skip: int = 0,
-    limit: int = 20,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user),
 ):

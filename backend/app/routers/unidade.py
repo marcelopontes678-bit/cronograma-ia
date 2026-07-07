@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.exceptions import forbidden_exception
 from app.dependencies import get_current_user, get_db, require_role
 from app.models.usuario import RoleUsuario, Usuario
 from app.schemas.unidade import UnidadeCreate, UnidadeResponse, UnidadeUpdate
@@ -12,7 +13,7 @@ from app.services import unidade_service
 router = APIRouter(prefix="/empresas/{empresa_id}/unidades", tags=["unidades"])
 
 
-@router.post("/", response_model=UnidadeResponse, status_code=201)
+@router.post("", response_model=UnidadeResponse, status_code=201)
 async def create_unidade(
     empresa_id: uuid.UUID,
     data: UnidadeCreate,
@@ -21,11 +22,14 @@ async def create_unidade(
         require_role(RoleUsuario.ADMIN, RoleUsuario.GERENTE)
     ),
 ):
+    # Não-admin só cria unidades na própria empresa
+    if current_user.role != RoleUsuario.ADMIN and current_user.empresa_id != empresa_id:
+        raise forbidden_exception
     data.empresa_id = empresa_id
     return await unidade_service.create_unidade(db, data)
 
 
-@router.get("/", response_model=list[UnidadeResponse])
+@router.get("", response_model=list[UnidadeResponse])
 async def list_unidades(
     empresa_id: uuid.UUID,
     tipo: Optional[str] = Query(None),

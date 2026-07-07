@@ -38,11 +38,14 @@ async def get_usuario(
     if not usuario:
         raise not_found("Usuário")
 
-    if (
-        current_user.role != RoleUsuario.ADMIN
-        and str(current_user.id) != str(usuario_id)
-        and current_user.empresa_id != usuario.empresa_id
-    ):
+    # Permitido: o próprio usuário, ADMIN, ou GERENTE da mesma empresa
+    is_self = str(current_user.id) == str(usuario_id)
+    is_admin = current_user.role == RoleUsuario.ADMIN
+    is_gerente_same_empresa = (
+        current_user.role == RoleUsuario.GERENTE
+        and current_user.empresa_id == usuario.empresa_id
+    )
+    if not (is_self or is_admin or is_gerente_same_empresa):
         raise forbidden_exception
 
     return usuario
@@ -68,6 +71,13 @@ async def update_usuario(
     data: UsuarioUpdate,
     current_user: Usuario,
 ) -> Usuario:
+    # Escrita é mais restrita que leitura: apenas o próprio usuário ou ADMIN
+    if (
+        current_user.role != RoleUsuario.ADMIN
+        and str(current_user.id) != str(usuario_id)
+    ):
+        raise forbidden_exception
+
     usuario = await get_usuario(db, usuario_id, current_user)
 
     # Somente ADMIN pode mudar role

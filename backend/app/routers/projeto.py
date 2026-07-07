@@ -18,7 +18,7 @@ from app.services import projeto_service
 router = APIRouter(prefix="/projetos", tags=["projetos"])
 
 
-@router.post("/", response_model=ProjetoResponse, status_code=201)
+@router.post("", response_model=ProjetoResponse, status_code=201)
 async def create_projeto(
     data: ProjetoCreate,
     db: AsyncSession = Depends(get_db),
@@ -29,13 +29,13 @@ async def create_projeto(
     return await projeto_service.create_projeto(db, data, current_user)
 
 
-@router.get("/", response_model=list[ProjetoListItem])
+@router.get("", response_model=list[ProjetoListItem])
 async def list_projetos(
     empresa_id: Optional[uuid.UUID] = Query(None),
     status: Optional[StatusProjeto] = Query(None),
     search: Optional[str] = Query(None),
-    skip: int = 0,
-    limit: int = 20,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user),
 ):

@@ -15,6 +15,13 @@ from fastapi import HTTPException, status
 async def create_projeto(
     db: AsyncSession, data: ProjetoCreate, current_user: Usuario
 ) -> Projeto:
+    # Não-admin só cria projetos na própria empresa
+    if (
+        current_user.role != RoleUsuario.ADMIN
+        and data.empresa_id != current_user.empresa_id
+    ):
+        raise forbidden_exception
+
     existing = await db.execute(
         select(Projeto).where(
             Projeto.empresa_id == data.empresa_id,

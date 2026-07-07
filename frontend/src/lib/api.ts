@@ -1,6 +1,9 @@
 import axios, { AxiosError } from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// Aceita a env com ou sem o sufixo /api/v1 — normaliza para só o host
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000")
+  .replace(/\/api\/v1\/?$/, "")
+  .replace(/\/+$/, "");
 
 export const api = axios.create({
   baseURL: `${BASE_URL}/api/v1`,

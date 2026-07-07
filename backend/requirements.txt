@@ -9,6 +9,7 @@ pydantic-settings==2.3.0
 pydantic[email]==2.7.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # 5.x quebra com passlib 1.7.4
 python-multipart==0.0.9
 httpx==0.27.0
 pytest==8.2.2
