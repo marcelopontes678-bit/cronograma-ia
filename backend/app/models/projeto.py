@@ -11,6 +11,7 @@ from app.models.base import Base, TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.empresa import Empresa
+    from app.models.engenharia import Ambiente
     from app.models.unidade import Unidade
     from app.models.usuario import Usuario
 
@@ -72,4 +73,10 @@ class Projeto(TimestampMixin, Base):
     )
     responsavel: Mapped["Usuario | None"] = relationship(
         "Usuario", foreign_keys=[responsavel_id]
+    )
+    ambientes: Mapped[list["Ambiente"]] = relationship(
+        "Ambiente",
+        back_populates="projeto",
+        cascade="all, delete-orphan",
+        order_by="Ambiente.ordem",
     )

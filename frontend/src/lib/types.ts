@@ -94,3 +94,79 @@ export interface TokenResponse {
 export interface ApiError {
   detail: string | { msg: string; loc: string[] }[];
 }
+
+// ── Sprint 2: Engenharia manual ──────────────────────────────────────────────
+
+export type TipoMaterial = "chapa" | "fita_borda" | "ferragem" | "outro";
+
+export interface Material {
+  id: string;
+  empresa_id: string;
+  nome: string;
+  codigo: string | null;
+  tipo: TipoMaterial;
+  espessura_mm: number | null;
+  largura_mm: number | null;
+  comprimento_mm: number | null;
+  cor: string | null;
+  unidade_medida: string;
+  preco_unitario: string | null;
+  observacoes: string | null;
+  is_active: boolean;
+}
+
+export interface Peca {
+  id: string;
+  modulo_id: string;
+  material_id: string | null;
+  nome: string;
+  comprimento_mm: number;
+  largura_mm: number;
+  quantidade: number;
+  veio: boolean;
+  fita_c1: boolean;
+  fita_c2: boolean;
+  fita_l1: boolean;
+  fita_l2: boolean;
+  observacoes: string | null;
+}
+
+export interface Modulo {
+  id: string;
+  ambiente_id: string;
+  nome: string;
+  codigo: string | null;
+  largura_mm: number | null;
+  altura_mm: number | null;
+  profundidade_mm: number | null;
+  quantidade: number;
+  descricao: string | null;
+  ordem: number;
+  pecas: Peca[];
+}
+
+export interface Ambiente {
+  id: string;
+  projeto_id: string;
+  nome: string;
+  descricao: string | null;
+  ordem: number;
+  modulos: Modulo[];
+}
+
+export interface ResumoMaterial {
+  material_id: string | null;
+  material_nome: string;
+  total_pecas: number;
+  area_m2: number;
+  fita_borda_m: number;
+}
+
+export interface EngenhariaResumo {
+  projeto_id: string;
+  total_ambientes: number;
+  total_modulos: number;
+  total_pecas: number;
+  materiais: ResumoMaterial[];
+  ambientes: Ambiente[];
+}

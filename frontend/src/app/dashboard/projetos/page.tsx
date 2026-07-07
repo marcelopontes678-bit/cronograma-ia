@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ProjetoListItem, StatusProjeto } from "@/lib/types";
 import { Topbar } from "@/components/layout/Topbar";
@@ -36,6 +37,7 @@ const FILTER_OPTIONS: { label: string; value: string }[] = [
 ];
 
 export default function ProjetosPage() {
+  const router = useRouter();
   const [projetos, setProjetos] = useState<ProjetoListItem[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -133,6 +135,7 @@ export default function ProjetosPage() {
               <tbody>
                 {projetos.map((p, i) => (
                   <tr key={p.id}
+                      onClick={() => router.push(`/dashboard/projetos/${p.id}`)}
                       className="group hover:bg-[#FAFAFA] transition-colors cursor-pointer"
                       style={{ borderBottom: i < projetos.length - 1 ? "1px solid #F0F2F8" : "none" }}>
                     <td className="py-3.5 pr-4 text-xs font-mono" style={{ color: "#9CA3AF" }}>{p.codigo}</td>

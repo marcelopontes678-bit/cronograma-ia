@@ -25,6 +25,16 @@ const nav = [
     ),
   },
   {
+    href: "/dashboard/materiais",
+    label: "Materiais",
+    icon: (
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path d="M12 2l9 4.9v10.2L12 22l-9-4.9V6.9L12 2z" />
+        <path d="M12 22V12M3 6.9l9 5.1 9-5.1" />
+      </svg>
+    ),
+  },
+  {
     href: "/dashboard/empresa",
     label: "Empresa",
     icon: (
