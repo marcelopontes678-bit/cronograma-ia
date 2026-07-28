@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartFactory — Móveis Planejados sob Projeto Executivo</title>
+<meta name="description" content="Marcenaria de projeto: cada móvel desenhado em milímetros, produzido em fábrica própria e instalado no prazo assinado em contrato. Simule seu projeto em 40 segundos.">
+<meta name="theme-color" content="#14131a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   SMARTFACTORY · MÓVEIS PLANEJADOS
+   Sistema: "prancha de projeto executivo"
+   Tinta / Papel / Nogueira / Latão / Azul-cota
+   ═══════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  color-scheme: light dark;
+
+  /* — paleta base — */
+  --tinta:      #14131a;
+  --tinta-2:    #1e1c26;
+  --papel:      #efebe2;
+  --papel-2:    #e5e0d4;
+  --nogueira:   #6e4a31;
+  --latao:      #b5904e;
+  --cota:       #3b6ea5;
+  --grafite:    #56535f;
+
+  /* — tokens semânticos (tema claro) — */
+  --fundo:      var(--papel);
+  --fundo-alt:  var(--papel-2);
+  --superficie: #f6f3ec;
+  --texto:      var(--tinta);
+  --texto-fraco:var(--grafite);
+  --regua:      rgba(20,19,26,.14);
+  --regua-forte:rgba(20,19,26,.30);
+  --acento:     var(--latao);
+  --acento-txt: #6d5424;
+  --anota:      var(--cota);
+  --sombra:     0 1px 2px rgba(20,19,26,.06), 0 12px 32px -12px rgba(20,19,26,.18);
+
+  /* — escala tipográfica — */
+  --f-display: "Bricolage Grotesque", "Archivo", "Helvetica Neue", sans-serif;
+  --f-corpo:   "Newsreader", Georgia, "Times New Roman", serif;
+  --f-tec:     "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --t-xs: .688rem;   --t-sm: .813rem;  --t-base: 1.0625rem;
+  --t-md: 1.25rem;   --t-lg: 1.75rem;  --t-xl: 2.5rem;
+  --t-2xl: clamp(2.6rem, 6.4vw, 5.2rem);
+  --t-3xl: clamp(3.2rem, 9vw, 7.5rem);
+
+  --gut: clamp(1.25rem, 4vw, 3.5rem);
+  --max: 1240px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo:      #100f15;
+    --fundo-alt:  #16151c;
+    --superficie: #1b1a22;
+    --texto:      #ece8df;
+    --texto-fraco:#9a96a3;
+    --regua:      rgba(236,232,223,.13);
+    --regua-forte:rgba(236,232,223,.28);
+    --acento:     #cfa860;
+    --acento-txt: #dcbc7c;
+    --anota:      #79a9dc;
+    --sombra:     0 1px 2px rgba(0,0,0,.5), 0 16px 40px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"] {
+  --fundo:#100f15; --fundo-alt:#16151c; --superficie:#1b1a22;
+  --texto:#ece8df; --texto-fraco:#9a96a3;
+  --regua:rgba(236,232,223,.13); --regua-forte:rgba(236,232,223,.28);
+  --acento:#cfa860; --acento-txt:#dcbc7c; --anota:#79a9dc;
+  --sombra:0 1px 2px rgba(0,0,0,.5), 0 16px 40px -16px rgba(0,0,0,.7);
+}
+:root[data-theme="light"] {
+  --fundo:#efebe2; --fundo-alt:#e5e0d4; --superficie:#f6f3ec;
+  --texto:#14131a; --texto-fraco:#56535f;
+  --regua:rgba(20,19,26,.14); --regua-forte:rgba(20,19,26,.30);
+  --acento:#b5904e; --acento-txt:#6d5424; --anota:#3b6ea5;
+  --sombra:0 1px 2px rgba(20,19,26,.06), 0 12px 32px -12px rgba(20,19,26,.18);
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--f-corpo);
+  font-size: var(--t-base);
+  font-weight: 300;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--anota);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── utilitários de composição ───────────────────────────── */
+.env { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--gut); }
+
+.selo {
+  font-family: var(--f-tec);
+  font-size: var(--t-xs);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+  display: flex; align-items: center; gap: .6em;
+}
+.selo::before {
+  content: ""; width: 26px; height: 1px; background: var(--acento); flex: none;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--f-display);
+  font-weight: 800;
+  letter-spacing: -.028em;
+  line-height: .96;
+  text-wrap: balance;
+  margin: 0;
+}
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-lg); line-height: 1.08; letter-spacing: -.02em; }
+p { margin: 0; max-width: 62ch; }
+
+.tec { font-family: var(--f-tec); font-size: var(--t-sm); letter-spacing: .02em; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* revelação por scroll */
+.rev { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+.rev.vis { opacity: 1; transform: none; }
+
+/* ═══ CABEÇALHO ═══════════════════════════════════════════ */
+.topo {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--fundo) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s, padding .3s;
+}
+.topo.fixo { border-bottom-color: var(--regua); }
+.topo-in {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding-block: 1.05rem;
+}
+.topo.fixo .topo-in { padding-block: .7rem; }
+.marca { display: flex; align-items: baseline; gap: .55rem; text-decoration: none; }
+.marca b {
+  font-family: var(--f-display); font-weight: 800; font-size: 1.06rem;
+  letter-spacing: -.02em; text-transform: uppercase;
+}
+.marca span {
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .18em;
+  color: var(--acento-txt); text-transform: uppercase;
+}
+.nav { display: flex; align-items: center; gap: 1.7rem; }
+.nav a {
+  font-family: var(--f-tec); font-size: var(--t-sm); text-decoration: none;
+  color: var(--texto-fraco); letter-spacing: .04em; transition: color .2s;
+}
+.nav a:hover { color: var(--texto); }
+@media (max-width: 900px) { .nav .oculta-mob { display: none; } }
+
+.btn {
+  font-family: var(--f-tec); font-size: var(--t-sm); letter-spacing: .06em;
+  text-transform: uppercase; text-decoration: none;
+  display: inline-flex; align-items: center; gap: .6em;
+  padding: .78em 1.25em; border: 1px solid var(--texto); border-radius: 2px;
+  background: var(--texto); color: var(--fundo);
+  cursor: pointer; transition: transform .18s cubic-bezier(.22,.61,.36,1), box-shadow .18s, background .18s, color .18s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--sombra); }
+.btn-vazado { background: transparent; color: var(--texto); border-color: var(--regua-forte); }
+.btn-vazado:hover { border-color: var(--texto); }
+.btn-latao { background: var(--acento); border-color: var(--acento); color: #17140c; }
+.btn-latao:hover { background: color-mix(in srgb, var(--acento) 84%, #fff); }
+
+.tema {
+  border: 1px solid var(--regua-forte); background: transparent; color: var(--texto-fraco);
+  width: 34px; height: 34px; border-radius: 2px; cursor: pointer;
+  display: grid; place-items: center; transition: border-color .2s, color .2s;
+}
+.tema:hover { color: var(--texto); border-color: var(--texto); }
+
+/* ═══ 1. HERO — a prancha ════════════════════════════════ */
+.hero {
+  position: relative; overflow: hidden;
+  background: var(--tinta); color: #ece8df;
+  border-bottom: 1px solid rgba(236,232,223,.12);
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(236,232,223,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(236,232,223,.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(120% 90% at 70% 40%, #000 30%, transparent 78%);
+  pointer-events: none;
+}
+.hero-in {
+  position: relative; display: grid; gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  align-items: center; padding-block: clamp(3.5rem, 9vw, 7rem);
+}
+@media (max-width: 940px) { .hero-in { grid-template-columns: 1fr; } }
+
+.hero .selo { color: rgba(236,232,223,.6); }
+.hero h1 {
+  font-size: var(--t-3xl); margin-top: 1.5rem;
+  color: #f4f1e8;
+}
+.hero h1 em {
+  font-family: var(--f-corpo); font-style: italic; font-weight: 300;
+  letter-spacing: -.01em; color: var(--latao);
+}
+.hero-sub {
+  margin-top: 1.6rem; font-size: var(--t-md); color: rgba(236,232,223,.74);
+  max-width: 46ch;
+}
+.hero-acoes { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.2rem; }
+.hero .btn-vazado { color: #ece8df; border-color: rgba(236,232,223,.3); }
+.hero .btn-vazado:hover { border-color: #ece8df; }
+
+.hero-provas {
+  display: flex; flex-wrap: wrap; gap: 1.6rem 2.6rem; margin-top: 2.8rem;
+  padding-top: 1.6rem; border-top: 1px solid rgba(236,232,223,.14);
+}
+.prova b {
+  display: block; font-family: var(--f-display); font-weight: 800;
+  font-size: 1.9rem; letter-spacing: -.03em; color: #f4f1e8;
+}
+.prova span {
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(236,232,223,.5);
+}
+
+/* desenho técnico animado */
+.prancha { position: relative; }
+.prancha svg { width: 100%; height: auto; overflow: visible; }
+.carimbo {
+  position: absolute; right: 0; bottom: -14px;
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .12em;
+  color: rgba(236,232,223,.42); text-transform: uppercase;
+  border: 1px solid rgba(236,232,223,.18); padding: .4em .7em;
+  display: flex; gap: 1.2em; background: rgba(20,19,26,.6);
+}
+.tracado { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: desenhar 1.5s cubic-bezier(.65,0,.35,1) forwards; }
+@keyframes desenhar { to { stroke-dashoffset: 0; } }
+.surge { opacity: 0; animation: surgir .6s ease forwards; }
+@keyframes surgir { to { opacity: 1; } }
+
+/* ═══ régua divisória ════════════════════════════════════ */
+.regua {
+  height: 26px; border-bottom: 1px solid var(--regua);
+  background-image: repeating-linear-gradient(90deg, var(--regua) 0 1px, transparent 1px 20px);
+  background-position: bottom; background-size: 20px 8px; background-repeat: repeat-x;
+}
+
+/* ═══ estrutura de seção ═════════════════════════════════ */
+.sec { padding-block: clamp(3.6rem, 8vw, 6.5rem); }
+.sec-alt { background: var(--fundo-alt); }
+.sec-cab { display: grid; gap: 1.4rem; margin-bottom: clamp(2.2rem, 5vw, 3.4rem); }
+.sec-cab p { font-size: var(--t-md); color: var(--texto-fraco); }
+@media (min-width: 860px) {
+  .sec-cab { grid-template-columns: 1.15fr 1fr; align-items: end; gap: 2.5rem; }
+}
+
+/* ═══ 2. DOR / DIAGNÓSTICO ═══════════════════════════════ */
+.dores { display: grid; gap: 1px; background: var(--regua); border: 1px solid var(--regua); }
+@media (min-width: 760px) { .dores { grid-template-columns: repeat(3, 1fr); } }
+.dor { background: var(--fundo); padding: clamp(1.5rem, 3vw, 2.1rem); }
+.dor h3 { margin-bottom: .7rem; }
+.dor p { color: var(--texto-fraco); font-size: var(--t-base); }
+.dor-tag {
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .14em;
+  text-transform: uppercase; color: var(--anota); margin-bottom: 1.1rem; display: block;
+}
+
+/* ═══ 3. PLANTA → MÓVEL (comparador) ═════════════════════ */
+.comp-quadro {
+  position: relative; border: 1px solid var(--regua-forte); background: var(--tinta);
+  overflow: hidden; touch-action: pan-y;
+}
+.comp-quadro svg { width: 100%; height: auto; display: block; }
+.comp-camada { position: absolute; inset: 0; }
+.comp-camada--render { clip-path: inset(0 0 0 var(--corte, 50%)); }
+.comp-alca {
+  position: absolute; top: 0; bottom: 0; left: var(--corte, 50%);
+  width: 2px; background: var(--latao); transform: translateX(-1px);
+  pointer-events: none;
+}
+.comp-alca::after {
+  content: "↔"; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--latao); color: #17140c;
+  display: grid; place-items: center; font-size: 1.1rem;
+  box-shadow: 0 4px 18px rgba(0,0,0,.45);
+}
+.comp-rot {
+  position: absolute; top: 14px; font-family: var(--f-tec); font-size: var(--t-xs);
+  letter-spacing: .14em; text-transform: uppercase; color: rgba(236,232,223,.55);
+  border: 1px solid rgba(236,232,223,.2); padding: .3em .6em; background: rgba(20,19,26,.55);
+}
+.comp-rot--esq { left: 14px; }
+.comp-rot--dir { right: 14px; }
+.comp-range {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: ew-resize; margin: 0;
+}
+.comp-legenda {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+  margin-top: 1rem; color: var(--texto-fraco);
+}
+
+/* ═══ 4. SIMULADOR ═══════════════════════════════════════ */
+.sim {
+  display: grid; gap: 1px; background: var(--regua-forte);
+  border: 1px solid var(--regua-forte); box-shadow: var(--sombra);
+}
+@media (min-width: 940px) { .sim { grid-template-columns: 1.06fr .94fr; } }
+.sim-form, .sim-saida { background: var(--superficie); padding: clamp(1.6rem, 3.4vw, 2.6rem); }
+.sim-saida { background: var(--tinta); color: #ece8df; display: flex; flex-direction: column; gap: 1.4rem; }
+
+.campo { display: block; margin-bottom: 1.8rem; }
+.campo:last-child { margin-bottom: 0; }
+.campo-tit {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .14em;
+  text-transform: uppercase; color: var(--texto-fraco); margin-bottom: .85rem;
+}
+.campo-tit b { font-size: var(--t-sm); color: var(--acento-txt); letter-spacing: .06em; }
+
+.opcoes { display: flex; flex-wrap: wrap; gap: .5rem; }
+.opcao {
+  font-family: var(--f-tec); font-size: var(--t-sm); letter-spacing: .02em;
+  padding: .62em 1em; border: 1px solid var(--regua-forte); border-radius: 2px;
+  background: transparent; color: var(--texto); cursor: pointer;
+  transition: border-color .18s, background .18s, color .18s, transform .18s;
+}
+.opcao:hover { border-color: var(--texto); transform: translateY(-1px); }
+.opcao[aria-pressed="true"] { background: var(--texto); border-color: var(--texto); color: var(--fundo); }
+
+input[type="range"].metros {
+  -webkit-appearance: none; appearance: none; width: 100%;
+  height: 3px; background: var(--regua-forte); border-radius: 2px; cursor: pointer;
+}
+input[type="range"].metros::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--acento); border: 3px solid var(--superficie);
+  box-shadow: 0 0 0 1px var(--acento); cursor: grab;
+}
+input[type="range"].metros::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%; border: 3px solid var(--superficie);
+  background: var(--acento); box-shadow: 0 0 0 1px var(--acento); cursor: grab;
+}
+.escala {
+  display: flex; justify-content: space-between; margin-top: .5rem;
+  font-family: var(--f-tec); font-size: var(--t-xs); color: var(--texto-fraco);
+}
+
+.sim-valor { border-bottom: 1px solid rgba(236,232,223,.16); padding-bottom: 1.3rem; }
+.sim-rotulo {
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .16em;
+  text-transform: uppercase; color: rgba(236,232,223,.5); display: block; margin-bottom: .6rem;
+}
+.sim-faixa {
+  font-family: var(--f-display); font-weight: 800; letter-spacing: -.03em;
+  font-size: clamp(1.9rem, 4.6vw, 2.9rem); color: #f4f1e8; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.sim-faixa small { font-size: .42em; font-weight: 600; color: rgba(236,232,223,.55); letter-spacing: 0; }
+.sim-linhas { display: grid; gap: .85rem; }
+.sim-linha {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  font-family: var(--f-tec); font-size: var(--t-sm); color: rgba(236,232,223,.62);
+}
+.sim-linha b { color: #f4f1e8; font-weight: 500; font-variant-numeric: tabular-nums; }
+.sim-nota { font-size: var(--t-sm); color: rgba(236,232,223,.45); line-height: 1.5; }
+.sim-cta { margin-top: auto; display: grid; gap: .7rem; }
+.sim-preview { border: 1px solid rgba(236,232,223,.14); background: rgba(0,0,0,.25); }
+
+/* ═══ 5. AMBIENTES ═══════════════════════════════════════ */
+.grade { display: grid; gap: 1px; background: var(--regua); border-block: 1px solid var(--regua); }
+@media (min-width: 700px) { .grade { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .grade { grid-template-columns: repeat(3, 1fr); } }
+.peca {
+  position: relative; background: var(--fundo); padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 1rem; overflow: hidden;
+}
+.peca-arte { background: var(--tinta-2); border: 1px solid var(--regua); }
+.peca-arte svg { width: 100%; height: auto; }
+.peca h3 { font-size: 1.28rem; }
+.peca p { font-size: var(--t-sm); color: var(--texto-fraco); font-family: var(--f-corpo); }
+.peca-specs {
+  display: flex; flex-wrap: wrap; gap: .4rem;
+  font-family: var(--f-tec); font-size: var(--t-xs); color: var(--anota);
+}
+.peca-specs span { border: 1px solid var(--regua-forte); padding: .25em .55em; letter-spacing: .04em; }
+
+/* ═══ 6. PROCESSO ════════════════════════════════════════ */
+.etapas { display: grid; gap: 0; counter-reset: passo; }
+.etapa {
+  display: grid; gap: 1rem 2rem; padding-block: clamp(1.5rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--regua); align-items: start;
+}
+.etapa:last-child { border-bottom: 1px solid var(--regua); }
+@media (min-width: 840px) { .etapa { grid-template-columns: 5.5rem 1fr 15rem; } }
+.etapa-n {
+  font-family: var(--f-tec); font-size: var(--t-sm); color: var(--acento-txt);
+  letter-spacing: .12em; padding-top: .35rem;
+}
+.etapa h3 { margin-bottom: .55rem; }
+.etapa p { color: var(--texto-fraco); font-size: var(--t-base); }
+.etapa-prazo {
+  font-family: var(--f-tec); font-size: var(--t-sm); color: var(--texto-fraco);
+  border-left: 1px solid var(--regua-forte); padding-left: 1rem;
+}
+.etapa-prazo b { display: block; color: var(--texto); font-weight: 500; }
+
+/* ═══ 7. PROVA ═══════════════════════════════════════════ */
+.depos { display: grid; gap: 1px; background: var(--regua); border: 1px solid var(--regua); }
+@media (min-width: 820px) { .depos { grid-template-columns: repeat(3, 1fr); } }
+.depo { background: var(--fundo); padding: clamp(1.5rem, 3vw, 2.1rem); display: grid; gap: 1.2rem; }
+.depo blockquote { margin: 0; font-size: var(--t-md); line-height: 1.5; }
+.depo blockquote::before { content: "“"; color: var(--acento); }
+.depo blockquote::after { content: "”"; color: var(--acento); }
+.depo figcaption { font-family: var(--f-tec); font-size: var(--t-xs); color: var(--texto-fraco); letter-spacing: .06em; line-height: 1.7; }
+.depo figcaption b { display: block; color: var(--texto); letter-spacing: .1em; text-transform: uppercase; }
+
+/* ═══ 8. GARANTIA ════════════════════════════════════════ */
+.garantia {
+  border: 1px solid var(--acento); background: var(--superficie);
+  padding: clamp(1.8rem, 4vw, 3rem); display: grid; gap: 1.6rem;
+  box-shadow: var(--sombra);
+}
+@media (min-width: 880px) { .garantia { grid-template-columns: 1fr 1fr; align-items: center; gap: 3rem; } }
+.garantia-lista { display: grid; gap: .9rem; margin: 0; padding: 0; list-style: none; }
+.garantia-lista li {
+  display: grid; grid-template-columns: 1.6rem 1fr; gap: .6rem;
+  font-size: var(--t-base); color: var(--texto-fraco);
+}
+.garantia-lista li::before {
+  content: "✓"; color: var(--acento-txt); font-family: var(--f-tec); font-size: var(--t-sm);
+}
+
+/* ═══ 9. FAQ ═════════════════════════════════════════════ */
+.faq { border-top: 1px solid var(--regua); }
+.faq details { border-bottom: 1px solid var(--regua); }
+.faq summary {
+  cursor: pointer; list-style: none; padding-block: 1.25rem;
+  display: flex; justify-content: space-between; gap: 2rem; align-items: baseline;
+  font-family: var(--f-display); font-weight: 600; font-size: var(--t-md);
+  letter-spacing: -.015em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: "+"; font-family: var(--f-tec); font-size: 1.2rem; color: var(--acento-txt);
+  flex: none; transition: transform .25s;
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { padding-bottom: 1.4rem; color: var(--texto-fraco); }
+
+/* ═══ 10. CTA FINAL ══════════════════════════════════════ */
+.fecho {
+  background: var(--tinta); color: #ece8df; position: relative; overflow: hidden;
+}
+.fecho::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(80% 120% at 20% 0%, rgba(181,144,78,.20), transparent 62%);
+  pointer-events: none;
+}
+.fecho-in { position: relative; padding-block: clamp(3.5rem, 8vw, 6rem); display: grid; gap: 2rem; }
+@media (min-width: 900px) { .fecho-in { grid-template-columns: 1.25fr 1fr; align-items: center; gap: 4rem; } }
+.fecho h2 { color: #f4f1e8; }
+.fecho p { color: rgba(236,232,223,.72); font-size: var(--t-md); margin-top: 1.2rem; }
+.fecho .selo { color: rgba(236,232,223,.55); }
+.fecho-acoes { display: grid; gap: .8rem; }
+.fecho-nota { font-family: var(--f-tec); font-size: var(--t-xs); color: rgba(236,232,223,.45); letter-spacing: .05em; line-height: 1.7; }
+
+/* ═══ RODAPÉ ═════════════════════════════════════════════ */
+.rodape { border-top: 1px solid var(--regua); padding-block: 2.6rem; }
+.rodape-in { display: grid; gap: 2rem; }
+@media (min-width: 780px) { .rodape-in { grid-template-columns: 1.4fr 1fr 1fr; } }
+.rodape p, .rodape a { font-size: var(--t-sm); color: var(--texto-fraco); }
+.rodape-col { display: grid; gap: .55rem; align-content: start; }
+.rodape-col b {
+  font-family: var(--f-tec); font-size: var(--t-xs); letter-spacing: .16em;
+  text-transform: uppercase; color: var(--texto); margin-bottom: .3rem;
+}
+.rodape a { text-decoration: none; }
+.rodape a:hover { color: var(--texto); text-decoration: underline; text-underline-offset: 3px; }
+.rodape-fim {
+  margin-top: 2.4rem; padding-top: 1.4rem; border-top: 1px solid var(--regua);
+  font-family: var(--f-tec); font-size: var(--t-xs); color: var(--texto-fraco);
+  display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; justify-content: space-between;
+}
+
+/* barra fixa mobile */
+.barra-mob {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  display: none; gap: .6rem; padding: .7rem var(--gut) calc(.7rem + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--fundo) 92%, transparent);
+  backdrop-filter: blur(12px); border-top: 1px solid var(--regua);
+}
+.barra-mob .btn { flex: 1; justify-content: center; }
+@media (max-width: 720px) {
+  .barra-mob { display: flex; }
+  body { padding-bottom: 4.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ CABEÇALHO ══════════════════════════════════════════ -->
+<header class="topo" id="topo">
+  <div class="env topo-in">
+    <a class="marca" href="#topo">
+      <b>SmartFactory</b>
+      <span>Móveis Planejados</span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a class="oculta-mob" href="#projeto">Projeto</a>
+      <a class="oculta-mob" href="#simulador">Simulador</a>
+      <a class="oculta-mob" href="#ambientes">Ambientes</a>
+      <a class="oculta-mob" href="#processo">Processo</a>
+      <button class="tema" id="btn-tema" type="button" aria-label="Alternar tema claro e escuro">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+      </button>
+      <a class="btn btn-latao" href="#simulador">Simular meu projeto</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ══ 1 · HERO ═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="env hero-in">
+    <div>
+      <p class="selo">Marcenaria de projeto · Fábrica própria · Desde 2009</p>
+      <h1>Seu apartamento tem 11 cm de sobra.<br><em>Nós desenhamos para eles.</em></h1>
+      <p class="hero-sub">
+        Móveis planejados feitos a partir do projeto executivo — cada peça cotada em
+        milímetros, cortada em fábrica própria e instalada na data que está no contrato.
+        Sem "quase encaixou".
+      </p>
+      <div class="hero-acoes">
+        <a class="btn btn-latao" href="#simulador">Simular investimento em 40s</a>
+        <a class="btn btn-vazado" href="#projeto">Ver como projetamos</a>
+      </div>
+      <div class="hero-provas">
+        <div class="prova"><b class="num" data-conta="1420">0</b><span>Projetos entregues</span></div>
+        <div class="prova"><b class="num" data-conta="97" data-sufixo="%">0</b><span>No prazo contratado</span></div>
+        <div class="prova"><b class="num" data-conta="5" data-sufixo=" anos">0</b><span>Garantia em contrato</span></div>
+      </div>
+    </div>
+
+    <!-- desenho técnico: elevação de armário com cotas -->
+    <div class="prancha" aria-hidden="true">
+      <svg viewBox="0 0 460 380" role="img">
+        <defs>
+          <linearGradient id="madeira" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#6e4a31"/>
+            <stop offset="1" stop-color="#3f2a1c"/>
+          </linearGradient>
+          <linearGradient id="laca" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#2c2a34"/>
+            <stop offset="1" stop-color="#1a1922"/>
+          </linearGradient>
+        </defs>
+
+        <!-- corpo -->
+        <g class="surge" style="animation-delay:.55s">
+          <rect x="70" y="40" width="300" height="280" fill="url(#laca)" stroke="#4a4754" stroke-width="1"/>
+          <rect x="78" y="48" width="134" height="160" fill="url(#madeira)" opacity=".92"/>
+          <rect x="220" y="48" width="142" height="160" fill="#232128"/>
+          <rect x="78" y="216" width="284" height="46" fill="#232128"/>
+          <rect x="78" y="270" width="284" height="42" fill="url(#madeira)" opacity=".8"/>
+          <!-- puxadores latão -->
+          <rect x="196" y="120" width="4" height="34" fill="#b5904e"/>
+          <rect x="228" y="120" width="4" height="34" fill="#b5904e"/>
+          <rect x="196" y="232" width="46" height="3" fill="#b5904e"/>
+          <rect x="196" y="286" width="46" height="3" fill="#b5904e"/>
+        </g>
+
+        <!-- linhas de cota -->
+        <g stroke="#79a9dc" stroke-width="1" fill="none">
+          <path class="tracado" style="--len:300;animation-delay:.1s" d="M70 352 H370"/>
+          <path class="tracado" style="--len:36;animation-delay:.1s" d="M70 344 V360 M370 344 V360"/>
+          <path class="tracado" style="--len:280;animation-delay:.3s" d="M400 40 V320"/>
+          <path class="tracado" style="--len:36;animation-delay:.3s" d="M392 40 H408 M392 320 H408"/>
+          <path class="tracado" style="--len:60;animation-delay:.75s" d="M70 30 H212 M70 24 V36 M212 24 V36" opacity=".8"/>
+        </g>
+        <g font-family="IBM Plex Mono, monospace" font-size="11" fill="#79a9dc" letter-spacing="1">
+          <text class="surge" style="animation-delay:.7s" x="188" y="372" text-anchor="middle">3.180 mm</text>
+          <text class="surge" style="animation-delay:.85s" x="418" y="184" transform="rotate(-90 418 184)" text-anchor="middle">2.640 mm</text>
+          <text class="surge" style="animation-delay:1s" x="141" y="18" text-anchor="middle">1.340</text>
+        </g>
+        <g class="surge" style="animation-delay:1.15s" font-family="IBM Plex Mono, monospace" font-size="10" fill="#b5904e" letter-spacing="1.5">
+          <text x="70" y="336">FREIJÓ NATURAL · LACA FOSCA · PUXADOR LATÃO ESCOVADO</text>
+        </g>
+      </svg>
+      <div class="carimbo"><span>PRJ-2481</span><span>ESC 1:20</span><span>REV 03</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2 · DIAGNÓSTICO ════════════════════════════════════ -->
+<section class="sec" id="projeto">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Por que planejado dá errado</p>
+        <h2>Três coisas quebram um projeto.<br>Todas acontecem antes do corte.</h2>
+      </div>
+      <p>
+        Móvel planejado não falha na instalação — falha na medição, no desenho e na
+        promessa de prazo. Resolvemos os três antes de encostar em uma chapa.
+      </p>
+    </div>
+
+    <div class="dores rev">
+      <article class="dor">
+        <span class="dor-tag">Erro 01 · Medição</span>
+        <h3>Parede fora de prumo vira porta que raspa</h3>
+        <p>
+          Medimos com laser em 3 alturas por parede e registramos o desaprumo no projeto.
+          O móvel é desenhado torto de propósito, para ficar reto na sua parede.
+        </p>
+      </article>
+      <article class="dor">
+        <span class="dor-tag">Erro 02 · Desenho</span>
+        <h3>Render bonito não tem cota</h3>
+        <p>
+          Você aprova um projeto executivo com todas as medidas, ferragens e acabamentos
+          especificados. É esse documento que vai para a fábrica — não a imagem 3D.
+        </p>
+      </article>
+      <article class="dor">
+        <span class="dor-tag">Erro 03 · Prazo</span>
+        <h3>"Mais uns dias" custa caro</h3>
+        <p>
+          A data de instalação entra em contrato com multa por atraso nosso. Produção em
+          fábrica própria significa que a fila é nossa, não de terceiros.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="regua" aria-hidden="true"></div>
+
+<!-- ══ 3 · PLANTA → MÓVEL ═════════════════════════════════ -->
+<section class="sec sec-alt">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Do desenho à peça</p>
+        <h2>Arraste e veja o que sai da fábrica.</h2>
+      </div>
+      <p>
+        À esquerda, a elevação técnica que você assina. À direita, a mesma peça produzida.
+        As cotas são as mesmas — é literalmente o mesmo arquivo.
+      </p>
+    </div>
+
+    <div class="rev">
+      <div class="comp-quadro" id="comparador">
+        <!-- camada 1: desenho técnico -->
+        <svg viewBox="0 0 900 440" aria-label="Elevação técnica de armário de dormitório">
+          <rect width="900" height="440" fill="#14131a"/>
+          <g stroke="rgba(236,232,223,.07)" stroke-width="1">
+            <path d="M0 40 H900 M0 120 H900 M0 200 H900 M0 280 H900 M0 360 H900"/>
+            <path d="M100 0 V440 M240 0 V440 M380 0 V440 M520 0 V440 M660 0 V440 M800 0 V440"/>
+          </g>
+          <g stroke="#79a9dc" stroke-width="1.4" fill="none">
+            <rect x="120" y="70" width="660" height="300"/>
+            <path d="M120 70 V370 M285 70 V370 M450 70 V370 M615 70 V370 M780 70 V370"/>
+            <path d="M120 190 H450 M120 280 H450"/>
+            <path d="M615 150 H780 M615 230 H780 M615 310 H780"/>
+          </g>
+          <g stroke="#79a9dc" stroke-width=".8" stroke-dasharray="5 4" fill="none" opacity=".75">
+            <path d="M120 396 H780 M120 388 V404 M780 388 V404"/>
+            <path d="M820 70 V370 M812 70 H828 M812 370 H828"/>
+          </g>
+          <g font-family="IBM Plex Mono, monospace" font-size="12" fill="#79a9dc">
+            <text x="450" y="420" text-anchor="middle">2.640 mm</text>
+            <text x="846" y="224" transform="rotate(-90 846 224)" text-anchor="middle">2.400 mm</text>
+            <text x="136" y="92">01 · CABIDEIRO ALTO</text>
+            <text x="136" y="212">02 · GAVETEIRO 4×</text>
+            <text x="631" y="172">03 · SAPATEIRA</text>
+          </g>
+          <text x="40" y="416" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b5904e" letter-spacing="2">PLANTA</text>
+        </svg>
+
+        <!-- camada 2: peça produzida -->
+        <div class="comp-camada comp-camada--render" id="camada-render" aria-hidden="true">
+          <svg viewBox="0 0 900 440">
+            <defs>
+              <linearGradient id="parede" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2a2833"/><stop offset="1" stop-color="#191821"/>
+              </linearGradient>
+              <linearGradient id="freijo" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#7b5335"/><stop offset=".5" stop-color="#5c3d27"/><stop offset="1" stop-color="#734d31"/>
+              </linearGradient>
+              <linearGradient id="lacaFosca" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#33313c"/><stop offset="1" stop-color="#22212a"/>
+              </linearGradient>
+              <linearGradient id="luz" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="rgba(255,224,170,.30)"/><stop offset="1" stop-color="rgba(255,224,170,0)"/>
+              </linearGradient>
+            </defs>
+            <rect width="900" height="440" fill="url(#parede)"/>
+            <rect x="120" y="70" width="660" height="300" fill="url(#lacaFosca)"/>
+            <rect x="126" y="76" width="153" height="288" fill="url(#freijo)"/>
+            <rect x="291" y="76" width="153" height="288" fill="#2b2934"/>
+            <rect x="456" y="76" width="153" height="288" fill="url(#freijo)" opacity=".9"/>
+            <rect x="621" y="76" width="153" height="140" fill="#2b2934"/>
+            <rect x="621" y="222" width="153" height="142" fill="url(#freijo)" opacity=".82"/>
+            <!-- nicho iluminado -->
+            <rect x="291" y="150" width="153" height="90" fill="#15141b"/>
+            <rect x="291" y="150" width="153" height="90" fill="url(#luz)"/>
+            <rect x="291" y="150" width="153" height="3" fill="#ffe0aa" opacity=".55"/>
+            <!-- puxadores -->
+            <g fill="#b5904e">
+              <rect x="272" y="190" width="5" height="70"/>
+              <rect x="293" y="190" width="5" height="70"/>
+              <rect x="437" y="190" width="5" height="70"/>
+              <rect x="458" y="190" width="5" height="70"/>
+              <rect x="640" y="288" width="60" height="4"/>
+            </g>
+            <!-- rodapé + sombra -->
+            <rect x="120" y="358" width="660" height="12" fill="#0f0e14" opacity=".75"/>
+            <ellipse cx="450" cy="376" rx="330" ry="10" fill="#000" opacity=".45"/>
+            <text x="860" y="416" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="11" fill="#b5904e" letter-spacing="2">PEÇA INSTALADA</text>
+          </svg>
+        </div>
+
+        <span class="comp-rot comp-rot--esq">Projeto executivo</span>
+        <span class="comp-rot comp-rot--dir">Instalado</span>
+        <div class="comp-alca" id="alca-comp" aria-hidden="true"></div>
+        <input class="comp-range" id="range-comp" type="range" min="0" max="100" value="50"
+               aria-label="Comparar projeto executivo e móvel instalado">
+      </div>
+      <div class="comp-legenda tec">
+        <span>PRJ-2481 · Dormitório casal · Freijó natural + laca fosca</span>
+        <span>Arraste ↔ ou use as setas do teclado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 4 · SIMULADOR ══════════════════════════════════════ -->
+<section class="sec" id="simulador">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Simulador de investimento</p>
+        <h2>Saiba a faixa de preço antes de falar com vendedor.</h2>
+      </div>
+      <p>
+        Três escolhas, faixa na tela. Sem cadastro, sem e-mail, sem ligação.
+        Se fizer sentido, você fala com a gente já sabendo o número.
+      </p>
+    </div>
+
+    <div class="sim rev">
+      <!-- entradas -->
+      <div class="sim-form">
+        <div class="campo">
+          <div class="campo-tit"><span>01 · Ambiente</span><b id="lbl-ambiente">Dormitório</b></div>
+          <div class="opcoes" id="grupo-ambiente" role="group" aria-label="Ambiente">
+            <button class="opcao" type="button" data-val="dormitorio" aria-pressed="true">Dormitório</button>
+            <button class="opcao" type="button" data-val="cozinha" aria-pressed="false">Cozinha</button>
+            <button class="opcao" type="button" data-val="closet" aria-pressed="false">Closet</button>
+            <button class="opcao" type="button" data-val="homeoffice" aria-pressed="false">Home office</button>
+            <button class="opcao" type="button" data-val="sala" aria-pressed="false">Sala / painel</button>
+          </div>
+        </div>
+
+        <div class="campo">
+          <div class="campo-tit"><span>02 · Acabamento</span><b id="lbl-acabamento">Amadeirado</b></div>
+          <div class="opcoes" id="grupo-acabamento" role="group" aria-label="Acabamento">
+            <button class="opcao" type="button" data-val="mdf" aria-pressed="false">MDF branco</button>
+            <button class="opcao" type="button" data-val="amadeirado" aria-pressed="true">Amadeirado</button>
+            <button class="opcao" type="button" data-val="laca" aria-pressed="false">Laca fosca</button>
+            <button class="opcao" type="button" data-val="lamina" aria-pressed="false">Lâmina natural</button>
+          </div>
+        </div>
+
+        <div class="campo">
+          <div class="campo-tit"><span>03 · Metros lineares</span><b><span id="lbl-metros" class="num">6</span> m</b></div>
+          <input class="metros" id="metros" type="range" min="2" max="24" step="1" value="6"
+                 aria-label="Metros lineares de móvel">
+          <div class="escala"><span>2 m</span><span>uma parede ≈ 3 m</span><span>24 m</span></div>
+        </div>
+
+        <div class="campo">
+          <div class="campo-tit"><span>Extras</span><b id="lbl-extras">1 selecionado</b></div>
+          <div class="opcoes" id="grupo-extras" role="group" aria-label="Itens adicionais">
+            <button class="opcao" type="button" data-val="ferragem" aria-pressed="true">Ferragem Blum</button>
+            <button class="opcao" type="button" data-val="iluminacao" aria-pressed="false">Iluminação embutida</button>
+            <button class="opcao" type="button" data-val="pedra" aria-pressed="false">Bancada em pedra</button>
+            <button class="opcao" type="button" data-val="vidro" aria-pressed="false">Portas em vidro</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- saída -->
+      <div class="sim-saida">
+        <div class="sim-valor">
+          <span class="sim-rotulo">Faixa de investimento estimada</span>
+          <div class="sim-faixa"><span id="preco-min">R$ 12.400</span> <small>até</small> <span id="preco-max">R$ 16.800</span></div>
+        </div>
+
+        <div class="sim-preview" aria-hidden="true">
+          <svg viewBox="0 0 420 150">
+            <rect width="420" height="150" fill="#141319"/>
+            <g id="preview-modulos"></g>
+            <g stroke="#79a9dc" stroke-width=".8" fill="none" opacity=".7">
+              <path d="M30 132 H390 M30 126 V138 M390 126 V138"/>
+            </g>
+            <text id="preview-cota" x="210" y="147" text-anchor="middle"
+                  font-family="IBM Plex Mono, monospace" font-size="10" fill="#79a9dc">6.000 mm</text>
+          </svg>
+        </div>
+
+        <div class="sim-linhas">
+          <div class="sim-linha"><span>Prazo estimado de entrega</span><b id="out-prazo">45 dias</b></div>
+          <div class="sim-linha"><span>Parcelamento em até 12×</span><b id="out-parcela">R$ 1.033</b></div>
+          <div class="sim-linha"><span>Projeto executivo + medição</span><b>Sem custo</b></div>
+        </div>
+
+        <p class="sim-nota">
+          Faixa baseada em 1.420 projetos executados nos últimos 24 meses. O valor final
+          sai do projeto executivo — e não muda depois de assinado.
+        </p>
+
+        <div class="sim-cta">
+          <a class="btn btn-latao" id="cta-whats" href="#" target="_blank" rel="noopener">
+            Enviar esta simulação no WhatsApp
+          </a>
+          <a class="btn btn-vazado" href="#agendar" style="color:#ece8df;border-color:rgba(236,232,223,.3)">
+            Agendar medição gratuita
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="regua" aria-hidden="true"></div>
+
+<!-- ══ 5 · AMBIENTES ══════════════════════════════════════ -->
+<section class="sec sec-alt" id="ambientes">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Projetos executados</p>
+        <h2>Seis ambientes. Seis problemas de milímetro resolvidos.</h2>
+      </div>
+      <p>
+        Cada projeto abaixo tinha uma restrição que móvel de loja não resolve —
+        viga, desaprumo, pé-direito baixo, tubulação aparente.
+      </p>
+    </div>
+  </div>
+
+  <div class="grade rev">
+    <article class="peca">
+      <div class="peca-arte">
+        <svg viewBox="0 0 320 180" aria-label="Cozinha em L com bancada em pedra">
+          <rect width="320" height="180" fill="#1b1a22"/>
+          <rect x="24" y="40" width="120" height="52" fill="#5c3d27"/>
+          <rect x="150" y="40" width="146" height="52" fill="#2b2934"/>
+          <rect x="24" y="104" width="272" height="10" fill="#8d8a95"/>
+          <rect x="24" y="114" width="272" height="44" fill="#2b2934"/>
+          <rect x="60" y="130" width="46" height="3" fill="#b5904e"/>
+          <rect x="150" y="130" width="46" height="3" fill="#b5904e"/>
+          <rect x="240" y="130" width="46" height="3" fill="#b5904e"/>
+          <rect x="24" y="92" width="272" height="12" fill="#15141b"/>
+          <rect x="24" y="92" width="272" height="2" fill="#ffe0aa" opacity=".4"/>
+        </svg>
+      </div>
+      <h3>Cozinha com viga de 32 cm</h3>
+      <p>Torre de fornos rebaixada e cúpula embutida no gesso — a viga sumiu do olhar.</p>
+      <div class="peca-specs"><span>4,8 m lin</span><span>Nanoglass</span><span>38 dias</span></div>
+    </article>
+
+    <article class="peca">
+      <div class="peca-arte">
+        <svg viewBox="0 0 320 180" aria-label="Closet aberto com prateleiras e cabideiro">
+          <rect width="320" height="180" fill="#1b1a22"/>
+          <rect x="30" y="24" width="260" height="132" fill="#232128"/>
+          <g fill="#5c3d27">
+            <rect x="38" y="32" width="76" height="116"/>
+            <rect x="206" y="32" width="76" height="116"/>
+          </g>
+          <g stroke="#8d8a95" stroke-width="2">
+            <path d="M122 60 H198 M122 92 H198 M122 124 H198"/>
+          </g>
+          <rect x="122" y="40" width="76" height="3" fill="#b5904e"/>
+          <g fill="#3b3945"><rect x="130" y="66" width="24" height="22"/><rect x="160" y="66" width="30" height="22"/></g>
+        </svg>
+      </div>
+      <h3>Closet em 4,2 m² de quarto</h3>
+      <p>Cabideiro duplo + gaveteiro interno com puxador usinado. Nenhuma porta abre para dentro.</p>
+      <div class="peca-specs"><span>7,1 m lin</span><span>Lâmina freijó</span><span>42 dias</span></div>
+    </article>
+
+    <article class="peca">
+      <div class="peca-arte">
+        <svg viewBox="0 0 320 180" aria-label="Home office com bancada suspensa e prateleiras">
+          <rect width="320" height="180" fill="#1b1a22"/>
+          <rect x="30" y="30" width="260" height="8" fill="#5c3d27"/>
+          <rect x="30" y="62" width="180" height="8" fill="#5c3d27"/>
+          <rect x="30" y="100" width="260" height="12" fill="#2b2934"/>
+          <rect x="30" y="112" width="88" height="44" fill="#232128"/>
+          <rect x="46" y="130" width="56" height="3" fill="#b5904e"/>
+          <rect x="228" y="30" width="62" height="82" fill="#232128"/>
+          <rect x="236" y="38" width="46" height="30" fill="#3b3945"/>
+        </svg>
+      </div>
+      <h3>Home office na circulação</h3>
+      <p>Bancada de 42 cm suspensa: passagem livre e monitor de 27" sem encostar na parede.</p>
+      <div class="peca-specs"><span>3,4 m lin</span><span>Laca fosca</span><span>29 dias</span></div>
+    </article>
+
+    <article class="peca">
+      <div class="peca-arte">
+        <svg viewBox="0 0 320 180" aria-label="Painel de sala com nicho para TV">
+          <rect width="320" height="180" fill="#1b1a22"/>
+          <rect x="24" y="26" width="272" height="128" fill="#5c3d27"/>
+          <rect x="86" y="42" width="148" height="82" fill="#0f0e14"/>
+          <rect x="86" y="42" width="148" height="3" fill="#ffe0aa" opacity=".45"/>
+          <rect x="24" y="132" width="272" height="22" fill="#2b2934"/>
+          <rect x="118" y="141" width="84" height="3" fill="#b5904e"/>
+        </svg>
+      </div>
+      <h3>Painel com tubulação aparente</h3>
+      <p>Sanca técnica de 9 cm escondendo o dreno do split — sem perder profundidade útil.</p>
+      <div class="peca-specs"><span>5,2 m lin</span><span>Ripado freijó</span><span>31 dias</span></div>
+    </article>
+
+    <article class="peca">
+      <div class="peca-arte">
+        <svg viewBox="0 0 320 180" aria-label="Dormitório infantil com cama e armário integrados">
+          <rect width="320" height="180" fill="#1b1a22"/>
+          <rect x="26" y="28" width="96" height="126" fill="#2b2934"/>
+          <rect x="130" y="96" width="164" height="58" fill="#5c3d27"/>
+          <rect x="130" y="34" width="164" height="10" fill="#5c3d27"/>
+          <rect x="130" y="62" width="120" height="10" fill="#5c3d27"/>
+          <rect x="60" y="82" width="4" height="40" fill="#b5904e"/>
+          <rect x="86" y="82" width="4" height="40" fill="#b5904e"/>
+        </svg>
+      </div>
+      <h3>Quarto infantil que vira adolescente</h3>
+      <p>Módulos reposicionáveis: a cama sai, a escrivaninha entra, sem refazer o armário.</p>
+      <div class="peca-specs"><span>6,0 m lin</span><span>MDF + laca</span><span>34 dias</span></div>
+    </article>
+
+    <article class="peca">
+      <div class="peca-arte">
+        <svg viewBox="0 0 320 180" aria-label="Lavanderia compartimentada com torre de máquinas">
+          <rect width="320" height="180" fill="#1b1a22"/>
+          <rect x="30" y="28" width="110" height="126" fill="#2b2934"/>
+          <circle cx="85" cy="70" r="22" fill="#15141b"/>
+          <circle cx="85" cy="120" r="22" fill="#15141b"/>
+          <rect x="152" y="28" width="138" height="42" fill="#5c3d27"/>
+          <rect x="152" y="82" width="138" height="72" fill="#2b2934"/>
+          <rect x="188" y="112" width="66" height="3" fill="#b5904e"/>
+        </svg>
+      </div>
+      <h3>Lavanderia de 1,6 m</h3>
+      <p>Torre lava-e-seca com tanque embutido e ventilação técnica na lateral do módulo.</p>
+      <div class="peca-specs"><span>2,4 m lin</span><span>Branco TX</span><span>26 dias</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- ══ 6 · PROCESSO ═══════════════════════════════════════ -->
+<section class="sec" id="processo">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Como funciona</p>
+        <h2>Seis etapas. Você aprova cada uma antes da próxima começar.</h2>
+      </div>
+      <p>
+        A sequência abaixo é a mesma em todos os projetos — e o prazo de cada etapa
+        entra no contrato junto com a data final.
+      </p>
+    </div>
+
+    <div class="etapas rev">
+      <article class="etapa">
+        <div class="etapa-n">ETAPA 01</div>
+        <div>
+          <h3>Conversa de 20 minutos</h3>
+          <p>Você manda a planta ou as fotos. Entendemos uso, orçamento e restrição. Se não formos a melhor opção, dizemos na hora.</p>
+        </div>
+        <div class="etapa-prazo"><b>Mesmo dia</b>Presencial ou vídeo</div>
+      </article>
+      <article class="etapa">
+        <div class="etapa-n">ETAPA 02</div>
+        <div>
+          <h3>Medição a laser no local</h3>
+          <p>Três alturas por parede, prumo, esquadro, pontos elétricos e hidráulicos. Tudo registrado em ficha assinada.</p>
+        </div>
+        <div class="etapa-prazo"><b>Até 72 h</b>Sem custo e sem compromisso</div>
+      </article>
+      <article class="etapa">
+        <div class="etapa-n">ETAPA 03</div>
+        <div>
+          <h3>Projeto executivo + render</h3>
+          <p>Plantas, elevações cotadas, lista de ferragens e imagem 3D. Duas rodadas de ajuste inclusas.</p>
+        </div>
+        <div class="etapa-prazo"><b>5 a 7 dias</b>Você aprova por escrito</div>
+      </article>
+      <article class="etapa">
+        <div class="etapa-n">ETAPA 04</div>
+        <div>
+          <h3>Contrato com data e preço fechados</h3>
+          <p>Valor final, data de instalação e multa por atraso nossa. Depois da assinatura, o preço não muda.</p>
+        </div>
+        <div class="etapa-prazo"><b>1 dia</b>Assinatura digital</div>
+      </article>
+      <article class="etapa">
+        <div class="etapa-n">ETAPA 05</div>
+        <div>
+          <h3>Produção em fábrica própria</h3>
+          <p>Corte em seccionadora CNC, coladeira de bordas e conferência peça a peça. Você recebe fotos da sua produção.</p>
+        </div>
+        <div class="etapa-prazo"><b>25 a 40 dias</b>Acompanhamento por WhatsApp</div>
+      </article>
+      <article class="etapa">
+        <div class="etapa-n">ETAPA 06</div>
+        <div>
+          <h3>Montagem e vistoria assinada</h3>
+          <p>Equipe própria, proteção de piso e limpeza no fim. Só encerramos com sua vistoria item a item assinada.</p>
+        </div>
+        <div class="etapa-prazo"><b>2 a 5 dias</b>Garantia de 5 anos começa aqui</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="regua" aria-hidden="true"></div>
+
+<!-- ══ 7 · PROVA SOCIAL ═══════════════════════════════════ -->
+<section class="sec sec-alt">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Quem já assinou a vistoria</p>
+        <h2>1.420 projetos. 97% instalados na data do contrato.</h2>
+      </div>
+      <p>Depoimentos coletados após a vistoria final, com autorização de uso e projeto identificado.</p>
+    </div>
+
+    <div class="depos rev">
+      <figure class="depo">
+        <blockquote>Recebi o executivo com a viga do apartamento desenhada. Foi aí que entendi a diferença de preço.</blockquote>
+        <figcaption><b>Renata A.</b>Cozinha + lavanderia · PRJ-2109<br>Instalado em 36 dias</figcaption>
+      </figure>
+      <figure class="depo">
+        <blockquote>Atrasaram um dia e me ligaram antes de eu perceber, já com o desconto aplicado. Nunca vi isso.</blockquote>
+        <figcaption><b>Paulo M.</b>Dormitório + closet · PRJ-1987<br>Instalado em 44 dias</figcaption>
+      </figure>
+      <figure class="depo">
+        <blockquote>Três orçamentos. Dois mandaram render. Só a SmartFactory mandou as medidas de cada gaveta.</blockquote>
+        <figcaption><b>Camila e Théo D.</b>Apartamento completo · PRJ-2244<br>Instalado em 58 dias</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 8 · GARANTIA / RISCO ZERO ══════════════════════════ -->
+<section class="sec">
+  <div class="env">
+    <div class="garantia rev">
+      <div>
+        <p class="selo">Compromisso em contrato</p>
+        <h2 style="font-size:var(--t-xl);margin-top:1.2rem">O risco é nosso, não seu.</h2>
+        <p style="margin-top:1rem;color:var(--texto-fraco)">
+          Todo item abaixo está escrito no contrato que você assina — não é política interna,
+          é cláusula. Se descumprirmos, o desconto é automático.
+        </p>
+      </div>
+      <ul class="garantia-lista">
+        <li><span>Medição e projeto executivo sem custo, mesmo que você não feche.</span></li>
+        <li><span>Preço travado após a assinatura — reajuste de chapa é problema nosso.</span></li>
+        <li><span>Multa de 1% ao dia sobre o valor do contrato em caso de atraso nosso.</span></li>
+        <li><span>Garantia de 5 anos em estrutura, ferragem e acabamento.</span></li>
+        <li><span>Assistência em até 48 h úteis durante toda a garantia.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 9 · FAQ ════════════════════════════════════════════ -->
+<section class="sec sec-alt">
+  <div class="env">
+    <div class="sec-cab rev">
+      <div>
+        <p class="selo">Antes de você perguntar</p>
+        <h2>As dúvidas que aparecem em toda medição.</h2>
+      </div>
+      <p>Se a sua não estiver aqui, mande no WhatsApp — respondemos em minutos, em horário comercial.</p>
+    </div>
+
+    <div class="faq rev">
+      <details>
+        <summary>Quanto custa por metro linear?<span></span></summary>
+        <p>Depende do acabamento e da complexidade interna. Na prática, projetos ficam entre R$ 1.400 e R$ 4.200 por metro linear — use o simulador acima para ver a faixa do seu caso. O valor exato sai do projeto executivo, e não muda depois de assinado.</p>
+      </details>
+      <details>
+        <summary>Vocês cobram pelo projeto?<span></span></summary>
+        <p>Não. Medição a laser, projeto executivo e render 3D são gratuitos, mesmo se você decidir não fechar. Você fica com o material — pedimos apenas que não seja usado para orçar em outra marcenaria.</p>
+      </details>
+      <details>
+        <summary>Qual o prazo real de entrega?<span></span></summary>
+        <p>Entre 26 e 58 dias, contados da aprovação do projeto executivo. O prazo do seu projeto entra no contrato com data fechada e multa por atraso nosso de 1% ao dia.</p>
+      </details>
+      <details>
+        <summary>Atendem obra em andamento?<span></span></summary>
+        <p>Sim, e é o cenário ideal. Entramos ainda na fase de elétrica e hidráulica para posicionar pontos conforme o projeto do móvel — evita tomada atrás de gaveteiro e ralo embaixo de armário.</p>
+      </details>
+      <details>
+        <summary>Posso parcelar?<span></span></summary>
+        <p>Em até 12× sem juros no cartão, ou entrada + parcelas na produção. Também trabalhamos com financiamento de reforma via banco parceiro para projetos acima de R$ 30 mil.</p>
+      </details>
+      <details>
+        <summary>E se eu já tiver projeto de arquiteto?<span></span></summary>
+        <p>Melhor ainda. Executamos projeto de terceiros e devolvemos o detalhamento executivo para aprovação do seu arquiteto antes de cortar. Comissionamos parcerias com escritórios.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 10 · CTA FINAL ═════════════════════════════════════ -->
+<section class="fecho" id="agendar">
+  <div class="env fecho-in">
+    <div>
+      <p class="selo">Agende a medição</p>
+      <h2>Sua medição desta semana já tem<br>o projeto pronto em 7 dias.</h2>
+      <p>
+        Abrimos 6 medições por semana para manter o prazo de projeto em 5 a 7 dias.
+        Escolha o horário, receba a visita e fique com o executivo — feche ou não.
+      </p>
+    </div>
+    <div class="fecho-acoes">
+      <a class="btn btn-latao" id="cta-whats-2" href="#" target="_blank" rel="noopener">Falar no WhatsApp agora</a>
+      <a class="btn btn-vazado" href="tel:+551140028922" style="color:#ece8df;border-color:rgba(236,232,223,.3);justify-content:center">(11) 4002-8922</a>
+      <p class="fecho-nota">
+        Seg a sex, 8h–18h · Sáb, 9h–13h<br>
+        Atendemos São Paulo capital, ABC e Alphaville.<br>
+        Resposta média: 7 minutos em horário comercial.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RODAPÉ ═════════════════════════════════════════════ -->
+<footer class="rodape">
+  <div class="env">
+    <div class="rodape-in">
+      <div class="rodape-col">
+        <a class="marca" href="#topo"><b>SmartFactory</b><span>Móveis Planejados</span></a>
+        <p style="margin-top:.6rem">
+          Marcenaria de projeto com fábrica própria em São Paulo. Projeto executivo,
+          produção CNC e instalação com equipe própria desde 2009.
+        </p>
+      </div>
+      <div class="rodape-col">
+        <b>Navegação</b>
+        <a href="#projeto">Como projetamos</a>
+        <a href="#simulador">Simulador de investimento</a>
+        <a href="#ambientes">Projetos executados</a>
+        <a href="#processo">Processo e prazos</a>
+      </div>
+      <div class="rodape-col">
+        <b>Contato</b>
+        <a href="tel:+551140028922">(11) 4002-8922</a>
+        <a href="mailto:projetos@smartfactory.com.br">projetos@smartfactory.com.br</a>
+        <p>Showroom: Rua das Marcenarias, 480<br>Vila Olímpia · São Paulo/SP</p>
+      </div>
+    </div>
+    <div class="rodape-fim">
+      <span>© <span id="ano">2026</span> SmartFactory Móveis Planejados · CNPJ 00.000.000/0001-00</span>
+      <span>Política de privacidade · Termos de garantia</span>
+    </div>
+  </div>
+</footer>
+
+<!-- barra fixa mobile -->
+<div class="barra-mob">
+  <a class="btn btn-vazado" href="#simulador">Simular</a>
+  <a class="btn btn-latao" id="cta-whats-3" href="#" target="_blank" rel="noopener">WhatsApp</a>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ── configuração editável ───────────────────────────── */
+  const CFG = {
+    whatsapp: "5511940028922",            // número com DDI, só dígitos
+    // R$ por metro linear (mínimo, máximo) por acabamento
+    acabamento: {
+      mdf:        { nome: "MDF branco",     min: 1400, max: 1900 },
+      amadeirado: { nome: "Amadeirado",     min: 1900, max: 2600 },
+      laca:       { nome: "Laca fosca",     min: 2600, max: 3500 },
+      lamina:     { nome: "Lâmina natural", min: 3200, max: 4200 }
+    },
+    // multiplicador de complexidade por ambiente
+    ambiente: {
+      dormitorio: { nome: "Dormitório",   mult: 1.00, dias: 0 },
+      cozinha:    { nome: "Cozinha",      mult: 1.28, dias: 6 },
+      closet:     { nome: "Closet",       mult: 1.12, dias: 3 },
+      homeoffice: { nome: "Home office",  mult: 0.94, dias: -3 },
+      sala:       { nome: "Sala / painel", mult: 0.88, dias: -4 }
+    },
+    extras: {
+      ferragem:   { nome: "Ferragem Blum",        mult: 0.12, dias: 0 },
+      iluminacao: { nome: "Iluminação embutida",  mult: 0.09, dias: 2 },
+      pedra:      { nome: "Bancada em pedra",     mult: 0.18, dias: 5 },
+      vidro:      { nome: "Portas em vidro",      mult: 0.14, dias: 4 }
+    }
+  };
+
+  const estado = {
+    ambiente: "dormitorio",
+    acabamento: "amadeirado",
+    metros: 6,
+    extras: new Set(["ferragem"])
+  };
+
+  const $ = (s, ctx = document) => ctx.querySelector(s);
+  const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
+  const arredonda = n => Math.round(n / 100) * 100;
+
+  /* ── cabeçalho condensado ────────────────────────────── */
+  const topo = $("#topo");
+  const aoRolar = () => topo.classList.toggle("fixo", window.scrollY > 16);
+  aoRolar();
+  addEventListener("scroll", aoRolar, { passive: true });
+
+  /* ── tema ────────────────────────────────────────────── */
+  const raiz = document.documentElement;
+  $("#btn-tema").addEventListener("click", () => {
+    const escuroAgora = raiz.dataset.theme
+      ? raiz.dataset.theme === "dark"
+      : matchMedia("(prefers-color-scheme: dark)").matches;
+    raiz.dataset.theme = escuroAgora ? "light" : "dark";
+  });
+
+  /* ── revelação por scroll ────────────────────────────── */
+  const alvos = $$(".rev");
+  if ("IntersectionObserver" in window) {
+    const obs = new IntersectionObserver((entradas) => {
+      entradas.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add("vis"); obs.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: .12 });
+    alvos.forEach(el => obs.observe(el));
+  } else {
+    alvos.forEach(el => el.classList.add("vis"));
+  }
+
+  /* ── contadores do hero ──────────────────────────────── */
+  const semMovimento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $$("[data-conta]").forEach(el => {
+    const alvo = +el.dataset.conta;
+    const sufixo = el.dataset.sufixo || "";
+    if (semMovimento) { el.textContent = alvo.toLocaleString("pt-BR") + sufixo; return; }
+    const inicio = performance.now(), dur = 1400;
+    const passo = (t) => {
+      const p = Math.min((t - inicio) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(alvo * eased).toLocaleString("pt-BR") + sufixo;
+      if (p < 1) requestAnimationFrame(passo);
+    };
+    requestAnimationFrame(passo);
+  });
+
+  /* ── comparador planta / peça ────────────────────────── */
+  const range = $("#range-comp");
+  const camada = $("#camada-render");
+  const alca = $("#alca-comp");
+  const quadro = $("#comparador");
+  const aplicaCorte = (v) => {
+    camada.style.setProperty("--corte", v + "%");
+    alca.style.left = v + "%";
+  };
+  aplicaCorte(range.value);
+  range.addEventListener("input", () => aplicaCorte(range.value));
+  quadro.addEventListener("pointermove", (e) => {
+    if (e.pointerType === "mouse" && e.buttons === 0) {
+      const r = quadro.getBoundingClientRect();
+      const v = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+      range.value = v; aplicaCorte(v);
+    }
+  });
+
+  /* ── simulador ───────────────────────────────────────── */
+  const grupos = {
+    ambiente: $("#grupo-ambiente"),
+    acabamento: $("#grupo-acabamento"),
+    extras: $("#grupo-extras")
+  };
+
+  Object.entries(grupos).forEach(([chave, grupo]) => {
+    grupo.addEventListener("click", (e) => {
+      const btn = e.target.closest(".opcao");
+      if (!btn) return;
+      const val = btn.dataset.val;
+      if (chave === "extras") {
+        const ativo = btn.getAttribute("aria-pressed") === "true";
+        btn.setAttribute("aria-pressed", String(!ativo));
+        ativo ? estado.extras.delete(val) : estado.extras.add(val);
+      } else {
+        $$(".opcao", grupo).forEach(b => b.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        estado[chave] = val;
+      }
+      calcular();
+    });
+  });
+
+  const sliderMetros = $("#metros");
+  sliderMetros.addEventListener("input", () => {
+    estado.metros = +sliderMetros.value;
+    calcular();
+  });
+
+  /* preview: desenha módulos proporcionais ao nº de metros */
+  const desenhaPreview = () => {
+    const g = $("#preview-modulos");
+    const cores = {
+      mdf: ["#d8d5cd", "#c3c0b8"],
+      amadeirado: ["#7b5335", "#5c3d27"],
+      laca: ["#33313c", "#26242e"],
+      lamina: ["#8a6039", "#6b4a2c"]
+    }[estado.acabamento];
+    const nMod = Math.max(2, Math.min(10, Math.round(estado.metros / 1.2)));
+    const x0 = 30, larguraTotal = 360, vao = 3;
+    const larg = (larguraTotal - vao * (nMod - 1)) / nMod;
+    let html = '<rect x="30" y="24" width="360" height="94" fill="#0f0e14"/>';
+    for (let i = 0; i < nMod; i++) {
+      const x = x0 + i * (larg + vao);
+      html += `<rect x="${x.toFixed(1)}" y="26" width="${larg.toFixed(1)}" height="90" fill="${cores[i % 2]}"/>`;
+      if (estado.extras.has("vidro") && i % 3 === 1) {
+        html += `<rect x="${(x + 4).toFixed(1)}" y="30" width="${(larg - 8).toFixed(1)}" height="82" fill="#79a9dc" opacity=".18"/>`;
+      }
+      html += `<rect x="${(x + larg / 2 - 12).toFixed(1)}" y="96" width="24" height="2.5" fill="#b5904e"/>`;
+    }
+    if (estado.extras.has("iluminacao")) {
+      html += '<rect x="30" y="24" width="360" height="3" fill="#ffe0aa" opacity=".55"/>';
+    }
+    if (estado.extras.has("pedra")) {
+      html += '<rect x="30" y="116" width="360" height="6" fill="#8d8a95"/>';
+    }
+    g.innerHTML = html;
+    $("#preview-cota").textContent = (estado.metros * 1000).toLocaleString("pt-BR") + " mm";
+  };
+
+  function calcular() {
+    const acab = CFG.acabamento[estado.acabamento];
+    const amb = CFG.ambiente[estado.ambiente];
+    let multExtras = 1;
+    let diasExtras = 0;
+    estado.extras.forEach(k => {
+      multExtras += CFG.extras[k].mult;
+      diasExtras += CFG.extras[k].dias;
+    });
+
+    const min = arredonda(acab.min * estado.metros * amb.mult * multExtras);
+    const max = arredonda(acab.max * estado.metros * amb.mult * multExtras);
+    const dias = Math.round(24 + estado.metros * 1.5 + amb.dias + diasExtras);
+    const parcela = Math.round(min / 12);
+
+    $("#preco-min").textContent = "R$ " + min.toLocaleString("pt-BR");
+    $("#preco-max").textContent = "R$ " + max.toLocaleString("pt-BR");
+    $("#out-prazo").textContent = dias + " dias";
+    $("#out-parcela").textContent = "R$ " + parcela.toLocaleString("pt-BR");
+
+    $("#lbl-ambiente").textContent = amb.nome;
+    $("#lbl-acabamento").textContent = acab.nome;
+    $("#lbl-metros").textContent = estado.metros;
+    const nEx = estado.extras.size;
+    $("#lbl-extras").textContent = nEx === 0 ? "nenhum" : nEx + (nEx === 1 ? " selecionado" : " selecionados");
+
+    desenhaPreview();
+
+    const listaExtras = [...estado.extras].map(k => CFG.extras[k].nome).join(", ") || "nenhum";
+    const msg =
+      `Olá! Simulei meu projeto no site:\n\n` +
+      `• Ambiente: ${amb.nome}\n` +
+      `• Acabamento: ${acab.nome}\n` +
+      `• Metros lineares: ${estado.metros} m\n` +
+      `• Extras: ${listaExtras}\n` +
+      `• Faixa estimada: R$ ${min.toLocaleString("pt-BR")} a R$ ${max.toLocaleString("pt-BR")}\n\n` +
+      `Quero agendar a medição gratuita.`;
+    const url = `https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(msg)}`;
+    ["#cta-whats", "#cta-whats-2", "#cta-whats-3"].forEach(sel => {
+      const el = $(sel); if (el) el.href = url;
+    });
+  }
+
+  calcular();
+  $("#ano").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
