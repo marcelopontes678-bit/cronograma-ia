@@ -165,8 +165,13 @@ DEPENDENCY_MAPPER = AgentSpec(
     codigo="05",
     nome="Dependency Mapper",
     fase=Fase.PLANEJAMENTO,
-    tarefa="Ordenar os tópicos por pré-requisito, detectando ciclos e órfãos",
-    depende_de=("04",),
+    tarefa=(
+        "Construir o Grafo de Aprendizagem: DAG de pré-requisitos com ondas de "
+        "estudo paralelo, caminho crítico, nós bloqueadores, profundidade e "
+        "sequência lógica ideal"
+    ),
+    depende_de=("01", "02", "03", "04"),
+    entradas_do_usuario=("pre_requisitos",),
 )
 
 ROADMAP_BUILDER = AgentSpec(

@@ -17,14 +17,16 @@ backend/app/studyos/
     ├── perfil.py       # agente 01 — Profile Analyzer
     ├── objetivo.py     # agente 02 — Goal Analyzer
     ├── conhecimento.py # agente 03 — Knowledge Analyzer
-    └── curriculo.py    # agente 04 — Curriculum Builder
+    ├── curriculo.py    # agente 04 — Curriculum Builder
+    └── dependencias.py # agente 05 — Dependency Mapper
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`01-profile-analyzer.md`](01-profile-analyzer.md),
 [`02-goal-analyzer.md`](02-goal-analyzer.md),
 [`03-knowledge-analyzer.md`](03-knowledge-analyzer.md),
-[`04-curriculum-builder.md`](04-curriculum-builder.md).
+[`04-curriculum-builder.md`](04-curriculum-builder.md),
+[`05-dependency-mapper.md`](05-dependency-mapper.md).
 
 ## API
 
