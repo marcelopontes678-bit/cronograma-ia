@@ -97,8 +97,25 @@ GOAL_ANALYZER = AgentSpec(
     codigo="02",
     nome="Goal Analyzer",
     fase=Fase.DIAGNOSTICO,
-    tarefa="Traduzir o pedido em objetivo mensurável, escopo e prazo",
-    entradas_do_usuario=("objetivo", "prazo", "solicitacao"),
+    tarefa=(
+        "Converter o objetivo em Mapa Estratégico de Aprendizagem: categoria, "
+        "disciplinas, prioridades, competências, carga estimada, prazo e "
+        "critérios de sucesso"
+    ),
+    # O Mapa Estratégico usa o Perfil Cognitivo como entrada (tempo e prazo).
+    depende_de=("01",),
+    entradas_do_usuario=(
+        "objetivo",
+        "objetivos_secundarios",
+        "exame",
+        "categoria",
+        "data_prova",
+        "edital",
+        "materias",
+        "bibliografia",
+        "materiais_obrigatorios",
+        "nota_corte",
+    ),
 )
 
 KNOWLEDGE_ANALYZER = AgentSpec(

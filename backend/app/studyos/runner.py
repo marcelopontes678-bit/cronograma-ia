@@ -60,7 +60,6 @@ class RunnerEstrutural:
 
     #: Campos que cada agente ainda sem implementação precisa do usuário.
     CAMPOS_ESPERADOS: dict[str, tuple[str, ...]] = {
-        "02": ("objetivo", "prazo"),
         "03": ("nivel_atual",),
         "16": ("historico",),
         "17": ("historico",),

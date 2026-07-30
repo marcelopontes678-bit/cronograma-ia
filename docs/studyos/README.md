@@ -13,11 +13,14 @@ backend/app/studyos/
 ├── validators.py    # agente 24: validação estrutural do fluxo
 ├── orchestrator.py  # Master Orchestrator
 └── agentes/         # implementações concretas
-    └── perfil.py    # agente 01 — Profile Analyzer
+    ├── comum.py     # coerção de entradas compartilhada
+    ├── perfil.py    # agente 01 — Profile Analyzer
+    └── objetivo.py  # agente 02 — Goal Analyzer
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
-[`01-profile-analyzer.md`](01-profile-analyzer.md).
+[`01-profile-analyzer.md`](01-profile-analyzer.md),
+[`02-goal-analyzer.md`](02-goal-analyzer.md).
 
 ## API
 
@@ -44,7 +47,9 @@ curl -X POST localhost:8000/api/v1/studyos/orquestrar \
       "experiencia_anterior": "já estudei um ano",
       "disciplinas_favoritas": ["Português"],
       "disciplinas_dificuldade": ["Estatística", "RLM"],
-      "preferencia_estudo": "videoaula e mapa mental"
+      "preferencia_estudo": "videoaula e mapa mental",
+      "edital": {"Português": ["Sintaxe", "Crase"], "RLM": ["Lógica proposicional"]},
+      "nota_corte": 70
     }
   }'
 ```

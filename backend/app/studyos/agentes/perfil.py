@@ -9,10 +9,13 @@ informou. Campo não informado vira lacuna declarada — nunca um valor assumido
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date
 from typing import Any
 
-from app.studyos.intents import normalizar
+from app.studyos.agentes.comum import como_data as _data
+from app.studyos.agentes.comum import como_lista as _lista
+from app.studyos.agentes.comum import como_numero as _numero
+from app.studyos.agentes.comum import como_texto as _texto
 
 # --------------------------------------------------------------------------- #
 # Constantes declaradas (heurísticas explícitas, não valores inventados)
@@ -91,46 +94,6 @@ ESTILOS: dict[str, tuple[str, ...]] = {
     "leitura_escrita": ("ler", "leitura", "livro", "apostila", "pdf", "resumo", "escrever", "anotar", "texto"),
     "cinestesico": ("exercicio", "exercicios", "questoes", "praticar", "pratica", "resolver", "projeto", "mao na massa", "simulado"),
 }
-
-
-def _texto(valor: Any) -> str:
-    if valor is None:
-        return ""
-    if isinstance(valor, (list, tuple, set)):
-        return normalizar(" ".join(str(v) for v in valor))
-    return normalizar(str(valor))
-
-
-def _lista(valor: Any) -> list[str]:
-    if valor in (None, "", [], {}):
-        return []
-    if isinstance(valor, (list, tuple, set)):
-        return [str(v).strip() for v in valor if str(v).strip()]
-    return [parte.strip() for parte in str(valor).split(",") if parte.strip()]
-
-
-def _numero(valor: Any) -> float | None:
-    if valor in (None, "", [], {}):
-        return None
-    try:
-        return float(str(valor).replace(",", "."))
-    except ValueError:
-        return None
-
-
-def _data(valor: Any) -> date | None:
-    if isinstance(valor, datetime):
-        return valor.date()
-    if isinstance(valor, date):
-        return valor
-    if not valor:
-        return None
-    for formato in ("%Y-%m-%d", "%d/%m/%Y", "%d-%m-%Y"):
-        try:
-            return datetime.strptime(str(valor).strip(), formato).date()
-        except ValueError:
-            continue
-    return None
 
 
 def _achatar(dados: dict[str, Any]) -> dict[str, Any]:

@@ -52,7 +52,7 @@ Sempre e apenas quatro blocos:
 | # | Agente | Fase | Depende de |
 | --- | --- | --- | --- |
 | 01 | Profile Analyzer | diagnóstico | — |
-| 02 | Goal Analyzer | diagnóstico | — |
+| 02 | Goal Analyzer | diagnóstico | 01 |
 | 03 | Knowledge Analyzer | diagnóstico | 02 |
 | 04 | Curriculum Builder | planejamento | 02, 03 |
 | 05 | Dependency Mapper | planejamento | 04 |
