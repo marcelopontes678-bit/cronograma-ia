@@ -175,7 +175,11 @@ SEPARADORES_SECUNDARIOS = (
 def _disciplina(nome: str, topicos: Any, peso: Any, questoes: Any, origem: str) -> dict:
     return {
         "nome": nome.strip(),
-        "topicos": como_lista(topicos),
+        # `filhos_estruturais` no lugar de `como_lista` porque o tópico pode
+        # chegar como dicionário ({"nome": ..., "pre_requisitos": [...]}), e
+        # nesse caso a coerção genérica devolveria o dicionário inteiro como
+        # se fosse o nome do tópico.
+        "topicos": [nome_topico for nome_topico, _ in filhos_estruturais(topicos)],
         "peso": como_numero(peso),
         "questoes": como_numero(questoes),
         "origem": origem,

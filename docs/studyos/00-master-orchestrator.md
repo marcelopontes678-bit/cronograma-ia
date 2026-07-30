@@ -67,7 +67,7 @@ Sempre e apenas quatro blocos:
 | 14 | Memory Scheduler | memória | 01, 02, 03, 05, 06, 10, 11, 12, 13 |
 | 15 | Revision Planner | memória | 06, 10, 11, 12, 13, 14 |
 | 16 | Exam Simulator | avaliação | 01, 02, 03, 04, 05, 06, 09, 12, 13, 15 |
-| 17 | Error Analyzer | avaliação | 16 |
+| 17 | Error Analyzer | avaliação | 01, 03, 05, 09, 12, 13, 15, 16 |
 | 18 | Weakness Finder | avaliação | 17 |
 | 19 | Coach | acompanhamento | 01, 06 |
 | 20 | Habit Builder | acompanhamento | 01, 06 |

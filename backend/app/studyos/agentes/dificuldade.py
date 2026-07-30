@@ -19,7 +19,14 @@ from __future__ import annotations
 from datetime import date
 from typing import Any
 
-from app.studyos.agentes.comum import como_data, como_lista, como_numero, como_texto, preenchido
+from app.studyos.agentes.comum import (
+    como_data,
+    como_lista,
+    como_lista_de_dicts,
+    como_numero,
+    como_texto,
+    preenchido,
+)
 
 # --------------------------------------------------------------------------- #
 # Constantes declaradas
@@ -70,6 +77,19 @@ TIPO_POR_CATEGORIA: dict[str, str] = {
 }
 
 TIPOS_DE_DIFICULDADE = ("conceitual", "procedimental", "interpretacao", "memorizacao")
+
+#: Tipo de erro do agente 17 → vocabulário de dificuldade daqui. Os tipos que
+#: não descrevem falha com o conteúdo (atenção, estratégia, gestão do tempo)
+#: mapeiam para nada de propósito: são erros de execução da prova.
+TIPO_DO_AGENTE_17: dict[str, str | None] = {
+    "conceitual": "conceitual",
+    "interpretacao": "interpretacao",
+    "memorizacao": "memorizacao",
+    "calculo": "procedimental",
+    "estrategia": None,
+    "atencao": None,
+    "gestao_do_tempo": None,
+}
 
 
 def _classificar(indice: float | None) -> str:
@@ -122,14 +142,6 @@ def _erros_registrados(campos: dict, relatorio_de_erros: dict, exercicios: dict)
             }
         )
     return erros
-
-
-def como_lista_de_dicts(valor: Any) -> list[dict]:
-    if not preenchido(valor):
-        return []
-    if isinstance(valor, dict):
-        return [valor]
-    return [item for item in valor if isinstance(item, dict)]
 
 
 def _tempos(campos: dict, revisoes: dict) -> dict[str, dict]:
@@ -247,10 +259,17 @@ def _indice_do_topico(
 def _tipos_de_dificuldade(erros: list[dict]) -> dict:
     contagem = {tipo: 0 for tipo in TIPOS_DE_DIFICULDADE}
     sem_classificacao = 0
+    fora_do_conteudo = 0
     for erro in erros:
         tipo = como_texto(erro.get("tipo") or "")
-        if tipo in contagem:
-            contagem[tipo] += 1
+        traduzido = TIPO_DO_AGENTE_17.get(tipo, tipo)
+        if traduzido in contagem:
+            contagem[traduzido] += 1
+        elif tipo in TIPO_DO_AGENTE_17:
+            # Classificado pelo agente 17, mas como falha de execução da prova
+            # (atenção, estratégia, tempo). Não é dificuldade com o conteúdo, e
+            # contá-lo aqui inflaria o índice do tópico.
+            fora_do_conteudo += 1
         else:
             sem_classificacao += 1
 
@@ -260,6 +279,7 @@ def _tipos_de_dificuldade(erros: list[dict]) -> dict:
         "predominante": predominante,
         "contagem": detectados,
         "erros_sem_classificacao": sem_classificacao,
+        "erros_nao_atribuiveis_ao_conteudo": fora_do_conteudo,
         "base": (
             "categoria da questão errada (taxonomia do agente 09) ou tipo "
             "declarado no relatório de erros"

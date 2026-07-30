@@ -351,8 +351,18 @@ ERROR_ANALYZER = AgentSpec(
     codigo="17",
     nome="Error Analyzer",
     fase=Fase.AVALIACAO,
-    tarefa="Classificar os erros do simulado por causa raiz",
-    depende_de=("16",),
+    tarefa=(
+        "Construir o Relatório Inteligente de Erros: tipo e causa raiz com "
+        "evidência declarada, recorrência, gravidade, impacto no desempenho, "
+        "evolução da taxa de erro e recomendações de intervenção"
+    ),
+    depende_de=("01", "03", "05", "09", "12", "13", "15", "16"),
+    entradas_do_usuario=(
+        "respostas",
+        "erros",
+        "historico_respostas",
+        "relatorio_de_erros_anterior",
+    ),
 )
 
 WEAKNESS_FINDER = AgentSpec(

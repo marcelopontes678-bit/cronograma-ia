@@ -62,6 +62,15 @@ def como_data(valor: Any) -> date | None:
     return None
 
 
+def como_lista_de_dicts(valor: Any) -> list[dict]:
+    """Registros do usuário: um dicionário solto vale como lista de um."""
+    if not preenchido(valor):
+        return []
+    if isinstance(valor, dict):
+        return [valor]
+    return [item for item in valor if isinstance(item, dict)]
+
+
 def preenchido(valor: Any) -> bool:
     return valor not in VAZIOS
 
@@ -71,6 +80,9 @@ CHAVES_ESTRUTURAIS: tuple[str, ...] = (
     "modulos", "topicos", "conteudos", "subtopicos", "microtopicos",
     "peso", "questoes", "importancia", "obrigatorio", "opcional", "nome",
     "disciplina", "materia",
+    # Metadados do nó, não conteúdo dentro dele: sem isso, um tópico que
+    # declara pré-requisito vira um "conteúdo" chamado pre_requisitos.
+    "pre_requisitos", "pre_requisito", "requisitos", "depende_de",
 )
 
 

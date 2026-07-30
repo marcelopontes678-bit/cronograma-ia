@@ -189,6 +189,28 @@ def test_edital_como_lista_de_dicts_e_aceito():
     assert resultado["disciplinas"][0]["peso"] == 2.0
 
 
+def test_topico_como_dict_vira_nome_e_nao_o_dict_inteiro():
+    """Tópico com metadados é nome + metadados, não um nome esquisito."""
+    resultado = analisar(
+        entradas(
+            {
+                "objetivo": "Concurso",
+                "edital": {
+                    "Estatística": {
+                        "questoes": 10,
+                        "topicos": [
+                            {"nome": "Conjuntos"},
+                            {"nome": "Probabilidade", "pre_requisitos": ["Conjuntos"]},
+                        ],
+                    }
+                },
+            }
+        ),
+        hoje=HOJE,
+    )
+    assert resultado["disciplinas"][0]["topicos"] == ["Conjuntos", "Probabilidade"]
+
+
 def test_edital_modular_e_achatado_em_topicos():
     resultado = analisar(
         entradas(
