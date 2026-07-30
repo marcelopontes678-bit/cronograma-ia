@@ -21,7 +21,8 @@ backend/app/studyos/
     ├── dependencias.py # agente 05 — Dependency Mapper
     ├── roadmap.py      # agente 06 — Roadmap Builder
     ├── aula.py         # agente 07 — Lesson Generator
-    └── exemplos.py     # agente 08 — Example Generator
+    ├── exemplos.py     # agente 08 — Example Generator
+    └── exercicios.py   # agente 09 — Exercise Generator
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
@@ -32,7 +33,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`05-dependency-mapper.md`](05-dependency-mapper.md),
 [`06-roadmap-builder.md`](06-roadmap-builder.md),
 [`07-lesson-generator.md`](07-lesson-generator.md),
-[`08-example-generator.md`](08-example-generator.md).
+[`08-example-generator.md`](08-example-generator.md),
+[`09-exercise-generator.md`](09-exercise-generator.md).
 
 ## API
 

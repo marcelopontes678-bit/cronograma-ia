@@ -59,7 +59,7 @@ Sempre e apenas quatro blocos:
 | 06 | Roadmap Builder | planejamento | 01, 02, 03, 04, 05 |
 | 07 | Lesson Generator | produção | 01, 03, 04, 05, 06 |
 | 08 | Example Generator | produção | 01, 03, 07 |
-| 09 | Exercise Generator | produção | 07 |
+| 09 | Exercise Generator | produção | 01, 03, 04, 05, 06, 07, 08 |
 | 10 | Flashcard Generator | produção | 07 |
 | 11 | Summary Generator | produção | 07 |
 | 12 | Difficulty Detector | tutoria | 03, 09 |

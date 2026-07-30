@@ -227,8 +227,13 @@ EXERCISE_GENERATOR = AgentSpec(
     codigo="09",
     nome="Exercise Generator",
     fase=Fase.PRODUCAO,
-    tarefa="Gerar exercícios calibrados por aula e nível",
-    depende_de=("07",),
+    tarefa=(
+        "Gerar a bateria de exercícios do conteúdo estudado: categorias em "
+        "ordem crescente, formatos variados, cobertura dos conceitos, gabarito "
+        "com explicação, competência e pontuação por questão"
+    ),
+    depende_de=("01", "03", "04", "05", "06", "07", "08"),
+    entradas_do_usuario=("conteudo_solicitado", "tempo_disponivel_min"),
 )
 
 FLASHCARD_GENERATOR = AgentSpec(

@@ -13,6 +13,7 @@ from app.studyos.agentes import (
     curriculo,
     dependencias,
     exemplos,
+    exercicios,
     objetivo,
     perfil,
     roadmap,
@@ -28,6 +29,7 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "06": roadmap.construir,
     "07": aula.gerar,
     "08": exemplos.gerar,
+    "09": exercicios.gerar,
 }
 
 __all__ = [
@@ -37,6 +39,7 @@ __all__ = [
     "curriculo",
     "dependencias",
     "exemplos",
+    "exercicios",
     "objetivo",
     "perfil",
     "roadmap",
