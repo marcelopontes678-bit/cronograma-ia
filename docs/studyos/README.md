@@ -26,6 +26,7 @@ backend/app/studyos/
     ├── flashcards.py   # agente 10 — Flashcard Generator
     ├── resumos.py      # agente 11 — Summary Generator
     ├── dificuldade.py  # agente 12 — Difficulty Detector
+    ├── adaptativo.py   # agente 13 — Adaptive Teacher
     └── portoes.py      # regras de bloqueio compartilhadas
 ```
 
@@ -41,7 +42,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`09-exercise-generator.md`](09-exercise-generator.md),
 [`10-flashcard-generator.md`](10-flashcard-generator.md),
 [`11-summary-generator.md`](11-summary-generator.md),
-[`12-difficulty-detector.md`](12-difficulty-detector.md).
+[`12-difficulty-detector.md`](12-difficulty-detector.md),
+[`13-adaptive-teacher.md`](13-adaptive-teacher.md).
 
 ## API
 

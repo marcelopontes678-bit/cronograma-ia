@@ -284,8 +284,13 @@ ADAPTIVE_TEACHER = AgentSpec(
     codigo="13",
     nome="Adaptive Teacher",
     fase=Fase.TUTORIA,
-    tarefa="Reescrever a explicação nos pontos de maior dificuldade",
-    depende_de=("07", "12"),
+    tarefa=(
+        "Adaptar a experiência de ensino: estratégia didática, nível de "
+        "linguagem, ritmo, profundidade, exemplos e analogias, com critérios de "
+        "domínio e recomendação de avançar, revisar, reforçar ou repetir"
+    ),
+    depende_de=("01", "02", "03", "07", "08", "09", "10", "11", "12"),
+    entradas_do_usuario=("conteudo_solicitado", "estrategias_ja_usadas"),
 )
 
 MEMORY_SCHEDULER = AgentSpec(
