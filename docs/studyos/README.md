@@ -28,6 +28,7 @@ backend/app/studyos/
     ├── dificuldade.py  # agente 12 — Difficulty Detector
     ├── adaptativo.py   # agente 13 — Adaptive Teacher
     ├── memoria.py      # agente 14 — Memory Scheduler
+    ├── revisao.py      # agente 15 — Revision Planner
     └── portoes.py      # regras de bloqueio compartilhadas
 ```
 
@@ -45,7 +46,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`11-summary-generator.md`](11-summary-generator.md),
 [`12-difficulty-detector.md`](12-difficulty-detector.md),
 [`13-adaptive-teacher.md`](13-adaptive-teacher.md),
-[`14-memory-scheduler.md`](14-memory-scheduler.md).
+[`14-memory-scheduler.md`](14-memory-scheduler.md),
+[`15-revision-planner.md`](15-revision-planner.md).
 
 ## API
 

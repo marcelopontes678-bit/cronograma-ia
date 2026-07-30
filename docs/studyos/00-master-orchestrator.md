@@ -65,7 +65,7 @@ Sempre e apenas quatro blocos:
 | 12 | Difficulty Detector | tutoria | 01, 02, 03, 04, 05, 06, 09 |
 | 13 | Adaptive Teacher | tutoria | 01, 02, 03, 07, 08, 09, 10, 11, 12 |
 | 14 | Memory Scheduler | memória | 01, 02, 03, 05, 06, 10, 11, 12, 13 |
-| 15 | Revision Planner | memória | 06, 14 |
+| 15 | Revision Planner | memória | 06, 10, 11, 12, 13, 14 |
 | 16 | Exam Simulator | avaliação | 04, 09 |
 | 17 | Error Analyzer | avaliação | 16 |
 | 18 | Weakness Finder | avaliação | 17 |

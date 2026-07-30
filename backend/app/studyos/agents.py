@@ -315,8 +315,13 @@ REVISION_PLANNER = AgentSpec(
     codigo="15",
     nome="Revision Planner",
     fase=Fase.MEMORIA,
-    tarefa="Encaixar as revisões no roadmap sem estourar a carga diária",
-    depende_de=("06", "14"),
+    tarefa=(
+        "Transformar o calendário de revisões em sessões executáveis: tipo, "
+        "duração, objetivo, método, materiais, critério de conclusão e meta, "
+        "com equilíbrio de dificuldade e teto de carga por sessão"
+    ),
+    depende_de=("06", "10", "11", "12", "13", "14"),
+    entradas_do_usuario=("tempo_revisao_min", "sessoes_anteriores"),
 )
 
 EXAM_SIMULATOR = AgentSpec(
