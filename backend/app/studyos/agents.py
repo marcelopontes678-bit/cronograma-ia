@@ -297,8 +297,18 @@ MEMORY_SCHEDULER = AgentSpec(
     codigo="14",
     nome="Memory Scheduler",
     fase=Fase.MEMORIA,
-    tarefa="Definir os intervalos de repetição espaçada dos flashcards",
-    depende_de=("06", "10"),
+    tarefa=(
+        "Construir o Plano de Revisões: retenção e risco de esquecimento por "
+        "conteúdo, intervalos de repetição espaçada, método recomendado, "
+        "prioridade e calendário agrupado por contexto"
+    ),
+    depende_de=("01", "02", "03", "05", "06", "10", "11", "12", "13"),
+    entradas_do_usuario=(
+        "historico_revisoes",
+        "maximo_revisoes_por_dia",
+        "plano_anterior",
+        "data_prova",
+    ),
 )
 
 REVISION_PLANNER = AgentSpec(
