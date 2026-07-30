@@ -122,9 +122,21 @@ KNOWLEDGE_ANALYZER = AgentSpec(
     codigo="03",
     nome="Knowledge Analyzer",
     fase=Fase.DIAGNOSTICO,
-    tarefa="Mapear conhecimento atual e lacunas em relação ao objetivo",
-    depende_de=("02",),
-    entradas_do_usuario=("nivel_atual", "historico"),
+    tarefa=(
+        "Construir o Mapa de Conhecimento Estruturado: domínio por tópico com "
+        "base em evidência prática, lacunas, pré-requisitos ausentes, tópicos "
+        "esquecidos, esforço por tópico e Índice Geral de Conhecimento"
+    ),
+    depende_de=("01", "02"),
+    entradas_do_usuario=(
+        "historico",
+        "resultados_simulados",
+        "resultados_exercicios",
+        "questionario_diagnostico",
+        "ultimo_contato",
+        "subtopicos",
+        "pre_requisitos",
+    ),
 )
 
 CURRICULUM_BUILDER = AgentSpec(
