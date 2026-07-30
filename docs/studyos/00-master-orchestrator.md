@@ -54,7 +54,7 @@ Sempre e apenas quatro blocos:
 | 01 | Profile Analyzer | diagnóstico | — |
 | 02 | Goal Analyzer | diagnóstico | 01 |
 | 03 | Knowledge Analyzer | diagnóstico | 01, 02 |
-| 04 | Curriculum Builder | planejamento | 02, 03 |
+| 04 | Curriculum Builder | planejamento | 01, 02, 03 |
 | 05 | Dependency Mapper | planejamento | 04 |
 | 06 | Roadmap Builder | planejamento | 01, 05 |
 | 07 | Lesson Generator | produção | 06 |

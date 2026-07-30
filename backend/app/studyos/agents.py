@@ -143,8 +143,22 @@ CURRICULUM_BUILDER = AgentSpec(
     codigo="04",
     nome="Curriculum Builder",
     fase=Fase.PLANEJAMENTO,
-    tarefa="Montar a grade de tópicos que fecha as lacunas até o objetivo",
-    depende_de=("02", "03"),
+    tarefa=(
+        "Montar a Árvore Curricular Inteligente — disciplina, módulo, tópico, "
+        "subtópico e microtópico — com dificuldade, importância, tempo estimado "
+        "e status de domínio por item"
+    ),
+    depende_de=("01", "02", "03"),
+    entradas_do_usuario=(
+        "edital",
+        "matriz_curricular",
+        "bibliografia",
+        "subtopicos",
+        "microtopicos",
+        "pre_requisitos",
+        "conteudos_obrigatorios",
+        "conteudos_opcionais",
+    ),
 )
 
 DEPENDENCY_MAPPER = AgentSpec(

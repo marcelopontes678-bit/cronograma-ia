@@ -20,6 +20,7 @@ from app.studyos.agentes.comum import (
     como_lista,
     como_numero,
     como_texto,
+    filhos_estruturais,
     preenchido,
 )
 
@@ -181,6 +182,24 @@ def _disciplina(nome: str, topicos: Any, peso: Any, questoes: Any, origem: str) 
     }
 
 
+def _topicos_da_disciplina(conteudo: dict) -> Any:
+    """Tópicos de uma disciplina, achatando a modularização quando existir.
+
+    O agente 04 preserva os módulos; aqui eles só interessam como lista plana
+    de tópicos, que é o que o Mapa Estratégico consome.
+    """
+    direto = conteudo.get("topicos") or conteudo.get("conteudos")
+    if preenchido(direto):
+        return direto
+    if preenchido(conteudo.get("modulos")):
+        return [
+            nome_topico
+            for _, filhos in filhos_estruturais(conteudo["modulos"])
+            for nome_topico, _ in filhos_estruturais(filhos)
+        ]
+    return None
+
+
 def _extrair(fonte: Any, origem: str) -> list[dict]:
     """Aceita dict, lista de dicts, lista de nomes ou texto."""
     if not preenchido(fonte):
@@ -195,7 +214,7 @@ def _extrair(fonte: Any, origem: str) -> list[dict]:
             if not isinstance(conteudo, dict)
             else _disciplina(
                 str(nome),
-                conteudo.get("topicos") or conteudo.get("conteudos"),
+                _topicos_da_disciplina(conteudo),
                 conteudo.get("peso"),
                 conteudo.get("questoes"),
                 origem,

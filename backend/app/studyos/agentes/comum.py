@@ -66,4 +66,55 @@ def preenchido(valor: Any) -> bool:
     return valor not in VAZIOS
 
 
-__all__ = ["como_data", "como_lista", "como_numero", "como_texto", "preenchido"]
+#: Chaves que descrevem a estrutura de um edital/matriz e não são nomes de conteúdo.
+CHAVES_ESTRUTURAIS: tuple[str, ...] = (
+    "modulos", "topicos", "conteudos", "subtopicos", "microtopicos",
+    "peso", "questoes", "importancia", "obrigatorio", "opcional", "nome",
+    "disciplina", "materia",
+)
+
+
+def filhos_estruturais(bruto: Any) -> list[tuple[str, Any]]:
+    """Pares ``(nome, filhos)`` de um nível de edital, matriz ou lista.
+
+    Aceita dicionário aninhado, lista de nomes, lista de dicionários com `nome`
+    e texto separado por vírgula — os quatro formatos em que um edital costuma
+    chegar. Não inventa nível nenhum: o que não estiver escrito sai vazio.
+    """
+    if not preenchido(bruto):
+        return []
+
+    if isinstance(bruto, dict):
+        conteudo = {k: v for k, v in bruto.items() if k not in CHAVES_ESTRUTURAIS}
+        if conteudo:
+            return [(str(nome), filhos) for nome, filhos in conteudo.items()]
+        for chave in ("modulos", "topicos", "conteudos", "subtopicos", "microtopicos"):
+            if preenchido(bruto.get(chave)):
+                return filhos_estruturais(bruto[chave])
+        return []
+
+    if isinstance(bruto, (list, tuple)):
+        pares: list[tuple[str, Any]] = []
+        for item in bruto:
+            if isinstance(item, dict):
+                nome = item.get("nome") or item.get("disciplina") or item.get("materia")
+                if nome:
+                    pares.append((str(nome), item))
+                else:
+                    pares.extend(filhos_estruturais(item))
+            elif str(item).strip():
+                pares.append((str(item).strip(), None))
+        return pares
+
+    return [(nome, None) for nome in como_lista(bruto)]
+
+
+__all__ = [
+    "CHAVES_ESTRUTURAIS",
+    "como_data",
+    "como_lista",
+    "como_numero",
+    "como_texto",
+    "filhos_estruturais",
+    "preenchido",
+]

@@ -189,6 +189,30 @@ def test_edital_como_lista_de_dicts_e_aceito():
     assert resultado["disciplinas"][0]["peso"] == 2.0
 
 
+def test_edital_modular_e_achatado_em_topicos():
+    resultado = analisar(
+        entradas(
+            {
+                "objetivo": "Concurso",
+                "edital": {
+                    "Português": {
+                        "questoes": 20,
+                        "modulos": {
+                            "Gramática": {"Crase": ["Casos obrigatórios"], "Sintaxe": []},
+                            "Leitura": ["Interpretação"],
+                        },
+                    }
+                },
+            }
+        ),
+        hoje=HOJE,
+    )
+    portugues = resultado["disciplinas"][0]
+
+    assert portugues["topicos"] == ["Crase", "Sintaxe", "Interpretação"]
+    assert portugues["questoes"] == 20.0
+
+
 def test_disciplinas_do_perfil_entram_como_cobertura_parcial():
     resultado = analisar(
         entradas(

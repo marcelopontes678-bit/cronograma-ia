@@ -16,13 +16,15 @@ backend/app/studyos/
     ├── comum.py     # coerção de entradas compartilhada
     ├── perfil.py       # agente 01 — Profile Analyzer
     ├── objetivo.py     # agente 02 — Goal Analyzer
-    └── conhecimento.py # agente 03 — Knowledge Analyzer
+    ├── conhecimento.py # agente 03 — Knowledge Analyzer
+    └── curriculo.py    # agente 04 — Curriculum Builder
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`01-profile-analyzer.md`](01-profile-analyzer.md),
 [`02-goal-analyzer.md`](02-goal-analyzer.md),
-[`03-knowledge-analyzer.md`](03-knowledge-analyzer.md).
+[`03-knowledge-analyzer.md`](03-knowledge-analyzer.md),
+[`04-curriculum-builder.md`](04-curriculum-builder.md).
 
 ## API
 
