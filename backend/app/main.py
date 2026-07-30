@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import engine
 from app.models.base import Base
-from app.routers import auth, empresa, projeto, unidade, usuario
+from app.routers import auth, empresa, projeto, studyos, unidade, usuario
 
 
 @asynccontextmanager
@@ -40,6 +40,7 @@ app.include_router(empresa.router, prefix=PREFIX)
 app.include_router(unidade.router, prefix=PREFIX)
 app.include_router(usuario.router, prefix=PREFIX)
 app.include_router(projeto.router, prefix=PREFIX)
+app.include_router(studyos.router, prefix=PREFIX)
 
 
 @app.get("/health", tags=["sistema"])
