@@ -266,8 +266,18 @@ DIFFICULTY_DETECTOR = AgentSpec(
     codigo="12",
     nome="Difficulty Detector",
     fase=Fase.TUTORIA,
-    tarefa="Estimar dificuldade percebida por tópico a partir do nível e dos exercícios",
-    depende_de=("03", "09"),
+    tarefa=(
+        "Construir o Mapa Dinâmico de Dificuldades: índice por conteúdo, tipos "
+        "de dificuldade, padrões de erro, sinais de sobrecarga, gargalos, risco "
+        "de abandono e prioridade de reforço"
+    ),
+    depende_de=("01", "02", "03", "04", "05", "06", "09"),
+    entradas_do_usuario=(
+        "erros",
+        "historico_sessoes",
+        "historico",
+        "relatorio_anterior",
+    ),
 )
 
 ADAPTIVE_TEACHER = AgentSpec(
