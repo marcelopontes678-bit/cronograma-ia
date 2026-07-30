@@ -328,8 +328,23 @@ EXAM_SIMULATOR = AgentSpec(
     codigo="16",
     nome="Exam Simulator",
     fase=Fase.AVALIACAO,
-    tarefa="Montar simulados com peso proporcional à grade",
-    depende_de=("04", "09"),
+    tarefa=(
+        "Montar o simulado do formato adequado: distribuição por disciplina e "
+        "dificuldade, caderno sem respostas, gabarito oficial, critérios de "
+        "correção e estatística prevista"
+    ),
+    depende_de=("01", "02", "03", "04", "05", "06", "09", "12", "13", "15"),
+    entradas_do_usuario=(
+        "tipo_de_simulado",
+        "numero_de_questoes",
+        "disciplina_alvo",
+        "assunto_alvo",
+        "banca",
+        "estilo_da_banca",
+        "penalidade_por_erro",
+        "nota_corte",
+        "semente",
+    ),
 )
 
 ERROR_ANALYZER = AgentSpec(

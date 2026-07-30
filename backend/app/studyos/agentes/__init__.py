@@ -23,6 +23,7 @@ from app.studyos.agentes import (
     resumos,
     revisao,
     roadmap,
+    simulado,
 )
 
 #: código do agente -> função que recebe o payload de entradas e devolve o conteúdo
@@ -42,6 +43,7 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "13": adaptativo.adaptar,
     "14": memoria.agendar,
     "15": revisao.planejar,
+    "16": simulado.gerar,
 }
 
 __all__ = [
@@ -61,4 +63,5 @@ __all__ = [
     "resumos",
     "revisao",
     "roadmap",
+    "simulado",
 ]
