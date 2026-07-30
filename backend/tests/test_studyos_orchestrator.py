@@ -48,21 +48,24 @@ def test_ondas_respeitam_dependencias():
 
 
 def test_agentes_independentes_ficam_na_mesma_onda():
-    # 08 e 11 dependem apenas do Lesson Generator: rodam em paralelo.
-    ondas = ondas_de_execucao({"07", "08", "09", "10", "11"})
-    onda_producao = next(o for o in ondas if "08" in o)
+    # 19 Coach e 20 Habit Builder dependem do mesmo par (01, 06) e de mais
+    # ninguém: rodam em paralelo.
+    ondas = ondas_de_execucao({"19", "20"})
+    onda_final = next(o for o in ondas if "19" in o)
 
-    assert {"08", "11"}.issubset(set(onda_producao))
+    assert {"19", "20"}.issubset(set(onda_final))
 
 
 def test_cadeia_de_producao_e_serializada_pelas_dependencias():
-    # 09 consome os exemplos do 08, e 10 consome os exercícios do 09.
+    # Cada agente de produção consome a saída do anterior: 08 usa a aula, 09 os
+    # exemplos, 10 os exercícios e 11 os flashcards. A fase inteira é serial —
+    # não por escolha do orquestrador, mas porque as specs se encadeiam.
     ondas = ondas_de_execucao({"07", "08", "09", "10", "11"})
     onda_de = {
         codigo: indice for indice, onda in enumerate(ondas) for codigo in onda
     }
 
-    assert onda_de["07"] < onda_de["08"] < onda_de["09"] < onda_de["10"]
+    assert onda_de["07"] < onda_de["08"] < onda_de["09"] < onda_de["10"] < onda_de["11"]
 
 
 def test_validators_e_sempre_a_ultima_onda():

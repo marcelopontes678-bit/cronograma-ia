@@ -253,8 +253,13 @@ SUMMARY_GENERATOR = AgentSpec(
     codigo="11",
     nome="Summary Generator",
     fase=Fase.PRODUCAO,
-    tarefa="Produzir resumos e sínteses por tópico",
-    depende_de=("07",),
+    tarefa=(
+        "Sintetizar o conteúdo estudado em resumos de 1 min, 5 min e completo, "
+        "com conceitos-chave, definições, processos, armadilhas, checklist de "
+        "revisão e mapa mental textual"
+    ),
+    depende_de=("01", "03", "04", "05", "06", "07", "08", "09", "10"),
+    entradas_do_usuario=("conteudo_solicitado",),
 )
 
 DIFFICULTY_DETECTOR = AgentSpec(
