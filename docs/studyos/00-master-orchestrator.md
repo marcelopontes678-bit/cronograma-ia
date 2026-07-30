@@ -60,7 +60,7 @@ Sempre e apenas quatro blocos:
 | 07 | Lesson Generator | produção | 01, 03, 04, 05, 06 |
 | 08 | Example Generator | produção | 01, 03, 07 |
 | 09 | Exercise Generator | produção | 01, 03, 04, 05, 06, 07, 08 |
-| 10 | Flashcard Generator | produção | 07 |
+| 10 | Flashcard Generator | produção | 01, 03, 04, 05, 06, 07, 08, 09 |
 | 11 | Summary Generator | produção | 07 |
 | 12 | Difficulty Detector | tutoria | 03, 09 |
 | 13 | Adaptive Teacher | tutoria | 07, 12 |

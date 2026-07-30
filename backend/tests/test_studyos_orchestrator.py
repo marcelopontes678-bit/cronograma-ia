@@ -48,14 +48,21 @@ def test_ondas_respeitam_dependencias():
 
 
 def test_agentes_independentes_ficam_na_mesma_onda():
-    # 08, 10 e 11 dependem apenas do Lesson Generator: rodam em paralelo.
-    # O 09 sai dessa onda porque consome os exemplos do 08.
+    # 08 e 11 dependem apenas do Lesson Generator: rodam em paralelo.
     ondas = ondas_de_execucao({"07", "08", "09", "10", "11"})
     onda_producao = next(o for o in ondas if "08" in o)
 
-    assert {"08", "10", "11"}.issubset(set(onda_producao))
-    assert "09" not in onda_producao
-    assert any("09" in onda for onda in ondas[ondas.index(onda_producao) + 1 :])
+    assert {"08", "11"}.issubset(set(onda_producao))
+
+
+def test_cadeia_de_producao_e_serializada_pelas_dependencias():
+    # 09 consome os exemplos do 08, e 10 consome os exercícios do 09.
+    ondas = ondas_de_execucao({"07", "08", "09", "10", "11"})
+    onda_de = {
+        codigo: indice for indice, onda in enumerate(ondas) for codigo in onda
+    }
+
+    assert onda_de["07"] < onda_de["08"] < onda_de["09"] < onda_de["10"]
 
 
 def test_validators_e_sempre_a_ultima_onda():

@@ -14,6 +14,7 @@ from app.studyos.agentes import (
     dependencias,
     exemplos,
     exercicios,
+    flashcards,
     objetivo,
     perfil,
     roadmap,
@@ -30,6 +31,7 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "07": aula.gerar,
     "08": exemplos.gerar,
     "09": exercicios.gerar,
+    "10": flashcards.gerar,
 }
 
 __all__ = [
@@ -40,6 +42,7 @@ __all__ = [
     "dependencias",
     "exemplos",
     "exercicios",
+    "flashcards",
     "objetivo",
     "perfil",
     "roadmap",

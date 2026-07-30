@@ -22,7 +22,9 @@ backend/app/studyos/
     ├── roadmap.py      # agente 06 — Roadmap Builder
     ├── aula.py         # agente 07 — Lesson Generator
     ├── exemplos.py     # agente 08 — Example Generator
-    └── exercicios.py   # agente 09 — Exercise Generator
+    ├── exercicios.py   # agente 09 — Exercise Generator
+    ├── flashcards.py   # agente 10 — Flashcard Generator
+    └── portoes.py      # regras de bloqueio compartilhadas
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
@@ -34,7 +36,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`06-roadmap-builder.md`](06-roadmap-builder.md),
 [`07-lesson-generator.md`](07-lesson-generator.md),
 [`08-example-generator.md`](08-example-generator.md),
-[`09-exercise-generator.md`](09-exercise-generator.md).
+[`09-exercise-generator.md`](09-exercise-generator.md),
+[`10-flashcard-generator.md`](10-flashcard-generator.md).
 
 ## API
 

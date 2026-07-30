@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from app.studyos.agentes.comum import como_lista, como_numero, como_texto, preenchido
+from app.studyos.agentes.portoes import conteudo_estudado, localizar_no
 
 # --------------------------------------------------------------------------- #
 # Categorias, formatos e custos declarados
@@ -99,8 +100,6 @@ TEMPO_MAXIMO_MIN = 120.0
 #: Mínimo de questões por categoria selecionada.
 MINIMO_POR_CATEGORIA = 1
 
-STATUS_ESTUDADO = ("concluido", "em_andamento")
-
 
 class ConteudoNaoEstudado(Exception):
     """Tentativa de montar exercícios de conteúdo ainda não estudado."""
@@ -111,70 +110,26 @@ class ConteudoNaoEstudado(Exception):
 # --------------------------------------------------------------------------- #
 
 
-def _no_do_grafo(grafo: dict, aula: dict, solicitado: Any) -> dict | None:
-    nos = grafo.get("nos", [])
-    alvo = como_texto(solicitado) if preenchido(solicitado) else None
-    if alvo is None and aula.get("conteudo"):
-        alvo = como_texto(aula["conteudo"]["nome"])
-    if alvo is None:
-        return None
-    for no in nos:
-        if no["id"] == solicitado or como_texto(no["nome"]) == alvo:
-            return no
-    return None
-
-
-def _portao(
-    aula: dict, no: dict | None, diagnostico: dict, grafo: dict | None = None
-) -> dict | None:
-    """Exercício exige conteúdo estudado — pela aula do 07 ou por estudo anterior."""
-    aula_gerada = aula.get("status") == "gerada"
-    ja_estudado = bool(no) and no.get("status_curricular") in STATUS_ESTUDADO
-
-    if aula_gerada or ja_estudado:
+def _portao(aula: dict, no: dict | None, diagnostico: dict, grafo: dict) -> dict | None:
+    """Portão compartilhado, mais o registro da tensão com o pedido do agente 03."""
+    bloqueio = conteudo_estudado(aula, no, grafo)
+    if bloqueio is None:
         return None
 
-    if no is not None and no.get("status") == "bloqueado":
-        por_id = {n["id"]: n["nome"] for n in (grafo or {}).get("nos", [])}
-        pendentes = [por_id.get(pre, pre) for pre in no.get("bloqueado_por", [])]
-        return {
-            "motivo": "conteudo_bloqueado",
-            "detalhe": (
-                "O conteúdo depende de pré-requisitos não concluídos: "
-                + ", ".join(pendentes)
-            ),
-            "acao": "Estudar os pré-requisitos antes.",
-        }
-
-    if not aula and no is None:
-        return {
-            "motivo": "conteudo_ausente",
-            "detalhe": "Nenhuma aula do agente 07 nem conteúdo identificado no grafo.",
-            "acao": "Indicar o conteúdo ou gerar a aula.",
-        }
-
-    detalhe = (
-        "A aula existe em estrutura, mas não foi redigida, e o conteúdo não "
-        "consta como estudado."
-        if aula
-        else "O conteúdo ainda não foi estudado."
-    )
-    bloqueio = {
-        "motivo": "conteudo_nao_estudado",
-        "detalhe": detalhe,
-        "acao": "Estudar o conteúdo antes de praticar.",
-    }
-    if diagnostico.get("necessaria"):
-        # O agente 03 pediu medição justamente do que ainda não foi estudado.
-        # A regra do 09 é mais forte que o pedido: a tensão fica registrada.
-        bloqueio["pedido_de_diagnostico_pendente"] = {
-            "origem": "03 Knowledge Analyzer",
-            "observacao": (
-                "Há pedido de avaliação diagnóstica sobre este conteúdo, mas a "
-                "regra do agente 09 proíbe exercitar conteúdo não estudado. "
-                "Resolver estudando o conteúdo ou registrando estudo anterior."
-            ),
-        }
+    if bloqueio["motivo"] == "conteudo_nao_estudado":
+        bloqueio["acao"] = "Estudar o conteúdo antes de praticar."
+        if diagnostico.get("necessaria"):
+            # O agente 03 pediu medição justamente do que ainda não foi
+            # estudado. A regra do 09 é mais forte que o pedido: a tensão fica
+            # registrada em vez de ser resolvida em silêncio.
+            bloqueio["pedido_de_diagnostico_pendente"] = {
+                "origem": "03 Knowledge Analyzer",
+                "observacao": (
+                    "Há pedido de avaliação diagnóstica sobre este conteúdo, mas a "
+                    "regra do agente 09 proíbe exercitar conteúdo não estudado. "
+                    "Resolver estudando o conteúdo ou registrando estudo anterior."
+                ),
+            }
     return bloqueio
 
 
@@ -270,7 +225,7 @@ def montar_briefing(entradas: dict[str, Any]) -> dict[str, Any]:
     exemplos = anteriores.get("08", {}) or {}
 
     solicitado = campos.get("conteudo_solicitado")
-    no = _no_do_grafo(grafo, aula, solicitado)
+    no = localizar_no(grafo, aula, solicitado)
     diagnostico = mapa_conhecimento.get("avaliacao_diagnostica", {}) or {}
 
     bloqueio = _portao(aula, no, diagnostico, grafo)

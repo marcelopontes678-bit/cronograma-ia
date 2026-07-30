@@ -240,8 +240,13 @@ FLASHCARD_GENERATOR = AgentSpec(
     codigo="10",
     nome="Flashcard Generator",
     fase=Fase.PRODUCAO,
-    tarefa="Extrair flashcards atômicos das aulas",
-    depende_de=("07",),
+    tarefa=(
+        "Converter o conteúdo estudado em flashcards de recuperação ativa, com "
+        "tipo, dificuldade, prioridade, tempo de resposta, tags e marcação de "
+        "revisão frequente"
+    ),
+    depende_de=("01", "03", "04", "05", "06", "07", "08", "09"),
+    entradas_do_usuario=("conteudo_solicitado",),
 )
 
 SUMMARY_GENERATOR = AgentSpec(
