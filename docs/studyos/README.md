@@ -20,7 +20,8 @@ backend/app/studyos/
     ├── curriculo.py    # agente 04 — Curriculum Builder
     ├── dependencias.py # agente 05 — Dependency Mapper
     ├── roadmap.py      # agente 06 — Roadmap Builder
-    └── aula.py         # agente 07 — Lesson Generator
+    ├── aula.py         # agente 07 — Lesson Generator
+    └── exemplos.py     # agente 08 — Example Generator
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
@@ -30,7 +31,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`04-curriculum-builder.md`](04-curriculum-builder.md),
 [`05-dependency-mapper.md`](05-dependency-mapper.md),
 [`06-roadmap-builder.md`](06-roadmap-builder.md),
-[`07-lesson-generator.md`](07-lesson-generator.md).
+[`07-lesson-generator.md`](07-lesson-generator.md),
+[`08-example-generator.md`](08-example-generator.md).
 
 ## API
 
@@ -78,7 +80,9 @@ from app.studyos.runner import RunnerEstrutural
 def redator(briefing: dict) -> dict:
     return {s["chave"]: chamar_modelo(briefing, s) for s in briefing["secoes"]}
 
-orquestrador = MasterOrchestrator(RunnerEstrutural(redatores={"07": redator}))
+orquestrador = MasterOrchestrator(
+    RunnerEstrutural(redatores={"07": redator, "08": redator_de_exemplos})
+)
 ```
 
 Para trocar o motor inteiro — inclusive os agentes determinísticos — injete um

@@ -215,8 +215,12 @@ EXAMPLE_GENERATOR = AgentSpec(
     codigo="08",
     nome="Example Generator",
     fase=Fase.PRODUCAO,
-    tarefa="Gerar exemplos resolvidos para cada aula",
-    depende_de=("07",),
+    tarefa=(
+        "Gerar exemplos do conteúdo ensinado: introdutório, prático, avançado "
+        "quando aplicável, aplicado ao mundo real, analogia quando útil e "
+        "contraexemplo, cada um com o porquê de funcionar"
+    ),
+    depende_de=("01", "03", "07"),
 )
 
 EXERCISE_GENERATOR = AgentSpec(
