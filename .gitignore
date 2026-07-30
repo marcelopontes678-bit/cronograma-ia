@@ -1,4 +1,7 @@
-﻿.claude/
+﻿# Claude Code: versiona skills/agents do projeto, ignora config local
+.claude/*
+!.claude/skills/
+!.claude/agents/
 
 # Backend Python
 backend/.venv/
