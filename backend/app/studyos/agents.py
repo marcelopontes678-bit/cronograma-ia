@@ -178,8 +178,20 @@ ROADMAP_BUILDER = AgentSpec(
     codigo="06",
     nome="Roadmap Builder",
     fase=Fase.PLANEJAMENTO,
-    tarefa="Distribuir os tópicos ordenados no calendário disponível do estudante",
-    depende_de=("01", "05"),
+    tarefa=(
+        "Construir o Plano de Estudos: cronograma diário com sessões de "
+        "conteúdo, exercícios e revisão, metas diárias/semanais/mensais, "
+        "indicadores e risco de atraso"
+    ),
+    depende_de=("01", "02", "03", "04", "05"),
+    entradas_do_usuario=(
+        "data_inicio",
+        "data_prova",
+        "dias_da_semana",
+        "faltas",
+        "progresso",
+        "historico",
+    ),
 )
 
 LESSON_GENERATOR = AgentSpec(

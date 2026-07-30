@@ -18,7 +18,8 @@ backend/app/studyos/
     ├── objetivo.py     # agente 02 — Goal Analyzer
     ├── conhecimento.py # agente 03 — Knowledge Analyzer
     ├── curriculo.py    # agente 04 — Curriculum Builder
-    └── dependencias.py # agente 05 — Dependency Mapper
+    ├── dependencias.py # agente 05 — Dependency Mapper
+    └── roadmap.py      # agente 06 — Roadmap Builder
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
@@ -26,7 +27,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`02-goal-analyzer.md`](02-goal-analyzer.md),
 [`03-knowledge-analyzer.md`](03-knowledge-analyzer.md),
 [`04-curriculum-builder.md`](04-curriculum-builder.md),
-[`05-dependency-mapper.md`](05-dependency-mapper.md).
+[`05-dependency-mapper.md`](05-dependency-mapper.md),
+[`06-roadmap-builder.md`](06-roadmap-builder.md).
 
 ## API
 

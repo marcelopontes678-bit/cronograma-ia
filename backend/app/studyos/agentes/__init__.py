@@ -7,7 +7,14 @@ registro antes de cair no briefing genérico.
 
 from typing import Any, Callable
 
-from app.studyos.agentes import conhecimento, curriculo, dependencias, objetivo, perfil
+from app.studyos.agentes import (
+    conhecimento,
+    curriculo,
+    dependencias,
+    objetivo,
+    perfil,
+    roadmap,
+)
 
 #: código do agente -> função que recebe o payload de entradas e devolve o conteúdo
 IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
@@ -16,6 +23,7 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "03": conhecimento.analisar,
     "04": curriculo.construir,
     "05": dependencias.mapear,
+    "06": roadmap.construir,
 }
 
 __all__ = [
@@ -25,4 +33,5 @@ __all__ = [
     "dependencias",
     "objetivo",
     "perfil",
+    "roadmap",
 ]
