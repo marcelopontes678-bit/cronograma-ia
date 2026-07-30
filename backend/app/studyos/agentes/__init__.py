@@ -8,6 +8,7 @@ registro antes de cair no briefing genérico.
 from typing import Any, Callable
 
 from app.studyos.agentes import (
+    aula,
     conhecimento,
     curriculo,
     dependencias,
@@ -24,10 +25,12 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "04": curriculo.construir,
     "05": dependencias.mapear,
     "06": roadmap.construir,
+    "07": aula.gerar,
 }
 
 __all__ = [
     "IMPLEMENTACOES",
+    "aula",
     "conhecimento",
     "curriculo",
     "dependencias",

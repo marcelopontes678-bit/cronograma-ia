@@ -198,8 +198,17 @@ LESSON_GENERATOR = AgentSpec(
     codigo="07",
     nome="Lesson Generator",
     fase=Fase.PRODUCAO,
-    tarefa="Produzir as aulas de cada tópico do roadmap",
-    depende_de=("06",),
+    tarefa=(
+        "Gerar a aula do conteúdo solicitado: objetivo, contextualização, "
+        "conceitos, passo a passo, exemplos, aplicações, erros comuns, dicas, "
+        "resumo e pontos-chave, no nível do estudante"
+    ),
+    depende_de=("01", "03", "04", "05", "06"),
+    entradas_do_usuario=(
+        "conteudo_solicitado",
+        "bibliografia",
+        "materiais_obrigatorios",
+    ),
 )
 
 EXAMPLE_GENERATOR = AgentSpec(

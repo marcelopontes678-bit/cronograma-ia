@@ -19,7 +19,8 @@ backend/app/studyos/
     ├── conhecimento.py # agente 03 — Knowledge Analyzer
     ├── curriculo.py    # agente 04 — Curriculum Builder
     ├── dependencias.py # agente 05 — Dependency Mapper
-    └── roadmap.py      # agente 06 — Roadmap Builder
+    ├── roadmap.py      # agente 06 — Roadmap Builder
+    └── aula.py         # agente 07 — Lesson Generator
 ```
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
@@ -28,7 +29,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`03-knowledge-analyzer.md`](03-knowledge-analyzer.md),
 [`04-curriculum-builder.md`](04-curriculum-builder.md),
 [`05-dependency-mapper.md`](05-dependency-mapper.md),
-[`06-roadmap-builder.md`](06-roadmap-builder.md).
+[`06-roadmap-builder.md`](06-roadmap-builder.md),
+[`07-lesson-generator.md`](07-lesson-generator.md).
 
 ## API
 
@@ -64,9 +66,23 @@ curl -X POST localhost:8000/api/v1/studyos/orquestrar \
 
 ## Conectando um modelo
 
-O runner padrão (`RunnerEstrutural`) roda as implementações concretas e devolve
-briefing para os agentes ainda não implementados — ele nunca inventa conteúdo de
-estudo. Para plugar um modelo, basta injetar um runner:
+Os agentes 01–06 são determinísticos e não precisam de modelo. O agente 07 em
+diante produz conteúdo didático: ele monta o briefing e delega a redação a um
+**redator**, mantendo as regras (portão de pré-requisitos, estrutura, fontes)
+no código.
+
+```python
+from app.studyos import MasterOrchestrator
+from app.studyos.runner import RunnerEstrutural
+
+def redator(briefing: dict) -> dict:
+    return {s["chave"]: chamar_modelo(briefing, s) for s in briefing["secoes"]}
+
+orquestrador = MasterOrchestrator(RunnerEstrutural(redatores={"07": redator}))
+```
+
+Para trocar o motor inteiro — inclusive os agentes determinísticos — injete um
+runner próprio:
 
 ```python
 from app.studyos import MasterOrchestrator, RunnerDelegado

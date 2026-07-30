@@ -7,6 +7,7 @@ tocar no grafo nem na consolidação.
 
 from __future__ import annotations
 
+import inspect
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable, Protocol
 
@@ -40,6 +41,13 @@ class ContextoExecucao:
         }
 
 
+def _aceita_redator(implementacao: Callable) -> bool:
+    try:
+        return "redator" in inspect.signature(implementacao).parameters
+    except (TypeError, ValueError):  # pragma: no cover - builtins/callables exóticos
+        return False
+
+
 class AgentRunner(Protocol):
     """Contrato de execução de um agente."""
 
@@ -65,10 +73,23 @@ class RunnerEstrutural:
         "21": ("historico",),
     }
 
+    def __init__(self, redatores: dict[str, Callable[[dict], dict]] | None = None):
+        """``redatores`` conecta um modelo aos agentes que produzem conteúdo.
+
+        A chave é o código do agente (por exemplo ``"07"``); o valor recebe o
+        briefing montado pelo agente e devolve as seções redigidas. O agente
+        continua dono das regras — o redator só escreve.
+        """
+        self._redatores = dict(redatores or {})
+
     async def executar(self, spec: AgentSpec, entradas: dict) -> AgentResult:
         implementacao = IMPLEMENTACOES.get(spec.codigo)
         if implementacao is not None:
-            conteudo = implementacao(entradas)
+            redator = self._redatores.get(spec.codigo)
+            if redator is not None and _aceita_redator(implementacao):
+                conteudo = implementacao(entradas, redator=redator)
+            else:
+                conteudo = implementacao(entradas)
             return AgentResult(
                 codigo=spec.codigo,
                 nome=spec.nome,
