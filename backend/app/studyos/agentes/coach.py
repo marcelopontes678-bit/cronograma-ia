@@ -28,9 +28,14 @@ from typing import Any
 from app.studyos.agentes.comum import (
     como_data,
     como_lista_de_dicts,
-    como_numero,
     como_texto,
     preenchido,
+)
+from app.studyos.agentes.frequencia import (
+    consistencia as _consistencia_de,
+    dias_estudados as _dias_estudados,
+    dias_planejados as _dias_planejados,
+    sequencia_ate as _sequencia_atual,
 )
 
 # --------------------------------------------------------------------------- #
@@ -136,96 +141,20 @@ def _nivel_de_engajamento(consistencia: dict) -> str:
 # --------------------------------------------------------------------------- #
 
 
-def _dias_estudados(campos: dict) -> list[date]:
-    """Datas em que houve estudo registrado, sem duplicatas."""
-    datas: set[date] = set()
-    for chave in ("historico_frequencia", "historico_sessoes", "historico_estudo"):
-        for bruto in como_lista_de_dicts(campos.get(chave)):
-            data = como_data(bruto.get("data"))
-            if data is None:
-                continue
-            estudou = bruto.get("estudou")
-            minutos = como_numero(bruto.get("minutos") or bruto.get("tempo_min"))
-            if estudou is False or (minutos is not None and minutos <= 0):
-                continue
-            datas.add(data)
-    return sorted(datas)
-
-
-def _dias_planejados(plano: dict, inicio: date, fim: date) -> list[date]:
-    """Dias que o agente 06 reservou para estudo dentro da janela."""
-    dias: list[date] = []
-    for dia in plano.get("cronograma", []):
-        data = como_data(dia.get("data"))
-        if data and inicio <= data <= fim:
-            dias.append(data)
-    return sorted(dias)
-
-
-def _sequencia_atual(estudados: list[date], hoje: date) -> dict:
-    """Dias seguidos de estudo terminando hoje ou ontem."""
-    if not estudados:
-        return {"dias": 0, "base": "nenhum dia de estudo registrado"}
-
-    ultimo = estudados[-1]
-    if (hoje - ultimo).days > 1:
-        return {
-            "dias": 0,
-            "base": f"último estudo em {ultimo.isoformat()}, há {(hoje - ultimo).days} dias",
-        }
-
-    sequencia = 1
-    for anterior, seguinte in zip(reversed(estudados[:-1]), reversed(estudados[1:])):
-        if (seguinte - anterior).days != 1:
-            break
-        sequencia += 1
-    return {
-        "dias": sequencia,
-        "base": f"dias consecutivos até {ultimo.isoformat()}",
-    }
-
-
-def _consistencia(estudados: list[date], planejados: list[date]) -> dict:
-    """Dias estudados sobre dias planejados — sem plano, sem índice.
-
-    Frequência sozinha não é consistência: estudar 3 dias é ótimo contra uma
-    meta de 3 e ruim contra uma meta de 10. Sem denominador o agente devolve
-    `None` e declara o que falta.
-    """
-    if not planejados:
-        return {
-            "indice": None,
-            "dias_estudados": len(estudados),
-            "dias_planejados": 0,
-            "base": (
-                "nenhum dia planejado na janela; sem denominador não há índice "
-                "de consistência"
-            ),
-        }
-
-    cumpridos = [d for d in planejados if d in set(estudados)]
-    return {
-        "indice": round(len(cumpridos) / len(planejados), 4),
-        "dias_estudados": len(cumpridos),
-        "dias_planejados": len(planejados),
-        "base": (
-            f"{len(cumpridos)} de {len(planejados)} dias planejados na janela de "
-            f"{JANELA_DE_ANALISE_DIAS} dias"
-        ),
-    }
-
-
 def _evolucao(estudados: list[date], plano: dict, hoje: date) -> dict:
     """Consistência da janela atual contra a anterior, quando as duas existem."""
     fim_anterior = hoje - timedelta(days=JANELA_DE_ANALISE_DIAS)
     inicio_anterior = fim_anterior - timedelta(days=JANELA_DE_ANALISE_DIAS - 1)
 
-    atual = _consistencia(
+    atual = _consistencia_de(
         estudados,
         _dias_planejados(plano, hoje - timedelta(days=JANELA_DE_ANALISE_DIAS - 1), hoje),
+        JANELA_DE_ANALISE_DIAS,
     )
-    anterior = _consistencia(
-        estudados, _dias_planejados(plano, inicio_anterior, fim_anterior)
+    anterior = _consistencia_de(
+        estudados,
+        _dias_planejados(plano, inicio_anterior, fim_anterior),
+        JANELA_DE_ANALISE_DIAS,
     )
 
     if atual["indice"] is None or anterior["indice"] is None:
@@ -754,7 +683,7 @@ def acompanhar(entradas: dict[str, Any], hoje: date | None = None) -> dict[str, 
     estudados = _dias_estudados(campos)
     janela_inicio = hoje - timedelta(days=JANELA_DE_ANALISE_DIAS - 1)
     planejados = _dias_planejados(plano, janela_inicio, hoje)
-    consistencia = _consistencia(estudados, planejados)
+    consistencia = _consistencia_de(estudados, planejados, JANELA_DE_ANALISE_DIAS)
     sequencia = _sequencia_atual(estudados, hoje)
     ausencia = (hoje - estudados[-1]).days if estudados else None
     engajamento = _nivel_de_engajamento(consistencia)

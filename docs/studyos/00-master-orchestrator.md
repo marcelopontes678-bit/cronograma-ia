@@ -70,7 +70,7 @@ Sempre e apenas quatro blocos:
 | 17 | Error Analyzer | avaliação | 01, 03, 05, 09, 12, 13, 15, 16 |
 | 18 | Weakness Finder | avaliação | 01, 02, 03, 04, 05, 06, 12, 13, 15, 17 |
 | 19 | Coach | acompanhamento | 01, 06, 12, 13, 15, 17, 18 |
-| 20 | Habit Builder | acompanhamento | 01, 06 |
+| 20 | Habit Builder | acompanhamento | 01, 06, 15, 19 |
 | 21 | Performance Analyzer | acompanhamento | 17 |
 | 22 | Forecast Agent | acompanhamento | 06, 21 |
 | 23 | Optimization Agent | acompanhamento | 18, 22 |

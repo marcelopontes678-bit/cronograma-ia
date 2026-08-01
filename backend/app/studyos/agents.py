@@ -402,8 +402,18 @@ HABIT_BUILDER = AgentSpec(
     codigo="20",
     nome="Habit Builder",
     fase=Fase.ACOMPANHAMENTO,
-    tarefa="Converter o roadmap em rotina e gatilhos diários",
-    depende_de=("01", "06"),
+    tarefa=(
+        "Construir o Plano de Formação de Hábitos: consistência, sequências, "
+        "hábitos positivos e negativos observados, meta cumprível por "
+        "construção e estratégia de manutenção"
+    ),
+    depende_de=("01", "06", "15", "19"),
+    entradas_do_usuario=(
+        "historico_frequencia",
+        "historico_interrupcoes",
+        "historico_habitos",
+        "plano_de_habitos_anterior",
+    ),
 )
 
 PERFORMANCE_ANALYZER = AgentSpec(

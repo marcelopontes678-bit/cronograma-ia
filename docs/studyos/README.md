@@ -33,6 +33,8 @@ backend/app/studyos/
     ├── erros.py        # agente 17 — Error Analyzer
     ├── fraquezas.py    # agente 18 — Weakness Finder
     ├── coach.py        # agente 19 — Coach
+    ├── habitos.py      # agente 20 — Habit Builder
+    ├── frequencia.py   # leitura do registro de frequência (19 e 20)
     └── portoes.py      # regras de bloqueio compartilhadas
 ```
 
@@ -55,7 +57,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`16-exam-simulator.md`](16-exam-simulator.md),
 [`17-error-analyzer.md`](17-error-analyzer.md),
 [`18-weakness-finder.md`](18-weakness-finder.md),
-[`19-coach.md`](19-coach.md).
+[`19-coach.md`](19-coach.md),
+[`20-habit-builder.md`](20-habit-builder.md).
 
 ## API
 
