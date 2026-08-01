@@ -115,6 +115,62 @@ def test_sem_plano_do_agente_14_nao_ha_sessoes():
     assert "plano_de_revisoes_do_agente_14" in plano["lacunas"]
 
 
+def test_revisao_vencida_entra_no_primeiro_dia_util():
+    """Revisão atrasada está atrasada, não perdida — e o dia dela já passou."""
+    vencida = {
+        "conteudos": [
+            {
+                "topico": "Crase",
+                "disciplina": "Português",
+                "proxima_revisao": (HOJE - timedelta(days=90)).isoformat(),
+                "metodo_recomendado": "flashcards",
+                "minutos_estimados": 15,
+                "risco_de_esquecimento": "critico",
+                "prioridade": "alta",
+                "score_de_prioridade": 1.0,
+            }
+        ]
+    }
+    plano = planejar(
+        {**cadeia(TODOS_ESTUDADOS), "saidas_anteriores": {
+            **cadeia(TODOS_ESTUDADOS)["saidas_anteriores"], "14": vencida
+        }},
+        hoje=HOJE,
+    )
+    agendados = [c["topico"] for s in plano["sessoes"] for c in s["conteudos"]]
+
+    assert "Crase" in agendados or plano["conteudos_nao_alocados"]
+    for sessao in plano["sessoes"]:
+        assert sessao["data"] >= HOJE.isoformat()
+
+
+def test_revisao_vencida_nao_some_do_plano():
+    """Sem dia utilizável no passado, ela não pode simplesmente desaparecer."""
+    vencida = {
+        "conteudos": [
+            {
+                "topico": "Crase",
+                "disciplina": "Português",
+                "proxima_revisao": (HOJE - timedelta(days=90)).isoformat(),
+                "metodo_recomendado": "flashcards",
+                "minutos_estimados": 15,
+                "risco_de_esquecimento": "critico",
+                "prioridade": "alta",
+                "score_de_prioridade": 1.0,
+            }
+        ]
+    }
+    entradas = cadeia(TODOS_ESTUDADOS)
+    entradas["saidas_anteriores"]["14"] = vencida
+    plano = planejar(entradas, hoje=HOJE)
+
+    encontrados = (
+        [c["topico"] for s in plano["sessoes"] for c in s["conteudos"]]
+        + [c["topico"] for c in plano["conteudos_nao_alocados"]]
+    )
+    assert "Crase" in encontrados
+
+
 def test_conteudo_nao_estudado_nao_chega_a_virar_sessao():
     plano = planejar(cadeia(), hoje=HOJE)
 

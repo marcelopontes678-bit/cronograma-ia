@@ -792,6 +792,9 @@ def analisar(entradas: dict[str, Any], hoje: date | None = None) -> dict[str, An
                 "topico": erro.get("topico"),
                 "questao": erro.get("questao"),
                 "tipo": erro["tipo"],
+                # A competência vem do agente 16 e é o que o agente 18 agrega
+                # para achar as competências mais comprometidas.
+                "competencia_avaliada": erro.get("competencia"),
                 "causa_provavel": erro["causa_provavel"],
                 "evidencias": erro["evidencias"],
                 "contradicoes": erro["contradicoes"],

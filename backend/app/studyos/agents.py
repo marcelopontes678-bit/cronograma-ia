@@ -369,8 +369,16 @@ WEAKNESS_FINDER = AgentSpec(
     codigo="18",
     nome="Weakness Finder",
     fase=Fase.AVALIACAO,
-    tarefa="Consolidar os erros em pontos fracos priorizados",
-    depende_de=("17",),
+    tarefa=(
+        "Construir o Mapa Dinâmico de Fraquezas: Índice de Fraqueza por "
+        "conteúdo, nível de prioridade, impacto da recuperação, rankings de "
+        "maiores fraquezas e de maior urgência, e ação recomendada"
+    ),
+    depende_de=("01", "02", "03", "04", "05", "06", "12", "13", "15", "17"),
+    entradas_do_usuario=(
+        "historico_desempenho",
+        "mapa_de_fraquezas_anterior",
+    ),
 )
 
 COACH = AgentSpec(

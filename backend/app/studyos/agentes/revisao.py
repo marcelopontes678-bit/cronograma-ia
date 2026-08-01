@@ -231,7 +231,7 @@ def _sessoes_do_dia(
 
 
 def _montar_agenda(
-    conteudos: list[dict], por_data: dict[str, float], campos: dict
+    conteudos: list[dict], por_data: dict[str, float], campos: dict, hoje: date
 ) -> tuple[list[dict], list[dict], list[dict]]:
     """Percorre os dias carregando para frente o que não coube.
 
@@ -247,11 +247,23 @@ def _montar_agenda(
     for conteudo in conteudos:
         agrupados.setdefault(conteudo["proxima_revisao"], []).append(conteudo)
 
-    dias = _dias_utilizaveis(sorted(agrupados), por_data, campos)
+    dias = _dias_utilizaveis(sorted(agrupados), por_data, campos, hoje)
 
     sessoes: list[dict] = []
     adiados: list[dict] = []
-    pendentes: list[tuple[dict, str]] = []
+    # Revisão cuja data já passou está atrasada, não perdida: ela entra na fila
+    # do primeiro dia utilizável. Sem isso ela não seria visitada por dia
+    # nenhum e sumiria do plano sem aparecer nem como não alocada.
+    pendentes: list[tuple[dict, str]] = (
+        [
+            (conteudo, conteudo["proxima_revisao"])
+            for data in sorted(agrupados)
+            if dias and data < dias[0]
+            for conteudo in agrupados[data]
+        ]
+        if dias
+        else []
+    )
     numero = 1
 
     for data in dias:
@@ -306,15 +318,20 @@ def _montar_agenda(
 
 
 def _dias_utilizaveis(
-    datas_previstas: list[str], por_data: dict[str, float], campos: dict
+    datas_previstas: list[str], por_data: dict[str, float], campos: dict, hoje: date
 ) -> list[str]:
-    """Dias em que revisão pode acontecer, a partir da primeira data prevista."""
+    """Dias em que revisão pode acontecer, nunca antes de hoje.
+
+    Uma revisão vencida não pode ser agendada para a data em que venceu: o dia
+    já passou. O que se pode fazer com ela é colocá-la no próximo dia real.
+    """
+    limite = max(datas_previstas[0], hoje.isoformat())
     if por_data:
         # Só os dias que o agente 06 reservou para revisão são utilizáveis.
-        return sorted(d for d in por_data if d >= datas_previstas[0])
+        return sorted(d for d in por_data if d >= limite)
 
-    inicio = date.fromisoformat(datas_previstas[0])
-    fim = date.fromisoformat(datas_previstas[-1])
+    inicio = date.fromisoformat(limite)
+    fim = max(date.fromisoformat(datas_previstas[-1]), inicio)
     return [
         (inicio + timedelta(days=n)).isoformat()
         for n in range((fim - inicio).days + HORIZONTE_DE_ADIAMENTO_DIAS + 1)
@@ -535,7 +552,7 @@ def planejar(entradas: dict[str, Any], hoje: date | None = None) -> dict[str, An
     por_data, origem_do_tempo = _tempo_por_dia(campos, plano_de_estudos)
 
     sessoes, nao_alocados, adiados = _montar_agenda(
-        plano_de_revisoes.get("conteudos", []), por_data, campos
+        plano_de_revisoes.get("conteudos", []), por_data, campos, hoje
     )
 
     indicadores = _indicadores(sessoes, plano_de_revisoes, nao_alocados)

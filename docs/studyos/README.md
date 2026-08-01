@@ -31,6 +31,7 @@ backend/app/studyos/
     ├── revisao.py      # agente 15 — Revision Planner
     ├── simulado.py     # agente 16 — Exam Simulator
     ├── erros.py        # agente 17 — Error Analyzer
+    ├── fraquezas.py    # agente 18 — Weakness Finder
     └── portoes.py      # regras de bloqueio compartilhadas
 ```
 
@@ -51,7 +52,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`14-memory-scheduler.md`](14-memory-scheduler.md),
 [`15-revision-planner.md`](15-revision-planner.md),
 [`16-exam-simulator.md`](16-exam-simulator.md),
-[`17-error-analyzer.md`](17-error-analyzer.md).
+[`17-error-analyzer.md`](17-error-analyzer.md),
+[`18-weakness-finder.md`](18-weakness-finder.md).
 
 ## API
 
