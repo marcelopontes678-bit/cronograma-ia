@@ -10,6 +10,7 @@ from typing import Any, Callable
 from app.studyos.agentes import (
     adaptativo,
     aula,
+    coach,
     conhecimento,
     curriculo,
     dependencias,
@@ -48,12 +49,14 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "16": simulado.gerar,
     "17": erros.analisar,
     "18": fraquezas.mapear,
+    "19": coach.acompanhar,
 }
 
 __all__ = [
     "IMPLEMENTACOES",
     "adaptativo",
     "aula",
+    "coach",
     "conhecimento",
     "curriculo",
     "dependencias",

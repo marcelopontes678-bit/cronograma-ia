@@ -385,8 +385,17 @@ COACH = AgentSpec(
     codigo="19",
     nome="Coach",
     fase=Fase.ACOMPANHAMENTO,
-    tarefa="Traduzir o plano em orientação de execução e ritmo",
-    depende_de=("01", "06"),
+    tarefa=(
+        "Construir o Plano de Acompanhamento: engajamento, consistência, risco "
+        "de abandono, foco do momento, próxima meta e mensagens ancoradas em "
+        "dado medido"
+    ),
+    depende_de=("01", "06", "12", "13", "15", "17", "18"),
+    entradas_do_usuario=(
+        "historico_frequencia",
+        "historico_metas",
+        "mensagens_enviadas",
+    ),
 )
 
 HABIT_BUILDER = AgentSpec(

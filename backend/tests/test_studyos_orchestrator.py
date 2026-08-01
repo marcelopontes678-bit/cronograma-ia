@@ -48,12 +48,18 @@ def test_ondas_respeitam_dependencias():
 
 
 def test_agentes_independentes_ficam_na_mesma_onda():
-    # 19 Coach e 20 Habit Builder dependem do mesmo par (01, 06) e de mais
-    # ninguém: rodam em paralelo.
-    ondas = ondas_de_execucao({"19", "20"})
-    onda_final = next(o for o in ondas if "19" in o)
+    # 18 Weakness Finder e 21 Performance Analyzer consomem o mesmo relatório
+    # de erros (17) e não um ao outro: rodam em paralelo.
+    ondas = ondas_de_execucao({"18", "21"})
+    onda_final = next(o for o in ondas if "18" in o)
 
-    assert {"19", "20"}.issubset(set(onda_final))
+    assert {"18", "21"}.issubset(set(onda_final))
+
+
+def test_paralelismo_sobrevive_ao_catalogo_inteiro():
+    """O grafo completo ainda tem ondas com mais de um agente."""
+    ondas = ondas_de_execucao(set(AGENTES))
+    assert any(len(onda) > 1 for onda in ondas)
 
 
 def test_cadeia_de_producao_e_serializada_pelas_dependencias():
