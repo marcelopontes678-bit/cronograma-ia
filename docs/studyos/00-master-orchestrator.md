@@ -72,7 +72,7 @@ Sempre e apenas quatro blocos:
 | 19 | Coach | acompanhamento | 01, 06, 12, 13, 15, 17, 18 |
 | 20 | Habit Builder | acompanhamento | 01, 06, 15, 19 |
 | 21 | Performance Analyzer | acompanhamento | 01, 02, 03, 04, 06, 12, 15, 16, 17, 18, 19, 20 |
-| 22 | Forecast Agent | acompanhamento | 06, 21 |
+| 22 | Forecast Agent | acompanhamento | 01, 02, 04, 06, 12, 15, 16, 17, 18, 19, 20, 21 |
 | 23 | Optimization Agent | acompanhamento | 18, 22 |
 | 24 | Validators | validação | todos os executados |
 

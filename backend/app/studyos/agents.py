@@ -439,8 +439,13 @@ FORECAST_AGENT = AgentSpec(
     codigo="22",
     nome="Forecast Agent",
     fase=Fase.ACOMPANHAMENTO,
-    tarefa="Projetar a chegada ao objetivo no ritmo atual",
-    depende_de=("06", "21"),
+    tarefa=(
+        "Construir o Relatório de Previsão: PAO com intervalo, cenários "
+        "otimista/esperado/pessimista do mesmo modelo, fatores positivos e de "
+        "risco, e impacto simulado de cada alavanca"
+    ),
+    depende_de=("01", "02", "04", "06", "12", "15", "16", "17", "18", "19", "20", "21"),
+    entradas_do_usuario=("data_prova", "nota_corte"),
 )
 
 OPTIMIZATION_AGENT = AgentSpec(

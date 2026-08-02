@@ -36,6 +36,7 @@ backend/app/studyos/
     ├── habitos.py      # agente 20 — Habit Builder
     ├── frequencia.py   # leitura do registro de frequência (19 e 20)
     ├── performance.py  # agente 21 — Performance Analyzer
+    ├── previsao.py     # agente 22 — Forecast Agent
     └── portoes.py      # regras de bloqueio compartilhadas
 ```
 
@@ -60,7 +61,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`18-weakness-finder.md`](18-weakness-finder.md),
 [`19-coach.md`](19-coach.md),
 [`20-habit-builder.md`](20-habit-builder.md),
-[`21-performance-analyzer.md`](21-performance-analyzer.md).
+[`21-performance-analyzer.md`](21-performance-analyzer.md),
+[`22-forecast-agent.md`](22-forecast-agent.md).
 
 ## API
 

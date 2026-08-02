@@ -26,6 +26,7 @@ from app.studyos.agentes import (
     objetivo,
     perfil,
     performance,
+    previsao,
     resumos,
     revisao,
     roadmap,
@@ -55,6 +56,7 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "19": coach.acompanhar,
     "20": habitos.construir,
     "21": performance.analisar,
+    "22": previsao.prever,
 }
 
 __all__ = [
@@ -77,6 +79,7 @@ __all__ = [
     "objetivo",
     "perfil",
     "performance",
+    "previsao",
     "resumos",
     "revisao",
     "roadmap",
