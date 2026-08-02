@@ -10,7 +10,7 @@ backend/app/studyos/
 ├── graph.py         # fecho de dependências, ondas de execução, detecção de ciclo
 ├── intents.py       # classificação da solicitação → workflow
 ├── runner.py        # contrato de execução + runners (estrutural, delegado)
-├── validators.py    # agente 24: validação estrutural do fluxo
+├── validators.py    # agente 24 — Validators (auditoria do fluxo)
 ├── orchestrator.py  # Master Orchestrator
 └── agentes/         # implementações concretas
     ├── comum.py     # coerção de entradas compartilhada
@@ -64,7 +64,8 @@ Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`20-habit-builder.md`](20-habit-builder.md),
 [`21-performance-analyzer.md`](21-performance-analyzer.md),
 [`22-forecast-agent.md`](22-forecast-agent.md),
-[`23-optimization-agent.md`](23-optimization-agent.md).
+[`23-optimization-agent.md`](23-optimization-agent.md),
+[`24-validators.md`](24-validators.md).
 
 ## API
 

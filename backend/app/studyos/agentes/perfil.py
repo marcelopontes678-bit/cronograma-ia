@@ -250,6 +250,35 @@ def _estilo_aprendizagem(campos: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _observacoes(
+    campos: dict, tempo: dict, prazo: dict, lacunas: list[str]
+) -> list[str]:
+    """O que o agente registrou sobre a própria leitura do perfil."""
+    observacoes: list[str] = []
+
+    if not tempo.get("calculavel"):
+        observacoes.append(
+            "Tempo disponível não calculado: horas por dia ou dias por semana não "
+            "foram informados, e nenhum dos dois foi presumido."
+        )
+    elif tempo.get("fator_efetividade"):
+        observacoes.append(
+            f"Horas efetivas aplicam fator de {tempo['fator_efetividade']:.0%} sobre "
+            "as horas declaradas: tempo reservado não é tempo produzido."
+        )
+    if not prazo.get("definido"):
+        observacoes.append(
+            "Sem data de prova informada: o prazo não foi estimado e o plano será "
+            "construído sem horizonte fixo."
+        )
+    if lacunas:
+        observacoes.append(
+            f"{len(lacunas)} campo(s) não informado(s) ficaram nulos em vez de "
+            "receberem valor presumido."
+        )
+    return observacoes
+
+
 def _riscos(
     campos: dict[str, Any],
     tempo: dict[str, Any],
@@ -409,6 +438,13 @@ def analisar(entradas: dict[str, Any], hoje: date | None = None) -> dict[str, An
         "restricoes": _lista(campos.get("restricoes")),
         "necessidades_especiais": _lista(campos.get("necessidades_especiais")),
         "campos_informados": sorted(informados),
+        # O contrato mínimo que o agente 24 confere em toda saída: quem lê
+        # esta saída e o que o agente registrou sobre ela.
+        "consumido_por": [
+            "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12",
+            "13", "14", "16", "17", "18", "19", "20", "21", "22", "23", "24",
+        ],
+        "observacoes": _observacoes(campos, tempo, prazo, lacunas),
         "lacunas": lacunas,
         "completude": round(completude, 2),
         "confiabilidade": (
