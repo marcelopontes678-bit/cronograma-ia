@@ -24,6 +24,7 @@ from app.studyos.agentes import (
     habitos,
     memoria,
     objetivo,
+    otimizacao,
     perfil,
     performance,
     previsao,
@@ -57,6 +58,7 @@ IMPLEMENTACOES: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {
     "20": habitos.construir,
     "21": performance.analisar,
     "22": previsao.prever,
+    "23": otimizacao.otimizar,
 }
 
 __all__ = [
@@ -77,6 +79,7 @@ __all__ = [
     "habitos",
     "memoria",
     "objetivo",
+    "otimizacao",
     "perfil",
     "performance",
     "previsao",

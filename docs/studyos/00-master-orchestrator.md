@@ -73,7 +73,7 @@ Sempre e apenas quatro blocos:
 | 20 | Habit Builder | acompanhamento | 01, 06, 15, 19 |
 | 21 | Performance Analyzer | acompanhamento | 01, 02, 03, 04, 06, 12, 15, 16, 17, 18, 19, 20 |
 | 22 | Forecast Agent | acompanhamento | 01, 02, 04, 06, 12, 15, 16, 17, 18, 19, 20, 21 |
-| 23 | Optimization Agent | acompanhamento | 18, 22 |
+| 23 | Optimization Agent | acompanhamento | 01, 02, 03, 04, 05, 06, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22 |
 | 24 | Validators | validação | todos os executados |
 
 Obrigatórios em qualquer fluxo: **01**, **02** e **24**.

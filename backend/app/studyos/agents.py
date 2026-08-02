@@ -452,8 +452,15 @@ OPTIMIZATION_AGENT = AgentSpec(
     codigo="23",
     nome="Optimization Agent",
     fase=Fase.ACOMPANHAMENTO,
-    tarefa="Propor ajustes de plano a partir da projeção e dos pontos fracos",
-    depende_de=("18", "22"),
+    tarefa=(
+        "Construir o Plano de Otimização: eficiência do sistema, gargalos, "
+        "desperdícios e oportunidades, cada um com evidência medida, ganho "
+        "precificado pelo agente 22 e pedido de aprovação ao orquestrador"
+    ),
+    depende_de=(
+        "01", "02", "03", "04", "05", "06", "12", "14", "15", "16", "17", "18",
+        "19", "20", "21", "22",
+    ),
 )
 
 VALIDATORS = AgentSpec(
