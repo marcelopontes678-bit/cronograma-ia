@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from app.studyos.agentes.comum import como_lista, como_numero, como_texto, preenchido
+from app.studyos.agentes.comum import declara_confiabilidade
 from app.studyos.agentes.portoes import conteudo_estudado, localizar_no
 
 # --------------------------------------------------------------------------- #
@@ -476,6 +477,7 @@ def _observacoes(
 # --------------------------------------------------------------------------- #
 
 
+@declara_confiabilidade
 def gerar(
     entradas: dict[str, Any],
     redator: Callable[[dict], dict] | None = None,

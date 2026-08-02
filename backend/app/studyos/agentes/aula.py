@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from app.studyos.agentes.comum import como_lista, como_texto, preenchido
+from app.studyos.agentes.comum import declara_confiabilidade
 
 # --------------------------------------------------------------------------- #
 # Estrutura declarada da aula
@@ -470,6 +471,7 @@ def _lacunas(briefing: dict) -> list[str]:
 # --------------------------------------------------------------------------- #
 
 
+@declara_confiabilidade
 def gerar(
     entradas: dict[str, Any],
     redator: Callable[[dict], dict] | None = None,

@@ -7,6 +7,7 @@ Camada de orquestração de agentes de estudo, servida pelo backend FastAPI.
 ```
 backend/app/studyos/
 ├── agents.py        # catálogo dos 24 agentes: fase, tarefa, dependências
+├── acp.py           # Agent Communication Protocol v1.0 (formato único)
 ├── graph.py         # fecho de dependências, ondas de execução, detecção de ciclo
 ├── intents.py       # classificação da solicitação → workflow
 ├── runner.py        # contrato de execução + runners (estrutural, delegado)
@@ -40,6 +41,8 @@ backend/app/studyos/
     ├── otimizacao.py   # agente 23 — Optimization Agent
     └── portoes.py      # regras de bloqueio compartilhadas
 ```
+
+Protocolo de comunicação: [`acp-v1.md`](acp-v1.md).
 
 Specs dos agentes: [`00-master-orchestrator.md`](00-master-orchestrator.md),
 [`01-profile-analyzer.md`](01-profile-analyzer.md),

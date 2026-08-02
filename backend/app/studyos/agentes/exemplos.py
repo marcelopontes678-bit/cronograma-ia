@@ -18,6 +18,7 @@ from __future__ import annotations
 from typing import Any, Callable
 
 from app.studyos.agentes.comum import como_lista, preenchido
+from app.studyos.agentes.comum import declara_confiabilidade
 
 # --------------------------------------------------------------------------- #
 # Estrutura declarada do conjunto de exemplos
@@ -357,6 +358,7 @@ def _observacoes(faltantes: list[str], desconhecidos: list[str], briefing: dict)
 # --------------------------------------------------------------------------- #
 
 
+@declara_confiabilidade
 def gerar(
     entradas: dict[str, Any],
     redator: Callable[[dict], dict] | None = None,

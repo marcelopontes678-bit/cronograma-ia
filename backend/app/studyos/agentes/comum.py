@@ -9,7 +9,8 @@ inventar um valor.
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any
+from functools import wraps
+from typing import Any, Callable
 
 from app.studyos.intents import normalizar
 
@@ -71,6 +72,47 @@ def como_lista_de_dicts(valor: Any) -> list[dict]:
     return [item for item in valor if isinstance(item, dict)]
 
 
+#: Status de produção → confiabilidade declarada. Os agentes que dependem de
+#: um redator (07–11, 13, 16) não medem nada: a confiança na saída deles é a
+#: própria completude da produção, e é isso que a tabela traduz.
+CONFIABILIDADE_POR_STATUS: dict[str, str] = {
+    "bloqueado": "nenhuma",
+    "bloqueada": "nenhuma",
+    "sem_conteudo": "nenhuma",
+    "pendente_de_redacao": "baixa",
+    "pendente_de_geracao": "baixa",
+}
+
+
+def declara_confiabilidade(funcao: Callable) -> Callable:
+    """Garante que a saída do agente traga `confiabilidade`.
+
+    O protocolo ACP exige `confidence` em toda saída, e o número sai do rótulo
+    que o agente publica. Os agentes de produção não tinham rótulo porque não
+    medem nada — este decorador faz cada um declarar o seu a partir do status
+    e das lacunas que ele já expõe, em vez de deixar o protocolo arbitrar.
+    """
+
+    @wraps(funcao)
+    def com_confiabilidade(*args: Any, **kwargs: Any) -> Any:
+        saida = funcao(*args, **kwargs)
+        if not isinstance(saida, dict) or "confiabilidade" in saida:
+            return saida
+
+        status = str(saida.get("status") or "")
+        if status in CONFIABILIDADE_POR_STATUS:
+            rotulo = CONFIABILIDADE_POR_STATUS[status]
+        elif saida.get("bloqueio"):
+            rotulo = "nenhuma"
+        elif saida.get("lacunas"):
+            rotulo = "media"
+        else:
+            rotulo = "alta"
+        return {**saida, "confiabilidade": rotulo}
+
+    return com_confiabilidade
+
+
 def preenchido(valor: Any) -> bool:
     return valor not in VAZIOS
 
@@ -123,10 +165,12 @@ def filhos_estruturais(bruto: Any) -> list[tuple[str, Any]]:
 
 __all__ = [
     "CHAVES_ESTRUTURAIS",
+    "CONFIABILIDADE_POR_STATUS",
     "como_data",
     "como_lista",
     "como_numero",
     "como_texto",
+    "declara_confiabilidade",
     "filhos_estruturais",
     "preenchido",
 ]

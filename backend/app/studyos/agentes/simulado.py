@@ -25,6 +25,7 @@ from datetime import date
 from typing import Any, Callable
 
 from app.studyos.agentes.comum import como_data, como_lista, como_numero, como_texto, preenchido
+from app.studyos.agentes.comum import declara_confiabilidade
 
 # --------------------------------------------------------------------------- #
 # Constantes declaradas
@@ -771,6 +772,7 @@ def _observacoes(
 # --------------------------------------------------------------------------- #
 
 
+@declara_confiabilidade
 def gerar(
     entradas: dict[str, Any],
     redator: Callable[[dict], dict] | None = None,
