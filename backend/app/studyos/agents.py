@@ -420,8 +420,19 @@ PERFORMANCE_ANALYZER = AgentSpec(
     codigo="21",
     nome="Performance Analyzer",
     fase=Fase.ACOMPANHAMENTO,
-    tarefa="Medir desempenho e aderência contra o planejado",
-    depende_de=("17",),
+    tarefa=(
+        "Construir o Painel Inteligente de Performance: IGP, progresso, "
+        "indicadores acadêmicos, de aprendizagem e comportamentais, desvio do "
+        "planejado e alertas — cada número com origem declarada"
+    ),
+    depende_de=(
+        "01", "02", "03", "04", "06", "12", "15", "16", "17", "18", "19", "20"
+    ),
+    entradas_do_usuario=(
+        "resultados_exercicios",
+        "historico_frequencia",
+        "nota_corte",
+    ),
 )
 
 FORECAST_AGENT = AgentSpec(

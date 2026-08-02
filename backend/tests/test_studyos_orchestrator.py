@@ -48,12 +48,12 @@ def test_ondas_respeitam_dependencias():
 
 
 def test_agentes_independentes_ficam_na_mesma_onda():
-    # 18 Weakness Finder e 21 Performance Analyzer consomem o mesmo relatório
-    # de erros (17) e não um ao outro: rodam em paralelo.
-    ondas = ondas_de_execucao({"18", "21"})
-    onda_final = next(o for o in ondas if "18" in o)
+    # 10 Flashcard Generator e 12 Difficulty Detector consomem a mesma bateria
+    # de exercícios (09) e não um ao outro: rodam em paralelo.
+    ondas = ondas_de_execucao({"10", "12"})
+    onda_final = next(o for o in ondas if "10" in o)
 
-    assert {"18", "21"}.issubset(set(onda_final))
+    assert {"10", "12"}.issubset(set(onda_final))
 
 
 def test_paralelismo_sobrevive_ao_catalogo_inteiro():
