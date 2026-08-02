@@ -10,10 +10,17 @@ from app.studyos.agents import AGENTES, AGENTES_OBRIGATORIOS, ORDEM_FASES
 from app.studyos.graph import CicloDeDependencia, descrever_grafo, fechar_dependencias
 from app.studyos.intents import WORKFLOWS, Classificacao, classificar, selecionar_agentes
 from app.studyos.orchestrator import MasterOrchestrator, renderizar_markdown
+from app.studyos.redator import redatores_reais
+from app.studyos.runner import RunnerEstrutural
 
 router = APIRouter(prefix="/studyos", tags=["studyos"])
 
-orchestrator = MasterOrchestrator()
+#: Lido direto do ambiente (nunca de ``app.config``) para preservar o
+#: isolamento que os testes da API dependem: este router não exige
+#: ``DATABASE_URL`` nem qualquer outra configuração da aplicação principal.
+#: Sem ``ANTHROPIC_API_KEY``, ``redatores_reais()`` devolve ``{}`` e o
+#: comportamento é idêntico ao runner puramente determinístico.
+orchestrator = MasterOrchestrator(runner=RunnerEstrutural(redatores=redatores_reais()))
 
 
 @router.get("/agentes", response_model=list[AgenteCatalogoResponse])

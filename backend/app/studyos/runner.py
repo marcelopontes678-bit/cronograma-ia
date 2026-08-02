@@ -7,6 +7,7 @@ tocar no grafo nem na consolidação.
 
 from __future__ import annotations
 
+import asyncio
 import inspect
 from dataclasses import dataclass, field
 from typing import Awaitable, Callable, Protocol
@@ -87,7 +88,13 @@ class RunnerEstrutural:
         if implementacao is not None:
             redator = self._redatores.get(spec.codigo)
             if redator is not None and _aceita_redator(implementacao):
-                conteudo = implementacao(entradas, redator=redator)
+                #: O redator real faz chamadas de rede bloqueantes (httpx
+                #: síncrono). Rodar direto travaria o event loop inteiro —
+                #: inclusive outros agentes da mesma onda e, num servidor
+                #: vivo, qualquer outra requisição em andamento.
+                conteudo = await asyncio.to_thread(
+                    implementacao, entradas, redator=redator
+                )
             else:
                 conteudo = implementacao(entradas)
             return AgentResult(

@@ -109,6 +109,42 @@ diante produz conteúdo didático: ele monta o briefing e delega a redação a u
 **redator**, mantendo as regras (portão de pré-requisitos, estrutura, fontes)
 no código.
 
+### Caminho pronto: `app.studyos.redator`
+
+`app/studyos/redator.py` já conecta os agentes 07–11, 13 e 16 à API de
+Mensagens da Anthropic, com a saída forçada por *tool use* (o `input_schema`
+de cada ferramenta espelha exatamente a chave que o `montar()` de cada agente
+valida — nada de parsing de JSON solto em texto). É o caminho usado por
+`app/routers/studyos.py`:
+
+```python
+from app.studyos import MasterOrchestrator
+from app.studyos.redator import redatores_reais
+from app.studyos.runner import RunnerEstrutural
+
+orquestrador = MasterOrchestrator(
+    RunnerEstrutural(redatores=redatores_reais())
+)
+```
+
+`redatores_reais()` lê `ANTHROPIC_API_KEY` (e, opcionalmente,
+`STUDYOS_REDATOR_MODELO`) direto do ambiente — nunca de `app.config`, para
+preservar o isolamento que a API do StudyOS tem hoje em relação ao resto da
+aplicação (sem exigir banco de dados). Sem a chave, devolve `{}`: o mesmo
+"nenhum redator conectado" que o motor já tinha, sem mudança de
+comportamento. Falha de rede, timeout ou resposta sem a ferramenta esperada
+também devolvem `{}` para aquele agente — a regra "nunca invente conteúdo"
+vale para a chamada ao modelo tanto quanto para o resto do sistema.
+
+Por fazer chamada de rede bloqueante, o `RunnerEstrutural` roda a
+implementação do agente em thread separada (`asyncio.to_thread`) sempre que
+há um redator conectado para aquele código — sem isso, uma chamada ao modelo
+travaria o event loop inteiro, inclusive outros agentes da mesma onda.
+
+### Um redator próprio
+
+O mesmo ponto de extensão aceita qualquer callable:
+
 ```python
 from app.studyos import MasterOrchestrator
 from app.studyos.runner import RunnerEstrutural
