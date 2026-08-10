@@ -867,7 +867,7 @@ function renderRestBar() {
   root.innerHTML = `
     <div class="rest-bar">
       <div class="rest-bar-left">
-        <span class="rest-bar-time mono">${formatDuration(remaining)}</span>
+        <button class="rest-bar-time mono" id="restEdit" title="Editar tempo">${formatDuration(remaining)}</button>
         <span class="mono" style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Descanso</span>
       </div>
       <div class="rest-bar-actions">
@@ -877,9 +877,44 @@ function renderRestBar() {
       </div>
     </div>
   `;
+  document.getElementById('restEdit').onclick = () => openRestTimerEditor(remaining);
   document.getElementById('restMinus').onclick = () => adjustRestTimer(-15);
   document.getElementById('restPlus').onclick = () => adjustRestTimer(15);
   document.getElementById('restSkip').onclick = stopRestTimer;
+}
+
+function openRestTimerEditor(currentSeconds) {
+  const min = Math.floor(currentSeconds / 60);
+  const sec = currentSeconds % 60;
+  openModal(`
+    <div class="modal-title">Editar Descanso</div>
+    <label class="field-label">Tempo (min:seg)</label>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <input id="rtMin" type="number" inputmode="numeric" min="0" value="${min}" style="text-align:center;">
+      <span class="mono" style="font-size:16px;">:</span>
+      <input id="rtSec" type="number" inputmode="numeric" min="0" max="59" value="${sec}" style="text-align:center;">
+    </div>
+    <label class="field-label">Ou escolha um preset</label>
+    <div class="chip-row">
+      ${[30, 60, 90, 120, 180, 240].map(s => `<button class="chip" data-s="${s}">${formatDuration(s)}</button>`).join('')}
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="flex:1" id="rtCancel">Cancelar</button>
+      <button class="btn btn-primary" style="flex:2" id="rtSave">Definir</button>
+    </div>
+  `);
+  document.querySelectorAll('.chip-row [data-s]').forEach(chip => {
+    chip.onclick = () => { startRestTimer(Number(chip.dataset.s)); closeModal(); };
+  });
+  document.getElementById('rtCancel').onclick = closeModal;
+  document.getElementById('rtSave').onclick = () => {
+    const m = Math.max(0, Number(document.getElementById('rtMin').value) || 0);
+    const s = Math.max(0, Number(document.getElementById('rtSec').value) || 0);
+    const total = m * 60 + s;
+    if (total <= 0) { toast('Informe um tempo maior que zero.'); return; }
+    startRestTimer(total);
+    closeModal();
+  };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
