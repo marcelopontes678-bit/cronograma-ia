@@ -4,44 +4,45 @@ const STORAGE_KEY = 'treino_app_v1';
 const MUSCLE_GROUPS = ['Peito','Costas','Pernas','Ombros','Bíceps','Tríceps','Abdômen','Cardio','Outro'];
 
 const SEED_EXERCISES = [
-  { id:'supino-reto-barra', name:'Supino Reto (Barra)', muscle:'Peito', equipment:'Barra' },
-  { id:'supino-inclinado-barra', name:'Supino Inclinado (Barra)', muscle:'Peito', equipment:'Barra' },
-  { id:'supino-halteres', name:'Supino Reto (Halteres)', muscle:'Peito', equipment:'Halteres' },
-  { id:'crucifixo-halteres', name:'Crucifixo (Halteres)', muscle:'Peito', equipment:'Halteres' },
-  { id:'crossover', name:'Crossover (Cabo)', muscle:'Peito', equipment:'Cabo' },
-  { id:'flexao-braco', name:'Flexão de Braço', muscle:'Peito', equipment:'Peso Corporal' },
-  { id:'puxada-frontal', name:'Puxada Frontal (Pulley)', muscle:'Costas', equipment:'Cabo' },
-  { id:'remada-curvada', name:'Remada Curvada (Barra)', muscle:'Costas', equipment:'Barra' },
-  { id:'remada-baixa', name:'Remada Baixa (Cabo)', muscle:'Costas', equipment:'Cabo' },
-  { id:'barra-fixa', name:'Barra Fixa (Pull-up)', muscle:'Costas', equipment:'Peso Corporal' },
-  { id:'levantamento-terra', name:'Levantamento Terra', muscle:'Costas', equipment:'Barra' },
-  { id:'remada-unilateral', name:'Remada Unilateral (Halter)', muscle:'Costas', equipment:'Halteres' },
-  { id:'agachamento-livre', name:'Agachamento Livre', muscle:'Pernas', equipment:'Barra' },
-  { id:'leg-press', name:'Leg Press', muscle:'Pernas', equipment:'Máquina' },
-  { id:'cadeira-extensora', name:'Cadeira Extensora', muscle:'Pernas', equipment:'Máquina' },
-  { id:'mesa-flexora', name:'Mesa Flexora', muscle:'Pernas', equipment:'Máquina' },
-  { id:'stiff', name:'Stiff (Barra)', muscle:'Pernas', equipment:'Barra' },
-  { id:'panturrilha-pe', name:'Panturrilha em Pé', muscle:'Pernas', equipment:'Máquina' },
-  { id:'afundo-halteres', name:'Afundo (Halteres)', muscle:'Pernas', equipment:'Halteres' },
-  { id:'desenvolvimento-militar', name:'Desenvolvimento Militar (Barra)', muscle:'Ombros', equipment:'Barra' },
-  { id:'desenvolvimento-halteres', name:'Desenvolvimento com Halteres', muscle:'Ombros', equipment:'Halteres' },
-  { id:'elevacao-lateral', name:'Elevação Lateral', muscle:'Ombros', equipment:'Halteres' },
-  { id:'elevacao-frontal', name:'Elevação Frontal', muscle:'Ombros', equipment:'Halteres' },
-  { id:'remada-alta', name:'Remada Alta', muscle:'Ombros', equipment:'Barra' },
-  { id:'rosca-direta', name:'Rosca Direta (Barra)', muscle:'Bíceps', equipment:'Barra' },
-  { id:'rosca-alternada', name:'Rosca Alternada (Halteres)', muscle:'Bíceps', equipment:'Halteres' },
-  { id:'rosca-martelo', name:'Rosca Martelo', muscle:'Bíceps', equipment:'Halteres' },
-  { id:'rosca-scott', name:'Rosca Scott', muscle:'Bíceps', equipment:'Barra' },
-  { id:'triceps-corda', name:'Tríceps Corda (Pulley)', muscle:'Tríceps', equipment:'Cabo' },
-  { id:'triceps-testa', name:'Tríceps Testa', muscle:'Tríceps', equipment:'Barra' },
-  { id:'triceps-frances', name:'Tríceps Francês', muscle:'Tríceps', equipment:'Halteres' },
-  { id:'mergulho-paralelas', name:'Mergulho (Paralelas)', muscle:'Tríceps', equipment:'Peso Corporal' },
-  { id:'abdominal-supra', name:'Abdominal Supra', muscle:'Abdômen', equipment:'Peso Corporal' },
-  { id:'prancha', name:'Prancha', muscle:'Abdômen', equipment:'Peso Corporal' },
-  { id:'elevacao-pernas', name:'Elevação de Pernas', muscle:'Abdômen', equipment:'Peso Corporal' },
-  { id:'abdominal-polia', name:'Abdominal na Polia', muscle:'Abdômen', equipment:'Cabo' },
-  { id:'esteira', name:'Esteira / Corrida', muscle:'Cardio', equipment:'Cardio' },
-  { id:'bike', name:'Bicicleta Ergométrica', muscle:'Cardio', equipment:'Cardio' },
+  { id:'supino-reto-barra', name:'Supino Reto (Barra)', muscle:'Peito', equipment:'Barra', hasImages: true, instructions: ['Deite no banco, pés apoiados no chão, e segure a barra um pouco mais aberta que a largura dos ombros.', 'Retire a barra do suporte e estenda os braços sobre o peito.', 'Desça a barra de forma controlada até tocar levemente o meio do peito.', 'Empurre a barra de volta à posição inicial, contraindo o peitoral no topo.'] },
+  { id:'supino-inclinado-barra', name:'Supino Inclinado (Barra)', muscle:'Peito', equipment:'Barra', hasImages: true, instructions: ['Ajuste o banco entre 30-45°, deite e segure a barra na largura dos ombros.', 'Retire a barra do suporte e estenda os braços acima do peito superior.', 'Desça a barra controladamente até a parte superior do peito.', 'Empurre de volta à posição inicial, focando na parte superior do peitoral.'] },
+  { id:'supino-halteres', name:'Supino Reto (Halteres)', muscle:'Peito', equipment:'Halteres', hasImages: true, instructions: ['Deite no banco com um halter em cada mão, na altura do peito.', 'Empurre os halteres para cima até os braços ficarem estendidos, sem travar os cotovelos.', 'Desça controladamente até sentir alongamento no peito.', 'Repita, mantendo os halteres alinhados durante todo o movimento.'] },
+  { id:'crucifixo-halteres', name:'Crucifixo (Halteres)', muscle:'Peito', equipment:'Halteres', hasImages: true, instructions: ['Deite no banco com um halter em cada mão, braços estendidos acima do peito.', 'Com leve flexão nos cotovelos, abra os braços em arco até sentir alongamento no peito.', 'Retorne os halteres à posição inicial contraindo o peitoral.'] },
+  { id:'crossover', name:'Crossover (Cabo)', muscle:'Peito', equipment:'Cabo', hasImages: true, instructions: ['Posicione as polias altas e segure um cabo em cada mão, dando um passo à frente.', 'Com leve flexão nos cotovelos, puxe os cabos para baixo e para o centro, à frente do corpo.', 'Contraia o peitoral no ponto final e retorne controladamente.'] },
+  { id:'flexao-braco', name:'Flexão de Braço', muscle:'Peito', equipment:'Peso Corporal', hasImages: true, instructions: ['Apoie as mãos no chão, um pouco mais abertas que os ombros, corpo alinhado.', 'Desça o corpo flexionando os cotovelos até quase tocar o chão.', 'Empurre de volta à posição inicial, mantendo o abdômen contraído.'] },
+  { id:'puxada-frontal', name:'Puxada Frontal (Pulley)', muscle:'Costas', equipment:'Cabo', hasImages: true, instructions: ['Sente no aparelho e segure a barra com pegada aberta, mais larga que os ombros.', 'Puxe a barra para baixo até a altura do queixo/peito, levando os cotovelos para baixo.', 'Retorne controladamente até a extensão completa dos braços.'] },
+  { id:'remada-curvada', name:'Remada Curvada (Barra)', muscle:'Costas', equipment:'Barra', hasImages: true, instructions: ['Segure a barra com as mãos na largura dos ombros, tronco inclinado à frente e joelhos levemente flexionados.', 'Puxe a barra em direção ao abdômen, levando os cotovelos para trás.', 'Desça controladamente até a extensão completa dos braços.'] },
+  { id:'remada-baixa', name:'Remada Baixa (Cabo)', muscle:'Costas', equipment:'Cabo', hasImages: true, instructions: ['Sente no aparelho, pés apoiados, e segure o triângulo/barra com os braços estendidos.', 'Puxe o cabo em direção ao abdômen, mantendo as costas retas e levando os cotovelos para trás.', 'Retorne controladamente até a extensão completa dos braços.'] },
+  { id:'barra-fixa', name:'Barra Fixa (Pull-up)', muscle:'Costas', equipment:'Peso Corporal', hasImages: true, instructions: ['Segure a barra com pegada pronada, um pouco mais aberta que os ombros.', 'Puxe o corpo para cima até o queixo ultrapassar a barra.', 'Desça controladamente até a extensão completa dos braços.'] },
+  { id:'levantamento-terra', name:'Levantamento Terra', muscle:'Costas', equipment:'Barra', hasImages: true, instructions: ['Posicione os pés na largura do quadril, barra próxima às canelas.', 'Segure a barra, mantenha as costas retas e o peito aberto.', 'Estenda quadris e joelhos simultaneamente para levantar a barra, mantendo-a próxima ao corpo.', 'Desça controladamente revertendo o movimento.'] },
+  { id:'remada-unilateral', name:'Remada Unilateral (Halter)', muscle:'Costas', equipment:'Halteres', hasImages: true, instructions: ['Apoie um joelho e uma mão no banco, segurando o halter com a outra mão, braço estendido.', 'Puxe o halter em direção ao quadril, levando o cotovelo para trás.', 'Desça controladamente até a extensão completa do braço.'] },
+  { id:'agachamento-livre', name:'Agachamento Livre', muscle:'Pernas', equipment:'Barra', hasImages: true, instructions: ['Posicione a barra sobre os trapézios, pés na largura dos ombros.', 'Desça flexionando quadris e joelhos, mantendo o peito aberto e os joelhos alinhados com os pés.', 'Desça até as coxas ficarem paralelas ao chão (ou conforme mobilidade) e suba controladamente.'] },
+  { id:'leg-press', name:'Leg Press', muscle:'Pernas', equipment:'Máquina', hasImages: true, instructions: ['Sente no aparelho com os pés apoiados na plataforma, na largura dos ombros.', 'Solte as travas e desça a plataforma flexionando os joelhos até 90°.', 'Empurre a plataforma de volta, sem travar os joelhos no topo.'] },
+  { id:'cadeira-extensora', name:'Cadeira Extensora', muscle:'Pernas', equipment:'Máquina', hasImages: true, instructions: ['Sente no aparelho com os tornozelos apoiados no rolo, joelhos alinhados com o eixo do aparelho.', 'Estenda as pernas até quase a extensão completa, contraindo o quadríceps.', 'Retorne controladamente à posição inicial.'] },
+  { id:'mesa-flexora', name:'Mesa Flexora', muscle:'Pernas', equipment:'Máquina', hasImages: true, instructions: ['Deite de bruços no aparelho, com os tornozelos apoiados no rolo.', 'Flexione os joelhos, levando os calcanhares em direção aos glúteos.', 'Retorne controladamente à posição inicial.'] },
+  { id:'stiff', name:'Stiff (Barra)', muscle:'Pernas', equipment:'Barra', hasImages: true, instructions: ['Segure a barra na largura dos ombros, pernas levemente flexionadas.', 'Incline o tronco à frente, empurrando o quadril para trás, mantendo a barra próxima às pernas.', 'Desça até sentir alongamento nos posteriores de coxa e retorne à posição inicial.'] },
+  { id:'panturrilha-pe', name:'Panturrilha em Pé', muscle:'Pernas', equipment:'Máquina', hasImages: true, instructions: ['Fique em pé no aparelho, apoiando a ponta dos pés na plataforma.', 'Suba o corpo o máximo possível, contraindo a panturrilha.', 'Desça controladamente até sentir alongamento total.'] },
+  { id:'afundo-halteres', name:'Afundo (Halteres)', muscle:'Pernas', equipment:'Halteres', hasImages: true, instructions: ['Fique em pé com um halter em cada mão, ao lado do corpo.', 'Dê um passo à frente e desça o corpo até o joelho de trás quase tocar o chão.', 'Empurre de volta à posição inicial e repita com a outra perna.'] },
+  { id:'desenvolvimento-militar', name:'Desenvolvimento Militar (Barra)', muscle:'Ombros', equipment:'Barra', hasImages: true, instructions: ['Segure a barra na altura dos ombros, mãos um pouco mais abertas que a largura dos ombros.', 'Empurre a barra para cima até a extensão completa dos braços.', 'Desça controladamente até a posição inicial.'] },
+  { id:'desenvolvimento-halteres', name:'Desenvolvimento com Halteres', muscle:'Ombros', equipment:'Halteres', hasImages: true, instructions: ['Sente ou fique em pé com um halter em cada mão, na altura dos ombros.', 'Empurre os halteres para cima até quase se tocarem no topo.', 'Desça controladamente até a posição inicial.'] },
+  { id:'elevacao-lateral', name:'Elevação Lateral', muscle:'Ombros', equipment:'Halteres', hasImages: true, instructions: ['Fique em pé com um halter em cada mão, ao lado do corpo.', 'Eleve os braços lateralmente até a altura dos ombros, com leve flexão nos cotovelos.', 'Desça controladamente até a posição inicial.'] },
+  { id:'elevacao-frontal', name:'Elevação Frontal', muscle:'Ombros', equipment:'Halteres', hasImages: true, instructions: ['Fique em pé com um halter em cada mão, à frente das coxas.', 'Eleve os braços à frente até a altura dos ombros.', 'Desça controladamente até a posição inicial.'] },
+  { id:'remada-alta', name:'Remada Alta', muscle:'Ombros', equipment:'Barra', hasImages: true, instructions: ['Segure a barra com pegada fechada, à frente das coxas.', 'Puxe a barra para cima ao longo do corpo, levando os cotovelos para cima e para fora.', 'Desça controladamente até a posição inicial.'] },
+  { id:'rosca-direta', name:'Rosca Direta (Barra)', muscle:'Bíceps', equipment:'Barra', hasImages: true, instructions: ['Segure a barra com pegada supinada, na largura dos ombros.', 'Flexione os cotovelos, levando a barra até a altura dos ombros.', 'Desça controladamente até a extensão completa dos braços.'] },
+  { id:'rosca-alternada', name:'Rosca Alternada (Halteres)', muscle:'Bíceps', equipment:'Halteres', hasImages: true, instructions: ['Fique em pé com um halter em cada mão, braços estendidos.', 'Flexione um braço por vez, girando o punho até a palma ficar voltada para cima.', 'Desça controladamente e repita com o outro braço.'] },
+  { id:'rosca-martelo', name:'Rosca Martelo', muscle:'Bíceps', equipment:'Halteres', hasImages: true, instructions: ['Fique em pé com um halter em cada mão, palmas voltadas para o corpo.', 'Flexione os cotovelos, mantendo as palmas voltadas uma para a outra durante todo o movimento.', 'Desça controladamente até a extensão completa dos braços.'] },
+  { id:'rosca-scott', name:'Rosca Scott', muscle:'Bíceps', equipment:'Barra', hasImages: true, instructions: ['Apoie os braços no banco Scott, segurando a barra com pegada supinada.', 'Flexione os cotovelos, levando a barra em direção aos ombros.', 'Desça controladamente até a extensão quase completa dos braços.'] },
+  { id:'triceps-corda', name:'Tríceps Corda (Pulley)', muscle:'Tríceps', equipment:'Cabo', hasImages: true, instructions: ['Segure a corda na polia alta, cotovelos junto ao corpo.', 'Estenda os braços para baixo, separando as pontas da corda no final do movimento.', 'Retorne controladamente até a posição inicial.'] },
+  { id:'triceps-testa', name:'Tríceps Testa', muscle:'Tríceps', equipment:'Barra', hasImages: true, instructions: ['Deite no banco segurando a barra com os braços estendidos acima do peito.', 'Flexione os cotovelos, descendo a barra em direção à testa.', 'Estenda os braços de volta à posição inicial, mantendo os cotovelos fixos.'] },
+  { id:'triceps-frances', name:'Tríceps Francês', muscle:'Tríceps', equipment:'Halteres', hasImages: true, instructions: ['Fique em pé ou sentado segurando um halter com as duas mãos, acima da cabeça.', 'Flexione os cotovelos, descendo o halter atrás da cabeça.', 'Estenda os braços de volta à posição inicial.'] },
+  { id:'mergulho-paralelas', name:'Mergulho (Paralelas)', muscle:'Tríceps', equipment:'Peso Corporal', hasImages: true, instructions: ['Apoie-se nas barras paralelas com os braços estendidos.', 'Desça o corpo flexionando os cotovelos, mantendo o tronco levemente inclinado à frente.', 'Empurre de volta à posição inicial.'] },
+  { id:'abdominal-supra', name:'Abdominal Supra', muscle:'Abdômen', equipment:'Peso Corporal', hasImages: true, instructions: ['Deite de costas com os joelhos flexionados e pés apoiados no chão.', 'Contraia o abdômen, elevando a parte superior do tronco em direção aos joelhos.', 'Desça controladamente sem relaxar completamente o abdômen.'] },
+  { id:'prancha', name:'Prancha', muscle:'Abdômen', equipment:'Peso Corporal', hasImages: true, instructions: ['Apoie os antebraços e a ponta dos pés no chão, corpo alinhado da cabeça aos calcanhares.', 'Contraia o abdômen e os glúteos, mantendo a posição sem deixar o quadril cair.', 'Sustente pelo tempo determinado, respirando de forma controlada.'] },
+  { id:'elevacao-pernas', name:'Elevação de Pernas', muscle:'Abdômen', equipment:'Peso Corporal', hasImages: true, instructions: ['Deite de costas (ou pendure-se em uma barra) com as pernas estendidas.', 'Eleve as pernas em direção ao tronco, contraindo o abdômen inferior.', 'Desça controladamente sem tocar o chão completamente.'] },
+  { id:'abdominal-polia', name:'Abdominal na Polia', muscle:'Abdômen', equipment:'Cabo', hasImages: true, instructions: ['Ajoelhe-se de frente para a polia alta, segurando a corda atrás da cabeça.', 'Contraia o abdômen, flexionando o tronco em direção aos joelhos.', 'Retorne controladamente à posição inicial.'] },
+  { id:'esteira', name:'Esteira / Corrida', muscle:'Cardio', equipment:'Cardio', hasImages: true, instructions: ['Ajuste a velocidade e a inclinação desejadas na esteira.', 'Mantenha uma postura ereta durante a corrida, com passadas naturais.', 'Ajuste o ritmo conforme o objetivo do treino (resistência ou velocidade).'] },
+  { id:'bike', name:'Bicicleta Ergométrica', muscle:'Cardio', equipment:'Cardio', hasImages: true, instructions: ['Ajuste o banco e o guidão à altura adequada.', 'Pedale mantendo um ritmo constante, ajustando a resistência conforme o objetivo.', 'Mantenha a postura ereta durante todo o exercício.'] },
+
 ];
 
 const SEED_ROUTINES = [
@@ -368,6 +369,7 @@ let ui = {
   exerciseDetailId: null,
   historyDetailId: null,
   showMeasurements: false,
+  instructionsExpanded: false,
 };
 
 function setTab(tab) {
@@ -763,7 +765,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
       if (s.completed) {
         if (!s.weight && prev) s.weight = prev.weight;
         if (!s.reps && prev) s.reps = prev.reps;
-        if (!s.warmup && isLastInGroup(we)) startRestTimer(state.settings.restDefault);
+        if (!s.warmup && isLastInGroup(we)) startRestTimer(ex && ex.restOverride ? ex.restOverride : state.settings.restDefault);
       }
       saveState(); render();
     };
@@ -1263,7 +1265,7 @@ function renderExerciciosTab(main) {
         <div><div class="ex-list-name">${esc(e.name)}</div><div class="ex-list-muscle">${esc(e.muscle)} · ${esc(e.equipment)}</div></div>
         <div class="mono" style="font-size:11px;color:var(--muted);">${pr.maxWeight ? pr.maxWeight + unitLabel() : ''}</div>
       `;
-      item.onclick = () => { ui.exerciseDetailId = e.id; render(); window.scrollTo(0,0); };
+      item.onclick = () => { ui.exerciseDetailId = e.id; ui.instructionsExpanded = false; render(); window.scrollTo(0,0); };
       listCard.appendChild(item);
     });
   }
@@ -1293,6 +1295,9 @@ function openModalNewExerciseStandalone() {
   };
 }
 
+let exerciseAnimTimer = null;
+function stopExerciseAnim() { if (exerciseAnimTimer) { clearInterval(exerciseAnimTimer); exerciseAnimTimer = null; } }
+
 function renderExerciseDetail(main, exerciseId) {
   const ex = getExercise(exerciseId);
   if (!ex) { ui.exerciseDetailId = null; renderExerciciosTab(main); return; }
@@ -1301,16 +1306,94 @@ function renderExerciseDetail(main, exerciseId) {
   back.className = 'btn btn-ghost btn-sm';
   back.style.marginBottom = '14px';
   back.textContent = '← Voltar';
-  back.onclick = () => { ui.exerciseDetailId = null; render(); };
+  back.onclick = () => { stopExerciseAnim(); ui.exerciseDetailId = null; render(); };
   main.appendChild(back);
+
+  if (ex.hasImages) {
+    const imgCard = document.createElement('div');
+    imgCard.className = 'card';
+    imgCard.innerHTML = `
+      <div class="ex-demo-wrap">
+        <img class="ex-demo-img" id="exDemoImg" src="exercises/${esc(ex.id)}/0.jpg" alt="${esc(ex.name)}">
+        <button class="ex-demo-play" id="exDemoPlay" title="Reproduzir demonstração">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+    `;
+    main.appendChild(imgCard);
+    const imgEl = imgCard.querySelector('#exDemoImg');
+    const playBtn = imgCard.querySelector('#exDemoPlay');
+    stopExerciseAnim();
+    const PLAY_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+    const PAUSE_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+    playBtn.onclick = () => {
+      if (exerciseAnimTimer) {
+        stopExerciseAnim();
+        imgEl.src = `exercises/${ex.id}/0.jpg`;
+        playBtn.classList.remove('playing');
+        playBtn.innerHTML = PLAY_ICON;
+        return;
+      }
+      playBtn.classList.add('playing');
+      playBtn.innerHTML = PAUSE_ICON;
+      let frame = 0;
+      exerciseAnimTimer = setInterval(() => {
+        frame = 1 - frame;
+        imgEl.src = `exercises/${ex.id}/${frame}.jpg`;
+      }, 650);
+    };
+  }
+
+  const titleCard = document.createElement('div');
+  titleCard.className = 'card card-pad';
+  titleCard.innerHTML = `<div class="history-name" style="font-size:19px;">${esc(ex.name)}</div>`;
+  main.appendChild(titleCard);
+
+  if (ex.instructions && ex.instructions.length) {
+    const insCard = document.createElement('div');
+    insCard.className = 'card card-pad';
+    const shown = ui.instructionsExpanded ? ex.instructions : ex.instructions.slice(0, 1);
+    insCard.innerHTML = `
+      <div class="ex-card-title" style="margin-bottom:10px;">Instruções</div>
+      <ol class="ex-instructions-list">${shown.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
+      ${ex.instructions.length > 1 ? `<button class="btn btn-ghost btn-sm" id="insToggle" style="margin-top:8px;">${ui.instructionsExpanded ? '▲ Menos' : '▼ Mais'}</button>` : ''}
+    `;
+    main.appendChild(insCard);
+    const insToggle = insCard.querySelector('#insToggle');
+    if (insToggle) insToggle.onclick = () => { ui.instructionsExpanded = !ui.instructionsExpanded; render(); };
+  }
+
+  const infoCard = document.createElement('div');
+  infoCard.className = 'card card-pad';
+  infoCard.innerHTML = `
+    <div class="ex-info-row"><span class="ex-card-title">Parte do corpo</span><span class="mono" style="color:var(--muted);">${esc(ex.muscle)}</span></div>
+    <div class="ex-info-row"><span class="ex-card-title">Categoria</span><span class="mono" style="color:var(--muted);">${esc(ex.equipment)}</span></div>
+  `;
+  main.appendChild(infoCard);
+
+  const prefCard = document.createElement('div');
+  prefCard.className = 'card card-pad';
+  const restOptions = [null, 30, 60, 90, 120, 180];
+  prefCard.innerHTML = `
+    <div class="ex-card-title" style="margin-bottom:4px;">Preferências</div>
+    <div class="toggle-row" style="border-bottom:none;">
+      <span>Temporizador de Descanso</span>
+    </div>
+    <div class="seg" id="exRestSeg" style="flex-wrap:wrap;">
+      ${restOptions.map(v => `<button data-v="${v ?? ''}" class="${(ex.restOverride || null) === v ? 'on' : ''}">${v ? formatDuration(v) : 'Padrão'}</button>`).join('')}
+    </div>
+  `;
+  main.appendChild(prefCard);
+  prefCard.querySelectorAll('#exRestSeg button').forEach(b => b.onclick = () => {
+    ex.restOverride = b.dataset.v ? Number(b.dataset.v) : null;
+    saveState(); render();
+  });
 
   const head = document.createElement('div');
   head.className = 'card card-pad';
   const pr = getExercisePR(exerciseId);
   head.innerHTML = `
-    <div class="history-name" style="font-size:18px;">${esc(ex.name)}</div>
-    <div class="ex-card-sub" style="margin-bottom:14px;">${esc(ex.muscle)} · ${esc(ex.equipment)}</div>
-    <div class="pr-grid">
+    <div class="pr-grid" style="margin-bottom:0;">
       <div class="stat-box"><div class="stat-num">${pr.maxWeight ? pr.maxWeight + unitLabel() : '—'}</div><div class="stat-label">Recorde de Carga</div></div>
       <div class="stat-box"><div class="stat-num">${pr.best1rm ? Math.round(pr.best1rm) + unitLabel() : '—'}</div><div class="stat-label">1RM Estimado</div></div>
     </div>

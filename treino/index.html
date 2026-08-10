@@ -387,6 +387,24 @@ main#main > * { animation: contentFadeIn .16s ease both; }
 
 /* Detail / chart */
 .pr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+
+/* Demonstração do exercício */
+.ex-demo-wrap { position: relative; background: var(--surface2); }
+.ex-demo-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.ex-demo-play {
+  position: absolute; right: 14px; bottom: 14px; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--accent); color: var(--accent-ink); border: none; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+}
+.ex-demo-play.playing { background: var(--surface); color: var(--accent); border: 1px solid var(--accent); }
+.ex-demo-play svg { margin-left: 1px; }
+.ex-demo-play.playing svg { margin-left: 0; }
+
+.ex-instructions-list { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; line-height: 1.6; color: var(--text); }
+.ex-instructions-list li::marker { color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-weight: 600; }
+
+.ex-info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.ex-info-row:last-child { border-bottom: none; }
 .chart-wrap { padding: 14px 10px; }
 .set-history-row { display: flex; justify-content: space-between; padding: 9px 16px; border-bottom: 1px solid var(--border); font-size: 12.5px; }
 .set-history-row:last-child { border-bottom: none; }
