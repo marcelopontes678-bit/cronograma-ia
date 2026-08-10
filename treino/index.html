@@ -264,7 +264,11 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
   box-shadow: 0 8px 24px rgba(0,0,0,.4);
 }
 .rest-bar-left { display: flex; align-items: center; gap: 10px; }
-.rest-bar-time { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); min-width: 54px; }
+.rest-bar-time {
+  font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent); min-width: 54px;
+  background: none; border: none; padding: 0; text-align: left; cursor: pointer;
+}
+.rest-bar-time:hover { color: var(--accent2); }
 .rest-bar-actions { display: flex; gap: 6px; }
 .rest-bar-actions button {
   background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: 7px;
