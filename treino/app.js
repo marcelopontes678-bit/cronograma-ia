@@ -71,7 +71,7 @@ const PLATES_LB = [45, 35, 25, 10, 5, 2.5];
 
 function defaultState() {
   return {
-    settings: { unit: 'kg', restDefault: 90, barWeight: 20 },
+    settings: { unit: 'kg', restDefault: 90, barWeight: 20, theme: 'dark' },
     exercises: SEED_EXERCISES.map(e => ({ ...e, custom: false })),
     routines: SEED_ROUTINES.map(r => ({ ...r, exercises: r.exercises.map(x => ({ ...x })) })),
     workouts: [],
@@ -286,6 +286,59 @@ function enableDragReorder(containerEl, onReorderIds) {
       containerEl.onpointermove = onMove;
       containerEl.onpointerup = onUp;
     };
+  });
+}
+
+/* ---------- arrastar (swipe) para excluir ---------- */
+function enableSwipeToDelete(row, onDelete, excludeSelector) {
+  let startX = 0, startY = 0, active = false, committed = false, pointerId = null;
+  row.style.touchAction = 'pan-y';
+  row.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (excludeSelector && e.target.closest(excludeSelector)) return;
+    startX = e.clientX; startY = e.clientY; active = true; committed = false; pointerId = e.pointerId;
+    row.style.transition = 'none';
+    // Não captura o ponteiro ainda: um toque simples deve deixar o clique do
+    // botão/input filho disparar normalmente. Só captura ao confirmar o swipe.
+  });
+  row.addEventListener('pointermove', (e) => {
+    if (!active) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    if (!committed) {
+      if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { committed = true; row.setPointerCapture(pointerId); }
+      else if (Math.abs(dy) > 8) { active = false; return; }
+    }
+    if (committed) {
+      const clamped = Math.min(0, Math.max(dx, -96));
+      row.style.transform = `translateX(${clamped}px)`;
+      row.classList.toggle('swipe-armed', clamped < -48);
+    }
+  });
+  const finish = (e) => {
+    if (!active) return;
+    active = false;
+    row.style.transition = 'transform .18s ease';
+    const dx = e.clientX - startX;
+    if (committed && dx < -48) {
+      row.style.transform = 'translateX(-100%)';
+      row.style.opacity = '0';
+      setTimeout(onDelete, 160);
+      return;
+    }
+    row.style.transform = 'translateX(0)';
+    row.classList.remove('swipe-armed');
+    if (committed) {
+      const suppressClick = (ev) => { ev.stopPropagation(); ev.preventDefault(); };
+      row.addEventListener('click', suppressClick, { capture: true, once: true });
+    }
+    committed = false;
+  };
+  row.addEventListener('pointerup', finish);
+  row.addEventListener('pointercancel', () => {
+    active = false; committed = false;
+    row.style.transition = 'transform .18s ease';
+    row.style.transform = 'translateX(0)';
+    row.classList.remove('swipe-armed');
   });
 }
 
@@ -714,6 +767,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
       }
       saveState(); render();
     };
+    enableSwipeToDelete(row, () => { we.sets = we.sets.filter(x => x.uid !== s.uid); saveState(); render(); });
     table.appendChild(row);
   });
 
@@ -864,6 +918,12 @@ function renderRestBar() {
   const root = document.getElementById('restBarRoot');
   if (!restTimer.active) { root.innerHTML = ''; return; }
   const remaining = Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000));
+  const existing = root.querySelector('#restEdit');
+  if (existing) {
+    // apenas atualiza o texto — evita recriar o DOM (e replay da animação de entrada) a cada tick
+    existing.textContent = formatDuration(remaining);
+    return;
+  }
   root.innerHTML = `
     <div class="rest-bar">
       <div class="rest-bar-left">
@@ -877,7 +937,7 @@ function renderRestBar() {
       </div>
     </div>
   `;
-  document.getElementById('restEdit').onclick = () => openRestTimerEditor(remaining);
+  document.getElementById('restEdit').onclick = () => openRestTimerEditor(Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000)));
   document.getElementById('restMinus').onclick = () => adjustRestTimer(-15);
   document.getElementById('restPlus').onclick = () => adjustRestTimer(15);
   document.getElementById('restSkip').onclick = stopRestTimer;
@@ -1361,7 +1421,9 @@ function renderRoutineEditor() {
       `;
       row.querySelector('[data-act="sets"]').onclick = () => openStepperEditor('Número de Séries', x.targetSets, 1, 10, v => { x.targetSets = v; renderRoutineEditor(); });
       row.querySelector('[data-act="reps"]').onclick = () => openRepRangeEditor(x, () => renderRoutineEditor());
-      row.querySelector('[data-act="del"]').onclick = () => { routineDraft.exercises = routineDraft.exercises.filter(e => e !== x); renderRoutineEditor(); };
+      const removeRow = () => { routineDraft.exercises = routineDraft.exercises.filter(e => e !== x); renderRoutineEditor(); };
+      row.querySelector('[data-act="del"]').onclick = removeRow;
+      enableSwipeToDelete(row, removeRow, '.drag-handle');
       list.appendChild(row);
     });
     if (routineDraft.exercises.length >= 2) {
@@ -1445,6 +1507,14 @@ function renderPerfilTab(main) {
   card.className = 'card card-pad';
   card.innerHTML = `
     <div class="toggle-row">
+      <span>Tema</span>
+      <div class="seg" id="themeSeg">
+        <button data-t="dark" class="${state.settings.theme === 'dark' ? 'on' : ''}">Escuro</button>
+        <button data-t="light" class="${state.settings.theme === 'light' ? 'on' : ''}">Claro</button>
+        <button data-t="system" class="${state.settings.theme === 'system' ? 'on' : ''}">Sistema</button>
+      </div>
+    </div>
+    <div class="toggle-row">
       <span>Unidade de peso</span>
       <div class="seg" id="unitSeg">
         <button data-u="kg" class="${state.settings.unit === 'kg' ? 'on' : ''}">KG</button>
@@ -1464,6 +1534,7 @@ function renderPerfilTab(main) {
     <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">Alterar a unidade não converte os pesos já registrados — serve apenas para novos registros.</p>
   `;
   main.appendChild(card);
+  card.querySelectorAll('#themeSeg button').forEach(b => b.onclick = () => { state.settings.theme = b.dataset.t; saveState(); applyTheme(); render(); });
   card.querySelectorAll('#unitSeg button').forEach(b => b.onclick = () => { state.settings.unit = b.dataset.u; saveState(); render(); });
   card.querySelectorAll('#restSeg button').forEach(b => b.onclick = () => { state.settings.restDefault = Number(b.dataset.s); saveState(); render(); });
   document.getElementById('barWeightInput').oninput = (e) => { state.settings.barWeight = Number(e.target.value) || 0; saveState(); };
@@ -1631,7 +1702,15 @@ function renderMeasurementsView(main) {
   main.appendChild(listCard);
 }
 
+/* ===================== TEMA ===================== */
+function applyTheme() {
+  const t = state.settings.theme;
+  if (t === 'system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', t);
+}
+
 /* ===================== INIT ===================== */
+applyTheme();
 if (state.activeWorkout) { /* mantém sessão ativa entre reloads */ }
 render();
 
