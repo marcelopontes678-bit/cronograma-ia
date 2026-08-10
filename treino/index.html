@@ -6,7 +6,7 @@
 <title>Treino</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff6b35">
+<meta name="theme-color" content="#2dd4bf">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,8 +22,9 @@
   --border: #2a2a2e;
   --text: #ededf0;
   --muted: #8a8a90;
-  --accent: #ff6b35;
-  --accent2: #ff8a5c;
+  --accent: #2dd4bf;
+  --accent2: #5eead4;
+  --accent-ink: #04211d;
   --blue: #4a9eff;
   --green: #3ecf8e;
   --red: #ff5c5c;
@@ -103,7 +104,7 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
   font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
   transition: all .15s; white-space: nowrap;
 }
-.btn-primary { background: var(--accent); color: #17100c; font-weight: 600; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .btn-primary:hover { background: var(--accent2); }
 .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
 .btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
@@ -160,34 +161,100 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
 .workout-actions { display: flex; gap: 8px; }
 
 .ex-card { margin-bottom: 14px; }
-.ex-card-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid var(--border); gap: 10px; }
-.ex-card-title { font-size: 14.5px; font-weight: 600; }
+.ex-card-head { display: flex; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border); gap: 10px; }
+.ex-card-head-info { flex: 1; min-width: 0; }
+.ex-card-head-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.ex-card-title { font-size: 14.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
 .ex-card-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: .5px; margin-top: 2px; }
+.ex-sublabel {
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--accent); border: 1px solid var(--accent);
+  border-radius: 4px; padding: 1px 5px; letter-spacing: .5px;
+}
+.ex-plate-btn { font-size: 14px; }
+.ex-check-badge {
+  width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface2);
+  display: flex; align-items: center; justify-content: center; color: transparent; flex-shrink: 0;
+}
+.ex-check-badge.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.drag-handle {
+  background: none; border: none; color: var(--muted); font-size: 18px; line-height: 1; padding: 4px 2px;
+  cursor: grab; touch-action: none; flex-shrink: 0;
+}
+.drag-row.dragging { opacity: .55; }
 
 .set-table { padding: 8px 12px 12px; }
 .set-row-header, .set-row {
-  display: grid; grid-template-columns: 32px 1fr 64px 56px 38px; gap: 6px; align-items: center; padding: 6px 4px;
+  display: grid; grid-template-columns: 30px 1fr 1fr 46px 36px; gap: 6px; align-items: center; padding: 6px 4px;
 }
 .set-row-header { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; text-align: center; }
 .set-row { border-radius: 8px; }
-.set-row.completed { background: rgba(62,207,142,0.08); }
+.set-row.completed { background: rgba(45,212,191,0.08); }
 .set-row.warmup .set-num-btn { color: var(--yellow); border-color: var(--yellow); }
 .set-num-btn {
-  width: 28px; height: 28px; border-radius: 7px; background: var(--surface2); border: 1px solid var(--border);
+  position: relative; width: 28px; height: 28px; border-radius: 7px; background: var(--surface2); border: 1px solid var(--border);
   font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); display: flex; align-items: center; justify-content: center;
 }
-.set-prev { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); text-align: center; }
+.pr-dot { position: absolute; top: -6px; right: -6px; font-size: 10px; }
 .set-input { text-align: center; padding: 8px 4px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+.set-input-rpe { color: var(--accent); }
 .set-check {
   width: 34px; height: 34px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface2);
   display: flex; align-items: center; justify-content: center; color: var(--muted);
 }
 .set-check.on { background: var(--green); border-color: var(--green); color: #06200f; }
 .set-check svg { width: 16px; height: 16px; }
-.pr-badge { color: var(--yellow); font-size: 11px; margin-left: 4px; }
 
 .add-set-btn { margin: 6px 4px 2px; }
 .ex-card-menu-btn { background: none; border: none; color: var(--muted); padding: 4px; }
+
+/* Progresso do treino ativo */
+.workout-progress-bar { height: 3px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
+.workout-progress-fill { height: 100%; background: var(--accent); transition: width .3s ease; }
+
+/* Superset (exercícios agrupados) */
+.group-wrap {
+  border: 1px solid var(--accent); border-radius: 12px; padding: 10px; margin-bottom: 14px;
+  background: rgba(45,212,191,0.04);
+}
+.group-wrap-head {
+  display: flex; align-items: center; gap: 8px; padding: 4px 6px 10px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase;
+}
+.group-wrap .ex-card { margin-bottom: 0; }
+
+/* Volume por grupo muscular */
+.muscle-vol-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+.muscle-vol-label { font-size: 12px; width: 70px; flex-shrink: 0; color: var(--muted); }
+.muscle-vol-bar-wrap { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.muscle-vol-bar { height: 100%; background: var(--accent); border-radius: 4px; }
+.muscle-vol-value { font-size: 11px; color: var(--text); width: 56px; text-align: right; flex-shrink: 0; }
+
+/* Calculadora de anilhas */
+.plate-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.plate-chip {
+  font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: var(--accent-ink);
+  background: var(--accent); border-radius: 8px; padding: 8px 12px; min-width: 34px; text-align: center;
+}
+
+/* Editor de rotina */
+.routine-editor-row { display: flex; align-items: flex-start; gap: 8px; padding: 12px; margin-bottom: 10px; }
+.routine-editor-row-info { flex: 1; min-width: 0; }
+.routine-chip-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.routine-chip {
+  font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text); background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px;
+}
+.stepper-big { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 16px 0; }
+.stepper-big-value { font-size: 28px; min-width: 40px; text-align: center; }
+.body-diagram-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
+
+/* Medidas corporais */
+.measure-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.measure-entry { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-bottom: 1px solid var(--border); gap: 10px; }
+.measure-entry:last-child { border-bottom: none; }
+.measure-entry-date { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); }
+.measure-entry-detail { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
 /* Rest timer floating bar */
 .rest-bar {
@@ -211,7 +278,7 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
   flex-shrink: 0; padding: 7px 13px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface);
   font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .5px; color: var(--muted); text-transform: uppercase;
 }
-.chip.active { background: var(--accent); border-color: var(--accent); color: #17100c; font-weight: 600; }
+.chip.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
 
 .ex-list-item {
   display: flex; align-items: center; justify-content: space-between; padding: 13px 16px;
@@ -222,7 +289,7 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
 .ex-list-muscle { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: .5px; }
 .ex-list-check { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
 .ex-list-check.on { background: var(--accent); border-color: var(--accent); }
-.ex-list-check svg { width: 13px; height: 13px; color: #17100c; }
+.ex-list-check svg { width: 13px; height: 13px; color: var(--accent-ink); }
 
 /* History */
 .history-card { padding: 15px 16px; }
@@ -263,7 +330,7 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
 .toggle-row:last-child { border-bottom: none; }
 .seg { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
 .seg button { padding: 6px 10px; background: var(--surface2); border: none; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); }
-.seg button.on { background: var(--accent); color: #17100c; font-weight: 600; }
+.seg button.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 
 .toast {
   position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%); z-index: 30;
@@ -273,7 +340,7 @@ main#main { flex: 1; width: 100%; max-width: 640px; margin: 0 auto; padding: 16p
 @keyframes fadeInOut { 0% { opacity: 0; transform: translate(-50%,8px); } 12%,80% { opacity: 1; transform: translate(-50%,0); } 100% { opacity: 0; transform: translate(-50%,-6px); } }
 
 @media (min-width: 700px) {
-  .set-row-header, .set-row { grid-template-columns: 40px 1fr 80px 64px 42px; }
+  .set-row-header, .set-row { grid-template-columns: 36px 1fr 1fr 60px 42px; }
 }
 </style>
 </head>
