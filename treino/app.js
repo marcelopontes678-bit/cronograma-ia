@@ -872,10 +872,25 @@ function confirmDialog(message, onConfirm) {
 }
 
 /* ---------- rest timer ---------- */
-let restTimer = { active: false, endsAt: 0, duration: 0, interval: null };
+let restTimer = { active: false, endsAt: 0, duration: 0, interval: null, finished: false };
+
+/* Contexto de áudio compartilhado: navegadores móveis só liberam áudio depois de
+   um gesto do usuário, então destravamos no primeiro toque em qualquer lugar do
+   app, em vez de tentar criar um novo AudioContext de dentro do timer (que
+   rodaria "mudo" em boa parte dos navegadores). */
+let sharedAudioCtx = null;
+function unlockAudio() {
+  if (sharedAudioCtx) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    sharedAudioCtx = new AC();
+  } catch (e) { /* áudio indisponível */ }
+}
+document.addEventListener('pointerdown', unlockAudio, { once: true });
 
 function startRestTimer(seconds) {
   restTimer.active = true;
+  restTimer.finished = false;
   restTimer.duration = seconds;
   restTimer.endsAt = Date.now() + seconds * 1000;
   if (restTimer.interval) clearInterval(restTimer.interval);
@@ -884,6 +899,7 @@ function startRestTimer(seconds) {
 }
 function stopRestTimer() {
   restTimer.active = false;
+  restTimer.finished = false;
   if (restTimer.interval) { clearInterval(restTimer.interval); restTimer.interval = null; }
   renderRestBar();
 }
@@ -894,29 +910,56 @@ function adjustRestTimer(deltaSec) {
 function tickRestTimer() {
   const remaining = Math.round((restTimer.endsAt - Date.now()) / 1000);
   if (remaining <= 0) {
-    playRestDoneAlert();
-    stopRestTimer();
+    if (!restTimer.finished) {
+      restTimer.finished = true;
+      if (restTimer.interval) { clearInterval(restTimer.interval); restTimer.interval = null; }
+      playRestDoneAlert();
+      renderRestBar();
+      setTimeout(() => { if (restTimer.finished) stopRestTimer(); }, 2500);
+    }
     return;
   }
   renderRestBar();
 }
 function playRestDoneAlert() {
   try {
-    const AC = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AC();
-    [0, 0.18, 0.36].forEach(t => {
-      const o = ctx.createOscillator(); const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.value = 880; g.gain.value = 0.15;
-      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.14);
-    });
+    if (!sharedAudioCtx) unlockAudio();
+    const ctx = sharedAudioCtx;
+    if (ctx) {
+      if (ctx.state === 'suspended') ctx.resume();
+      [880, 880, 1046, 1046].forEach((freq, i) => {
+        const t = ctx.currentTime + i * 0.22;
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.value = freq;
+        o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+        o.start(t); o.stop(t + 0.22);
+      });
+    }
   } catch (e) { /* som indisponível */ }
-  if (navigator.vibrate) navigator.vibrate([200, 80, 200]);
-  toast('Descanso concluído — hora da próxima série!');
+  if (navigator.vibrate) navigator.vibrate([250, 100, 250, 100, 400]);
 }
 function renderRestBar() {
   const root = document.getElementById('restBarRoot');
   if (!restTimer.active) { root.innerHTML = ''; return; }
+
+  if (restTimer.finished) {
+    if (root.querySelector('.rest-bar-done')) return;
+    root.innerHTML = `
+      <div class="rest-bar rest-bar-done" id="restDoneBar">
+        <div class="rest-bar-left">
+          <span class="rest-bar-time mono">🔔</span>
+          <span class="mono" style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Descanso concluído!</span>
+        </div>
+        <div class="rest-bar-actions"><button id="restDismiss">OK</button></div>
+      </div>
+    `;
+    document.getElementById('restDismiss').onclick = stopRestTimer;
+    return;
+  }
+
   const remaining = Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000));
   const existing = root.querySelector('#restEdit');
   if (existing) {
