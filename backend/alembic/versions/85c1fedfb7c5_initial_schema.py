@@ -82,7 +82,14 @@ def upgrade() -> None:
         sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("empresa_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("nome", sa.String(200), nullable=False),
-        sa.Column(sa.Enum("fabrica", "centro_distribuicao", "escritorio", name="tipounidade"), name="tipo", nullable=False),
+        sa.Column(
+            postgresql.ENUM(
+                "fabrica", "centro_distribuicao", "escritorio",
+                name="tipounidade", create_type=False,
+            ),
+            name="tipo",
+            nullable=False,
+        ),
         sa.Column("codigo", sa.String(20), nullable=True),
         sa.Column("email", sa.String(254), nullable=True),
         sa.Column("telefone", sa.String(20), nullable=True),
@@ -120,7 +127,14 @@ def upgrade() -> None:
         sa.Column("nome", sa.String(200), nullable=False),
         sa.Column("email", sa.String(254), nullable=False),
         sa.Column("hashed_password", sa.String(255), nullable=False),
-        sa.Column(sa.Enum("admin", "gerente", "operador", "visualizador", name="roleusuario"), name="role", nullable=False),
+        sa.Column(
+            postgresql.ENUM(
+                "admin", "gerente", "operador", "visualizador",
+                name="roleusuario", create_type=False,
+            ),
+            name="role",
+            nullable=False,
+        ),
         sa.Column("telefone", sa.String(20), nullable=True),
         sa.Column("avatar_url", sa.String(500), nullable=True),
         sa.Column("last_login_at", sa.DateTime(timezone=True), nullable=True),
@@ -177,13 +191,14 @@ def upgrade() -> None:
         sa.Column("nome", sa.String(300), nullable=False),
         sa.Column("descricao", sa.Text(), nullable=True),
         sa.Column(
-            sa.Enum(
+            postgresql.ENUM(
                 "rascunho",
                 "aguardando_aprovacao",
                 "em_producao",
                 "concluido",
                 "cancelado",
                 name="statusprojeto",
+                create_type=False,
             ),
             name="status",
             nullable=False,

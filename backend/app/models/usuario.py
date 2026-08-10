@@ -37,7 +37,12 @@ class Usuario(TimestampMixin, Base):
     email: Mapped[str] = mapped_column(sa.String(254), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(sa.String(255), nullable=False)
     role: Mapped[RoleUsuario] = mapped_column(
-        sa.Enum(RoleUsuario, name="roleusuario"), nullable=False
+        sa.Enum(
+            RoleUsuario,
+            name="roleusuario",
+            values_callable=lambda enum_cls: [e.value for e in enum_cls],
+        ),
+        nullable=False,
     )
     telefone: Mapped[str | None] = mapped_column(sa.String(20))
     avatar_url: Mapped[str | None] = mapped_column(sa.String(500))
