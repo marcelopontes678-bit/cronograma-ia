@@ -1,4 +1,4 @@
-const CACHE = 'treino-v1';
+const CACHE = 'treino-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -21,8 +21,19 @@ self.addEventListener('activate', e => {
   );
 });
 
+// Network-first: sempre tenta buscar a versão mais recente primeiro (o app está em
+// desenvolvimento ativo). Só cai pro cache guardado quando o dispositivo está
+// offline — assim quem já instalou o app sempre recebe as atualizações ao abrir
+// com internet, em vez de ficar preso na versão do dia da instalação.
 self.addEventListener('fetch', e => {
+  if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match('./index.html')))
+    fetch(e.request)
+      .then(res => {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+        return res;
+      })
+      .catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
   );
 });
