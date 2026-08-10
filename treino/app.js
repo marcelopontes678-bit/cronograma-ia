@@ -66,13 +66,17 @@ const SEED_ROUTINES = [
 ];
 
 /* ---------- estado / persistência ---------- */
+const PLATES_KG = [25, 20, 15, 10, 5, 2.5, 1.25];
+const PLATES_LB = [45, 35, 25, 10, 5, 2.5];
+
 function defaultState() {
   return {
-    settings: { unit: 'kg', restDefault: 90 },
+    settings: { unit: 'kg', restDefault: 90, barWeight: 20 },
     exercises: SEED_EXERCISES.map(e => ({ ...e, custom: false })),
     routines: SEED_ROUTINES.map(r => ({ ...r, exercises: r.exercises.map(x => ({ ...x })) })),
     workouts: [],
     activeWorkout: null,
+    bodyMeasurements: [],
   };
 }
 
@@ -88,6 +92,7 @@ function loadState() {
         routines: parsed.routines || def.routines,
         workouts: parsed.workouts || [],
         activeWorkout: parsed.activeWorkout || null,
+        bodyMeasurements: parsed.bodyMeasurements || [],
       };
     }
   } catch (e) { console.error('Falha ao carregar dados', e); }
@@ -193,6 +198,97 @@ function isSetPR(exerciseId, weight, reps, excludeWorkoutId) {
   return Number(weight) > maxWeight && maxWeight > 0 || (maxWeight === 0 && Number(weight) > 0);
 }
 
+/* ---------- calculadora de anilhas ---------- */
+function calculatePlates(target, bar) {
+  const plates = state.settings.unit === 'lb' ? PLATES_LB : PLATES_KG;
+  target = Number(target) || 0;
+  bar = Number(bar) || 0;
+  if (target <= bar) return { perSide: [], leftover: 0, exact: target === bar };
+  let remaining = (target - bar) / 2;
+  const perSide = [];
+  const EPS = 1e-6;
+  plates.forEach(p => {
+    while (remaining + EPS >= p) { perSide.push(p); remaining -= p; }
+  });
+  return { perSide, leftover: Math.max(0, remaining), exact: remaining <= EPS };
+}
+
+/* ---------- volume semanal por grupo muscular ---------- */
+function getWeeklyMuscleVolume() {
+  const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+  const totals = {};
+  state.workouts.forEach(w => {
+    if (new Date(w.date).getTime() < weekAgo) return;
+    (w.exercises || []).forEach(we => {
+      const ex = getExercise(we.exerciseId);
+      if (!ex) return;
+      (we.sets || []).forEach(s => {
+        if (!s.completed || s.warmup || !s.weight || !s.reps) return;
+        totals[ex.muscle] = (totals[ex.muscle] || 0) + Number(s.weight) * Number(s.reps);
+      });
+    });
+  });
+  return Object.entries(totals).map(([muscle, volume]) => ({ muscle, volume })).sort((a, b) => b.volume - a.volume);
+}
+
+/* ---------- supersets (exercícios agrupados) ---------- */
+function getGroupSiblings(groupId) {
+  if (!state.activeWorkout) return [];
+  return state.activeWorkout.exercises.filter(x => x.groupId === groupId);
+}
+function isLastInGroup(we) {
+  if (!we.groupId) return true;
+  const siblings = getGroupSiblings(we.groupId);
+  return siblings.length > 0 && siblings[siblings.length - 1].uid === we.uid;
+}
+function computeGroupLabels() {
+  const labels = {};
+  let i = 0;
+  const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  (state.activeWorkout ? state.activeWorkout.exercises : []).forEach(we => {
+    if (we.groupId && !(we.groupId in labels)) labels[we.groupId] = LETTERS[i++ % LETTERS.length];
+  });
+  return labels;
+}
+
+/* ---------- arrastar para reordenar (pointer events, funciona em touch e mouse) ---------- */
+function enableDragReorder(containerEl, onReorderIds) {
+  containerEl.querySelectorAll(':scope > .drag-row').forEach(row => {
+    const handle = row.querySelector('.drag-handle');
+    if (!handle) return;
+    handle.style.touchAction = 'none';
+    handle.onpointerdown = (e) => {
+      e.preventDefault();
+      const dragging = row;
+      dragging.classList.add('dragging');
+      // Capture on the container (which never moves) rather than the dragged row itself —
+      // reparenting the captured element via insertBefore silently drops pointer capture in Chromium.
+      containerEl.setPointerCapture(e.pointerId);
+
+      const onMove = (ev) => {
+        const rows = [...containerEl.querySelectorAll(':scope > .drag-row')].filter(r => r !== dragging);
+        const y = ev.clientY;
+        let inserted = false;
+        for (const r of rows) {
+          const rect = r.getBoundingClientRect();
+          if (y < rect.top + rect.height / 2) { containerEl.insertBefore(dragging, r); inserted = true; break; }
+        }
+        if (!inserted && rows.length) containerEl.insertBefore(dragging, rows[rows.length - 1].nextSibling);
+      };
+      const onUp = () => {
+        dragging.classList.remove('dragging');
+        containerEl.releasePointerCapture(e.pointerId);
+        containerEl.onpointermove = null;
+        containerEl.onpointerup = null;
+        const ids = [...containerEl.querySelectorAll(':scope > .drag-row')].map(r => r.dataset.id);
+        onReorderIds(ids);
+      };
+      containerEl.onpointermove = onMove;
+      containerEl.onpointerup = onUp;
+    };
+  });
+}
+
 /* ---------- toast ---------- */
 function toast(msg) {
   const root = document.getElementById('toastRoot');
@@ -218,12 +314,14 @@ let ui = {
   exFilterMuscle: 'Todos',
   exerciseDetailId: null,
   historyDetailId: null,
+  showMeasurements: false,
 };
 
 function setTab(tab) {
   ui.tab = tab;
   ui.exerciseDetailId = null;
   ui.historyDetailId = null;
+  ui.showMeasurements = false;
   render();
   window.scrollTo(0, 0);
 }
@@ -263,6 +361,23 @@ function renderTreinoTab(main) {
   `;
   main.appendChild(stats);
 
+  const weeklyVolume = getWeeklyMuscleVolume();
+  if (weeklyVolume.length) {
+    const maxVol = weeklyVolume[0].volume;
+    const volCard = document.createElement('div');
+    volCard.className = 'card card-pad';
+    volCard.style.marginTop = '12px';
+    volCard.innerHTML = `<div class="ex-card-title" style="margin-bottom:10px;">Volume por Grupo Muscular (7 dias)</div>` +
+      weeklyVolume.map(v => `
+        <div class="muscle-vol-row">
+          <span class="muscle-vol-label">${esc(v.muscle)}</span>
+          <div class="muscle-vol-bar-wrap"><div class="muscle-vol-bar" style="width:${Math.max(4, (v.volume / maxVol) * 100)}%"></div></div>
+          <span class="muscle-vol-value mono">${Math.round(v.volume).toLocaleString('pt-BR')}</span>
+        </div>
+      `).join('');
+    main.appendChild(volCard);
+  }
+
   const startBtn = document.createElement('button');
   startBtn.className = 'btn btn-primary btn-block';
   startBtn.style.marginTop = '14px';
@@ -293,7 +408,12 @@ function renderTreinoTab(main) {
 function renderRoutineCard(r) {
   const card = document.createElement('div');
   card.className = 'card routine-card';
-  const exLine = r.exercises.map(x => { const ex = getExercise(x.exerciseId); return ex ? `${ex.name} · ${x.targetSets}x` : ''; }).filter(Boolean).join('  •  ');
+  const exLine = r.exercises.map(x => {
+    const ex = getExercise(x.exerciseId);
+    if (!ex) return '';
+    const reps = x.repsMin && x.repsMax ? ` (${x.repsMin}-${x.repsMax})` : '';
+    return `${ex.name} · ${x.targetSets}x${reps}`;
+  }).filter(Boolean).join('  •  ');
   card.innerHTML = `
     <div class="routine-head">
       <div class="routine-name">${esc(r.name)}</div>
@@ -347,9 +467,9 @@ function makeWorkoutExercise(exerciseId, targetSets) {
   const n = targetSets || 3;
   const sets = [];
   for (let i = 0; i < n; i++) sets.push(makeEmptySet());
-  return { uid: uid(), exerciseId, sets };
+  return { uid: uid(), exerciseId, sets, groupId: null };
 }
-function makeEmptySet() { return { uid: uid(), weight: '', reps: '', completed: false, warmup: false }; }
+function makeEmptySet() { return { uid: uid(), weight: '', reps: '', rpe: '', completed: false, warmup: false }; }
 
 function renderActiveWorkout(main) {
   const aw = state.activeWorkout;
@@ -375,17 +495,54 @@ function renderActiveWorkout(main) {
   };
   timerBar.querySelector('#btnFinish').onclick = openFinishWorkoutModal;
 
+  const totalSets = aw.exercises.reduce((s, we) => s + we.sets.filter(x => !x.warmup).length, 0);
+  const doneSets = aw.exercises.reduce((s, we) => s + we.sets.filter(x => !x.warmup && x.completed).length, 0);
+  const pct = totalSets ? Math.round((doneSets / totalSets) * 100) : 0;
+  const progressBar = document.createElement('div');
+  progressBar.className = 'workout-progress-bar';
+  progressBar.innerHTML = `<div class="workout-progress-fill" style="width:${pct}%"></div>`;
+  main.appendChild(progressBar);
+
   startActiveTimer();
 
   if (!aw.exercises.length) {
     main.appendChild(makeEmpty('Adicione exercícios para começar a registrar suas séries.'));
   }
 
-  aw.exercises.forEach(we => main.appendChild(renderWorkoutExerciseCard(we)));
+  const groupLabels = computeGroupLabels();
+  const rendered = new Set();
+  aw.exercises.forEach(we => {
+    if (rendered.has(we.uid)) return;
+    if (we.groupId) {
+      const siblings = getGroupSiblings(we.groupId);
+      siblings.forEach(s => rendered.add(s.uid));
+      main.appendChild(renderExerciseGroup(we.groupId, siblings, groupLabels[we.groupId]));
+    } else {
+      rendered.add(we.uid);
+      main.appendChild(renderWorkoutExerciseCard(we));
+    }
+  });
+
+  if (aw.exercises.length >= 2) {
+    enableDragReorder(main, ids => {
+      const newList = [];
+      ids.forEach(id => {
+        if (id.startsWith('group:')) newList.push(...getGroupSiblings(id.slice(6)));
+        else { const we = aw.exercises.find(x => x.uid === id); if (we) newList.push(we); }
+      });
+      aw.exercises = newList;
+      saveState(); render();
+    });
+  }
+
+  const actionsRow = document.createElement('div');
+  actionsRow.style.display = 'flex';
+  actionsRow.style.gap = '8px';
+  actionsRow.style.marginTop = '4px';
 
   const addBtn = document.createElement('button');
-  addBtn.className = 'btn btn-ghost btn-block';
-  addBtn.style.marginTop = '4px';
+  addBtn.className = 'btn btn-ghost';
+  addBtn.style.flex = '1';
   addBtn.innerHTML = `+ Adicionar Exercício`;
   addBtn.onclick = () => {
     openExercisePicker(ids => {
@@ -393,7 +550,80 @@ function renderActiveWorkout(main) {
       saveState(); render(); closeModal();
     }, { title: 'Adicionar Exercícios' });
   };
-  main.appendChild(addBtn);
+  actionsRow.appendChild(addBtn);
+
+  if (aw.exercises.length >= 2) {
+    const groupBtn = document.createElement('button');
+    groupBtn.className = 'btn btn-ghost';
+    groupBtn.style.flex = '1';
+    groupBtn.innerHTML = `🔗 Agrupar`;
+    groupBtn.onclick = openGroupPicker;
+    actionsRow.appendChild(groupBtn);
+  }
+  main.appendChild(actionsRow);
+}
+
+function renderExerciseGroup(groupId, members, label) {
+  const wrap = document.createElement('div');
+  wrap.className = 'group-wrap drag-row';
+  wrap.dataset.id = 'group:' + groupId;
+  const head = document.createElement('div');
+  head.className = 'group-wrap-head';
+  head.innerHTML = `<button class="drag-handle" title="Arrastar para reordenar">≡</button><span>SUPERSET ${esc(label || '')}</span><button class="btn btn-ghost btn-sm" style="padding:5px 10px;margin-left:auto;">Desagrupar</button>`;
+  head.querySelector('.btn-ghost').onclick = () => {
+    members.forEach(m => { m.groupId = null; });
+    saveState(); render();
+  };
+  wrap.appendChild(head);
+  members.forEach((we, i) => {
+    const card = renderWorkoutExerciseCard(we, `${label}${i + 1}`);
+    card.style.marginBottom = i === members.length - 1 ? '0' : '10px';
+    wrap.appendChild(card);
+  });
+  return wrap;
+}
+
+function openGroupPicker() {
+  const aw = state.activeWorkout;
+  const selected = new Set();
+  const draw = () => {
+    openModal(`
+      <div class="modal-title">Agrupar Exercícios</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.5;">Selecione 2 ou mais exercícios deste treino para formar um superset (alternados sem descanso entre eles).</p>
+      <div class="card" id="gpList"></div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" style="flex:1" id="gpCancel">Cancelar</button>
+        <button class="btn btn-primary" style="flex:2" id="gpConfirm">Agrupar (${selected.size})</button>
+      </div>
+    `);
+    const list = document.getElementById('gpList');
+    aw.exercises.forEach(we => {
+      const ex = getExercise(we.exerciseId);
+      const on = selected.has(we.uid);
+      const item = document.createElement('div');
+      item.className = 'ex-list-item';
+      item.innerHTML = `
+        <div><div class="ex-list-name">${esc(ex ? ex.name : '?')}</div><div class="ex-list-muscle">${esc(ex ? ex.muscle : '')}${we.groupId ? ' · já agrupado' : ''}</div></div>
+        <div class="ex-list-check ${on ? 'on' : ''}">${on ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg>' : ''}</div>
+      `;
+      item.onclick = () => { if (selected.has(we.uid)) selected.delete(we.uid); else selected.add(we.uid); draw(); };
+      list.appendChild(item);
+    });
+    document.getElementById('gpCancel').onclick = closeModal;
+    document.getElementById('gpConfirm').onclick = () => {
+      if (selected.size < 2) { toast('Selecione ao menos 2 exercícios.'); return; }
+      const groupId = uid();
+      const firstIdx = aw.exercises.findIndex(we => selected.has(we.uid));
+      const chosen = aw.exercises.filter(we => selected.has(we.uid));
+      chosen.forEach(we => { we.groupId = groupId; });
+      const remaining = aw.exercises.filter(we => !selected.has(we.uid));
+      const insertPos = aw.exercises.slice(0, firstIdx).filter(we => !selected.has(we.uid)).length;
+      remaining.splice(insertPos, 0, ...chosen);
+      aw.exercises = remaining;
+      saveState(); closeModal(); render(); toast('Exercícios agrupados');
+    };
+  };
+  draw();
 }
 
 let activeTimerInterval = null;
@@ -410,35 +640,48 @@ function startActiveTimer() {
 }
 function stopActiveTimer() { if (activeTimerInterval) { clearInterval(activeTimerInterval); activeTimerInterval = null; } }
 
-function renderWorkoutExerciseCard(we) {
+function renderWorkoutExerciseCard(we, subLabel) {
   const ex = getExercise(we.exerciseId);
   const card = document.createElement('div');
-  card.className = 'card ex-card';
+  card.className = 'card ex-card' + (subLabel ? '' : ' drag-row');
+  if (!subLabel) card.dataset.id = we.uid;
+
+  const workingSets = we.sets.filter(s => !s.warmup);
+  const allDone = workingSets.length > 0 && workingSets.every(s => s.completed);
 
   const head = document.createElement('div');
   head.className = 'ex-card-head';
   head.innerHTML = `
-    <div>
-      <div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}</div>
+    ${subLabel ? '' : '<button class="drag-handle" title="Arrastar para reordenar">≡</button>'}
+    <div class="ex-card-head-info">
+      <div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}${subLabel ? `<span class="ex-sublabel">${esc(subLabel)}</span>` : ''}</div>
       <div class="ex-card-sub">${esc(ex ? ex.muscle : '')}</div>
     </div>
-    <button class="ex-card-menu-btn" title="Remover exercício">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V6"/></svg>
-    </button>
+    <div class="ex-card-head-actions">
+      ${ex && ex.equipment === 'Barra' ? '<button class="icon-btn ex-plate-btn" title="Calculadora de anilhas">🏋</button>' : ''}
+      <div class="ex-check-badge ${allDone ? 'on' : ''}" title="${allDone ? 'Exercício concluído' : ''}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg>
+      </div>
+      <button class="ex-card-menu-btn" title="Remover exercício">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m2 0v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V6"/></svg>
+      </button>
+    </div>
   `;
-  head.querySelector('button').onclick = () => {
+  head.querySelector('.ex-card-menu-btn').onclick = () => {
     confirmDialog(`Remover "${ex ? ex.name : 'exercício'}" deste treino?`, () => {
       state.activeWorkout.exercises = state.activeWorkout.exercises.filter(x => x.uid !== we.uid);
       saveState(); render();
     });
   };
+  const plateBtn = head.querySelector('.ex-plate-btn');
+  if (plateBtn) plateBtn.onclick = () => openPlateCalculator(we);
   card.appendChild(head);
 
   const table = document.createElement('div');
   table.className = 'set-table';
   table.innerHTML = `
     <div class="set-row-header">
-      <span>SET</span><span>ANTERIOR</span><span>${unitLabel().toUpperCase()}</span><span>REPS</span><span>✓</span>
+      <span>SET</span><span>REPS</span><span>${unitLabel().toUpperCase()}</span><span>RPE</span><span>✓</span>
     </div>
   `;
   let workingIdx = 0;
@@ -446,28 +689,28 @@ function renderWorkoutExerciseCard(we) {
     const numLabel = s.warmup ? 'W' : String(++workingIdx);
     const prevIdx = s.warmup ? -1 : workingIdx - 1;
     const prev = !s.warmup ? getLastPerformance(we.exerciseId, prevIdx) : null;
-    const prevText = prev ? `${prev.weight}${unitLabel()} x ${prev.reps}` : '—';
     const pr = s.completed && !s.warmup && isSetPR(we.exerciseId, s.weight, s.reps, state.activeWorkout.id);
 
     const row = document.createElement('div');
     row.className = 'set-row' + (s.completed ? ' completed' : '') + (s.warmup ? ' warmup' : '');
     row.innerHTML = `
-      <button class="set-num-btn" title="Marcar como aquecimento">${numLabel}</button>
-      <span class="set-prev">${esc(prevText)}${pr ? '<span class="pr-badge">🏆</span>' : ''}</span>
-      <input class="set-input" type="number" inputmode="decimal" placeholder="${prev ? prev.weight : '0'}" value="${s.weight}">
+      <button class="set-num-btn" title="Marcar como aquecimento">${numLabel}${pr ? '<span class="pr-dot">🏆</span>' : ''}</button>
       <input class="set-input" type="number" inputmode="numeric" placeholder="${prev ? prev.reps : '0'}" value="${s.reps}">
+      <input class="set-input" type="number" inputmode="decimal" placeholder="${prev ? prev.weight : '0'}" value="${s.weight}">
+      <input class="set-input set-input-rpe" type="number" step="0.5" min="1" max="10" inputmode="decimal" placeholder="${prev && prev.rpe ? prev.rpe : '–'}" value="${s.rpe || ''}">
       <button class="set-check ${s.completed ? 'on' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></button>
     `;
-    const [numBtn, , weightInput, repsInput, checkBtn] = row.children;
+    const [numBtn, repsInput, weightInput, rpeInput, checkBtn] = row.children;
     numBtn.onclick = () => { s.warmup = !s.warmup; saveState(); render(); };
     weightInput.oninput = () => { s.weight = weightInput.value; saveState(); };
     repsInput.oninput = () => { s.reps = repsInput.value; saveState(); };
+    rpeInput.oninput = () => { s.rpe = rpeInput.value; saveState(); };
     checkBtn.onclick = () => {
       s.completed = !s.completed;
       if (s.completed) {
         if (!s.weight && prev) s.weight = prev.weight;
         if (!s.reps && prev) s.reps = prev.reps;
-        if (!s.warmup) startRestTimer(state.settings.restDefault);
+        if (!s.warmup && isLastInGroup(we)) startRestTimer(state.settings.restDefault);
       }
       saveState(); render();
     };
@@ -482,6 +725,41 @@ function renderWorkoutExerciseCard(we) {
 
   card.appendChild(table);
   return card;
+}
+
+function openPlateCalculator(we) {
+  const ex = getExercise(we.exerciseId);
+  const lastWeight = [...we.sets].reverse().find(s => s.weight)?.weight || state.settings.barWeight;
+  openModal(`
+    <div class="modal-title">Calculadora de Anilhas</div>
+    <div class="ex-card-sub" style="margin-bottom:14px;">${esc(ex ? ex.name : '')}</div>
+    <label class="field-label">Peso total (${unitLabel()})</label>
+    <input id="pcTarget" type="number" inputmode="decimal" value="${lastWeight}">
+    <label class="field-label">Peso da barra (${unitLabel()})</label>
+    <input id="pcBar" type="number" inputmode="decimal" value="${state.settings.barWeight}">
+    <div id="pcResult"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary btn-block" id="pcClose">Fechar</button>
+    </div>
+  `);
+  const targetEl = document.getElementById('pcTarget');
+  const barEl = document.getElementById('pcBar');
+  const resultEl = document.getElementById('pcResult');
+  const update = () => {
+    const r = calculatePlates(targetEl.value, barEl.value);
+    const plateChips = r.perSide.length
+      ? r.perSide.map(p => `<span class="plate-chip">${p}</span>`).join('')
+      : '<span class="mono" style="color:var(--muted);font-size:12px;">Sem anilhas — só a barra</span>';
+    resultEl.innerHTML = `
+      <div class="field-label" style="margin:16px 0 8px;">Anilhas por lado</div>
+      <div class="plate-chips">${plateChips}</div>
+      ${r.leftover > 0.01 ? `<div class="mono" style="color:var(--yellow);font-size:11px;margin-top:8px;">Sobram ${r.leftover.toFixed(2)}${unitLabel()} por lado (sem anilha exata disponível)</div>` : ''}
+    `;
+  };
+  targetEl.oninput = update;
+  barEl.oninput = update;
+  document.getElementById('pcClose').onclick = closeModal;
+  update();
 }
 
 function openFinishWorkoutModal() {
@@ -754,7 +1032,7 @@ function renderHistoryDetail(main, workoutId) {
     const card = document.createElement('div');
     card.className = 'card';
     card.style.marginTop = '12px';
-    const rows = we.sets.map((s, i) => `<div class="set-history-row"><span>${s.warmup ? 'W' : (i+1)}</span><span>${esc(s.weight)}${unitLabel()} × ${esc(s.reps)}</span></div>`).join('');
+    const rows = we.sets.map((s, i) => `<div class="set-history-row"><span>${s.warmup ? 'W' : (i+1)}</span><span>${esc(s.weight)}${unitLabel()} × ${esc(s.reps)}${s.rpe ? ` · RPE ${esc(s.rpe)}` : ''}</span></div>`).join('');
     card.innerHTML = `
       <div class="ex-card-head"><div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}</div></div>
       ${rows}
@@ -951,7 +1229,7 @@ function renderLineChartSVG(points, unit) {
   });
   const linePath = coords.map((c, i) => (i === 0 ? 'M' : 'L') + c.x.toFixed(1) + ',' + c.y.toFixed(1)).join(' ');
   const areaPath = linePath + ` L${coords[coords.length-1].x.toFixed(1)},${(H-padB).toFixed(1)} L${coords[0].x.toFixed(1)},${(H-padB).toFixed(1)} Z`;
-  const dots = coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="3.2" fill="#ff6b35" stroke="#0d0d0f" stroke-width="1.5"/>`).join('');
+  const dots = coords.map(c => `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="3.2" fill="#2dd4bf" stroke="#0d0d0f" stroke-width="1.5"/>`).join('');
   const firstLabel = formatDateShort(coords[0].d), lastLabel = formatDateShort(coords[coords.length-1].d);
   return `
     <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;overflow:visible;">
@@ -959,11 +1237,43 @@ function renderLineChartSVG(points, unit) {
       <line x1="${padL}" y1="${H-padB}" x2="${W-padR}" y2="${H-padB}" stroke="#2a2a2e" stroke-width="1"/>
       <text x="2" y="${padT+4}" font-size="8" fill="#8a8a90" font-family="IBM Plex Mono">${Math.round(max)}${unit}</text>
       <text x="2" y="${H-padB}" font-size="8" fill="#8a8a90" font-family="IBM Plex Mono">${Math.round(min)}${unit}</text>
-      <path d="${areaPath}" fill="#ff6b3522" stroke="none"/>
-      <path d="${linePath}" fill="none" stroke="#ff6b35" stroke-width="2"/>
+      <path d="${areaPath}" fill="#2dd4bf22" stroke="none"/>
+      <path d="${linePath}" fill="none" stroke="#2dd4bf" stroke-width="2"/>
       ${dots}
       <text x="${padL}" y="${H-4}" font-size="8" fill="#8a8a90" font-family="IBM Plex Mono">${esc(firstLabel)}</text>
       <text x="${W-padR}" y="${H-4}" font-size="8" fill="#8a8a90" font-family="IBM Plex Mono" text-anchor="end">${esc(lastLabel)}</text>
+    </svg>
+  `;
+}
+
+/* ---------- diagrama corporal simplificado (frente/costas) ---------- */
+function bodyDiagramSVG(activeMuscles) {
+  const on = (m) => activeMuscles.has(m) ? 'var(--accent)' : 'var(--surface2)';
+  const skin = 'var(--border)';
+  return `
+    <svg viewBox="0 0 220 250" style="width:100%;max-width:240px;margin:0 auto;display:block;">
+      <g>
+        <circle cx="55" cy="20" r="15" fill="var(--surface2)" stroke="${skin}"/>
+        <rect x="33" y="37" width="44" height="16" rx="6" fill="${on('Ombros')}" stroke="${skin}"/>
+        <rect x="37" y="53" width="36" height="48" rx="10" fill="${on('Peito')}" stroke="${skin}"/>
+        <rect x="37" y="101" width="36" height="30" rx="8" fill="${on('Abdômen')}" stroke="${skin}"/>
+        <rect x="18" y="55" width="15" height="52" rx="7" fill="${on('Bíceps')}" stroke="${skin}"/>
+        <rect x="77" y="55" width="15" height="52" rx="7" fill="${on('Bíceps')}" stroke="${skin}"/>
+        <rect x="37" y="133" width="17" height="74" rx="8" fill="${on('Pernas')}" stroke="${skin}"/>
+        <rect x="56" y="133" width="17" height="74" rx="8" fill="${on('Pernas')}" stroke="${skin}"/>
+        <text x="55" y="238" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="IBM Plex Mono" letter-spacing="1">FRENTE</text>
+      </g>
+      <g transform="translate(110,0)">
+        <circle cx="55" cy="20" r="15" fill="var(--surface2)" stroke="${skin}"/>
+        <rect x="33" y="37" width="44" height="16" rx="6" fill="${on('Ombros')}" stroke="${skin}"/>
+        <rect x="37" y="53" width="36" height="48" rx="10" fill="${on('Costas')}" stroke="${skin}"/>
+        <rect x="37" y="101" width="36" height="30" rx="8" fill="var(--surface2)" stroke="${skin}"/>
+        <rect x="18" y="55" width="15" height="52" rx="7" fill="${on('Tríceps')}" stroke="${skin}"/>
+        <rect x="77" y="55" width="15" height="52" rx="7" fill="${on('Tríceps')}" stroke="${skin}"/>
+        <rect x="37" y="133" width="17" height="74" rx="8" fill="${on('Pernas')}" stroke="${skin}"/>
+        <rect x="56" y="133" width="17" height="74" rx="8" fill="${on('Pernas')}" stroke="${skin}"/>
+        <text x="55" y="238" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="IBM Plex Mono" letter-spacing="1">COSTAS</text>
+      </g>
     </svg>
   `;
 }
@@ -978,12 +1288,14 @@ function openRoutineEditor(routineId) {
   renderRoutineEditor();
 }
 function renderRoutineEditor() {
+  const musclesInRoutine = new Set(routineDraft.exercises.map(x => { const ex = getExercise(x.exerciseId); return ex ? ex.muscle : null; }).filter(Boolean));
   openModal(`
     <div class="modal-title">${routineDraft.name ? 'Editar Rotina' : 'Nova Rotina'}</div>
+    ${musclesInRoutine.size ? `<div class="body-diagram-wrap">${bodyDiagramSVG(musclesInRoutine)}</div>` : ''}
     <label class="field-label">Nome da rotina</label>
     <input id="rName" type="text" placeholder="Ex: Treino A — Push" value="${esc(routineDraft.name)}">
     <label class="field-label">Exercícios</label>
-    <div class="card" id="rExList"></div>
+    <div id="rExList"></div>
     <button class="btn btn-ghost btn-block" id="rAddEx" style="margin-top:10px;">+ Adicionar Exercício</button>
     <div class="modal-footer">
       <button class="btn btn-ghost" style="flex:1" id="rCancel">Cancelar</button>
@@ -994,29 +1306,40 @@ function renderRoutineEditor() {
   if (!routineDraft.exercises.length) {
     list.appendChild(makeEmpty('Nenhum exercício adicionado.'));
   } else {
-    routineDraft.exercises.forEach((x, idx) => {
+    routineDraft.exercises.forEach((x) => {
       const ex = getExercise(x.exerciseId);
       const row = document.createElement('div');
-      row.className = 'ex-list-item';
+      row.className = 'card routine-editor-row drag-row';
+      row.dataset.id = x.exerciseId;
+      const repsLabel = x.repsMin && x.repsMax ? `${x.repsMin}-${x.repsMax} Wdh` : (x.repsMin ? `${x.repsMin} Wdh` : '— Wdh');
       row.innerHTML = `
-        <div><div class="ex-list-name">${esc(ex ? ex.name : '?')}</div><div class="ex-list-muscle">${esc(ex ? ex.muscle : '')}</div></div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button class="icon-btn" data-act="minus" style="width:28px;height:28px;">−</button>
-          <span class="mono" style="min-width:14px;text-align:center;">${x.targetSets}</span>
-          <button class="icon-btn" data-act="plus" style="width:28px;height:28px;">+</button>
-          <button class="icon-btn" data-act="del" style="width:28px;height:28px;color:var(--red);">✕</button>
+        <button class="drag-handle" title="Arrastar para reordenar">≡</button>
+        <div class="routine-editor-row-info">
+          <div class="ex-list-name">${esc(ex ? ex.name : '?')}</div>
+          <div class="ex-list-muscle">${esc(ex ? ex.muscle : '')}</div>
+          <div class="routine-chip-row">
+            <span class="routine-chip" data-act="sets">${x.targetSets} Séries</span>
+            <span class="routine-chip" data-act="reps">${esc(repsLabel)}</span>
+          </div>
         </div>
+        <button class="icon-btn" data-act="del" style="width:28px;height:28px;color:var(--red);flex-shrink:0;">✕</button>
       `;
-      row.querySelector('[data-act="minus"]').onclick = () => { x.targetSets = Math.max(1, x.targetSets - 1); renderRoutineEditor(); };
-      row.querySelector('[data-act="plus"]').onclick = () => { x.targetSets = Math.min(10, x.targetSets + 1); renderRoutineEditor(); };
-      row.querySelector('[data-act="del"]').onclick = () => { routineDraft.exercises.splice(idx, 1); renderRoutineEditor(); };
+      row.querySelector('[data-act="sets"]').onclick = () => openStepperEditor('Número de Séries', x.targetSets, 1, 10, v => { x.targetSets = v; renderRoutineEditor(); });
+      row.querySelector('[data-act="reps"]').onclick = () => openRepRangeEditor(x, () => renderRoutineEditor());
+      row.querySelector('[data-act="del"]').onclick = () => { routineDraft.exercises = routineDraft.exercises.filter(e => e !== x); renderRoutineEditor(); };
       list.appendChild(row);
     });
+    if (routineDraft.exercises.length >= 2) {
+      enableDragReorder(list, ids => {
+        routineDraft.exercises = ids.map(id => routineDraft.exercises.find(x => x.exerciseId === id)).filter(Boolean);
+        renderRoutineEditor();
+      });
+    }
   }
   document.getElementById('rName').oninput = (e) => { routineDraft.name = e.target.value; };
   document.getElementById('rAddEx').onclick = () => {
     openExercisePicker(ids => {
-      ids.forEach(id => { if (!routineDraft.exercises.some(x => x.exerciseId === id)) routineDraft.exercises.push({ exerciseId: id, targetSets: 3 }); });
+      ids.forEach(id => { if (!routineDraft.exercises.some(x => x.exerciseId === id)) routineDraft.exercises.push({ exerciseId: id, targetSets: 3, repsMin: '', repsMax: '' }); });
       renderRoutineEditor();
     }, { title: 'Adicionar Exercícios' });
   };
@@ -1032,8 +1355,57 @@ function renderRoutineEditor() {
   };
 }
 
+function openStepperEditor(title, value, min, max, onSave) {
+  let v = value;
+  const draw = () => {
+    openModal(`
+      <div class="modal-title">${esc(title)}</div>
+      <div class="stepper-big">
+        <button class="icon-btn" id="stMinus" style="width:44px;height:44px;">−</button>
+        <span class="mono stepper-big-value">${v}</span>
+        <button class="icon-btn" id="stPlus" style="width:44px;height:44px;">+</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-block" id="stSave">Confirmar</button>
+      </div>
+    `);
+    document.getElementById('stMinus').onclick = () => { v = Math.max(min, v - 1); draw(); };
+    document.getElementById('stPlus').onclick = () => { v = Math.min(max, v + 1); draw(); };
+    document.getElementById('stSave').onclick = () => { onSave(v); };
+  };
+  draw();
+}
+
+function openRepRangeEditor(x, onSave) {
+  openModal(`
+    <div class="modal-title">Faixa de Repetições</div>
+    <div style="display:flex;gap:10px;">
+      <div class="field-group" style="flex:1;">
+        <label class="field-label">Mínimo</label>
+        <input id="repMin" type="number" inputmode="numeric" value="${x.repsMin || ''}" placeholder="Ex: 8">
+      </div>
+      <div class="field-group" style="flex:1;">
+        <label class="field-label">Máximo</label>
+        <input id="repMax" type="number" inputmode="numeric" value="${x.repsMax || ''}" placeholder="Ex: 12">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="flex:1" id="rrClear">Limpar</button>
+      <button class="btn btn-primary" style="flex:2" id="rrSave">Confirmar</button>
+    </div>
+  `);
+  document.getElementById('rrClear').onclick = () => { x.repsMin = ''; x.repsMax = ''; closeModal(); onSave(); };
+  document.getElementById('rrSave').onclick = () => {
+    x.repsMin = document.getElementById('repMin').value;
+    x.repsMax = document.getElementById('repMax').value;
+    closeModal(); onSave();
+  };
+}
+
 /* ===================== TAB: PERFIL ===================== */
 function renderPerfilTab(main) {
+  if (ui.showMeasurements) { renderMeasurementsView(main); return; }
+
   const card = document.createElement('div');
   card.className = 'card card-pad';
   card.innerHTML = `
@@ -1050,11 +1422,23 @@ function renderPerfilTab(main) {
         ${[60,90,120,180].map(s => `<button data-s="${s}" class="${state.settings.restDefault===s?'on':''}">${s}s</button>`).join('')}
       </div>
     </div>
+    <div class="toggle-row">
+      <span>Peso da barra padrão (${unitLabel()})</span>
+      <input id="barWeightInput" type="number" inputmode="decimal" style="max-width:80px;text-align:center;" value="${state.settings.barWeight}">
+    </div>
     <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">Alterar a unidade não converte os pesos já registrados — serve apenas para novos registros.</p>
   `;
   main.appendChild(card);
   card.querySelectorAll('#unitSeg button').forEach(b => b.onclick = () => { state.settings.unit = b.dataset.u; saveState(); render(); });
   card.querySelectorAll('#restSeg button').forEach(b => b.onclick = () => { state.settings.restDefault = Number(b.dataset.s); saveState(); render(); });
+  document.getElementById('barWeightInput').oninput = (e) => { state.settings.barWeight = Number(e.target.value) || 0; saveState(); };
+
+  const measureBtn = document.createElement('button');
+  measureBtn.className = 'btn btn-ghost btn-block';
+  measureBtn.style.marginTop = '12px';
+  measureBtn.textContent = '📏 Medidas Corporais';
+  measureBtn.onclick = () => { ui.showMeasurements = true; render(); window.scrollTo(0, 0); };
+  main.appendChild(measureBtn);
 
   const dataTitle = document.createElement('div');
   dataTitle.className = 'section-title';
@@ -1117,6 +1501,99 @@ function renderPerfilTab(main) {
   about.style.lineHeight = '1.7';
   about.innerHTML = `Treino — diário de treino inspirado no Strong.<br>Todos os dados ficam salvos apenas neste dispositivo.`;
   main.appendChild(about);
+}
+
+/* ===================== MEDIDAS CORPORAIS ===================== */
+const MEASURE_FIELDS = [
+  { key: 'chest', label: 'Peito' }, { key: 'waist', label: 'Cintura' },
+  { key: 'hips', label: 'Quadril' }, { key: 'arm', label: 'Braço' },
+  { key: 'thigh', label: 'Coxa' }, { key: 'calf', label: 'Panturrilha' },
+];
+
+function renderMeasurementsView(main) {
+  const back = document.createElement('button');
+  back.className = 'btn btn-ghost btn-sm';
+  back.style.marginBottom = '14px';
+  back.textContent = '← Voltar';
+  back.onclick = () => { ui.showMeasurements = false; render(); };
+  main.appendChild(back);
+
+  const formCard = document.createElement('div');
+  formCard.className = 'card card-pad';
+  const today = new Date().toISOString().split('T')[0];
+  formCard.innerHTML = `
+    <div class="ex-card-title" style="margin-bottom:12px;">Novo Registro</div>
+    <label class="field-label">Data</label>
+    <input id="mDate" type="date" value="${today}">
+    <div class="measure-form-grid" style="margin-top:10px;">
+      <div>
+        <label class="field-label">Peso Corporal (${unitLabel()})</label>
+        <input id="mWeight" type="number" inputmode="decimal" placeholder="0">
+      </div>
+      <div>
+        <label class="field-label">% Gordura</label>
+        <input id="mBodyFat" type="number" inputmode="decimal" placeholder="0">
+      </div>
+    </div>
+    <label class="field-label" style="margin-top:14px;">Medidas (cm) — opcional</label>
+    <div class="measure-form-grid">
+      ${MEASURE_FIELDS.map(f => `<input id="m_${f.key}" type="number" inputmode="decimal" placeholder="${f.label}">`).join('')}
+    </div>
+    <button class="btn btn-primary btn-block" id="mSave" style="margin-top:14px;">Salvar Registro</button>
+  `;
+  main.appendChild(formCard);
+  document.getElementById('mSave').onclick = () => {
+    const weight = document.getElementById('mWeight').value;
+    const bodyFat = document.getElementById('mBodyFat').value;
+    const entry = { id: uid(), date: document.getElementById('mDate').value || today, weight, bodyFat };
+    MEASURE_FIELDS.forEach(f => { entry[f.key] = document.getElementById(`m_${f.key}`).value; });
+    if (!weight && !bodyFat && !MEASURE_FIELDS.some(f => entry[f.key])) { toast('Preencha ao menos um valor.'); return; }
+    state.bodyMeasurements.push(entry);
+    saveState(); render(); window.scrollTo(0, 0); toast('Registro salvo');
+  };
+
+  const weightPoints = state.bodyMeasurements
+    .filter(m => m.weight)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .map(m => ({ date: m.date, value: Number(m.weight) }));
+  if (weightPoints.length >= 2) {
+    const chartCard = document.createElement('div');
+    chartCard.className = 'card';
+    chartCard.style.marginTop = '12px';
+    chartCard.innerHTML = `<div class="ex-card-head"><div class="ex-card-title">Progressão do Peso Corporal</div></div><div class="chart-wrap">${renderLineChartSVG(weightPoints, unitLabel())}</div>`;
+    main.appendChild(chartCard);
+  }
+
+  const listCard = document.createElement('div');
+  listCard.className = 'card';
+  listCard.style.marginTop = '12px';
+  const sorted = [...state.bodyMeasurements].sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (!sorted.length) {
+    listCard.appendChild(makeEmpty('Nenhum registro ainda.'));
+  } else {
+    sorted.forEach(m => {
+      const detailParts = [];
+      if (m.bodyFat) detailParts.push(`${m.bodyFat}% gordura`);
+      MEASURE_FIELDS.forEach(f => { if (m[f.key]) detailParts.push(`${f.label}: ${m[f.key]}cm`); });
+      const row = document.createElement('div');
+      row.className = 'measure-entry';
+      row.innerHTML = `
+        <div>
+          <div class="measure-entry-date">${esc(formatDateShort(m.date))}</div>
+          <div class="measure-entry-detail">${m.weight ? `${m.weight}${unitLabel()}` : ''}${detailParts.length ? (m.weight ? ' · ' : '') + esc(detailParts.join(' · ')) : ''}</div>
+        </div>
+        <button class="icon-btn" style="width:28px;height:28px;color:var(--red);flex-shrink:0;">✕</button>
+      `;
+      row.querySelector('button').onclick = () => {
+        confirmDialog('Excluir este registro?', () => {
+          state.bodyMeasurements = state.bodyMeasurements.filter(x => x.id !== m.id);
+          saveState(); render();
+        });
+      };
+      listCard.appendChild(row);
+    });
+  }
+  main.appendChild(listCard);
 }
 
 /* ===================== INIT ===================== */
