@@ -1,0 +1,24 @@
+{
+  "name": "Treino - Diário de Musculação",
+  "short_name": "Treino",
+  "description": "Registro de treinos de musculação inspirado no Strong: séries, cargas, histórico e progressão",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d0d0f",
+  "theme_color": "#ff6b35",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
