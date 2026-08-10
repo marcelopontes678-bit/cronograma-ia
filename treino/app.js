@@ -1034,10 +1034,6 @@ function openExercisePicker(onConfirm, opts) {
 
 function renderExercisePicker(title) {
   const muscles = ['Todos', ...MUSCLE_GROUPS];
-  const filtered = state.exercises.filter(e =>
-    (picker.muscle === 'Todos' || e.muscle === picker.muscle) &&
-    e.name.toLowerCase().includes(picker.query.toLowerCase())
-  );
   openModal(`
     <div class="modal-title">${esc(title)}</div>
     <input class="search-box" id="pickerSearch" type="text" placeholder="Buscar exercício..." value="${esc(picker.query)}">
@@ -1051,7 +1047,25 @@ function renderExercisePicker(title) {
       <button class="btn btn-primary" style="flex:2" id="pickerConfirm">Adicionar (${picker.selected.size})</button>
     </div>
   `);
+  // A busca só atualiza a lista de resultados (updatePickerResults), nunca reconstrói
+  // o modal inteiro — recriar o <input> a cada tecla jogava o cursor de volta pro início.
+  document.getElementById('pickerSearch').oninput = (ev) => { picker.query = ev.target.value; updatePickerResults(title); };
+  document.getElementById('pickerCancel').onclick = closeModal;
+  document.getElementById('pickerConfirm').onclick = () => {
+    if (!picker.selected.size) { toast('Selecione ao menos um exercício.'); return; }
+    picker.onConfirm(Array.from(picker.selected));
+  };
+  document.getElementById('pickerNewEx').onclick = () => openNewExerciseForm(title);
+  updatePickerResults(title);
+}
+
+function updatePickerResults(title) {
+  const filtered = state.exercises.filter(e =>
+    (picker.muscle === 'Todos' || e.muscle === picker.muscle) &&
+    e.name.toLowerCase().includes(picker.query.toLowerCase())
+  );
   const list = document.getElementById('pickerList');
+  list.innerHTML = '';
   if (!filtered.length) {
     list.appendChild(makeEmpty('Nenhum exercício encontrado.'));
   } else {
@@ -1065,21 +1079,17 @@ function renderExercisePicker(title) {
       `;
       item.onclick = () => {
         if (picker.selected.has(e.id)) picker.selected.delete(e.id); else picker.selected.add(e.id);
-        renderExercisePicker(title);
+        updatePickerResults(title);
       };
       list.appendChild(item);
     });
   }
-  document.getElementById('pickerSearch').oninput = (ev) => { picker.query = ev.target.value; renderExercisePicker(title); document.getElementById('pickerSearch').focus(); };
   document.querySelectorAll('#pickerChips .chip').forEach(chip => {
-    chip.onclick = () => { picker.muscle = chip.dataset.m; renderExercisePicker(title); };
+    chip.classList.toggle('active', chip.dataset.m === picker.muscle);
+    chip.onclick = () => { picker.muscle = chip.dataset.m; updatePickerResults(title); };
   });
-  document.getElementById('pickerCancel').onclick = closeModal;
-  document.getElementById('pickerConfirm').onclick = () => {
-    if (!picker.selected.size) { toast('Selecione ao menos um exercício.'); return; }
-    picker.onConfirm(Array.from(picker.selected));
-  };
-  document.getElementById('pickerNewEx').onclick = () => openNewExerciseForm(title);
+  const confirmBtn = document.getElementById('pickerConfirm');
+  if (confirmBtn) confirmBtn.textContent = `Adicionar (${picker.selected.size})`;
 }
 
 function openNewExerciseForm(returnTitle) {
