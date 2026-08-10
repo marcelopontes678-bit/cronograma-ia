@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from app.models.unidade import Unidade
     from app.models.usuario import Usuario
     from app.models.projeto import Projeto
+    from app.models.instagram_connection import ConexaoInstagram
 
 
 class Empresa(TimestampMixin, Base):
@@ -39,4 +40,8 @@ class Empresa(TimestampMixin, Base):
     )
     projetos: Mapped[list["Projeto"]] = relationship(
         "Projeto", back_populates="empresa"
+    )
+    conexao_instagram: Mapped["ConexaoInstagram | None"] = relationship(
+        "ConexaoInstagram", back_populates="empresa", uselist=False,
+        cascade="all, delete-orphan",
     )

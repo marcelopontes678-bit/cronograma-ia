@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
     ENVIRONMENT: str = "development"
     CORS_ORIGINS: str = "http://localhost:3000"
+    COMPOSIO_API_KEY: str | None = None
 
     @property
     def cors_origins_list(self) -> list[str]:

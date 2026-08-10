@@ -15,6 +15,7 @@ import app.models.empresa
 import app.models.unidade
 import app.models.usuario
 import app.models.projeto
+import app.models.instagram_connection
 
 target_metadata = Base.metadata
 

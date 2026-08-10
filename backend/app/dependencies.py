@@ -1,5 +1,6 @@
 from typing import AsyncGenerator
 
+from composio import Composio
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select
@@ -9,6 +10,7 @@ from app.core.exceptions import credentials_exception, forbidden_exception
 from app.core.security import decode_access_token
 from app.database import AsyncSessionLocal
 from app.models.usuario import RoleUsuario, Usuario
+from app.services.composio_service import get_composio_client
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -16,6 +18,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         yield session
+
+
+def get_composio() -> Composio:
+    return get_composio_client()
 
 
 async def get_current_user(
