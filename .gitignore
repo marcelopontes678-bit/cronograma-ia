@@ -7,6 +7,8 @@ backend/**/__pycache__/
 backend/*.pyc
 backend/.env
 backend/alembic.ini.local
+__pycache__/
+*.pyc
 
 # Frontend Node
 frontend/.next/
