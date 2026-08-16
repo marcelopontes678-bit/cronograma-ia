@@ -1,6 +1,13 @@
 {
   "version": 1,
   "skills": {
+    "moneyprinterturbo-video": {
+      "source": "harry0703/MoneyPrinterTurbo",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "docs/skill/SKILL.md",
+      "computedHash": "531b16fef7cea3912fa78d2c93e303745d8c6549974da9a22cf5eaf6e24fd372"
+    },
     "watch": {
       "source": "bradautomates/claude-video",
       "sourceType": "github",
