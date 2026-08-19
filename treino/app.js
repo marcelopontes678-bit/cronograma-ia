@@ -128,6 +128,11 @@ function formatDateFull(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
 }
+function formatDateTimeFull(iso) {
+  const d = new Date(iso);
+  const time = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  return `${formatDateFull(iso)} às ${time}`;
+}
 function todayISO() { return new Date().toISOString(); }
 
 function epley1RM(weight, reps) {
@@ -146,6 +151,61 @@ function workoutSetCount(w) {
   let total = 0;
   (w.exercises || []).forEach(we => (we.sets || []).forEach(s => { if (s.completed) total++; }));
   return total;
+}
+
+/* Resumo por exercício de um treino: nº de séries concluídas e a melhor série (maior
+   peso, com mais reps como desempate) — usado no resumo ao finalizar e no histórico. */
+function getWorkoutExerciseSummaries(w) {
+  return (w.exercises || []).map(we => {
+    const ex = getExercise(we.exerciseId);
+    const completed = (we.sets || []).filter(s => s.completed);
+    let best = null;
+    completed.forEach(s => {
+      if (!s.weight) return;
+      const better = !best
+        || Number(s.weight) > Number(best.weight)
+        || (Number(s.weight) === Number(best.weight) && Number(s.reps || 0) > Number(best.reps || 0));
+      if (better) best = s;
+    });
+    return { exerciseId: we.exerciseId, name: ex ? ex.name : 'Exercício', count: completed.length, best };
+  }).filter(s => s.count > 0);
+}
+
+function countWorkoutPRs(w) {
+  let count = 0;
+  (w.exercises || []).forEach(we => (we.sets || []).forEach(s => {
+    if (s.completed && !s.warmup && s.weight && s.reps && isSetPR(we.exerciseId, s.weight, s.reps, w.id)) count++;
+  }));
+  return count;
+}
+
+function buildWorkoutSummaryCard(w) {
+  const summaries = getWorkoutExerciseSummaries(w);
+  const prCount = countWorkoutPRs(w);
+  const card = document.createElement('div');
+  card.className = 'card card-pad workout-summary-card';
+  card.innerHTML = `
+    <div class="history-name" style="font-size:19px;">${esc(w.name)}</div>
+    <div class="history-date" style="margin-bottom:${w.notes ? '6px' : '14px'};">${esc(formatDateTimeFull(w.date))}</div>
+    ${w.notes ? `<p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;">${esc(w.notes)}</p>` : ''}
+    <div class="summary-cols-head">
+      <span>Séries</span><span>Melhor série</span>
+    </div>
+    <div class="summary-rows">
+      ${summaries.map(s => `
+        <div class="summary-row">
+          <span class="summary-row-left">${s.count} × ${esc(s.name)}</span>
+          <span class="summary-row-right mono">${s.best ? `${esc(s.best.weight)}${unitLabel()} × ${esc(s.best.reps)}` : '—'}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="summary-footer">
+      <span class="summary-footer-item">⏱ ${formatDuration(w.durationSec || 0)}</span>
+      <span class="summary-footer-item">🏋 ${Math.round(workoutVolume(w)).toLocaleString('pt-BR')}${unitLabel()}</span>
+      <span class="summary-footer-item">🏆 ${prCount} PR${prCount === 1 ? '' : 's'}</span>
+    </div>
+  `;
+  return card;
 }
 
 /* histórico de um exercício: lista de treinos concluídos que o contêm, mais recentes primeiro */
@@ -875,7 +935,10 @@ function openFinishWorkoutModal() {
     state.activeWorkout = null;
     saveState();
     closeModal();
-    setTab('historico');
+    ui.tab = 'historico';
+    ui.historyDetailId = aw.id;
+    render();
+    window.scrollTo(0, 0);
     toast('Treino salvo!');
   };
 }
@@ -1184,19 +1247,12 @@ function renderHistoryDetail(main, workoutId) {
   back.onclick = () => { ui.historyDetailId = null; render(); };
   main.appendChild(back);
 
-  const head = document.createElement('div');
-  head.className = 'card card-pad';
-  head.innerHTML = `
-    <div class="history-name" style="font-size:19px;">${esc(w.name)}</div>
-    <div class="history-date" style="margin-bottom:12px;">${esc(formatDateFull(w.date))}</div>
-    <div class="stats-row">
-      <div class="stat-box"><div class="stat-num">${formatDuration(w.durationSec || 0)}</div><div class="stat-label">Duração</div></div>
-      <div class="stat-box"><div class="stat-num">${workoutSetCount(w)}</div><div class="stat-label">Séries</div></div>
-      <div class="stat-box"><div class="stat-num">${Math.round(workoutVolume(w)).toLocaleString('pt-BR')}</div><div class="stat-label">Volume ${unitLabel()}</div></div>
-    </div>
-    ${w.notes ? `<p style="margin-top:14px;font-size:13px;color:var(--muted);line-height:1.6;">${esc(w.notes)}</p>` : ''}
-  `;
-  main.appendChild(head);
+  main.appendChild(buildWorkoutSummaryCard(w));
+
+  const detailsTitle = document.createElement('div');
+  detailsTitle.className = 'section-title';
+  detailsTitle.textContent = 'Detalhes de todas as séries';
+  main.appendChild(detailsTitle);
 
   w.exercises.forEach(we => {
     const ex = getExercise(we.exerciseId);

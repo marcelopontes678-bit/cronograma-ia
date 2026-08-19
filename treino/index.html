@@ -368,6 +368,21 @@ main#main > * { animation: contentFadeIn .16s ease both; }
 .history-meta-item { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
 .history-ex-line { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
 
+/* Resumo do treino */
+.summary-cols-head {
+  display: flex; justify-content: space-between; padding-bottom: 8px; margin-bottom: 6px; border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+}
+.summary-rows { display: flex; flex-direction: column; }
+.summary-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.summary-row:last-child { border-bottom: none; }
+.summary-row-left { font-size: 13px; color: var(--text); }
+.summary-row-right { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.summary-footer {
+  display: flex; justify-content: space-between; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border);
+}
+.summary-footer-item { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+
 /* Modal */
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 20;
