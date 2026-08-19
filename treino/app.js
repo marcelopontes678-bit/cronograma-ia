@@ -167,6 +167,26 @@ function getLastPerformance(exerciseId, setIndex) {
   return null;
 }
 
+/* Maior carga já registrada nessa posição de série (não apenas a última vez) — é essa
+   referência que aparece como sugestão ao logar, pra sempre mirar em evoluir o próprio
+   recorde em vez de só repetir o treino anterior. */
+function getBestPerformance(exerciseId, setIndex) {
+  const past = getExerciseWorkouts(exerciseId);
+  let best = null;
+  past.forEach(w => {
+    const we = w.exercises.find(e => e.exerciseId === exerciseId);
+    if (!we || !we.sets || !we.sets.length) return;
+    const workingSets = we.sets.filter(s => !s.warmup);
+    const s = workingSets[setIndex] || workingSets[workingSets.length - 1];
+    if (!s || s.weight == null || s.weight === '') return;
+    const better = !best
+      || Number(s.weight) > Number(best.weight)
+      || (Number(s.weight) === Number(best.weight) && Number(s.reps || 0) > Number(best.reps || 0));
+    if (better) best = s;
+  });
+  return best;
+}
+
 function getExercisePR(exerciseId) {
   let maxWeight = 0, maxWeightReps = 0, best1rm = 0;
   state.workouts.forEach(w => {
@@ -703,6 +723,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
 
   const workingSets = we.sets.filter(s => !s.warmup);
   const allDone = workingSets.length > 0 && workingSets.every(s => s.completed);
+  const exPr = getExercisePR(we.exerciseId);
 
   const head = document.createElement('div');
   head.className = 'ex-card-head';
@@ -710,7 +731,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
     ${subLabel ? '' : '<button class="drag-handle" title="Arrastar para reordenar">≡</button>'}
     <div class="ex-card-head-info">
       <div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}${subLabel ? `<span class="ex-sublabel">${esc(subLabel)}</span>` : ''}</div>
-      <div class="ex-card-sub">${esc(ex ? ex.muscle : '')}</div>
+      <div class="ex-card-sub">${esc(ex ? ex.muscle : '')}${exPr.maxWeight ? ` · <span class="ex-best-badge">🏆 ${exPr.maxWeight}${unitLabel()}</span>` : ''}</div>
     </div>
     <div class="ex-card-head-actions">
       ${ex && ex.equipment === 'Barra' ? '<button class="icon-btn ex-plate-btn" title="Calculadora de anilhas">🏋</button>' : ''}
@@ -743,7 +764,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
   we.sets.forEach((s) => {
     const numLabel = s.warmup ? 'W' : String(++workingIdx);
     const prevIdx = s.warmup ? -1 : workingIdx - 1;
-    const prev = !s.warmup ? getLastPerformance(we.exerciseId, prevIdx) : null;
+    const prev = !s.warmup ? getBestPerformance(we.exerciseId, prevIdx) : null;
     const pr = s.completed && !s.warmup && isSetPR(we.exerciseId, s.weight, s.reps, state.activeWorkout.id);
 
     const row = document.createElement('div');
