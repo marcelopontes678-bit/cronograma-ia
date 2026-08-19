@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Treino</title>
+<meta name="description" content="Registro de treinos de musculação: séries, cargas, histórico e progressão.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
 <meta name="theme-color" content="#2dd4bf">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,10 +79,21 @@ body {
   color: var(--text);
   font-family: 'IBM Plex Sans', sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
+/* Grão sutil pra tirar a chapadura do flat design — quase imperceptível, só quebra a monotonia */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  opacity: .035; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+p, li { text-wrap: pretty; }
 
 button, input, select, textarea { font-family: inherit; color: inherit; }
 button { cursor: pointer; }
@@ -173,6 +186,11 @@ main#main > * { animation: contentFadeIn .16s ease both; }
 }
 .icon-btn svg { width: 16px; height: 16px; }
 .icon-btn:hover { color: var(--text); border-color: var(--muted); }
+
+/* Anel de foco consistente com o tema, pra navegação por teclado */
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
 
 /* Cards */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
@@ -318,12 +336,12 @@ main#main > * { animation: contentFadeIn .16s ease both; }
   position: fixed; left: 12px; right: 12px; bottom: calc(64px + env(safe-area-inset-bottom));
   z-index: 7; background: var(--surface2); border: 1px solid var(--accent); border-radius: 12px;
   padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  box-shadow: 0 8px 24px rgba(3,26,23,.45);
   animation: restBarIn .22s cubic-bezier(.2,.8,.3,1) both;
 }
 @keyframes restDonePulse {
-  0%, 100% { border-color: var(--green); box-shadow: 0 8px 24px rgba(0,0,0,.4), 0 0 0 0 rgba(62,207,142,.5); }
-  50% { border-color: var(--accent); box-shadow: 0 8px 24px rgba(0,0,0,.4), 0 0 0 6px rgba(62,207,142,0); }
+  0%, 100% { border-color: var(--green); box-shadow: 0 8px 24px rgba(3,26,23,.45), 0 0 0 0 rgba(62,207,142,.5); }
+  50% { border-color: var(--accent); box-shadow: 0 8px 24px rgba(3,26,23,.45), 0 0 0 6px rgba(62,207,142,0); }
 }
 .rest-bar-done { border-color: var(--green); animation: restBarIn .22s cubic-bezier(.2,.8,.3,1) both, restDonePulse 1s ease-in-out infinite; }
 .rest-bar-done .rest-bar-time { animation: popIn .4s ease both; }
@@ -410,7 +428,7 @@ main#main > * { animation: contentFadeIn .16s ease both; }
 .ex-demo-play {
   position: absolute; right: 14px; bottom: 14px; width: 46px; height: 46px; border-radius: 50%;
   background: var(--accent); color: var(--accent-ink); border: none; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+  box-shadow: 0 4px 14px rgba(3,26,23,.4);
 }
 .ex-demo-play.playing { background: var(--surface); color: var(--accent); border: 1px solid var(--accent); }
 .ex-demo-play svg { margin-left: 1px; }
@@ -436,7 +454,7 @@ main#main > * { animation: contentFadeIn .16s ease both; }
 .toast {
   position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%); z-index: 30;
   background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 20px;
-  font-size: 12.5px; box-shadow: 0 6px 18px rgba(0,0,0,.4); animation: fadeInOut 2.4s ease both;
+  font-size: 12.5px; box-shadow: 0 6px 18px rgba(3,26,23,.42); animation: fadeInOut 2.4s ease both;
 }
 @keyframes fadeInOut { 0% { opacity: 0; transform: translate(-50%,8px); } 12%,80% { opacity: 1; transform: translate(-50%,0); } 100% { opacity: 0; transform: translate(-50%,-6px); } }
 
@@ -447,7 +465,7 @@ main#main > * { animation: contentFadeIn .16s ease both; }
 </head>
 <body>
 
-<div class="app-header">
+<header class="app-header">
   <div>
     <div class="app-title-wrap"><span class="app-title">TREINO</span><span class="app-badge">Log</span></div>
     <div class="header-sub" id="headerSub">Diário de treino</div>
@@ -455,14 +473,14 @@ main#main > * { animation: contentFadeIn .16s ease both; }
   <button class="icon-btn" id="btnQuickTimer" title="Timer de descanso">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>
   </button>
-</div>
+</header>
 
 <main id="main"></main>
-<div id="restBarRoot"></div>
+<div id="restBarRoot" aria-live="polite"></div>
 <div id="modalRoot"></div>
-<div id="toastRoot"></div>
+<div id="toastRoot" aria-live="polite"></div>
 
-<div class="bottom-nav">
+<nav class="bottom-nav">
   <button class="nav-btn" data-tab="treino" onclick="setTab('treino')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5l11 11M20.5 8.5l-3-3a1.5 1.5 0 0 0-2.1 0l-1 1a1.5 1.5 0 0 0 0 2.1l3 3a1.5 1.5 0 0 0 2.1 0l1-1a1.5 1.5 0 0 0 0-2.1zM8.6 15.4l-3 3a1.5 1.5 0 0 1-2.1 0l-1-1a1.5 1.5 0 0 1 0-2.1l3-3"/></svg>
     Treino
@@ -479,7 +497,7 @@ main#main > * { animation: contentFadeIn .16s ease both; }
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
     Perfil
   </button>
-</div>
+</nav>
 
 <script src="app.js"></script>
 </body>

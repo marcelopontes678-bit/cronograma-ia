@@ -939,7 +939,7 @@ function openFinishWorkoutModal() {
     ui.historyDetailId = aw.id;
     render();
     window.scrollTo(0, 0);
-    toast('Treino salvo!');
+    toast('Treino salvo');
   };
 }
 
@@ -1037,7 +1037,7 @@ function renderRestBar() {
       <div class="rest-bar rest-bar-done" id="restDoneBar">
         <div class="rest-bar-left">
           <span class="rest-bar-time mono">🔔</span>
-          <span class="mono" style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Descanso concluído!</span>
+          <span class="mono" style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Descanso concluído</span>
         </div>
         <div class="rest-bar-actions"><button id="restDismiss">OK</button></div>
       </div>
