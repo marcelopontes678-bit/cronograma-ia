@@ -846,12 +846,19 @@ function renderWorkoutExerciseCard(we, subLabel) {
       if (s.completed) {
         if (!s.weight && prev) s.weight = prev.weight;
         if (!s.reps && prev) s.reps = prev.reps;
-        if (!s.warmup && isLastInGroup(we)) startRestTimer(ex && ex.restOverride ? ex.restOverride : state.settings.restDefault);
+        if (!s.warmup && isLastInGroup(we)) {
+          saveState();
+          startRestTimer(ex && ex.restOverride ? ex.restOverride : state.settings.restDefault, { weUid: we.uid, setUid: s.uid });
+          return; // startRestTimer já re-renderiza
+        }
       }
       saveState(); render();
     };
     enableSwipeToDelete(row, () => { we.sets = we.sets.filter(x => x.uid !== s.uid); saveState(); render(); });
     table.appendChild(row);
+    if (restTimer.active && !restTimer.finished && restTimer.contextWeUid === we.uid && restTimer.contextSetUid === s.uid) {
+      table.appendChild(buildInlineRestDivider());
+    }
   });
 
   const addSetBtn = document.createElement('button');
@@ -958,7 +965,7 @@ function confirmDialog(message, onConfirm) {
 }
 
 /* ---------- rest timer ---------- */
-let restTimer = { active: false, endsAt: 0, duration: 0, interval: null, finished: false };
+let restTimer = { active: false, endsAt: 0, duration: 0, interval: null, finished: false, contextWeUid: null, contextSetUid: null };
 
 /* Contexto de áudio compartilhado: navegadores móveis só liberam áudio depois de
    um gesto do usuário, então destravamos no primeiro toque em qualquer lugar do
@@ -974,20 +981,24 @@ function unlockAudio() {
 }
 document.addEventListener('pointerdown', unlockAudio, { once: true });
 
-function startRestTimer(seconds) {
+function startRestTimer(seconds, context) {
   restTimer.active = true;
   restTimer.finished = false;
   restTimer.duration = seconds;
   restTimer.endsAt = Date.now() + seconds * 1000;
+  restTimer.contextWeUid = context ? context.weUid : null;
+  restTimer.contextSetUid = context ? context.setUid : null;
   if (restTimer.interval) clearInterval(restTimer.interval);
   restTimer.interval = setInterval(tickRestTimer, 250);
-  renderRestBar();
+  render();
 }
 function stopRestTimer() {
   restTimer.active = false;
   restTimer.finished = false;
+  restTimer.contextWeUid = null;
+  restTimer.contextSetUid = null;
   if (restTimer.interval) { clearInterval(restTimer.interval); restTimer.interval = null; }
-  renderRestBar();
+  render();
 }
 function adjustRestTimer(deltaSec) {
   restTimer.endsAt += deltaSec * 1000;
@@ -1000,7 +1011,7 @@ function tickRestTimer() {
       restTimer.finished = true;
       if (restTimer.interval) { clearInterval(restTimer.interval); restTimer.interval = null; }
       playRestDoneAlert();
-      renderRestBar();
+      render(); // troca estrutural: some o divisor embutido, aparece o aviso flutuante
       setTimeout(() => { if (restTimer.finished) stopRestTimer(); }, 2500);
     }
     return;
@@ -1029,6 +1040,7 @@ function playRestDoneAlert() {
 }
 function renderRestBar() {
   const root = document.getElementById('restBarRoot');
+
   if (!restTimer.active) { root.innerHTML = ''; return; }
 
   if (restTimer.finished) {
@@ -1047,6 +1059,15 @@ function renderRestBar() {
   }
 
   const remaining = Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000));
+  const hasInlinePosition = restTimer.contextWeUid && document.getElementById('restInlineTime');
+
+  if (hasInlinePosition) {
+    // O cronômetro tem uma posição embutida entre as séries — não duplica na barra flutuante.
+    root.innerHTML = '';
+    document.getElementById('restInlineTime').textContent = formatDuration(remaining);
+    return;
+  }
+
   const existing = root.querySelector('#restEdit');
   if (existing) {
     // apenas atualiza o texto — evita recriar o DOM (e replay da animação de entrada) a cada tick
@@ -1072,6 +1093,18 @@ function renderRestBar() {
   document.getElementById('restSkip').onclick = stopRestTimer;
 }
 
+/* Divisor de descanso embutido entre as séries — a posição preferida do cronômetro,
+   em vez da barra flutuante (que fica só como reserva quando não há uma série de
+   referência visível, por exemplo se o timer foi iniciado pelo botão do cabeçalho). */
+function buildInlineRestDivider() {
+  const remaining = Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000));
+  const div = document.createElement('div');
+  div.className = 'set-rest-divider';
+  div.innerHTML = `<span class="set-rest-divider-time mono" id="restInlineTime">${formatDuration(remaining)}</span>`;
+  div.onclick = () => openRestTimerEditor(Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000)));
+  return div;
+}
+
 function openRestTimerEditor(currentSeconds) {
   const min = Math.floor(currentSeconds / 60);
   const sec = currentSeconds % 60;
@@ -1092,8 +1125,10 @@ function openRestTimerEditor(currentSeconds) {
       <button class="btn btn-primary" style="flex:2" id="rtSave">Definir</button>
     </div>
   `);
+  // Mantém a posição embutida entre as séries, se já havia uma, ao redefinir o tempo.
+  const keepContext = restTimer.contextWeUid ? { weUid: restTimer.contextWeUid, setUid: restTimer.contextSetUid } : undefined;
   document.querySelectorAll('.chip-row [data-s]').forEach(chip => {
-    chip.onclick = () => { startRestTimer(Number(chip.dataset.s)); closeModal(); };
+    chip.onclick = () => { startRestTimer(Number(chip.dataset.s), keepContext); closeModal(); };
   });
   document.getElementById('rtCancel').onclick = closeModal;
   document.getElementById('rtSave').onclick = () => {
@@ -1101,7 +1136,7 @@ function openRestTimerEditor(currentSeconds) {
     const s = Math.max(0, Number(document.getElementById('rtSec').value) || 0);
     const total = m * 60 + s;
     if (total <= 0) { toast('Informe um tempo maior que zero.'); return; }
-    startRestTimer(total);
+    startRestTimer(total, keepContext);
     closeModal();
   };
 }
