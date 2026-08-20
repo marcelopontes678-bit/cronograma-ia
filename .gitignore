@@ -19,6 +19,9 @@ frontend/.env
 # Docker / env
 .env
 
+# Cloudflare Workers (cache/estado local do wrangler dev)
+.wrangler/
+
 # OS
 .DS_Store
 

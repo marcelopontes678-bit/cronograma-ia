@@ -1,7 +1,9 @@
 {
   "name": "cronograma-ia",
   "compatibility_date": "2026-08-10",
+  "main": "worker/index.js",
   "assets": {
-    "directory": "./treino"
+    "directory": "./treino",
+    "binding": "ASSETS"
   }
 }
