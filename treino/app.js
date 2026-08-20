@@ -1934,7 +1934,7 @@ function renderPerfilTab(main) {
   about.style.color = 'var(--muted)';
   about.style.fontSize = '11px';
   about.style.lineHeight = '1.7';
-  about.innerHTML = `Treino — diário de treino inspirado no Strong.<br>Todos os dados ficam salvos apenas neste dispositivo.`;
+  about.innerHTML = `Gibor — diário de treino inspirado no Strong.<br>Todos os dados ficam salvos apenas neste dispositivo.`;
   main.appendChild(about);
 }
 

@@ -1,6 +1,6 @@
 {
-  "name": "Treino - Diário de Musculação",
-  "short_name": "Treino",
+  "name": "Gibor - Diário de Musculação",
+  "short_name": "Gibor",
   "description": "Registro de treinos de musculação inspirado no Strong: séries, cargas, histórico e progressão",
   "start_url": "./",
   "display": "standalone",
