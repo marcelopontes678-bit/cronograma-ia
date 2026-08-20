@@ -89,7 +89,7 @@ function loadState() {
       const def = defaultState();
       return {
         settings: { ...def.settings, ...(parsed.settings || {}) },
-        exercises: parsed.exercises && parsed.exercises.length ? parsed.exercises : def.exercises,
+        exercises: parsed.exercises || def.exercises,
         routines: parsed.routines || def.routines,
         workouts: parsed.workouts || [],
         activeWorkout: parsed.activeWorkout || null,
@@ -103,7 +103,29 @@ function loadState() {
 let state = loadState();
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error('Falha ao salvar dados', e);
+    toast('Não foi possível salvar — armazenamento cheio ou indisponível.');
+  }
+}
+
+/* Validação mínima de um backup importado — o suficiente para recusar arquivos
+   claramente malformados antes que quebrem alguma tela mais adiante, sem exigir
+   um schema completo. Retorna uma mensagem de erro, ou null se estiver ok. */
+function validateImportedState(data) {
+  if (!data || typeof data !== 'object') return 'o arquivo não contém um objeto JSON válido.';
+  if (!Array.isArray(data.exercises)) return 'campo "exercises" ausente ou inválido.';
+  if (!Array.isArray(data.workouts)) return 'campo "workouts" ausente ou inválido.';
+  if (data.routines !== undefined && !Array.isArray(data.routines)) return 'campo "routines" inválido.';
+  if (data.bodyMeasurements !== undefined && !Array.isArray(data.bodyMeasurements)) return 'campo "bodyMeasurements" inválido.';
+  if (data.settings !== undefined && (typeof data.settings !== 'object' || data.settings === null)) return 'campo "settings" inválido.';
+  const badExercise = data.exercises.find(e => !e || typeof e.id !== 'string' || typeof e.name !== 'string');
+  if (badExercise) return 'um ou mais exercícios estão com formato inválido (faltando id/nome).';
+  const badWorkout = data.workouts.find(w => !w || typeof w.id !== 'string' || !Array.isArray(w.exercises));
+  if (badWorkout) return 'um ou mais treinos estão com formato inválido.';
+  return null;
 }
 
 /* ---------- utilitários ---------- */
@@ -1910,7 +1932,8 @@ function renderPerfilTab(main) {
     reader.onload = () => {
       try {
         const data = JSON.parse(reader.result);
-        if (!data.exercises || !data.workouts) throw new Error('Formato inválido');
+        const validationError = validateImportedState(data);
+        if (validationError) throw new Error(validationError);
         confirmDialog('Importar estes dados vai substituir tudo que existe atualmente. Continuar?', () => {
           state = data;
           state.activeWorkout = state.activeWorkout || null;
