@@ -1,4 +1,4 @@
-const CACHE = 'treino-v2';
+const CACHE = 'treino-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -6,11 +6,22 @@ const ASSETS = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
+];
+// Fontes externas: melhor-esforço. Ficam fora do addAll atômico acima porque uma
+// falha de rede nessa URL (CDN fora do ar, bloqueio momentâneo) não deve impedir
+// a instalação do Service Worker com os assets locais que realmente importam.
+const EXTERNAL_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap'
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(ASSETS).then(() =>
+        Promise.allSettled(EXTERNAL_ASSETS.map(url => c.add(url)))
+      ))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
