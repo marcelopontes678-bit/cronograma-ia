@@ -28,7 +28,7 @@ public class LauncherActivity extends AppCompatActivity {
 
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("https://marcelopontes678-bit.github.io/cronograma-ia/");
+        webView.loadUrl("https://cronograma-ia.marcelopontes678.workers.dev/");
     }
 
     @Override
