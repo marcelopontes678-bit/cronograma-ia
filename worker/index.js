@@ -15,6 +15,10 @@
    Durable Objects ou as regras de Rate Limiting do painel Cloudflare — todas
    fora do escopo mínimo da Camada 2). Enquanto não existir, monitore o uso
    pelo painel da Anthropic para não ser pego de surpresa por um custo alto.
+
+   Nota: se ANTHROPIC_API_KEY for adicionada/alterada pelo painel da
+   Cloudflare depois do deploy mais recente, é preciso um novo deploy pra
+   ela valer — o binding é fixado na versão publicada, não é lido "ao vivo".
 */
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
