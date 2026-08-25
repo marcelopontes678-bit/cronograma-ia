@@ -270,14 +270,12 @@ function getBestPerformance(exerciseId, setIndex) {
 }
 
 /* Sugestão de progressão de carga pra próxima vez que este exercício for
-   feito nesta posição de série. Regra de sobrecarga progressiva dupla,
-   baseada no desempenho MAIS RECENTE (não no recorde) pra refletir onde
-   você está agora: bateu o teto da faixa de reps sem estar perto da falha?
-   sugere subir o peso. Senão, mantém o peso e mira uma rep a mais. RPE muito
-   alto segura a progressão em vez de empurrar mais carga.
+   feito nesta posição de série. Progressão linear: prioriza subir o peso
+   (não pedir mais repetições), baseada no desempenho MAIS RECENTE (não no
+   recorde) pra refletir onde você está agora. RPE muito alto na última vez
+   segura a progressão em vez de empurrar mais carga.
    É uma heurística determinística, não uma chamada de IA — decisão numérica
    como essa é mais confiável como regra fixa do que como resposta de modelo. */
-const PROGRESSION_REP_CEILING = 12;
 function getProgressionSuggestion(exerciseId, setIndex) {
   const last = getLastPerformance(exerciseId, setIndex);
   if (!last) return null;
@@ -290,10 +288,7 @@ function getProgressionSuggestion(exerciseId, setIndex) {
   if (rpe != null && rpe >= 9.5) {
     return { weight, reps, reason: `RPE ${rpe} na última vez — mantenha a carga e foque na execução.` };
   }
-  if (reps >= PROGRESSION_REP_CEILING) {
-    return { weight: weight + increment, reps, reason: `Você bateu ${reps} reps com ${weight}${unitLabel()} — hora de subir a carga.` };
-  }
-  return { weight, reps: reps + 1, reason: `Mire em ${reps + 1} reps com ${weight}${unitLabel()} (última vez: ${reps}).` };
+  return { weight: weight + increment, reps, reason: `Aumente para ${weight + increment}${unitLabel()} mantendo ${reps} reps (última vez: ${weight}${unitLabel()}).` };
 }
 
 function getExercisePR(exerciseId) {
