@@ -57,10 +57,18 @@ async function handleGenerate(request, env) {
 
   // Restringe o proxy ao próprio app — não é uma API pública aberta a qualquer
   // origem. Checagem simples (não é proteção completa contra CSRF nem
-  // substitui rate limiting — ver nota no topo do arquivo).
+  // substitui rate limiting — ver nota no topo do arquivo). Um Origin
+  // malformado (ex.: "null", mandado em navegações sandboxed) é tratado
+  // como não permitido em vez de derrubar a requisição com uma exceção.
   const origin = request.headers.get('Origin');
-  if (origin && new URL(origin).host !== new URL(request.url).host) {
-    return json({ error: 'Origem não permitida.' }, 403);
+  if (origin) {
+    try {
+      if (new URL(origin).host !== new URL(request.url).host) {
+        return json({ error: 'Origem não permitida.' }, 403);
+      }
+    } catch {
+      return json({ error: 'Origem não permitida.' }, 403);
+    }
   }
 
   let body;
@@ -68,6 +76,9 @@ async function handleGenerate(request, env) {
     body = await request.json();
   } catch {
     return json({ error: 'Corpo da requisição precisa ser um JSON válido.' }, 400);
+  }
+  if (!body || typeof body !== 'object') {
+    return json({ error: 'Corpo da requisição precisa ser um objeto JSON.' }, 400);
   }
 
   const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
@@ -78,8 +89,19 @@ async function handleGenerate(request, env) {
     return json({ error: `"prompt" excede o limite de ${MAX_TEXT_CHARS} caracteres.` }, 400);
   }
 
-  const system = typeof body.system === 'string' ? body.system.slice(0, MAX_TEXT_CHARS) : undefined;
-  const maxTokens = Math.min(Number(body.maxTokens) || MAX_TOKENS_CAP, MAX_TOKENS_CAP);
+  const system = typeof body.system === 'string' ? body.system : undefined;
+  if (system && system.length > MAX_TEXT_CHARS) {
+    return json({ error: `"system" excede o limite de ${MAX_TEXT_CHARS} caracteres.` }, 400);
+  }
+
+  let maxTokens = MAX_TOKENS_CAP;
+  if (body.maxTokens !== undefined) {
+    const n = Number(body.maxTokens);
+    if (!Number.isFinite(n) || n <= 0) {
+      return json({ error: '"maxTokens" precisa ser um número maior que zero.' }, 400);
+    }
+    maxTokens = Math.min(n, MAX_TOKENS_CAP);
+  }
 
   // Checa a chave só depois de validar a entrada do cliente — assim um pedido
   // malformado sempre recebe o erro certo, com ou sem a chave configurada.
@@ -115,5 +137,7 @@ async function handleGenerate(request, env) {
 
   const data = await anthropicRes.json();
   const text = (data.content || []).map(b => b.text || '').join('').trim();
-  return json({ text });
+  // Sinaliza pro cliente quando a resposta foi cortada por atingir max_tokens,
+  // em vez de deixar um texto truncado passar como se fosse uma resposta completa.
+  return json({ text, truncated: data.stop_reason === 'max_tokens' });
 }
