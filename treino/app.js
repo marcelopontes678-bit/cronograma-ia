@@ -269,6 +269,33 @@ function getBestPerformance(exerciseId, setIndex) {
   return best;
 }
 
+/* Sugestão de progressão de carga pra próxima vez que este exercício for
+   feito nesta posição de série. Regra de sobrecarga progressiva dupla,
+   baseada no desempenho MAIS RECENTE (não no recorde) pra refletir onde
+   você está agora: bateu o teto da faixa de reps sem estar perto da falha?
+   sugere subir o peso. Senão, mantém o peso e mira uma rep a mais. RPE muito
+   alto segura a progressão em vez de empurrar mais carga.
+   É uma heurística determinística, não uma chamada de IA — decisão numérica
+   como essa é mais confiável como regra fixa do que como resposta de modelo. */
+const PROGRESSION_REP_CEILING = 12;
+function getProgressionSuggestion(exerciseId, setIndex) {
+  const last = getLastPerformance(exerciseId, setIndex);
+  if (!last) return null;
+  const weight = Number(last.weight), reps = Number(last.reps);
+  if (!weight || !reps) return null;
+
+  const rpe = last.rpe !== '' && last.rpe != null ? Number(last.rpe) : null;
+  const increment = state.settings.unit === 'lb' ? 5 : 2.5;
+
+  if (rpe != null && rpe >= 9.5) {
+    return { weight, reps, reason: `RPE ${rpe} na última vez — mantenha a carga e foque na execução.` };
+  }
+  if (reps >= PROGRESSION_REP_CEILING) {
+    return { weight: weight + increment, reps, reason: `Você bateu ${reps} reps com ${weight}${unitLabel()} — hora de subir a carga.` };
+  }
+  return { weight, reps: reps + 1, reason: `Mire em ${reps + 1} reps com ${weight}${unitLabel()} (última vez: ${reps}).` };
+}
+
 function getExercisePR(exerciseId) {
   let maxWeight = 0, maxWeightReps = 0, best1rm = 0;
   state.workouts.forEach(w => {
@@ -806,6 +833,10 @@ function renderWorkoutExerciseCard(we, subLabel) {
   const workingSets = we.sets.filter(s => !s.warmup);
   const allDone = workingSets.length > 0 && workingSets.every(s => s.completed);
   const exPr = getExercisePR(we.exerciseId);
+  // Sugestão da 1ª série representa a tendência geral do exercício — é a que
+  // aparece como dica no cabeçalho do card (cada série individual ainda tem
+  // sua própria sugestão nos placeholders/preenchimento automático abaixo).
+  const headSuggestion = !allDone ? getProgressionSuggestion(we.exerciseId, 0) : null;
 
   const head = document.createElement('div');
   head.className = 'ex-card-head';
@@ -815,6 +846,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
       <div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}${subLabel ? `<span class="ex-sublabel">${esc(subLabel)}</span>` : ''}</div>
       <div class="ex-card-sub">${esc(ex ? ex.muscle : '')}${exPr.maxWeight ? ` · <span class="ex-best-badge">🏆 ${exPr.maxWeight}${unitLabel()}</span>` : ''}</div>
       ${we.notes ? `<div class="ex-card-note">📝 ${esc(we.notes)}</div>` : ''}
+      ${headSuggestion ? `<div class="ex-card-suggestion">💡 ${esc(headSuggestion.reason)}</div>` : ''}
     </div>
     <div class="ex-card-head-actions">
       ${ex && ex.equipment === 'Barra' ? '<button class="icon-btn ex-plate-btn" title="Calculadora de anilhas">🏋</button>' : ''}
@@ -842,7 +874,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
   we.sets.forEach((s) => {
     const numLabel = s.warmup ? 'W' : String(++workingIdx);
     const prevIdx = s.warmup ? -1 : workingIdx - 1;
-    const prev = !s.warmup ? getBestPerformance(we.exerciseId, prevIdx) : null;
+    const prev = !s.warmup ? getProgressionSuggestion(we.exerciseId, prevIdx) : null;
     const pr = s.completed && !s.warmup && isSetPR(we.exerciseId, s.weight, s.reps, state.activeWorkout.id);
 
     const row = document.createElement('div');
