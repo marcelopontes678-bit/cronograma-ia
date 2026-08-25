@@ -5,5 +5,16 @@
   "assets": {
     "directory": "./treino",
     "binding": "ASSETS"
-  }
+  },
+  // Segredo de IA (ver worker/index.js). Declarado aqui, e não só pelo painel
+  // da Cloudflare, pra sobreviver a todo novo deploy do Workers Builds — um
+  // binding adicionado só pelo painel se perde no próximo push, porque o
+  // deploy do CI reconstrói o Worker inteiro a partir deste arquivo.
+  "secrets_store_secrets": [
+    {
+      "binding": "ANTHROPIC_API_KEY",
+      "store_id": "450600002dcd4af5bb656b4d8667b56d",
+      "secret_name": "anthropic-api-key"
+    }
+  ]
 }
