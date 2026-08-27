@@ -1,0 +1,36 @@
+{
+  "_descricao": "Parametros de precificacao para orcamento de marcenaria. Baseado na Planilha de Custos 2026 (Personatto/Materializa), aba CUSTOS, mes de referencia: Marco/2026 (unico mes com faturamento real preenchido).",
+  "_referencia_planilha": {
+    "arquivo": "Planilha_Custos_2026_Personatto_Materializa.xlsx",
+    "aba": "CUSTOS",
+    "mes_referencia": "Marco/2026",
+    "custo_fixo_total": 101317.50,
+    "faturamento_mes": 300000.00
+  },
+  "markup": {
+    "pct_custo_fixo": 0.3377,
+    "pct_impostos": 0.09,
+    "pct_comissao_fabrica": 0.01,
+    "pct_lucro": 0.15,
+    "comissao_vendas_faixas": [
+      { "ate": 150000.00, "pct": 0.05 },
+      { "ate": 200000.00, "pct": 0.06 },
+      { "ate": 500000.00, "pct": 0.07 },
+      { "ate": null, "pct": 0.08 }
+    ],
+    "formula": "divisor_markup = 1 / (1 - (pct_custo_fixo + pct_impostos + pct_comissao_fabrica + pct_comissao_vendas + pct_lucro))"
+  },
+  "montagem": {
+    "cobrada_separadamente": false,
+    "observacao": "Nao ha percentual ou valor de montagem cobrado no orcamento. Custo de montagem, se houver, e tratado como mao de obra (ver abaixo), nao como componente do markup."
+  },
+  "mao_de_obra": {
+    "incluida_no_markup": false,
+    "observacao": "Mao de obra de producao/montagem NAO entra na base dividida pelo markup. E somada apos o calculo do preco do material, como valor separado no orcamento final. O valor/regra de mao de obra por projeto ainda precisa ser definido."
+  },
+  "formula_final": {
+    "descricao": "preco_final_item = (custo_material / divisor_markup_de_venda) ... nota: divisor_markup ja e o multiplicador (1/(1-markup)), entao: preco_venda_material = custo_material * divisor_markup; preco_final = preco_venda_material + custo_mao_de_obra",
+    "custo_base": "apenas custo de material (chapas, ferragens, acabamentos) extraido do projeto normalizado",
+    "mao_de_obra": "somada depois, fora do markup, valor a definir por projeto"
+  }
+}
