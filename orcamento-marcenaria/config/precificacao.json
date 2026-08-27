@@ -24,6 +24,10 @@
     "cobrada_separadamente": false,
     "observacao": "Nao ha percentual ou valor de montagem cobrado no orcamento. Custo de montagem, se houver, e tratado como mao de obra (ver abaixo), nao como componente do markup."
   },
+  "faturamento_acumulado": {
+    "fonte": "entrada_manual",
+    "observacao": "O faturamento acumulado do periodo (usado para escolher a faixa de comissao de vendas em markup.comissao_vendas_faixas) e digitado manualmente pelo usuario no momento de gerar cada orcamento. Nao e calculado automaticamente a partir de historico."
+  },
   "mao_de_obra": {
     "incluida_no_markup": false,
     "observacao": "Mao de obra de producao/montagem NAO entra na base dividida pelo markup. E somada apos o calculo do preco do material, como valor separado no orcamento final. O valor/regra de mao de obra por projeto ainda precisa ser definido."
