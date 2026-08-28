@@ -1,0 +1,68 @@
+{
+  "name": "registrar_extracao",
+  "description": "Registra os ambientes e modulos de marcenaria identificados nesta(s) pagina(s) do projeto.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "ambientes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "nome": { "type": "string" },
+            "modulos": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "largura_mm": { "type": ["number", "null"] },
+                  "altura_mm": { "type": ["number", "null"] },
+                  "profundidade_mm": { "type": ["number", "null"] },
+                  "quantidade_portas": { "type": "integer", "minimum": 0 },
+                  "quantidade_gavetas": { "type": "integer", "minimum": 0 },
+                  "material_sugerido": { "type": "string" },
+                  "material_explicito_no_desenho": {
+                    "type": "boolean",
+                    "description": "false quando o material veio de inferencia (Preferencias Globais/Regras Aprendidas), nao do proprio desenho"
+                  },
+                  "confianca": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "Confianca honesta da leitura. < 0.7 para cotas ilegiveis, rotulos sobrepostos ou dimensoes inferidas por proximidade"
+                  },
+                  "bounding_box": {
+                    "type": "object",
+                    "description": "Coordenadas normalizadas (0-1) da regiao do modulo na pagina",
+                    "properties": {
+                      "pagina": { "type": "integer", "minimum": 1 },
+                      "x": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "y": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "width": { "type": "number", "minimum": 0, "maximum": 1 },
+                      "height": { "type": "number", "minimum": 0, "maximum": 1 }
+                    },
+                    "required": ["pagina", "x", "y", "width", "height"]
+                  },
+                  "observacoes": { "type": "string" }
+                },
+                "required": [
+                  "nome", "quantidade_portas", "quantidade_gavetas",
+                  "material_sugerido", "material_explicito_no_desenho",
+                  "confianca", "bounding_box"
+                ]
+              }
+            }
+          },
+          "required": ["nome", "modulos"]
+        }
+      },
+      "avisos": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Ambiguidades, itens fora de escopo (marmoraria/loucas/vidracaria), ou qualquer coisa que precise de revisao humana"
+      }
+    },
+    "required": ["ambientes", "avisos"]
+  }
+}
