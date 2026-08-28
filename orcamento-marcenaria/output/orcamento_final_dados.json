@@ -1,0 +1,45 @@
+{
+  "cliente": "Paula e Gabriel",
+  "projeto": "Projeto - Quarto Maria",
+  "divisor_markup": 2.7601435274634274,
+  "pct_comissao_vendas_aplicada": 0.05,
+  "faturamento_acumulado": 100000,
+  "modulos": [
+    {
+      "nome": "Projeto - Quarto Maria - Armário",
+      "custo_material": 1050.364,
+      "preco_venda_material": 2899.1553960805954,
+      "custo_mao_de_obra": 0.0,
+      "preco_final": 2899.1553960805954
+    },
+    {
+      "nome": "Projeto - Quarto Maria - Armário",
+      "custo_material": 1050.364,
+      "preco_venda_material": 2899.1553960805954,
+      "custo_mao_de_obra": 0.0,
+      "preco_final": 2899.1553960805954
+    },
+    {
+      "nome": "Projeto - Quarto Maria - Fechamento Lateral Dir",
+      "custo_material": 5.919,
+      "preco_venda_material": 16.337289539056027,
+      "custo_mao_de_obra": 0.0,
+      "preco_final": 16.337289539056027
+    },
+    {
+      "nome": "Projeto - Quarto Maria - Fechamento Lateral Esq",
+      "custo_material": 5.919,
+      "preco_venda_material": 16.337289539056027,
+      "custo_mao_de_obra": 0.0,
+      "preco_final": 16.337289539056027
+    },
+    {
+      "nome": "Projeto - Quarto Maria - Rodapé Lateral",
+      "custo_material": 76.947,
+      "preco_venda_material": 212.38476400772836,
+      "custo_mao_de_obra": 0.0,
+      "preco_final": 212.38476400772836
+    }
+  ],
+  "total": 6043.370135247031
+}
