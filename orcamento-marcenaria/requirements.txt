@@ -3,3 +3,4 @@ pdfplumber>=0.11
 pymupdf>=1.24
 cffi>=1.16
 cryptography>=42
+ezdxf>=1.3

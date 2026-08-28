@@ -12,8 +12,8 @@ Pipeline: **detectar tipo de arquivo -> extrair (normalizar) -> precificar -> ge
 | Extensao / conteudo | Extractor | Status |
 |---|---|---|
 | `.xml` (exportacao "Listagem_montados" do Promob) | `extractors/extract_promob_xml.py` | Testado com projeto real |
-| `.dxf` (Promob ou convertido de DWG) | `extractors/extract_promob_dxf.py` | **Ainda nao implementado** |
-| `.dwg` | `extractors/convert_dwg.py` (DWG->DXF via ODA File Converter) depois `extract_promob_dxf.py` | Codigo escrito, conversao ainda nao testada (ODA instalado so na maquina Windows do usuario) |
+| `.dxf` (Promob ou convertido de DWG) | `extractors/extract_promob_dxf.py` | Testado com DXF real (gerado pelo proprio pipeline DWG->DXF); schema de blocos Promob ainda nao confirmado com um DXF exportado do Promob de verdade |
+| `.dwg` | `extractors/convert_dwg.py` (DWG->DXF via LibreDWG `dwg2dxf`, self-hosted; ODA File Converter como fallback) depois `extract_promob_dxf.py` | Testado ponta a ponta: LibreDWG compilado e `dwg2dxf` convertendo DWG->DXF de verdade, ver `Dockerfile` |
 | `.pdf` | `extractors/extract_pdf_plant.py` | Testado com planta real (2 paginas vetoriais) |
 | `.skp` | Nao le o binario direto. Pedir ao usuario para exportar `File > Generate Report...` no SketchUp e usar `extractors/extract_skp.py` no CSV/TXT gerado | Codigo escrito, aguardando teste com relatorio real |
 
