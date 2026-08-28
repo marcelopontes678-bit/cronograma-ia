@@ -1,0 +1,22 @@
+{
+  "usuario_id": "personatto_materializa",
+  "espessuras": {
+    "caixa_mm": 15,
+    "porta_mm": 18,
+    "fundo_mm": 6,
+    "prateleira_mm": 15
+  },
+  "ferragens": {
+    "marca_corredicas": "Hettich",
+    "marca_dobradicas": "Hettich",
+    "tipo_corredica_padrao": "telescopica",
+    "dobradica_com_amortecimento": true
+  },
+  "metodo_uniao": "cavilha",
+  "acabamento_interno_padrao": "MDF Branco",
+  "profundidade_padrao_por_tipo_mm": {
+    "armario_superior": 350,
+    "armario_inferior": 550,
+    "armario_alto": 550
+  }
+}
