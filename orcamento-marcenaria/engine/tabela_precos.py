@@ -15,13 +15,18 @@ import openpyxl
 @dataclass
 class PrecoReferencia:
     reference: str
+    codigo_interno: str
     descricao: str
     categoria: str
+    espessura_mm: float | None
     unidade: str
     preco_unitario: float
     fornecedor: str
 
 
+# Colunas da planilha (config/tabela_precos_referencia.xlsx), na ordem:
+# REFERENCE, Codigo Interno, Descricao, Categoria, Espessura (mm), Unidade,
+# Preco Unitario, Fornecedor, Data Atualizacao, Observacoes
 def carregar_tabela_precos(caminho_xlsx: str | Path) -> dict[str, PrecoReferencia]:
     caminho_xlsx = Path(caminho_xlsx)
     if not caminho_xlsx.exists():
@@ -35,16 +40,19 @@ def carregar_tabela_precos(caminho_xlsx: str | Path) -> dict[str, PrecoReferenci
         reference = row[0].value
         if not reference:
             continue
-        preco = row[4].value
+        preco = row[6].value
         if preco is None:
             continue
+        espessura = row[4].value
         tabela[reference] = PrecoReferencia(
             reference=reference,
-            descricao=row[1].value or "",
-            categoria=row[2].value or "",
-            unidade=row[3].value or "",
+            codigo_interno=row[1].value or "",
+            descricao=row[2].value or "",
+            categoria=row[3].value or "",
+            espessura_mm=float(espessura) if espessura is not None else None,
+            unidade=row[5].value or "",
             preco_unitario=float(preco),
-            fornecedor=row[5].value or "",
+            fornecedor=row[7].value or "",
         )
     return tabela
 
