@@ -54,6 +54,8 @@ class ResultadoFitaReferencia:
 class ResultadoFerragem:
     descricao: str
     reference: str
+    preco_unitario: float
+    quantidade: int
     custo: float
     origem: str
 
@@ -171,10 +173,15 @@ def calcular_projeto(
             resultado.itens_sem_preco.append((item.get("reference"), item.get("descricao"), status))
             continue
         # status "OK" ou "OK_INCLUIDO_NA_CHAPA" (custo=0 explicito, informado pelo usuario) -- ambos entram no total
+        preco_ref = tabela.get(item.get("reference"))
+        preco_unitario = preco_ref.preco_unitario_un if (preco_ref and preco_ref.preco_unitario_un is not None) else 0.0
+        quantidade = item.get("repeticao", 1)
         resultado.ferragens.append(
             ResultadoFerragem(
                 descricao=item.get("descricao"),
                 reference=item.get("reference"),
+                preco_unitario=preco_unitario,
+                quantidade=quantidade,
                 custo=custo,
                 origem=item.get("origem", ""),
             )
