@@ -1,23 +1,27 @@
 /**
  * Gera o orcamento final em .docx (proposta formatada para o cliente) a
- * partir de um JSON com o resultado ja calculado pelo engine Python.
+ * partir de um JSON com o resultado ja calculado pelo engine Python
+ * (modelo chapa fechada + fita de borda + ferragens).
  *
  * Uso: node gerar_orcamento_docx.js dados.json saida.docx
  *
- * Formato esperado do JSON de entrada (ver engine/exportar_resultado_json.py):
+ * Formato esperado do JSON de entrada (ver __main__ deste arquivo /
+ * gerar_orcamento_xlsx.py):
  * {
  *   "cliente": "...", "projeto": "...",
  *   "divisor_markup": 2.76, "pct_comissao_vendas_aplicada": 0.05,
  *   "faturamento_acumulado": 100000,
- *   "modulos": [{ "nome": "...", "custo_material": 950, "preco_venda_material": 2622.14,
- *                 "custo_mao_de_obra": 200, "preco_final": 2822.14 }],
- *   "total": 2822.14
+ *   "chapas": [{ "acabamento": "18mm Branco", "num_chapas": 3, "preco_chapa": 334.9, "custo_chapas": 1004.7 }],
+ *   "fitas": [{ "acabamento": "18mm Branco", "metros_total": 74.2, "preco_fita_metro": 26.9, "custo_fita": 1997.27 }],
+ *   "ferragens": [{ "descricao": "Suporte", "custo": 19.8 }],
+ *   "custo_material_total": 10155.66, "preco_venda_material": 28031.09,
+ *   "custo_mao_de_obra": 806.25, "total": 28837.34
  * }
  */
 const fs = require("fs");
 const {
   Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell,
-  WidthType, ShadingType, AlignmentType, BorderStyle,
+  WidthType, ShadingType, AlignmentType,
 } = require("docx");
 
 const [, , caminhoJson, caminhoSaida] = process.argv;
@@ -31,47 +35,80 @@ const dados = JSON.parse(fs.readFileSync(caminhoJson, "utf-8"));
 const moeda = (v) =>
   "R$ " + Number(v).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-const LARGURA_TABELA = 9360; // ~6.5in em DXA
-const LARGURAS_COLUNAS = [4680, 2340, 2340];
-
-function celula(texto, { negrito = false, corFundo = null, alinhamento = AlignmentType.LEFT, largura } = {}) {
+function celula(texto, { negrito = false, corFundo = null, alinhamento = AlignmentType.LEFT, largura, italico = false } = {}) {
   return new TableCell({
     width: { size: largura, type: WidthType.DXA },
     shading: corFundo ? { type: ShadingType.CLEAR, fill: corFundo } : undefined,
     children: [
       new Paragraph({
         alignment: alinhamento,
-        children: [new TextRun({ text: String(texto), bold: negrito })],
+        children: [new TextRun({ text: String(texto), bold: negrito, italics: italico })],
       }),
     ],
   });
 }
 
-const linhasCabecalho = new TableRow({
-  tableHeader: true,
-  children: [
-    celula("Ambiente / Modulo", { negrito: true, corFundo: "305496", largura: LARGURAS_COLUNAS[0] }),
-    celula("Preco Material (R$)", { negrito: true, corFundo: "305496", alinhamento: AlignmentType.RIGHT, largura: LARGURAS_COLUNAS[1] }),
-    celula("Preco Final (R$)", { negrito: true, corFundo: "305496", alinhamento: AlignmentType.RIGHT, largura: LARGURAS_COLUNAS[2] }),
-  ],
-});
+function secaoTabela(titulo, larguras, headers, linhas) {
+  const larguraTotal = larguras.reduce((a, b) => a + b, 0);
+  const linhaCabecalho = new TableRow({
+    tableHeader: true,
+    children: headers.map((h, i) =>
+      celula(h, { negrito: true, corFundo: "305496", alinhamento: i === 0 ? AlignmentType.LEFT : AlignmentType.RIGHT, largura: larguras[i] })
+    ),
+  });
+  const linhasTabela = linhas.map(
+    (valores) =>
+      new TableRow({
+        children: valores.map((v, i) => celula(v, { alinhamento: i === 0 ? AlignmentType.LEFT : AlignmentType.RIGHT, largura: larguras[i] })),
+      })
+  );
+  return [
+    new Paragraph({ text: titulo, heading: HeadingLevel.HEADING_2 }),
+    new Table({ width: { size: larguraTotal, type: WidthType.DXA }, columnWidths: larguras, rows: [linhaCabecalho, ...linhasTabela] }),
+    new Paragraph({ text: "" }),
+  ];
+}
 
-const linhasModulos = (dados.modulos || []).map(
-  (m) =>
-    new TableRow({
-      children: [
-        celula(m.nome, { largura: LARGURAS_COLUNAS[0] }),
-        celula(moeda(m.preco_venda_material), { alinhamento: AlignmentType.RIGHT, largura: LARGURAS_COLUNAS[1] }),
-        celula(moeda(m.preco_final), { alinhamento: AlignmentType.RIGHT, largura: LARGURAS_COLUNAS[2] }),
-      ],
-    })
+const seqChapas = secaoTabela(
+  "Chapas de MDF",
+  [4680, 1560, 1560, 1560],
+  ["Acabamento", "Num Chapas", "Preco/Chapa", "Custo"],
+  (dados.chapas || []).map((c) => [c.acabamento, String(c.num_chapas), moeda(c.preco_chapa), moeda(c.custo_chapas)])
 );
 
-const linhaTotal = new TableRow({
-  children: [
-    celula("TOTAL GERAL", { negrito: true, corFundo: "D9E1F2", largura: LARGURAS_COLUNAS[0] }),
-    celula("", { corFundo: "D9E1F2", largura: LARGURAS_COLUNAS[1] }),
-    celula(moeda(dados.total), { negrito: true, corFundo: "D9E1F2", alinhamento: AlignmentType.RIGHT, largura: LARGURAS_COLUNAS[2] }),
+const seqFitas = secaoTabela(
+  "Fita de Borda",
+  [4680, 1560, 1560, 1560],
+  ["Acabamento", "Metros", "Preco/Metro", "Custo"],
+  (dados.fitas || []).map((f) => [f.acabamento, f.metros_total.toFixed(2), moeda(f.preco_fita_metro), moeda(f.custo_fita)])
+);
+
+const seqFerragens = secaoTabela(
+  "Ferragens / Componentes",
+  [7020, 2340],
+  ["Descricao", "Custo"],
+  (dados.ferragens || []).map((fe) => [fe.descricao, moeda(fe.custo)])
+);
+
+const linhasResumo = [
+  ["Custo Material Total", moeda(dados.custo_material_total)],
+  ["Preco Venda Material (x Markup)", moeda(dados.preco_venda_material)],
+  ["Mao de Obra", moeda(dados.custo_mao_de_obra)],
+];
+const tabelaResumo = new Table({
+  width: { size: 9360, type: WidthType.DXA },
+  columnWidths: [7020, 2340],
+  rows: [
+    ...linhasResumo.map(
+      ([label, valor]) =>
+        new TableRow({ children: [celula(label, { largura: 7020 }), celula(valor, { largura: 2340, alinhamento: AlignmentType.RIGHT })] })
+    ),
+    new TableRow({
+      children: [
+        celula("TOTAL GERAL", { negrito: true, corFundo: "D9E1F2", largura: 7020 }),
+        celula(moeda(dados.total), { negrito: true, corFundo: "D9E1F2", largura: 2340, alinhamento: AlignmentType.RIGHT }),
+      ],
+    }),
   ],
 });
 
@@ -84,11 +121,11 @@ const doc = new Document({
         new Paragraph({ text: `Cliente: ${dados.cliente || "-"}` }),
         new Paragraph({ text: `Projeto: ${dados.projeto || "-"}` }),
         new Paragraph({ text: "" }),
-        new Table({
-          width: { size: LARGURA_TABELA, type: WidthType.DXA },
-          columnWidths: LARGURAS_COLUNAS,
-          rows: [linhasCabecalho, ...linhasModulos, linhaTotal],
-        }),
+        ...seqChapas,
+        ...seqFitas,
+        ...seqFerragens,
+        new Paragraph({ text: "Resumo", heading: HeadingLevel.HEADING_2 }),
+        tabelaResumo,
         new Paragraph({ text: "" }),
         new Paragraph({
           children: [
