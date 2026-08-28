@@ -173,20 +173,20 @@ def gerar_xlsx_projeto(
     linha += 2
 
     linhas_chapas = [
-        [c.reference, c.area_total_m2, c.area_com_perda_m2, c.num_chapas, c.preco_chapa, c.custo_chapas]
+        [c.acabamento, c.area_total_m2, c.area_com_perda_m2, c.num_chapas, c.preco_chapa, c.custo_chapas]
         for c in resultado_calculo.chapas
     ]
     linha, p1, u1 = escrever_secao(
         "Chapas de MDF",
-        ["Referencia", "Area Total (m2)", "Area c/ Perda (m2)", "Num Chapas", "Preco/Chapa (R$)", "Custo (R$)"],
+        ["Acabamento", "Area Total (m2)", "Area c/ Perda (m2)", "Num Chapas", "Preco/Chapa (R$)", "Custo (R$)"],
         linhas_chapas,
         linha,
     )
 
-    linhas_fitas = [[f.reference, f.metros_total, f.preco_fita_metro, f.custo_fita] for f in resultado_calculo.fitas]
+    linhas_fitas = [[f.acabamento, f.metros_total, f.preco_fita_metro, f.custo_fita] for f in resultado_calculo.fitas]
     linha, p2, u2 = escrever_secao(
         "Fita de Borda",
-        ["Referencia", "Metros Total", "Preco/Metro (R$)", "Custo (R$)"],
+        ["Acabamento", "Metros Total", "Preco/Metro (R$)", "Custo (R$)"],
         linhas_fitas,
         linha,
     )

@@ -21,7 +21,12 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
-from tabela_precos import PrecoReferencia, calcular_custo_item_ferragem
+from tabela_precos import (
+    PrecoReferencia,
+    calcular_custo_item_ferragem,
+    chave_acabamento,
+    indexar_precos_por_acabamento,
+)
 
 AREA_UTIL_CHAPA_M2_PADRAO = 2.750 * 1.830  # 5.0325 m2 (chapa 2750x1830mm)
 PCT_PERDA_CORTE_PADRAO = 0.15
@@ -29,7 +34,7 @@ PCT_PERDA_CORTE_PADRAO = 0.15
 
 @dataclass
 class ResultadoChapasReferencia:
-    reference: str
+    acabamento: str  # ex: "18mm Duratex.Essencial.Rosa Infinito"
     area_total_m2: float
     area_com_perda_m2: float
     num_chapas: int
@@ -39,7 +44,7 @@ class ResultadoChapasReferencia:
 
 @dataclass
 class ResultadoFitaReferencia:
-    reference: str
+    acabamento: str
     metros_total: float
     preco_fita_metro: float
     custo_fita: float
@@ -95,34 +100,46 @@ def calcular_projeto(
 ) -> ResultadoCalculoProjeto:
     itens = _itens_flat(ambientes_json)
     resultado = ResultadoCalculoProjeto()
+    indice_acabamento = indexar_precos_por_acabamento(tabela)
 
-    # --- Chapas + fita: agrupar itens M2 por REFERENCE ---
-    area_por_ref: dict[str, float] = {}
-    metros_fita_por_ref: dict[str, float] = {}
+    # --- Chapas + fita: agrupar itens M2 por ACABAMENTO (espessura + material),
+    # nao pelo REFERENCE completo -- o REFERENCE varia por tipo de peca mesmo
+    # quando sai da mesma chapa (ver tabela_precos.chave_acabamento). ---
+    area_por_acabamento: dict[tuple[int, str], float] = {}
+    metros_fita_por_acabamento: dict[tuple[int, str], float] = {}
+    referencia_exemplo_por_acabamento: dict[tuple[int, str], str] = {}
 
     for item in itens:
         if item.get("unidade") != "M2":
             continue
         ref = item.get("reference")
+        chave = chave_acabamento(ref)
+        if chave is None:
+            # REFERENCE nao seguiu o padrao esperado -- trata como acabamento proprio (fallback)
+            chave = (0, ref)
+        referencia_exemplo_por_acabamento.setdefault(chave, ref)
+
         repeticao = item.get("repeticao", 1)
         quantidade_m2 = item.get("quantidade", 0.0)  # m2 da peca, ja calculado pelo Promob
-
-        area_por_ref[ref] = area_por_ref.get(ref, 0.0) + quantidade_m2 * repeticao
+        area_por_acabamento[chave] = area_por_acabamento.get(chave, 0.0) + quantidade_m2 * repeticao
 
         perimetro_m = _perimetro_fitavel_m(item.get("largura_mm"), item.get("altura_mm"), item.get("profundidade_mm"))
-        metros_fita_por_ref[ref] = metros_fita_por_ref.get(ref, 0.0) + perimetro_m * repeticao
+        metros_fita_por_acabamento[chave] = metros_fita_por_acabamento.get(chave, 0.0) + perimetro_m * repeticao
 
-    for ref, area_total in area_por_ref.items():
-        preco_ref = tabela.get(ref)
+    for chave, area_total in area_por_acabamento.items():
+        espessura, nome = chave
+        rotulo = f"{espessura}mm {nome}" if espessura else nome
+        preco_ref = indice_acabamento.get(chave)
+
         if preco_ref is None or preco_ref.preco_chapa_fechada is None:
-            resultado.itens_sem_preco.append((ref, "(chapa)", "SEM_PRECO_CHAPA_NA_TABELA"))
+            resultado.itens_sem_preco.append((referencia_exemplo_por_acabamento[chave], f"(chapa) {rotulo}", "SEM_PRECO_CHAPA_NA_TABELA"))
         else:
             area_com_perda = area_total * (1 + pct_perda_corte)
             num_chapas = math.ceil(area_com_perda / area_util_chapa_m2)
             custo = num_chapas * preco_ref.preco_chapa_fechada
             resultado.chapas.append(
                 ResultadoChapasReferencia(
-                    reference=ref,
+                    acabamento=rotulo,
                     area_total_m2=area_total,
                     area_com_perda_m2=area_com_perda,
                     num_chapas=num_chapas,
@@ -131,14 +148,14 @@ def calcular_projeto(
                 )
             )
 
-        metros_total = metros_fita_por_ref.get(ref, 0.0)
+        metros_total = metros_fita_por_acabamento.get(chave, 0.0)
         if preco_ref is None or preco_ref.preco_fita_metro is None:
-            resultado.itens_sem_preco.append((ref, "(fita de borda)", "SEM_PRECO_FITA_NA_TABELA"))
+            resultado.itens_sem_preco.append((referencia_exemplo_por_acabamento[chave], f"(fita de borda) {rotulo}", "SEM_PRECO_FITA_NA_TABELA"))
         else:
             custo_fita = metros_total * preco_ref.preco_fita_metro
             resultado.fitas.append(
                 ResultadoFitaReferencia(
-                    reference=ref,
+                    acabamento=rotulo,
                     metros_total=metros_total,
                     preco_fita_metro=preco_ref.preco_fita_metro,
                     custo_fita=custo_fita,
@@ -150,9 +167,10 @@ def calcular_projeto(
         if item.get("unidade") != "UN":
             continue
         custo, status = calcular_custo_item_ferragem(item, tabela)
-        if status != "OK":
+        if status == "SEM_PRECO_NA_TABELA":
             resultado.itens_sem_preco.append((item.get("reference"), item.get("descricao"), status))
             continue
+        # status "OK" ou "OK_INCLUIDO_NA_CHAPA" (custo=0 explicito, informado pelo usuario) -- ambos entram no total
         resultado.ferragens.append(
             ResultadoFerragem(
                 descricao=item.get("descricao"),
