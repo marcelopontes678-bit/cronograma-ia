@@ -159,6 +159,8 @@ def gerar_xlsx_projeto(
     pct_comissao_atual = pct_comissao_vendas(config, faturamento_acumulado)
 
     linha = 5
+    ws.cell(row=linha, column=1, value="Composicao do markup (referencia -- nao alimenta o Divisor abaixo):").font = Font(name=FONT, italic=True, size=8, color="666666")
+    linha += 1
     ws.cell(row=linha, column=1, value="% Custo Fixo").font = Font(name=FONT, bold=True, size=10)
     c = ws.cell(row=linha, column=2, value=m["pct_custo_fixo"]); c.number_format = "0.00%"; c.font = FONTE_INPUT
     linha_custo_fixo = linha
@@ -179,13 +181,12 @@ def gerar_xlsx_projeto(
     c = ws.cell(row=linha, column=2, value=m["pct_lucro"]); c.number_format = "0.00%"; c.font = FONTE_INPUT
     linha_lucro = linha
     linha += 1
-    ws.cell(row=linha, column=1, value="Divisor de Markup").font = Font(name=FONT, bold=True, size=10)
-    c = ws.cell(
-        row=linha, column=2,
-        value=f"=1/(1-(B{linha_custo_fixo}+B{linha_impostos}+B{linha_comissao_fabrica}+B{linha_comissao_vendas}+B{linha_lucro}))",
-    )
+    ws.cell(row=linha, column=1, value="Divisor de Markup (fixo, editavel)").font = Font(name=FONT, bold=True, size=10)
+    c = ws.cell(row=linha, column=2, value=divisor_atual)
     c.number_format = "0.0000"
+    c.font = FONTE_INPUT
     celula_divisor = f"$B${linha}"
+    ws.cell(row=linha, column=3, value="(nao muda automaticamente com os % acima ou com os precos -- edite direto aqui)").font = Font(name=FONT, italic=True, size=8, color="666666")
     linha += 1
     ws.cell(row=linha, column=1, value="% Perda de Corte").font = Font(name=FONT, bold=True, size=10)
     c = ws.cell(row=linha, column=2, value=pct_perda_corte); c.number_format = "0.0%"; c.font = FONTE_INPUT
