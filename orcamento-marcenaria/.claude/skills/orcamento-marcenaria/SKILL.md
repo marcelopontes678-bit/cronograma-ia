@@ -13,7 +13,7 @@ Pipeline: **detectar tipo de arquivo -> extrair (normalizar) -> precificar -> ge
 |---|---|---|
 | `.xml` (exportacao "Listagem_montados" do Promob) | `extractors/extract_promob_xml.py` | Testado com projeto real |
 | `.dxf` (Promob ou convertido de DWG) | `extractors/extract_promob_dxf.py` | Testado com DXF real (gerado pelo proprio pipeline DWG->DXF); schema de blocos Promob ainda nao confirmado com um DXF exportado do Promob de verdade |
-| `.dwg` | `extractors/convert_dwg.py` (DWG->DXF via LibreDWG `dwg2dxf`, self-hosted; ODA File Converter como fallback) depois `extract_promob_dxf.py` | Testado ponta a ponta: LibreDWG compilado e `dwg2dxf` convertendo DWG->DXF de verdade, ver `Dockerfile` |
+| `.dwg` | `extractors/convert_dwg.py` (DWG->DXF via LibreDWG `dwg2dxf`, self-hosted; ODA File Converter como fallback) depois `extract_promob_dxf.py` | Testado ponta a ponta com DWG real do usuario (AutoCAD 2018/2019/2020, 30MB, projeto arquitetonico): converteu e extraiu 2455 blocos. IMPORTANTE: exige LibreDWG >= 0.14.8592 -- a 0.13.3 falha em DWG salvo como AC1032 (ver nota no Dockerfile) |
 | `.pdf` | `extractors/extract_pdf_plant.py` | Testado com planta real (2 paginas vetoriais) |
 | `.skp` | Nao le o binario direto. Pedir ao usuario para exportar `File > Generate Report...` no SketchUp e usar `extractors/extract_skp.py` no CSV/TXT gerado | Codigo escrito, aguardando teste com relatorio real |
 

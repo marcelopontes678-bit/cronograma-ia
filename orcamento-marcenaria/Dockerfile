@@ -9,7 +9,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Pinned em uma tag estavel do LibreDWG (ajuste a versao conforme necessario).
-ARG LIBREDWG_VERSION=0.13.3
+# IMPORTANTE: 0.13.3 falha ao ler DWG salvos como AutoCAD 2018/2019/2020
+# (AC1032, secoes comprimidas) -- testado com um DWG real do usuario, so
+# funcionou a partir da 0.14.8592. Nao volte para uma versao mais antiga
+# sem testar contra um DWG real nesse formato.
+ARG LIBREDWG_VERSION=0.14.8592
 RUN git clone --depth 1 --branch ${LIBREDWG_VERSION} https://github.com/LibreDWG/libredwg.git /tmp/libredwg \
     && cd /tmp/libredwg \
     && ./autogen.sh \
