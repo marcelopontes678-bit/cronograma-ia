@@ -41,7 +41,16 @@ Ambiente (ex: "Quarto Maria")
 
 ## 3. Tabela de precos por referencia
 
-Os extractors do Promob (XML/DXF) trazem geometria e um codigo `REFERENCE` de material/acabamento, mas **nao trazem preco em R$**. O preco de cada item vem de `config/tabela_precos_referencia.xlsx` (modelo em `tabela_precos_referencia_MODELO.xlsx`), que mapeia `REFERENCE -> preco unitario`. Use `engine/tabela_precos.py::calcular_custo_item` para resolver isso -- um item cuja referencia nao esta na tabela fica marcado `SEM_PRECO_NA_TABELA` e **nunca** entra no orcamento com custo zero ou estimado.
+Os extractors do Promob (XML/DXF) trazem geometria e um codigo `REFERENCE` de material/acabamento, mas **nao trazem preco em R$**. O preco vem de `config/tabela_precos_referencia.xlsx` (modelo em `tabela_precos_referencia_MODELO.xlsx`).
+
+**Modelo de precificacao (por chapa fechada + fita + ferragem, nao mais peca por peca):**
+- Itens de unidade `M2` (pecas de MDF): precificados por **CHAPA FECHADA**. `engine/calculo_projeto.py::calcular_projeto` soma a area (m2) de todas as pecas do mesmo `REFERENCE`, aplica 15% de perda de corte, divide pela area util de uma chapa padrao (2750x1830mm = 5,0325 m2) e arredonda pra cima -> numero de chapas x `preco_chapa_fechada`.
+- Fita de borda (mesmo `REFERENCE` da chapa): estimada pelo perimetro fitavel de cada peca (as duas maiores dimensoes; a menor e a espessura) x repeticao, somado em metros x `preco_fita_metro`.
+- Itens de unidade `UN` (ferragens/componentes): `preco_unitario_un` x quantidade/repeticao, como antes (`tabela_precos.py::calcular_custo_item_ferragem`).
+
+Referencia sem preco cadastrado fica em `resultado.itens_sem_preco` e **nunca** entra no total com custo zero ou estimado.
+
+`engine/orcamento_engine.py::calcular_orcamento_projeto` aplica o markup sobre o `custo_material_total` agregado do projeto inteiro (chapas+fita+ferragens), nao mais por modulo -- ver tambem a funcao legada `calcular_orcamento` (por modulo/peca) mantida para outras origens de dados que nao tenham essa granularidade M2/UN.
 
 ## 4. Precificacao
 

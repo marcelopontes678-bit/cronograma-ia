@@ -124,6 +124,43 @@ class ResultadoOrcamento:
         return sum(m.preco_final for m in self.modulos)
 
 
+@dataclass
+class ResultadoOrcamentoProjeto:
+    """Orcamento calculado no nivel do projeto inteiro, quando o custo de
+    material vem agregado por chapa/fita/ferragem (engine/calculo_projeto.py)
+    em vez de por modulo individual."""
+    divisor_markup: float
+    pct_comissao_vendas_aplicada: float
+    custo_material_total: float
+    preco_venda_material: float
+    custo_mao_de_obra: float
+
+    @property
+    def total(self) -> float:
+        return self.preco_venda_material + self.custo_mao_de_obra
+
+
+def calcular_orcamento_projeto(
+    custo_material_total: float,
+    config: dict,
+    faturamento_acumulado: float,
+    custo_mao_de_obra: float = 0.0,
+) -> ResultadoOrcamentoProjeto:
+    """Aplica a formula de precificacao a um custo de material ja agregado
+    no nivel do projeto (soma de chapas+fita+ferragens), em vez de por
+    modulo. Mao de obra e somada depois do markup, como sempre."""
+    divisor = calcular_divisor_markup(config, faturamento_acumulado)
+    pct_comissao = pct_comissao_vendas(config, faturamento_acumulado)
+    preco_venda_material = custo_material_total * divisor
+    return ResultadoOrcamentoProjeto(
+        divisor_markup=divisor,
+        pct_comissao_vendas_aplicada=pct_comissao,
+        custo_material_total=custo_material_total,
+        preco_venda_material=preco_venda_material,
+        custo_mao_de_obra=custo_mao_de_obra,
+    )
+
+
 def calcular_orcamento(
     ambientes: list[Ambiente],
     config: dict,
