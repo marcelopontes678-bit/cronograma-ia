@@ -100,12 +100,16 @@ def carregar_tabela_precos(caminho_xlsx: str | Path) -> dict[str, PrecoReferenci
 
 def indexar_precos_por_acabamento(tabela: dict[str, PrecoReferencia]) -> dict[tuple[int, str], PrecoReferencia]:
     """Agrupa as entradas da tabela por (espessura, nome_acabamento), pra casar
-    pecas MDF de REFERENCE diferente que vem da mesma chapa/acabamento."""
+    pecas MDF de REFERENCE diferente que vem da mesma chapa/acabamento.
+
+    Mesmo fallback usado por calculo_projeto.py ao agrupar itens: quando o
+    REFERENCE nao segue o padrao numerico do Promob (ex: nome de material
+    em texto livre vindo de uma extracao por Vision), usa o proprio texto
+    como chave (espessura=0) em vez de descartar a linha -- senao uma
+    linha de preco com REFERENCE em texto livre nunca seria encontrada."""
     indice: dict[tuple[int, str], PrecoReferencia] = {}
     for preco_ref in tabela.values():
-        chave = chave_acabamento(preco_ref.reference)
-        if chave is None:
-            continue
+        chave = chave_acabamento(preco_ref.reference) or (0, preco_ref.reference)
         existente = indice.get(chave)
         # prefere uma entrada que ja tenha preco de chapa/fita preenchido
         if existente is None or (existente.preco_chapa_fechada is None and preco_ref.preco_chapa_fechada is not None):
