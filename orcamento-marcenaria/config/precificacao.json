@@ -29,12 +29,12 @@
     "observacao": "O faturamento acumulado do periodo (usado para escolher a faixa de comissao de vendas em markup.comissao_vendas_faixas) e digitado manualmente pelo usuario no momento de gerar cada orcamento. Nao e calculado automaticamente a partir de historico."
   },
   "mao_de_obra": {
-    "incluida_no_markup": false,
-    "observacao": "Mao de obra de producao/montagem NAO entra na base dividida pelo markup. E somada apos o calculo do preco do material, como valor separado no orcamento final. O valor/regra de mao de obra por projeto ainda precisa ser definido."
+    "incluida_no_markup": true,
+    "observacao": "Mao de obra de producao/montagem entra na base de custo de fabricacao junto com o material, e e multiplicada pelo divisor de markup (nao e mais somada depois, fora do markup). O valor/regra de mao de obra por projeto ainda precisa ser definido."
   },
   "formula_final": {
-    "descricao": "preco_final_item = (custo_material / divisor_markup_de_venda) ... nota: divisor_markup ja e o multiplicador (1/(1-markup)), entao: preco_venda_material = custo_material * divisor_markup; preco_final = preco_venda_material + custo_mao_de_obra",
-    "custo_base": "apenas custo de material (chapas, ferragens, acabamentos) extraido do projeto normalizado",
-    "mao_de_obra": "somada depois, fora do markup, valor a definir por projeto"
+    "descricao": "custo_fabricacao = custo_material + custo_mao_de_obra; preco_venda_material = custo_fabricacao * divisor_markup; preco_final = preco_venda_material",
+    "custo_base": "custo de material (chapas, ferragens, acabamentos) MAIS custo de mao de obra, extraidos do projeto normalizado",
+    "mao_de_obra": "incluida na base de custo de fabricacao, multiplicada pelo markup junto com o material"
   }
 }

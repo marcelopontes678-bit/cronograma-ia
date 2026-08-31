@@ -44,8 +44,10 @@ class TestGerarXlsxComDadosReais:
         _, resultado_orcamento = self._gerar(
             caminho_quarto_maria_xml, caminho_tabela_precos_real, caminho_config_precificacao, tmp_path / "orc.xlsx"
         )
-        # valor conferido manualmente nesta sessao com o orcamento real do Quarto Maria
-        assert resultado_orcamento.total == pytest.approx(28837.34, abs=0.02)
+        # valor recalculado com a mao de obra dentro da base de markup
+        # (custo_fabricacao = custo_material + mao_de_obra, multiplicado
+        # pelo divisor -- ver orcamento_engine.calcular_orcamento_projeto)
+        assert resultado_orcamento.total == pytest.approx(30256.45, abs=0.02)
 
     def test_formulas_da_planilha_reproduzem_o_total_calculado(
         self, caminho_quarto_maria_xml, caminho_tabela_precos_real, caminho_config_precificacao, tmp_path

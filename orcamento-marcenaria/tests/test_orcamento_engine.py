@@ -68,16 +68,17 @@ class TestCalcularOrcamentoProjeto:
             faturamento_acumulado=100_000,
             custo_mao_de_obra=806.25,
         )
-        assert resultado.preco_venda_material == pytest.approx(10155.66 * resultado.divisor_markup)
-        assert resultado.total == pytest.approx(resultado.preco_venda_material + 806.25)
-        # valor conferido manualmente nesta sessao com o orcamento real do Quarto Maria
-        # (10155.66 aqui e o custo_material_total ja arredondado a 2 casas; a
-        # tolerancia cobre esse arredondamento de entrada, nao imprecisao do calculo)
-        assert resultado.total == pytest.approx(28837.34, abs=0.02)
+        assert resultado.preco_venda_material == pytest.approx((10155.66 + 806.25) * resultado.divisor_markup)
+        assert resultado.total == pytest.approx(resultado.preco_venda_material)
+        # valor recalculado com a mao de obra dentro da base de markup
+        # (custo_fabricacao = 10155.66 + 806.25 = 10961.91; 10155.66 aqui e o
+        # custo_material_total ja arredondado a 2 casas; a tolerancia cobre
+        # esse arredondamento de entrada, nao imprecisao do calculo)
+        assert resultado.total == pytest.approx(10961.91 * resultado.divisor_markup, abs=0.02)
 
 
 class TestCalcularOrcamentoLegadoPorModulo:
-    def test_mao_de_obra_soma_depois_do_markup(self, caminho_config_precificacao):
+    def test_mao_de_obra_entra_na_base_do_markup(self, caminho_config_precificacao):
         config = carregar_config(caminho_config_precificacao)
         ambiente = Ambiente(
             nome="Cozinha",
@@ -92,5 +93,5 @@ class TestCalcularOrcamentoLegadoPorModulo:
         resultado = calcular_orcamento([ambiente], config, faturamento_acumulado=100_000)
         modulo_resultado = resultado.modulos[0]
         assert modulo_resultado.custo_material == 800.0
-        assert modulo_resultado.preco_venda_material == pytest.approx(800.0 * resultado.divisor_markup)
-        assert modulo_resultado.preco_final == pytest.approx(modulo_resultado.preco_venda_material + 200.0)
+        assert modulo_resultado.preco_venda_material == pytest.approx(1000.0 * resultado.divisor_markup)
+        assert modulo_resultado.preco_final == pytest.approx(modulo_resultado.preco_venda_material)

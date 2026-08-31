@@ -57,7 +57,7 @@ def gerar_xlsx(
     ws.cell(row=linha_params + 2, column=2, value=faturamento_acumulado).number_format = MOEDA
 
     linha_cabecalho = linha_params + 4
-    headers = ["Ambiente / Modulo", "Custo Material (R$)", "Divisor Markup", "Preco Venda Material (R$)", "Mao de Obra (R$)", "Preco Final (R$)"]
+    headers = ["Ambiente / Modulo", "Custo Material (R$)", "Divisor Markup", "Mao de Obra (R$)", "Preco Venda (R$)", "Preco Final (R$)"]
     for col, h in enumerate(headers, start=1):
         c = ws.cell(row=linha_cabecalho, column=col, value=h)
         c.font = Font(name=FONT, bold=True, color=COR_HEADER_TEXTO, size=11)
@@ -78,19 +78,24 @@ def gerar_xlsx(
         cel_div.number_format = "0.0000"
         cel_div.border = BORDA
 
-        col_custo_letra = get_column_letter(2)
-        col_div_letra = get_column_letter(3)
-        cel_venda = ws.cell(row=linha_atual, column=4, value=f"={col_custo_letra}{linha_atual}*{col_div_letra}{linha_atual}")
-        cel_venda.number_format = MOEDA
-        cel_venda.border = BORDA
-
-        cel_mao_obra = ws.cell(row=linha_atual, column=5, value=modulo.custo_mao_de_obra)
+        cel_mao_obra = ws.cell(row=linha_atual, column=4, value=modulo.custo_mao_de_obra)
         cel_mao_obra.number_format = MOEDA
         cel_mao_obra.border = BORDA
 
-        col_venda_letra = get_column_letter(4)
-        col_mao_obra_letra = get_column_letter(5)
-        cel_final = ws.cell(row=linha_atual, column=6, value=f"={col_venda_letra}{linha_atual}+{col_mao_obra_letra}{linha_atual}")
+        col_custo_letra = get_column_letter(2)
+        col_div_letra = get_column_letter(3)
+        col_mao_obra_letra = get_column_letter(4)
+        # custo de fabricacao (material + mao de obra) x divisor de markup
+        cel_venda = ws.cell(
+            row=linha_atual,
+            column=5,
+            value=f"=({col_custo_letra}{linha_atual}+{col_mao_obra_letra}{linha_atual})*{col_div_letra}{linha_atual}",
+        )
+        cel_venda.number_format = MOEDA
+        cel_venda.border = BORDA
+
+        col_venda_letra = get_column_letter(5)
+        cel_final = ws.cell(row=linha_atual, column=6, value=f"={col_venda_letra}{linha_atual}")
         cel_final.number_format = MOEDA
         cel_final.border = BORDA
 
@@ -283,19 +288,24 @@ def gerar_xlsx_projeto(
     linha_custo_material = linha
 
     linha += 1
-    ws.cell(row=linha, column=1, value="Preco Venda Material (x Markup)").font = Font(name=FONT, bold=True)
-    ws.cell(row=linha, column=2, value=f"=B{linha_custo_material}*{celula_divisor}").number_format = MOEDA
-    linha_venda = linha
-
-    linha += 1
     ws.cell(row=linha, column=1, value="Mao de Obra (Custo Hora x Horas)").font = Font(name=FONT, bold=True)
     ws.cell(row=linha, column=2, value=f"={celula_custo_hora}*{celula_horas}").number_format = MOEDA
     linha_mao_obra = linha
 
     linha += 1
+    ws.cell(row=linha, column=1, value="Custo de Fabricacao (Material + Mao de Obra)").font = Font(name=FONT, bold=True)
+    ws.cell(row=linha, column=2, value=f"=B{linha_custo_material}+B{linha_mao_obra}").number_format = MOEDA
+    linha_custo_fabricacao = linha
+
+    linha += 1
+    ws.cell(row=linha, column=1, value="Preco Venda (Custo Fabricacao x Markup)").font = Font(name=FONT, bold=True)
+    ws.cell(row=linha, column=2, value=f"=B{linha_custo_fabricacao}*{celula_divisor}").number_format = MOEDA
+    linha_venda = linha
+
+    linha += 1
     ws.cell(row=linha, column=1, value="TOTAL GERAL").font = Font(name=FONT, bold=True, size=12)
     ws.cell(row=linha, column=1).fill = PatternFill(start_color=COR_TOTAL_BG, end_color=COR_TOTAL_BG, fill_type="solid")
-    c_total = ws.cell(row=linha, column=2, value=f"=B{linha_venda}+B{linha_mao_obra}")
+    c_total = ws.cell(row=linha, column=2, value=f"=B{linha_venda}")
     c_total.number_format = MOEDA
     c_total.font = Font(name=FONT, bold=True, size=12)
     c_total.fill = PatternFill(start_color=COR_TOTAL_BG, end_color=COR_TOTAL_BG, fill_type="solid")

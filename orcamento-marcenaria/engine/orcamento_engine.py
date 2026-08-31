@@ -8,10 +8,12 @@ Formula:
     divisor_markup = 1 / (1 - (pct_custo_fixo + pct_impostos +
                                 pct_comissao_fabrica + pct_comissao_vendas +
                                 pct_lucro))
-    preco_venda_material = custo_material * divisor_markup
-    preco_final_item = preco_venda_material + custo_mao_de_obra
+    custo_fabricacao = custo_material + custo_mao_de_obra
+    preco_venda_material = custo_fabricacao * divisor_markup
+    preco_final_item = preco_venda_material
 
-Mao de obra e somada depois do markup, nao e multiplicada por ele.
+Mao de obra entra na base do custo de fabricacao e e multiplicada pelo
+markup junto com o material (nao e mais somada depois, fora do markup).
 Montagem nao e cobrada como componente separado (config.montagem.cobrada_separadamente).
 """
 from __future__ import annotations
@@ -137,7 +139,7 @@ class ResultadoOrcamentoProjeto:
 
     @property
     def total(self) -> float:
-        return self.preco_venda_material + self.custo_mao_de_obra
+        return self.preco_venda_material
 
 
 def calcular_orcamento_projeto(
@@ -148,10 +150,12 @@ def calcular_orcamento_projeto(
 ) -> ResultadoOrcamentoProjeto:
     """Aplica a formula de precificacao a um custo de material ja agregado
     no nivel do projeto (soma de chapas+fita+ferragens), em vez de por
-    modulo. Mao de obra e somada depois do markup, como sempre."""
+    modulo. Mao de obra entra na base de custo de fabricacao e e
+    multiplicada pelo markup junto com o material."""
     divisor = calcular_divisor_markup(config, faturamento_acumulado)
     pct_comissao = pct_comissao_vendas(config, faturamento_acumulado)
-    preco_venda_material = custo_material_total * divisor
+    custo_fabricacao = custo_material_total + custo_mao_de_obra
+    preco_venda_material = custo_fabricacao * divisor
     return ResultadoOrcamentoProjeto(
         divisor_markup=divisor,
         pct_comissao_vendas_aplicada=pct_comissao,
@@ -174,8 +178,9 @@ def calcular_orcamento(
     for ambiente in ambientes:
         for modulo in ambiente.modulos:
             custo_material = modulo.custo_material_total
-            preco_venda_material = custo_material * divisor
-            preco_final = preco_venda_material + modulo.custo_mao_de_obra
+            custo_fabricacao = custo_material + modulo.custo_mao_de_obra
+            preco_venda_material = custo_fabricacao * divisor
+            preco_final = preco_venda_material
             resultados.append(
                 ResultadoModulo(
                     nome=f"{ambiente.nome} - {modulo.nome}",
@@ -221,6 +226,6 @@ if __name__ == "__main__":
     print(f"Divisor de markup: {resultado.divisor_markup:.4f}")
     print(f"Comissao de vendas aplicada: {resultado.pct_comissao_vendas_aplicada:.2%}")
     for m in resultado.modulos:
-        print(f"  {m.nome}: material R${m.custo_material:.2f} -> venda R${m.preco_venda_material:.2f} "
-              f"+ mao de obra R${m.custo_mao_de_obra:.2f} = R${m.preco_final:.2f}")
+        print(f"  {m.nome}: material R${m.custo_material:.2f} + mao de obra R${m.custo_mao_de_obra:.2f} "
+              f"= fabricacao R${m.custo_material + m.custo_mao_de_obra:.2f} -> venda R${m.preco_final:.2f}")
     print(f"TOTAL: R${resultado.total:.2f}")
