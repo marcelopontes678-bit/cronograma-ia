@@ -28,20 +28,33 @@ def _resposta_tool_use(ambientes, avisos=None):
     return resposta
 
 
+def _materiais(caixaria="MDF Cinza Cobalto Berneck"):
+    return {
+        "caixaria": caixaria, "frente": caixaria, "fundo": "MDF Branco",
+        "metodo_uniao": "minifix", "fixacao_fundo": "encaixado_em_rebaixo", "campos_inferidos": [],
+    }
+
+
 AMBIENTE_BANHEIRO_MOCK = [{
-    "nome": "Banheiro",
+    "nome_ambiente": "Banheiro",
     "modulos": [
         {
-            "nome": "Armario superior", "largura_mm": 930, "altura_mm": 1040, "profundidade_mm": 150,
-            "quantidade_portas": 1, "quantidade_gavetas": 0, "material_sugerido": "MDF Cinza Cobalto Berneck",
-            "material_explicito_no_desenho": True, "confianca": 0.9,
-            "bounding_box": {"pagina": 5, "x": 0.1, "y": 0.4, "width": 0.3, "height": 0.3}, "observacoes": "",
+            "id": "MOD-001", "nome": "Armario superior", "vista_referencia": "",
+            "dimensoes": {"largura_mm": 930, "altura_mm": 1040, "profundidade_mm": 150},
+            "componentes": {"portas": 1, "gavetas": 0, "prateleiras_internas": 1},
+            "especificacoes_materiais": _materiais(),
+            "ferragens_sugeridas": [], "itens_complementares": [],
+            "auditoria_visual": {"pagina_pdf": 5, "bounding_box": [400, 100, 700, 400]},
+            "descricao_resumida": "", "confianca": 0.9,
         },
         {
-            "nome": "Armario inferior", "largura_mm": None, "altura_mm": 610, "profundidade_mm": 580,
-            "quantidade_portas": 2, "quantidade_gavetas": 4, "material_sugerido": "MDF Verde Floresta Duratex",
-            "material_explicito_no_desenho": True, "confianca": 0.5,
-            "bounding_box": {"pagina": 5, "x": 0.1, "y": 0.7, "width": 0.3, "height": 0.2}, "observacoes": "largura ilegivel",
+            "id": "MOD-002", "nome": "Armario inferior", "vista_referencia": "",
+            "dimensoes": {"largura_mm": None, "altura_mm": 610, "profundidade_mm": 580},
+            "componentes": {"portas": 2, "gavetas": 4, "prateleiras_internas": 0},
+            "especificacoes_materiais": _materiais(caixaria="MDF Verde Floresta Duratex"),
+            "ferragens_sugeridas": [], "itens_complementares": [],
+            "auditoria_visual": {"pagina_pdf": 5, "bounding_box": [700, 100, 900, 400]},
+            "descricao_resumida": "largura ilegivel", "confianca": 0.5,
         },
     ],
 }]
@@ -116,7 +129,10 @@ class TestFluxoDeRevisaoEConfirmacao:
 
         for m in modulos:
             if m["confianca"] < 0.7:
-                r = client.patch(f"/api/v1/jobs/{job_id}/modulos/{m['id']}", json={"largura_mm": 890, "confianca": 1.0})
+                r = client.patch(
+                    f"/api/v1/jobs/{job_id}/modulos/{m['id']}",
+                    json={"dimensoes": {"largura_mm": 890}, "confianca": 1.0},
+                )
                 assert r.status_code == 200
                 assert r.json()["origem"] == "confirmado_humano"
 
@@ -127,11 +143,13 @@ class TestFluxoDeRevisaoEConfirmacao:
     def test_adicionar_modulo_manual(self, client, caminho_pdf_banheiro):
         job_id = _fazer_upload(client, caminho_pdf_banheiro).json()["job_id"]
         r = client.post(f"/api/v1/jobs/{job_id}/modulos", params={"nome_ambiente": "Banheiro"}, json={
-            "id": "mod_manual_01", "nome": "Prateleira adicional", "ambiente": "Banheiro",
-            "largura_mm": 600, "altura_mm": 300, "profundidade_mm": 250,
-            "quantidade_portas": 0, "quantidade_gavetas": 0, "material_sugerido": "MDF Branco",
-            "material_explicito_no_desenho": False, "confianca": 1.0, "bounding_boxes": [],
-            "origem": "adicionado_manual", "observacoes": "",
+            "id": "mod_manual_01", "nome": "Prateleira adicional", "vista_referencia": "",
+            "dimensoes": {"largura_mm": 600, "altura_mm": 300, "profundidade_mm": 250},
+            "componentes": {"portas": 0, "gavetas": 0, "prateleiras_internas": 0},
+            "especificacoes_materiais": _materiais(caixaria="MDF Branco"),
+            "ferragens_sugeridas": [], "itens_complementares": [],
+            "auditoria_visual": {"pagina_pdf": 5, "bounding_box": [0, 0, 100, 100]},
+            "descricao_resumida": "", "confianca": 1.0, "origem": "adicionado_manual",
         })
         assert r.status_code == 201
 
@@ -162,7 +180,10 @@ class TestOrcamento:
         modulos = [m for amb in client.get(f"/api/v1/jobs/{job_id}").json()["ambientes"] for m in amb["modulos"]]
         for m in modulos:
             if m["confianca"] < 0.7:
-                client.patch(f"/api/v1/jobs/{job_id}/modulos/{m['id']}", json={"largura_mm": 890, "confianca": 1.0})
+                client.patch(
+                    f"/api/v1/jobs/{job_id}/modulos/{m['id']}",
+                    json={"dimensoes": {"largura_mm": 890}, "confianca": 1.0},
+                )
         client.post(f"/api/v1/jobs/{job_id}/confirmar")
 
         r = client.post("/api/v1/orcamentos", json={

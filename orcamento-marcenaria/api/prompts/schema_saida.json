@@ -1,66 +1,116 @@
 {
   "name": "registrar_extracao",
-  "description": "Registra os ambientes e modulos de marcenaria identificados nesta(s) pagina(s) do projeto.",
+  "description": "Registra os ambientes e modulos de marcenaria identificados nesta(s) pagina(s) do projeto, no formato de levantamento tecnico do MAX.",
   "input_schema": {
     "type": "object",
     "properties": {
+      "projeto_id": { "type": "string" },
       "ambientes": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "nome": { "type": "string" },
+            "nome_ambiente": { "type": "string" },
             "modulos": {
               "type": "array",
               "items": {
                 "type": "object",
                 "properties": {
+                  "id": { "type": "string", "description": "Ex: 'MOD-001', unico dentro do job" },
                   "nome": { "type": "string" },
-                  "largura_mm": { "type": ["number", "null"] },
-                  "altura_mm": { "type": ["number", "null"] },
-                  "profundidade_mm": { "type": ["number", "null"] },
-                  "quantidade_portas": { "type": "integer", "minimum": 0 },
-                  "quantidade_gavetas": { "type": "integer", "minimum": 0 },
-                  "material_sugerido": { "type": "string" },
-                  "material_explicito_no_desenho": {
-                    "type": "boolean",
-                    "description": "false quando o material veio de inferencia (Preferencias Globais/Regras Aprendidas), nao do proprio desenho"
+                  "vista_referencia": { "type": "string" },
+                  "dimensoes": {
+                    "type": "object",
+                    "properties": {
+                      "largura_mm": { "type": ["number", "null"] },
+                      "altura_mm": { "type": ["number", "null"] },
+                      "profundidade_mm": { "type": ["number", "null"] }
+                    },
+                    "required": ["largura_mm", "altura_mm", "profundidade_mm"]
                   },
+                  "componentes": {
+                    "type": "object",
+                    "properties": {
+                      "portas": { "type": "integer", "minimum": 0 },
+                      "gavetas": { "type": "integer", "minimum": 0 },
+                      "prateleiras_internas": { "type": "integer", "minimum": 0 }
+                    },
+                    "required": ["portas", "gavetas", "prateleiras_internas"]
+                  },
+                  "especificacoes_materiais": {
+                    "type": "object",
+                    "properties": {
+                      "caixaria": { "type": "string" },
+                      "frente": { "type": "string" },
+                      "fundo": { "type": "string" },
+                      "metodo_uniao": { "type": "string" },
+                      "fixacao_fundo": { "type": "string" },
+                      "campos_inferidos": {
+                        "type": "array",
+                        "items": { "type": "string" },
+                        "description": "Nomes dos campos acima que vieram das Preferencias Globais/regras, nao do desenho"
+                      }
+                    },
+                    "required": ["caixaria", "frente", "fundo", "metodo_uniao", "fixacao_fundo", "campos_inferidos"]
+                  },
+                  "ferragens_sugeridas": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "nome": { "type": "string" },
+                        "quantidade": { "type": "integer", "minimum": 0 }
+                      },
+                      "required": ["nome", "quantidade"]
+                    }
+                  },
+                  "itens_complementares": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "nome": { "type": "string" },
+                        "tipo": { "type": "string" }
+                      },
+                      "required": ["nome", "tipo"]
+                    }
+                  },
+                  "auditoria_visual": {
+                    "type": "object",
+                    "properties": {
+                      "pagina_pdf": { "type": "integer", "minimum": 1 },
+                      "bounding_box": {
+                        "type": "array",
+                        "items": { "type": "integer", "minimum": 0, "maximum": 1000 },
+                        "minItems": 4,
+                        "maxItems": 4,
+                        "description": "[y_min, x_min, y_max, x_max], normalizado 0-1000"
+                      }
+                    },
+                    "required": ["pagina_pdf", "bounding_box"]
+                  },
+                  "descricao_resumida": { "type": "string" },
                   "confianca": {
                     "type": "number",
                     "minimum": 0,
                     "maximum": 1,
-                    "description": "Confianca honesta da leitura. < 0.7 para cotas ilegiveis, rotulos sobrepostos ou dimensoes inferidas por proximidade"
-                  },
-                  "bounding_box": {
-                    "type": "object",
-                    "description": "Coordenadas normalizadas (0-1) da regiao do modulo na pagina",
-                    "properties": {
-                      "pagina": { "type": "integer", "minimum": 1 },
-                      "x": { "type": "number", "minimum": 0, "maximum": 1 },
-                      "y": { "type": "number", "minimum": 0, "maximum": 1 },
-                      "width": { "type": "number", "minimum": 0, "maximum": 1 },
-                      "height": { "type": "number", "minimum": 0, "maximum": 1 }
-                    },
-                    "required": ["pagina", "x", "y", "width", "height"]
-                  },
-                  "observacoes": { "type": "string" }
+                    "description": "Confianca honesta da leitura (extensao deste sistema, ver secao 3 do prompt). < 0.7 para cotas ilegiveis, rotulos sobrepostos ou dimensoes inferidas por proximidade"
+                  }
                 },
                 "required": [
-                  "nome", "quantidade_portas", "quantidade_gavetas",
-                  "material_sugerido", "material_explicito_no_desenho",
-                  "confianca", "bounding_box"
+                  "id", "nome", "dimensoes", "componentes", "especificacoes_materiais",
+                  "auditoria_visual", "confianca"
                 ]
               }
             }
           },
-          "required": ["nome", "modulos"]
+          "required": ["nome_ambiente", "modulos"]
         }
       },
       "avisos": {
         "type": "array",
         "items": { "type": "string" },
-        "description": "Ambiguidades, itens fora de escopo (marmoraria/loucas/vidracaria), ou qualquer coisa que precise de revisao humana"
+        "description": "Ambiguidades ou qualquer coisa que precise de revisao humana"
       }
     },
     "required": ["ambientes", "avisos"]

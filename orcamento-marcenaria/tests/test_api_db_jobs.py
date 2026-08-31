@@ -3,22 +3,34 @@ from datetime import datetime, timezone
 import pytest
 
 from api.db import jobs as jobs_db
-from api.schemas.extracao import Ambiente, BoundingBox, ExtracaoResultado, Modulo, OrigemModulo, StatusExtracao
+from api.schemas.extracao import (
+    Ambiente,
+    AuditoriaVisual,
+    EspecificacoesMateriais,
+    ExtracaoResultado,
+    Modulo,
+    OrigemModulo,
+    StatusExtracao,
+)
 
 
 def _resultado(job_id, modulos):
     return ExtracaoResultado(
         job_id=job_id, arquivo_origem="x.pdf", status=StatusExtracao.AGUARDANDO_REVISAO,
-        ambientes=[Ambiente(nome="Banheiro", modulos=modulos)],
+        ambientes=[Ambiente(nome_ambiente="Banheiro", modulos=modulos)],
         criado_em=datetime.now(timezone.utc), atualizado_em=datetime.now(timezone.utc),
     )
 
 
 def _modulo(id_, confianca, origem=OrigemModulo.VISION_AUTOMATICO):
     return Modulo(
-        id=id_, nome="Armario", ambiente="Banheiro", quantidade_portas=0, quantidade_gavetas=0,
-        material_sugerido="MDF", material_explicito_no_desenho=True, confianca=confianca,
-        bounding_boxes=[BoundingBox(pagina=1, x=0, y=0, width=0.1, height=0.1)], origem=origem,
+        id=id_, nome="Armario",
+        especificacoes_materiais=EspecificacoesMateriais(
+            caixaria="MDF Branco", frente="MDF Branco", fundo="MDF Branco",
+            metodo_uniao="minifix", fixacao_fundo="encaixado_em_rebaixo",
+        ),
+        auditoria_visual=AuditoriaVisual(pagina_pdf=1, bounding_box=[0, 0, 100, 100]),
+        confianca=confianca, origem=origem,
     )
 
 
@@ -42,12 +54,24 @@ class TestSalvarECarregar:
 class TestAtualizarModulo:
     def test_corrige_modulo_e_marca_confirmado_humano(self, tmp_path):
         jobs_db.salvar(_resultado("job_1", [_modulo("m1", 0.5)]), tmp_path)
-        modulo = jobs_db.atualizar_modulo("job_1", "m1", {"largura_mm": 890, "confianca": 1.0}, tmp_path)
-        assert modulo.largura_mm == 890
+        modulo = jobs_db.atualizar_modulo(
+            "job_1", "m1", {"dimensoes": {"largura_mm": 890}, "confianca": 1.0}, tmp_path
+        )
+        assert modulo.dimensoes.largura_mm == 890
         assert modulo.origem == OrigemModulo.CONFIRMADO_HUMANO
 
         recarregado = jobs_db.carregar("job_1", tmp_path)
-        assert recarregado.ambientes[0].modulos[0].largura_mm == 890
+        assert recarregado.ambientes[0].modulos[0].dimensoes.largura_mm == 890
+
+    def test_patch_nao_apaga_outros_subcampos_aninhados(self, tmp_path):
+        modulo_original = _modulo("m1", 0.5)
+        modulo_original.dimensoes.largura_mm = 800
+        modulo_original.dimensoes.altura_mm = 700
+        jobs_db.salvar(_resultado("job_1", [modulo_original]), tmp_path)
+
+        modulo = jobs_db.atualizar_modulo("job_1", "m1", {"dimensoes": {"largura_mm": 890}}, tmp_path)
+        assert modulo.dimensoes.largura_mm == 890
+        assert modulo.dimensoes.altura_mm == 700  # nao deve ter sido apagado pelo patch parcial
 
     def test_modulo_inexistente_da_erro_claro(self, tmp_path):
         jobs_db.salvar(_resultado("job_1", [_modulo("m1", 0.5)]), tmp_path)
@@ -70,7 +94,7 @@ class TestAdicionarModulo:
         jobs_db.adicionar_modulo("job_1", "Cozinha", novo, tmp_path)
 
         resultado = jobs_db.carregar("job_1", tmp_path)
-        nomes = [a.nome for a in resultado.ambientes]
+        nomes = [a.nome_ambiente for a in resultado.ambientes]
         assert "Cozinha" in nomes
 
 

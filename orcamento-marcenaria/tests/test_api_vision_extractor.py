@@ -56,21 +56,33 @@ def _resposta_tool_use(ambientes, avisos=None):
 
 
 class TestExtrairDePdfComApiMockada:
+    def _materiais(self, caixaria="MDF Cinza Cobalto Berneck"):
+        return {
+            "caixaria": caixaria, "frente": caixaria, "fundo": "MDF Branco",
+            "metodo_uniao": "minifix", "fixacao_fundo": "encaixado_em_rebaixo", "campos_inferidos": [],
+        }
+
     def _ambiente_banheiro(self):
         return [{
-            "nome": "Banheiro",
+            "nome_ambiente": "Banheiro",
             "modulos": [
                 {
-                    "nome": "Armario superior", "largura_mm": 930, "altura_mm": 1040, "profundidade_mm": 150,
-                    "quantidade_portas": 1, "quantidade_gavetas": 0, "material_sugerido": "MDF Cinza Cobalto Berneck",
-                    "material_explicito_no_desenho": True, "confianca": 0.9,
-                    "bounding_box": {"pagina": 5, "x": 0.1, "y": 0.4, "width": 0.3, "height": 0.3}, "observacoes": "",
+                    "id": "MOD-001", "nome": "Armario superior", "vista_referencia": "",
+                    "dimensoes": {"largura_mm": 930, "altura_mm": 1040, "profundidade_mm": 150},
+                    "componentes": {"portas": 1, "gavetas": 0, "prateleiras_internas": 1},
+                    "especificacoes_materiais": self._materiais(),
+                    "ferragens_sugeridas": [], "itens_complementares": [],
+                    "auditoria_visual": {"pagina_pdf": 5, "bounding_box": [400, 100, 700, 400]},
+                    "descricao_resumida": "", "confianca": 0.9,
                 },
                 {
-                    "nome": "Armario inferior", "largura_mm": None, "altura_mm": 610, "profundidade_mm": 580,
-                    "quantidade_portas": 2, "quantidade_gavetas": 4, "material_sugerido": "MDF Verde Floresta Duratex",
-                    "material_explicito_no_desenho": True, "confianca": 0.5,
-                    "bounding_box": {"pagina": 5, "x": 0.1, "y": 0.7, "width": 0.3, "height": 0.2}, "observacoes": "largura ilegivel",
+                    "id": "MOD-002", "nome": "Armario inferior", "vista_referencia": "",
+                    "dimensoes": {"largura_mm": None, "altura_mm": 610, "profundidade_mm": 580},
+                    "componentes": {"portas": 2, "gavetas": 4, "prateleiras_internas": 0},
+                    "especificacoes_materiais": self._materiais(caixaria="MDF Verde Floresta Duratex"),
+                    "ferragens_sugeridas": [], "itens_complementares": [],
+                    "auditoria_visual": {"pagina_pdf": 5, "bounding_box": [700, 100, 900, 400]},
+                    "descricao_resumida": "largura ilegivel", "confianca": 0.5,
                 },
             ],
         }]
@@ -92,12 +104,15 @@ class TestExtrairDePdfComApiMockada:
 
     def test_status_sempre_comeca_aguardando_revisao_mesmo_com_alta_confianca(self, caminho_pdf_banheiro, tmp_path):
         ambiente_alta_confianca = [{
-            "nome": "Banheiro",
+            "nome_ambiente": "Banheiro",
             "modulos": [{
-                "nome": "Armario", "largura_mm": 900, "altura_mm": 1000, "profundidade_mm": 500,
-                "quantidade_portas": 1, "quantidade_gavetas": 0, "material_sugerido": "MDF Branco",
-                "material_explicito_no_desenho": True, "confianca": 1.0,
-                "bounding_box": {"pagina": 1, "x": 0, "y": 0, "width": 0.1, "height": 0.1}, "observacoes": "",
+                "id": "MOD-001", "nome": "Armario", "vista_referencia": "",
+                "dimensoes": {"largura_mm": 900, "altura_mm": 1000, "profundidade_mm": 500},
+                "componentes": {"portas": 1, "gavetas": 0, "prateleiras_internas": 0},
+                "especificacoes_materiais": self._materiais(caixaria="MDF Branco"),
+                "ferragens_sugeridas": [], "itens_complementares": [],
+                "auditoria_visual": {"pagina_pdf": 1, "bounding_box": [0, 0, 100, 100]},
+                "descricao_resumida": "", "confianca": 1.0,
             }],
         }]
         with patch("api.services.vision_extractor.Anthropic") as MockAnthropic:

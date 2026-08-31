@@ -25,8 +25,10 @@ Consulta o status/resultado do job. Fazer polling ate `status` sair de
 `processando`.
 
 **Response `200 OK`:** corpo = `ExtracaoResultado` (ver `schemas/extracao.py`).
-Quando `status == "aguardando_revisao"`, o frontend deve renderizar os
-`bounding_boxes` sobre a pagina e destacar modulos com `confianca < 0.7`.
+Quando `status == "aguardando_revisao"`, o frontend deve renderizar
+`modulo.auditoria_visual.bounding_box` (`[y_min, x_min, y_max, x_max]`,
+normalizado 0-1000) sobre a pagina `auditoria_visual.pagina_pdf`, e
+destacar modulos com `confianca < 0.7`.
 
 ---
 
@@ -36,9 +38,9 @@ Quando `status == "aguardando_revisao"`, o frontend deve renderizar os
 Corrige um modulo especifico (dimensao, material, etc). Marca
 `origem = "confirmado_humano"`.
 
-**Request:**
+**Request:** patch parcial (merge raso em subcampos aninhados como `dimensoes`):
 ```json
-{ "largura_mm": 900, "material_sugerido": "MDF Branco TX", "confianca": 1.0 }
+{ "dimensoes": { "largura_mm": 900 }, "especificacoes_materiais": { "caixaria": "MDF Branco TX" }, "confianca": 1.0 }
 ```
 **Response `200 OK`:** o `Modulo` atualizado.
 

@@ -5,12 +5,29 @@ import openpyxl
 import pytest
 from openpyxl.styles import Font
 
-from api.schemas.extracao import Ambiente, BoundingBox, ExtracaoResultado, Modulo, OrigemModulo, StatusExtracao
+from api.schemas.extracao import (
+    Ambiente,
+    AuditoriaVisual,
+    Componentes,
+    Dimensoes,
+    EspecificacoesMateriais,
+    ExtracaoResultado,
+    Modulo,
+    OrigemModulo,
+    StatusExtracao,
+)
 from api.services.pricing_service import PrecificacaoInvalidaError, gerar_orcamento
 
 
-def _bbox():
-    return BoundingBox(pagina=5, x=0.1, y=0.1, width=0.2, height=0.2)
+def _auditoria():
+    return AuditoriaVisual(pagina_pdf=5, bounding_box=[100, 100, 200, 200])
+
+
+def _materiais(caixaria="MDF Cinza Cobalto Berneck"):
+    return EspecificacoesMateriais(
+        caixaria=caixaria, frente=caixaria, fundo="MDF Branco",
+        metodo_uniao="minifix", fixacao_fundo="encaixado_em_rebaixo",
+    )
 
 
 def _tabela_precos_teste(caminho, preco_chapa=450.0, preco_fita=28.0):
@@ -34,15 +51,16 @@ def _tabela_precos_teste(caminho, preco_chapa=450.0, preco_fita=28.0):
 @pytest.fixture
 def resultado_confirmado():
     modulo = Modulo(
-        id="mod_0001", nome="Armario superior espelhado", ambiente="Banheiro",
-        largura_mm=930, altura_mm=1040, profundidade_mm=150,
-        quantidade_portas=1, quantidade_gavetas=0,
-        material_sugerido="MDF Cinza Cobalto Berneck", material_explicito_no_desenho=True,
-        confianca=0.9, bounding_boxes=[_bbox()], origem=OrigemModulo.CONFIRMADO_HUMANO,
+        id="mod_0001", nome="Armario superior espelhado",
+        dimensoes=Dimensoes(largura_mm=930, altura_mm=1040, profundidade_mm=150),
+        componentes=Componentes(portas=1, gavetas=0),
+        especificacoes_materiais=_materiais(),
+        auditoria_visual=_auditoria(),
+        confianca=0.9, origem=OrigemModulo.CONFIRMADO_HUMANO,
     )
     return ExtracaoResultado(
         job_id="job_pricing_teste", arquivo_origem="banheiro.pdf", status=StatusExtracao.CONFIRMADO,
-        ambientes=[Ambiente(nome="Banheiro", modulos=[modulo])],
+        ambientes=[Ambiente(nome_ambiente="Banheiro", modulos=[modulo])],
         avisos=[], criado_em=datetime.now(timezone.utc), atualizado_em=datetime.now(timezone.utc),
     )
 
@@ -82,14 +100,14 @@ class TestGerarOrcamentoComFatorDeArea:
 
     def test_modulo_sem_dimensoes_fica_pendente(self, tmp_path, caminho_config_precificacao):
         modulo_sem_dim = Modulo(
-            id="mod_0002", nome="Prateleira solta", ambiente="Banheiro",
-            quantidade_portas=0, quantidade_gavetas=0,
-            material_sugerido="MDF Branco", material_explicito_no_desenho=True,
-            confianca=0.4, bounding_boxes=[_bbox()], origem=OrigemModulo.VISION_AUTOMATICO,
+            id="mod_0002", nome="Prateleira solta",
+            especificacoes_materiais=_materiais(caixaria="MDF Branco"),
+            auditoria_visual=_auditoria(),
+            confianca=0.4, origem=OrigemModulo.VISION_AUTOMATICO,
         )
         resultado = ExtracaoResultado(
             job_id="j2", arquivo_origem="x.pdf", status=StatusExtracao.CONFIRMADO,
-            ambientes=[Ambiente(nome="Banheiro", modulos=[modulo_sem_dim])],
+            ambientes=[Ambiente(nome_ambiente="Banheiro", modulos=[modulo_sem_dim])],
             criado_em=datetime.now(timezone.utc), atualizado_em=datetime.now(timezone.utc),
         )
         tabela = _tabela_precos_teste(tmp_path / "tabela.xlsx")

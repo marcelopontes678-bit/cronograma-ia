@@ -75,7 +75,14 @@ def atualizar_modulo(job_id: str, modulo_id: str, patch: dict, dir_jobs: Path) -
         for i, modulo in enumerate(ambiente.modulos):
             if modulo.id == modulo_id:
                 dados_atualizados = modulo.model_dump()
-                dados_atualizados.update(patch)
+                for chave, valor in patch.items():
+                    # merge raso em campos aninhados (dimensoes, componentes,
+                    # especificacoes_materiais, auditoria_visual) para nao
+                    # exigir o objeto inteiro so pra corrigir um subcampo
+                    if isinstance(valor, dict) and isinstance(dados_atualizados.get(chave), dict):
+                        dados_atualizados[chave] = {**dados_atualizados[chave], **valor}
+                    else:
+                        dados_atualizados[chave] = valor
                 dados_atualizados["origem"] = patch.get("origem", "confirmado_humano")
                 novo_modulo = Modulo.model_validate(dados_atualizados)
                 ambiente.modulos[i] = novo_modulo
@@ -88,9 +95,9 @@ def atualizar_modulo(job_id: str, modulo_id: str, patch: dict, dir_jobs: Path) -
 def adicionar_modulo(job_id: str, nome_ambiente: str, modulo: Modulo, dir_jobs: Path) -> Modulo:
     resultado = carregar(job_id, dir_jobs)
 
-    ambiente_existente = next((a for a in resultado.ambientes if a.nome == nome_ambiente), None)
+    ambiente_existente = next((a for a in resultado.ambientes if a.nome_ambiente == nome_ambiente), None)
     if ambiente_existente is None:
-        ambiente_existente = Ambiente(nome=nome_ambiente)
+        ambiente_existente = Ambiente(nome_ambiente=nome_ambiente)
         resultado.ambientes.append(ambiente_existente)
 
     ambiente_existente.modulos.append(modulo)

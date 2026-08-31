@@ -27,14 +27,7 @@ from pathlib import Path
 
 from anthropic import Anthropic
 
-from api.schemas.extracao import (
-    Ambiente,
-    BoundingBox,
-    ExtracaoResultado,
-    Modulo,
-    OrigemModulo,
-    StatusExtracao,
-)
+from api.schemas.extracao import Ambiente, ExtracaoResultado, Modulo, OrigemModulo, StatusExtracao
 from api.schemas.preferencias import PreferenciasGlobais
 from api.services.pdf_to_images import PaginaRenderizada, renderizar_paginas
 
@@ -123,24 +116,14 @@ def _chamar_claude_para_lote(
 
 
 def _dict_para_modulo(dado_modulo: dict, contador_id: int) -> Modulo:
-    bb = dado_modulo["bounding_box"]
-    confianca = dado_modulo["confianca"]
-    return Modulo(
-        id=f"mod_{contador_id:04d}",
-        nome=dado_modulo["nome"],
-        ambiente="",  # preenchido pelo chamador (Ambiente ja sabe seu proprio nome)
-        largura_mm=dado_modulo.get("largura_mm"),
-        altura_mm=dado_modulo.get("altura_mm"),
-        profundidade_mm=dado_modulo.get("profundidade_mm"),
-        quantidade_portas=dado_modulo.get("quantidade_portas", 0),
-        quantidade_gavetas=dado_modulo.get("quantidade_gavetas", 0),
-        material_sugerido=dado_modulo["material_sugerido"],
-        material_explicito_no_desenho=dado_modulo["material_explicito_no_desenho"],
-        confianca=confianca,
-        bounding_boxes=[BoundingBox(**bb)],
-        origem=OrigemModulo.VISION_AUTOMATICO,
-        observacoes=dado_modulo.get("observacoes", ""),
-    )
+    """Constroi o Modulo a partir do dict retornado pelo tool_use do MAX.
+    O `id` que o MAX sugere (ex: 'MOD-001') pode colidir entre lotes, entao
+    substituimos por um contador globalmente unico do job; o restante do
+    dict ja tem o mesmo formato aninhado do schema Pydantic."""
+    dado = dict(dado_modulo)
+    dado["id"] = f"mod_{contador_id:04d}"
+    dado["origem"] = OrigemModulo.VISION_AUTOMATICO
+    return Modulo.model_validate(dado)
 
 
 def extrair_de_pdf(
@@ -178,12 +161,11 @@ def extrair_de_pdf(
             raise ExtracaoVisionError(f"job={job_id}: falha ao extrair paginas {paginas_str}: {exc}") from exc
 
         for amb_dado in resultado_lote.get("ambientes", []):
-            nome_amb = amb_dado["nome"]
-            ambiente = ambientes_por_nome.setdefault(nome_amb, Ambiente(nome=nome_amb))
+            nome_amb = amb_dado["nome_ambiente"]
+            ambiente = ambientes_por_nome.setdefault(nome_amb, Ambiente(nome_ambiente=nome_amb))
             for mod_dado in amb_dado.get("modulos", []):
                 contador_id += 1
                 modulo = _dict_para_modulo(mod_dado, contador_id)
-                modulo.ambiente = nome_amb
                 ambiente.modulos.append(modulo)
 
         avisos.extend(resultado_lote.get("avisos", []))

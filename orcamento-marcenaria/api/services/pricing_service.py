@@ -44,17 +44,20 @@ def _modulo_para_item_promob(modulo: Modulo) -> dict | None:
     calculo_projeto.py espera (mesmo shape dos itens do extractor Promob).
     Retorna None quando o modulo nao tem dimensoes suficientes para virar
     um item de chapa (nunca inventa largura/altura ausente)."""
-    if modulo.largura_mm is None or modulo.altura_mm is None:
+    largura_mm = modulo.dimensoes.largura_mm
+    altura_mm = modulo.dimensoes.altura_mm
+    if largura_mm is None or altura_mm is None:
         return None
 
     return {
         "unidade": "M2",
-        "reference": modulo.material_sugerido,
-        "quantidade": (modulo.largura_mm / 1000.0) * (modulo.altura_mm / 1000.0),  # area FRONTAL em m2, nao area de chapa
+        # caixaria e o material que domina a area de chapa (frente/fundo sao acabamentos de superficie menor)
+        "reference": modulo.especificacoes_materiais.caixaria,
+        "quantidade": (largura_mm / 1000.0) * (altura_mm / 1000.0),  # area FRONTAL em m2, nao area de chapa
         "repeticao": 1,
-        "largura_mm": modulo.largura_mm,
-        "altura_mm": modulo.altura_mm,
-        "profundidade_mm": modulo.profundidade_mm,
+        "largura_mm": largura_mm,
+        "altura_mm": altura_mm,
+        "profundidade_mm": modulo.dimensoes.profundidade_mm,
         "descricao": modulo.nome,
         "origem": f"modulo_id={modulo.id}",
     }
@@ -84,15 +87,20 @@ def _construir_ambientes_json(
             item["quantidade"] *= fator_area_frontal_para_chapa
             itens.append(item)
 
-            if modulo.quantidade_portas or modulo.quantidade_gavetas:
+            portas = modulo.componentes.portas
+            gavetas = modulo.componentes.gavetas
+            if portas or gavetas:
                 avisos.append(
-                    f"{modulo.id} ({modulo.nome}): {modulo.quantidade_portas} porta(s) / "
-                    f"{modulo.quantidade_gavetas} gaveta(s) detectadas, mas contagem de ferragens "
-                    f"(dobradicas/corredicas) ainda nao e calculada automaticamente nesta versao."
+                    f"{modulo.id} ({modulo.nome}): {portas} porta(s) / "
+                    f"{gavetas} gaveta(s) detectadas, mas contagem de ferragens "
+                    f"(dobradicas/corredicas) ainda nao e calculada automaticamente nesta versao "
+                    f"(ferragens_sugeridas pelo MAX: {[f.nome for f in modulo.ferragens_sugeridas]})."
                 )
 
         if itens:
-            ambientes_json.append({"nome": ambiente.nome, "modulos": [{"nome": ambiente.nome, "itens": itens}]})
+            ambientes_json.append(
+                {"nome": ambiente.nome_ambiente, "modulos": [{"nome": ambiente.nome_ambiente, "itens": itens}]}
+            )
 
     return ambientes_json
 

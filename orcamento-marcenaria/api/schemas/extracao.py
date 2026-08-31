@@ -1,67 +1,113 @@
-"""Schemas do resultado de extracao via Claude Vision.
+"""Schemas do resultado de extracao do agente MAX (Claude Vision, ver
+prompts/system_extrator.md). Schema de modulo bem mais rico que a v1:
+dimensoes/componentes/materiais aninhados, ferragens sugeridas e itens
+complementares (fora do escopo de marcenaria) explicitos, e
+auditoria_visual com bounding box no formato [y_min, x_min, y_max, x_max]
+normalizado 0-1000 (convencao pedida para o frontend).
 
-Diferente do extractor Promob (dados exatos de um XML estruturado), a
-extracao por Vision e uma INFERENCIA sobre uma imagem -- por isso todo
-Modulo carrega confianca e bounding_boxes, e a extracao nunca alimenta
-o motor de precificacao diretamente sem confirmacao humana (ver
-ExtracaoResultado.status).
-"""
+Extensao propria (nao fazia parte do schema pedido, mas preserva o
+principio central do projeto de nunca deixar dado nao confirmado virar
+orcamento): todo Modulo carrega `confianca` (0-1) e `origem` -- a
+extracao So sai de aguardando_revisao para confirmado com confirmacao
+humana explicita, exatamente como na v1."""
 from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
 
-from pydantic import BaseModel, Field
-
-
-class BoundingBox(BaseModel):
-    """Retangulo de destaque na pagina renderizada, em coordenadas
-    normalizadas (0-1) relativas ao tamanho da pagina -- independente
-    da resolucao usada para render no frontend."""
-    pagina: int = Field(..., ge=1, description="Numero da pagina no PDF original (1-indexed)")
-    x: float = Field(..., ge=0, le=1)
-    y: float = Field(..., ge=0, le=1)
-    width: float = Field(..., ge=0, le=1)
-    height: float = Field(..., ge=0, le=1)
+from pydantic import BaseModel, Field, field_validator
 
 
 class OrigemModulo(str, Enum):
-    VISION_AUTOMATICO = "vision_automatico"      # extraido pela LLM sem edicao
+    VISION_AUTOMATICO = "vision_automatico"      # extraido pelo MAX sem edicao
     CONFIRMADO_HUMANO = "confirmado_humano"       # usuario revisou e confirmou/corrigiu
-    ADICIONADO_MANUAL = "adicionado_manual"       # usuario adicionou um modulo que a IA nao pegou
+    ADICIONADO_MANUAL = "adicionado_manual"       # usuario adicionou um modulo que o MAX nao pegou
 
 
-class Modulo(BaseModel):
-    id: str = Field(..., description="ID estavel dentro do job, ex: 'mod_003'")
-    nome: str = Field(..., description="Ex: 'Armario Superior', 'Cristaleira'")
-    ambiente: str
+class AuditoriaVisual(BaseModel):
+    pagina_pdf: int = Field(..., ge=1)
+    bounding_box: list[int] = Field(
+        ..., min_length=4, max_length=4,
+        description="[y_min, x_min, y_max, x_max], normalizado 0-1000 relativo a pagina",
+    )
+
+    @field_validator("bounding_box")
+    @classmethod
+    def _valores_dentro_de_0_1000(cls, v: list[int]) -> list[int]:
+        if any(x < 0 or x > 1000 for x in v):
+            raise ValueError("bounding_box deve ter todos os valores entre 0 e 1000")
+        return v
+
+
+class Dimensoes(BaseModel):
     largura_mm: float | None = None
     altura_mm: float | None = None
     profundidade_mm: float | None = None
-    quantidade_portas: int = 0
-    quantidade_gavetas: int = 0
-    material_sugerido: str = Field(..., description="Inferido do desenho ou das Preferencias Globais quando nao especificado")
-    material_explicito_no_desenho: bool = Field(..., description="False quando o material veio de inferencia via Preferencias Globais, nao do proprio desenho")
-    confianca: float = Field(..., ge=0, le=1, description="Confianca da IA nesta leitura (0-1). < 0.7 deve ser destacado para revisao")
-    bounding_boxes: list[BoundingBox] = Field(default_factory=list)
+
+
+class Componentes(BaseModel):
+    portas: int = 0
+    gavetas: int = 0
+    prateleiras_internas: int = 0
+
+
+class EspecificacoesMateriais(BaseModel):
+    caixaria: str
+    frente: str
+    fundo: str
+    metodo_uniao: str
+    fixacao_fundo: str
+    campos_inferidos: list[str] = Field(
+        default_factory=list,
+        description="Nomes destes campos (ex: 'metodo_uniao') que vieram das Preferencias Globais/regras "
+        "do MAX, nao do proprio desenho -- nunca fica vazio silenciosamente quando algo foi inferido.",
+    )
+
+
+class FerragemSugerida(BaseModel):
+    nome: str
+    quantidade: int = Field(..., ge=0)
+
+
+class ItemComplementar(BaseModel):
+    """Elementos fora do escopo de marcenaria (regra 6 do MAX): pedra,
+    espelho, serralheria, estofado, fita de LED, etc."""
+    nome: str
+    tipo: str
+
+
+class Modulo(BaseModel):
+    id: str = Field(..., description="Ex: 'MOD-001', unico dentro do job")
+    nome: str
+    vista_referencia: str = ""
+    dimensoes: Dimensoes = Field(default_factory=Dimensoes)
+    componentes: Componentes = Field(default_factory=Componentes)
+    especificacoes_materiais: EspecificacoesMateriais
+    ferragens_sugeridas: list[FerragemSugerida] = Field(default_factory=list)
+    itens_complementares: list[ItemComplementar] = Field(default_factory=list)
+    auditoria_visual: AuditoriaVisual
+    descricao_resumida: str = ""
+
+    # extensao propria do skill (ver docstring do modulo)
+    confianca: float = Field(..., ge=0, le=1, description="Confianca do MAX nesta leitura (0-1). < 0.7 exige revisao humana antes de confirmar o job")
     origem: OrigemModulo = OrigemModulo.VISION_AUTOMATICO
-    observacoes: str = ""
 
 
 class Ambiente(BaseModel):
-    nome: str
+    nome_ambiente: str
     modulos: list[Modulo] = Field(default_factory=list)
 
 
 class StatusExtracao(str, Enum):
     PROCESSANDO = "processando"
-    AGUARDANDO_REVISAO = "aguardando_revisao"     # extraido, mas tem itens de baixa confianca
+    AGUARDANDO_REVISAO = "aguardando_revisao"     # extraido, mas precisa de revisao humana antes de confirmar
     CONFIRMADO = "confirmado"                     # humano revisou -- agora pode ir para o pricing_service
     ERRO = "erro"
 
 
 class ExtracaoResultado(BaseModel):
     job_id: str
+    projeto_id: str = ""
     arquivo_origem: str
     status: StatusExtracao
     ambientes: list[Ambiente] = Field(default_factory=list)
