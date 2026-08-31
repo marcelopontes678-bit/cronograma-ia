@@ -230,7 +230,21 @@ orcamento-marcenaria/
 └── Dockerfile                  # LibreDWG + Python + Node, self-hosted
 ```
 
-## 6. Princípios do projeto (não violar)
+## 6. Testes
+
+```bash
+pytest
+```
+
+114 testes cobrindo o pipeline CLI (`engine/`, `extractors/`) e a API
+(`api/`), rodando contra dados reais sempre que possível — o XML/PDF do
+projeto Quarto Maria, um DWG real convertido via LibreDWG (`dwg2dxf`,
+pulado automaticamente se não estiver instalado). As chamadas à API da
+Anthropic são mockadas na fronteira do SDK (`anthropic.Anthropic`), pelo
+mesmo motivo descrito na seção 3.4 — este ambiente de desenvolvimento não
+tem acesso de rede liberado para chamadas pagas.
+
+## 7. Princípios do projeto (não violar)
 
 - Nunca inventar preço, dimensão ou área — item sem dado real fica
   sinalizado como pendência, nunca com valor estimado silenciosamente.
