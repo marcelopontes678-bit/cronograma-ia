@@ -108,22 +108,75 @@ def _chamar_claude_para_lote(
 
     for bloco in resposta.content:
         if bloco.type == "tool_use" and bloco.name == ferramenta["name"]:
-            return bloco.input
+            return _normalizar_input_ferramenta(bloco.input)
 
     raise ExtracaoVisionError(
         f"Claude nao retornou o tool_use esperado ('{ferramenta['name']}'). Resposta: {resposta.content}"
     )
 
 
-def _dict_para_modulo(dado_modulo: dict, contador_id: int) -> Modulo:
+def _normalizar_input_ferramenta(entrada: dict) -> dict:
+    """Confirmado empiricamente contra a API real (nao era um risco
+    hipotetico do schema): as vezes o modelo serializa o objeto
+    {"ambientes": [...], "avisos": [...]} inteiro como uma STRING dentro
+    do proprio campo "ambientes", em vez de popular o array direto --
+    provavelmente por causa da profundidade do schema aninhado. Detecta
+    esse formato e desembrulha, registrando um aviso explicito em vez de
+    aceitar silenciosamente."""
+    if not isinstance(entrada.get("ambientes"), str):
+        return entrada
+
+    try:
+        desembrulhado = json.loads(entrada["ambientes"])
+    except json.JSONDecodeError as exc:
+        raise ExtracaoVisionError(
+            f"Campo 'ambientes' veio como string mas nao e JSON valido: {exc}"
+        ) from exc
+
+    if not isinstance(desembrulhado, dict) or "ambientes" not in desembrulhado:
+        raise ExtracaoVisionError(
+            "Campo 'ambientes' veio como string, mas o JSON desembrulhado nao tem o formato esperado "
+            f"(chaves: {list(desembrulhado.keys()) if isinstance(desembrulhado, dict) else type(desembrulhado)})."
+        )
+
+    logger.warning(
+        "Resposta do modelo veio com 'ambientes' serializado como string em vez de array -- desembrulhado automaticamente."
+    )
+    avisos = list(entrada.get("avisos") or []) + list(desembrulhado.get("avisos") or [])
+    avisos.append(
+        "A resposta do modelo veio com o campo 'ambientes' serializado como string (formato inesperado do schema) "
+        "-- corrigida automaticamente, mas revise os dados deste lote com atencao extra."
+    )
+    return {"ambientes": desembrulhado["ambientes"], "avisos": avisos}
+
+
+def _dict_para_modulo(dado_modulo: dict, contador_id: int) -> tuple[Modulo, str | None]:
     """Constroi o Modulo a partir do dict retornado pelo tool_use do MARC.
     O `id` que o MARC sugere (ex: 'MOD-001') pode colidir entre lotes, entao
     substituimos por um contador globalmente unico do job; o restante do
-    dict ja tem o mesmo formato aninhado do schema Pydantic."""
+    dict ja tem o mesmo formato aninhado do schema Pydantic.
+
+    Retorna (modulo, aviso). Confirmado empiricamente contra a API real: o
+    modelo as vezes estoura levemente o range 0-1000 do bounding_box (e uma
+    coordenada normalizada estimada visualmente, nao uma cota exata) -- em
+    vez de descartar o modulo inteiro, o valor e limitado (clamp) ao range
+    valido e o desvio fica registrado num aviso, nunca escondido."""
     dado = dict(dado_modulo)
     dado["id"] = f"mod_{contador_id:04d}"
     dado["origem"] = OrigemModulo.VISION_AUTOMATICO
-    return Modulo.model_validate(dado)
+
+    aviso = None
+    bbox = dado.get("auditoria_visual", {}).get("bounding_box")
+    if isinstance(bbox, list) and any(not isinstance(v, int) or v < 0 or v > 1000 for v in bbox):
+        bbox_original = list(bbox)
+        bbox_corrigido = [max(0, min(1000, round(v))) for v in bbox]
+        dado["auditoria_visual"]["bounding_box"] = bbox_corrigido
+        aviso = (
+            f"{dado['id']} ({dado.get('nome', '?')}): bounding_box {bbox_original} fora do range 0-1000, "
+            f"ajustado para {bbox_corrigido} -- confira a posicao do destaque visual manualmente."
+        )
+
+    return Modulo.model_validate(dado), aviso
 
 
 def extrair_de_pdf(
@@ -165,8 +218,10 @@ def extrair_de_pdf(
             ambiente = ambientes_por_nome.setdefault(nome_amb, Ambiente(nome_ambiente=nome_amb))
             for mod_dado in amb_dado.get("modulos", []):
                 contador_id += 1
-                modulo = _dict_para_modulo(mod_dado, contador_id)
+                modulo, aviso_bbox = _dict_para_modulo(mod_dado, contador_id)
                 ambiente.modulos.append(modulo)
+                if aviso_bbox:
+                    avisos.append(aviso_bbox)
 
         avisos.extend(resultado_lote.get("avisos", []))
 

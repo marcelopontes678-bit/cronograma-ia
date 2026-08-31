@@ -198,22 +198,40 @@ Preferências Globais (`/usuarios/{id}/preferencias`) e Regras Aprendidas
 via feedback (`/usuarios/{id}/feedback`) são injetadas automaticamente no
 prompt do extrator nas próximas execuções desse usuário.
 
-### 3.4 O que ainda não foi validado com a API real
+### 3.4 Validação com a API real (feita)
 
-Este ambiente de desenvolvimento não tem acesso de rede liberado para
-chamadas pagas à API da Anthropic. Todos os serviços foram testados
-**de verdade** (renderização de PDF, persistência em arquivo, roteamento
-HTTP via `TestClient`, matemática de precificação conferida à mão) com a
-chamada ao Claude **mockada na fronteira do SDK** (`anthropic.Anthropic`).
-Antes de usar em produção, rode pelo menos um upload real com uma chave
-de API válida e confira:
+`vision_extractor.py` e `feedback_service.py` já foram testados com uma
+chamada real à API da Anthropic (não só mockada), contra o PDF real
+`tests/arquivos_exemplo/silvana_helio/Banheiro.pdf`. A extração
+completa funciona ponta a ponta e produziu um `ExtracaoResultado`
+válido com 3 módulos, aplicando corretamente as diretrizes de
+engenharia do MARC (método de união/fixação inferidos e registrados em
+`campos_inferidos`, granito/vidro/louças classificados fora do escopo
+de marcenaria).
 
-- Se o modelo respeita o `tool_choice` forçado e retorna o schema
-  esperado (`api/prompts/schema_saida.json`).
-- Se o `bounding_box` de `auditoria_visual` retornado faz sentido
-  visualmente sobre a página renderizada.
-- Custo/tempo por página — ajuste `PAGINAS_POR_LOTE` em
-  `api/services/vision_extractor.py` se necessário.
+Dois problemas reais de robustez foram encontrados e corrigidos a
+partir dessa validação (não eram hipotéticos — só apareceram contra a
+API de verdade):
+
+- Às vezes o modelo serializa o objeto `{"ambientes": [...], "avisos": [...]}`
+  inteiro como uma **string** dentro do próprio campo `ambientes`, em
+  vez de popular o array direto (provavelmente por causa da
+  profundidade do schema aninhado). `_normalizar_input_ferramenta()`
+  detecta e desembrulha esse formato, registrando um aviso explícito.
+- O `bounding_box` retornado às vezes estoura levemente o range 0-1000
+  (é uma estimativa visual, não uma cota exata). `_dict_para_modulo()`
+  agora faz *clamp* do valor ao range válido e adiciona um aviso
+  pedindo conferência manual daquele destaque, em vez de descartar o
+  módulo inteiro com um erro de validação.
+
+Ainda vale conferir antes de um uso mais intenso em produção:
+
+- Custo/tempo por página em lotes maiores — ajuste `PAGINAS_POR_LOTE`
+  em `api/services/vision_extractor.py` se necessário.
+- Se o `bounding_box` (já dentro do range, sem o clamp) corresponde
+  visualmente à posição real do módulo na página renderizada — isso
+  exige comparar contra a imagem, o que não foi verificado nesta
+  validação.
 
 ---
 
@@ -271,10 +289,15 @@ pytest
 120 testes cobrindo o pipeline CLI (`engine/`, `extractors/`) e a API
 (`api/`), rodando contra dados reais sempre que possível — o XML/PDF do
 projeto Quarto Maria, um DWG real convertido via LibreDWG (`dwg2dxf`,
-pulado automaticamente se não estiver instalado). As chamadas à API da
-Anthropic são mockadas na fronteira do SDK (`anthropic.Anthropic`), pelo
-mesmo motivo descrito na seção 3.4 — este ambiente de desenvolvimento não
-tem acesso de rede liberado para chamadas pagas.
+pulado automaticamente se não estiver instalado). Por padrão, esses 120
+testes mockam a chamada à API da Anthropic na fronteira do SDK
+(`anthropic.Anthropic`), já que não é desejável gastar crédito de API a
+cada execução da suíte automatizada. A extração via Vision e o
+`feedback_service.py` já foram validados **manualmente** contra a API
+real ao menos uma vez (ver seção 3.4) — essa validação real não faz
+parte da suíte `pytest` e precisa ser repetida sempre que o
+`schema_saida.json` ou o `system_extrator.md` mudarem de forma
+relevante.
 
 ## 7. Princípios do projeto (não violar)
 
