@@ -89,6 +89,19 @@ async def get_job(db: AsyncSession, job_id: uuid.UUID, current_user: Usuario) ->
     return job
 
 
+def caminho_pagina_pdf(job: OrcamentoJob, numero: int) -> Path:
+    """Mesma logica de path usada em criar_job() (router) pra montar
+    pasta_trabalho -- a pagina so existe apos rodar_extracao_em_background
+    ter chamado renderizar_paginas()."""
+    return (
+        Path(settings.ORCAMENTO_STORAGE_DIR)
+        / str(job.empresa_id)
+        / str(job.id)
+        / "paginas"
+        / f"pagina_{numero:03d}.png"
+    )
+
+
 async def listar_jobs(
     db: AsyncSession, current_user: Usuario, skip: int = 0, limit: int = 20
 ) -> list[OrcamentoJob]:

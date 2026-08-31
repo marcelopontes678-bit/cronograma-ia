@@ -141,6 +141,35 @@ class TestOrcamentoJobs:
         )
         assert resp.status_code == 404
 
+    async def test_get_pagina_pdf_retorna_png(self, client: AsyncClient, empresa_a):
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        headers = {"Authorization": f"Bearer {token}"}
+        job = await _upload_job(client, token)
+
+        resp = await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/1", headers=headers)
+        assert resp.status_code == 200
+        assert resp.headers["content-type"] == "image/png"
+        assert len(resp.content) > 0
+        assert resp.content[:8] == b"\x89PNG\r\n\x1a\n"  # assinatura PNG
+
+    async def test_get_pagina_pdf_inexistente_da_404(self, client: AsyncClient, empresa_a):
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        headers = {"Authorization": f"Bearer {token}"}
+        job = await _upload_job(client, token)
+
+        resp = await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/999", headers=headers)
+        assert resp.status_code == 404
+
+    async def test_get_pagina_pdf_isolamento_multi_tenant(self, client: AsyncClient, empresa_a, empresa_b):
+        token_a = await obter_token(client, "admin@a.com", "senhaA123!")
+        token_b = await obter_token(client, "admin@b.com", "senhaB123!")
+        job = await _upload_job(client, token_a)
+
+        resp = await client.get(
+            f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/1", headers={"Authorization": f"Bearer {token_b}"}
+        )
+        assert resp.status_code == 404
+
         resp_lista = await client.get(
             "/api/v1/orcamentos/jobs", headers={"Authorization": f"Bearer {token_b}"}
         )

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import fitz  # PyMuPDF
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -106,6 +106,23 @@ async def get_job(
     current_user: Usuario = Depends(get_current_user),
 ):
     return await orcamento_service.get_job(db, job_id, current_user)
+
+
+@router.get("/jobs/{job_id}/paginas/{numero}")
+async def get_pagina_pdf(
+    job_id: uuid.UUID,
+    numero: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user),
+):
+    """Serve o PNG da pagina renderizada (para overlay de bounding_box no
+    frontend) -- so existe apos a extracao rodar; 404 antes disso ou se a
+    pagina nao existir no PDF."""
+    job = await orcamento_service.get_job(db, job_id, current_user)
+    caminho = orcamento_service.caminho_pagina_pdf(job, numero)
+    if not caminho.exists():
+        raise HTTPException(404, f"Pagina {numero} nao encontrada para este job.")
+    return FileResponse(caminho, media_type="image/png")
 
 
 # --------------------------------------------------------------------------
