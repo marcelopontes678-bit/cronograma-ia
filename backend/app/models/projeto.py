@@ -47,7 +47,7 @@ class Projeto(TimestampMixin, Base):
     nome: Mapped[str] = mapped_column(sa.String(300), nullable=False)
     descricao: Mapped[str | None] = mapped_column(sa.Text)
     status: Mapped[StatusProjeto] = mapped_column(
-        sa.Enum(StatusProjeto, name="statusprojeto"),
+        sa.Enum(StatusProjeto, name="statusprojeto", values_callable=lambda e: [m.value for m in e]),
         nullable=False,
         default=StatusProjeto.RASCUNHO,
     )

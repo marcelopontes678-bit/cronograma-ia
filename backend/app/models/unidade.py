@@ -30,7 +30,8 @@ class Unidade(TimestampMixin, Base):
     )
     nome: Mapped[str] = mapped_column(sa.String(200), nullable=False)
     tipo: Mapped[TipoUnidade] = mapped_column(
-        sa.Enum(TipoUnidade, name="tipounidade"), nullable=False
+        sa.Enum(TipoUnidade, name="tipounidade", values_callable=lambda e: [m.value for m in e]),
+        nullable=False,
     )
     codigo: Mapped[str | None] = mapped_column(sa.String(20))
     email: Mapped[str | None] = mapped_column(sa.String(254))
