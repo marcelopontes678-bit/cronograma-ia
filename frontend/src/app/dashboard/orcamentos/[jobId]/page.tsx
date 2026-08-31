@@ -5,6 +5,8 @@ import { api, extractErrorMessage } from "@/lib/api";
 import { Modulo, OrcamentoJob, OrcamentoResponse } from "@/lib/types";
 import { PaginaComOverlay } from "@/components/orcamento/PaginaComOverlay";
 
+export const runtime = "edge";
+
 const LIMIAR_CONFIANCA = 0.7;
 
 const STATUS_LABEL: Record<string, string> = {

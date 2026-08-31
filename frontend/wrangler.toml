@@ -1,0 +1,9 @@
+# Config do Cloudflare Pages para este frontend Next.js, via
+# @cloudflare/next-on-pages (npm run pages:build gera .vercel/output/static
+# a partir do build padrao do Next). Nao confundir com o wrangler.jsonc na
+# raiz do monorepo, que e de um Worker diferente e nao relacionado (o app
+# GIBOR em treino/).
+name = "smartfactory-frontend"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
