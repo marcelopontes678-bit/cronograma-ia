@@ -94,7 +94,7 @@ def _construir_ambientes_json(
                     f"{modulo.id} ({modulo.nome}): {portas} porta(s) / "
                     f"{gavetas} gaveta(s) detectadas, mas contagem de ferragens "
                     f"(dobradicas/corredicas) ainda nao e calculada automaticamente nesta versao "
-                    f"(ferragens_sugeridas pelo MAX: {[f.nome for f in modulo.ferragens_sugeridas]})."
+                    f"(ferragens_sugeridas pelo MARC: {[f.nome for f in modulo.ferragens_sugeridas]})."
                 )
 
         if itens:

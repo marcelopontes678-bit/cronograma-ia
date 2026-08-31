@@ -1,4 +1,4 @@
-"""Schemas do resultado de extracao do agente MAX (Claude Vision, ver
+"""Schemas do resultado de extracao do agente MARC (Claude Vision, ver
 prompts/system_extrator.md). Schema de modulo bem mais rico que a v1:
 dimensoes/componentes/materiais aninhados, ferragens sugeridas e itens
 complementares (fora do escopo de marcenaria) explicitos, e
@@ -19,9 +19,9 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class OrigemModulo(str, Enum):
-    VISION_AUTOMATICO = "vision_automatico"      # extraido pelo MAX sem edicao
+    VISION_AUTOMATICO = "vision_automatico"      # extraido pelo MARC sem edicao
     CONFIRMADO_HUMANO = "confirmado_humano"       # usuario revisou e confirmou/corrigiu
-    ADICIONADO_MANUAL = "adicionado_manual"       # usuario adicionou um modulo que o MAX nao pegou
+    ADICIONADO_MANUAL = "adicionado_manual"       # usuario adicionou um modulo que o MARC nao pegou
 
 
 class AuditoriaVisual(BaseModel):
@@ -60,7 +60,7 @@ class EspecificacoesMateriais(BaseModel):
     campos_inferidos: list[str] = Field(
         default_factory=list,
         description="Nomes destes campos (ex: 'metodo_uniao') que vieram das Preferencias Globais/regras "
-        "do MAX, nao do proprio desenho -- nunca fica vazio silenciosamente quando algo foi inferido.",
+        "do MARC, nao do proprio desenho -- nunca fica vazio silenciosamente quando algo foi inferido.",
     )
 
 
@@ -70,7 +70,7 @@ class FerragemSugerida(BaseModel):
 
 
 class ItemComplementar(BaseModel):
-    """Elementos fora do escopo de marcenaria (regra 6 do MAX): pedra,
+    """Elementos fora do escopo de marcenaria (regra 6 do MARC): pedra,
     espelho, serralheria, estofado, fita de LED, etc."""
     nome: str
     tipo: str
@@ -89,7 +89,7 @@ class Modulo(BaseModel):
     descricao_resumida: str = ""
 
     # extensao propria do skill (ver docstring do modulo)
-    confianca: float = Field(..., ge=0, le=1, description="Confianca do MAX nesta leitura (0-1). < 0.7 exige revisao humana antes de confirmar o job")
+    confianca: float = Field(..., ge=0, le=1, description="Confianca do MARC nesta leitura (0-1). < 0.7 exige revisao humana antes de confirmar o job")
     origem: OrigemModulo = OrigemModulo.VISION_AUTOMATICO
 
 

@@ -1,7 +1,7 @@
 """Preferencias Globais de producao -- diretrizes padrao da marcenaria,
-usadas pelo agente extrator (persona "MAX", ver prompts/system_extrator.md)
+usadas pelo agente extrator (persona "MARC", ver prompts/system_extrator.md)
 para inferir especificacoes que o desenho nao deixa explicitas (ex: desenho
-diz "Armario em MDF Branco" sem dizer o metodo de uniao -- o MAX usa
+diz "Armario em MDF Branco" sem dizer o metodo de uniao -- o MARC usa
 metodo_uniao daqui e registra o campo em
 Modulo.especificacoes_materiais.campos_inferidos, nunca fingindo que veio
 do proprio desenho).
@@ -41,7 +41,7 @@ class EspessurasPadrao(BaseModel):
     porta_mm: float = 18
     fundo_mm: float = 6
     prateleira_mm: float = 15
-    sarrafo_superior_mm: float = Field(25, description="Sarrafo superior de armarios baixos (regra 1 do MAX)")
+    sarrafo_superior_mm: float = Field(25, description="Sarrafo superior de armarios baixos (regra 1 do MARC)")
 
 
 class FerragensPadrao(BaseModel):
@@ -52,7 +52,7 @@ class FerragensPadrao(BaseModel):
 
 
 class FaixaDobradicasPorAltura(BaseModel):
-    """Regra 5 do MAX: quantidade de dobradicas por porta, pela altura
+    """Regra 5 do MARC: quantidade de dobradicas por porta, pela altura
     util do modulo. Avaliar em ordem crescente de altura_maxima_mm, usando
     a primeira faixa em que a altura do modulo couber."""
     altura_maxima_mm: float
@@ -60,7 +60,7 @@ class FaixaDobradicasPorAltura(BaseModel):
 
 
 class RegraApoioPorAmbiente(BaseModel):
-    """Regra 4 do MAX: pe plastico em areas molhadas, rodape em MDF em
+    """Regra 4 do MARC: pe plastico em areas molhadas, rodape em MDF em
     areas secas."""
     ambientes_molhados: list[str] = Field(
         default_factory=lambda: ["Cozinha", "Banheiro", "Lavanderia", "Área de Serviço", "Área de Serviço"]
@@ -80,7 +80,7 @@ class PreferenciasGlobais(BaseModel):
     acabamento_interno_padrao: str = Field("MDF Branco", description="Usado quando o desenho nao especifica o acabamento/fundo padrao")
     regra_fundo_exposto_forca_cor_caixaria: bool = Field(
         True,
-        description="Regra 2 (excecao de estetica) do MAX: em cristaleiras com porta de vidro/aluminio ou "
+        description="Regra 2 (excecao de estetica) do MARC: em cristaleiras com porta de vidro/aluminio ou "
         "nichos abertos onde o fundo fica exposto, usar o fundo na cor da caixaria em vez do acabamento_interno_padrao",
     )
     regra_apoio_por_ambiente: RegraApoioPorAmbiente = Field(default_factory=RegraApoioPorAmbiente)

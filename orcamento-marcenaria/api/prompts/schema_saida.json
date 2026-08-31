@@ -1,6 +1,6 @@
 {
   "name": "registrar_extracao",
-  "description": "Registra os ambientes e modulos de marcenaria identificados nesta(s) pagina(s) do projeto, no formato de levantamento tecnico do MAX.",
+  "description": "Registra os ambientes e modulos de marcenaria identificados nesta(s) pagina(s) do projeto, no formato de levantamento tecnico do MARC.",
   "input_schema": {
     "type": "object",
     "properties": {

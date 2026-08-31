@@ -2,8 +2,9 @@
 
 Skill/pipeline para gerar orçamento de marcenaria a partir de projetos em
 **PDF**, **DWG**, **SketchUp (relatório CSV)** ou **XML/DXF do Promob**, e
-um protótipo de API (`api/`) que usa **Claude Vision** para automatizar a
-leitura de plantas em PDF.
+um protótipo de API (`api/`) que usa **Claude Vision** — através da persona
+**MARC**, um agente especialista em engenharia de marcenaria e leitura de
+projetos — para automatizar a leitura de plantas em PDF.
 
 Duas formas de usar este projeto:
 
@@ -113,9 +114,34 @@ node engine/gerar_orcamento_docx.js output/orcamento_final_dados.json output/orc
 
 ---
 
-## 3. API (protótipo com Claude Vision)
+## 3. API (protótipo com Claude Vision — agente MARC)
 
 Arquitetura completa em [`api/ROTAS.md`](api/ROTAS.md).
+
+O agente extrator tem a persona **MARC**, um especialista em engenharia de
+marcenaria (system prompt em `api/prompts/system_extrator.md`). Além de ler
+dimensões e materiais direto do desenho, o MARC aplica diretrizes padrão da
+fábrica (`PreferenciasGlobais`) para inferir o que o projeto não deixa
+explícito:
+
+- Espessuras de caixaria/porta/fundo/sarrafo superior.
+- Método de união (cavilha/minifix/vb35/parafuso direto) e fixação do fundo.
+- **Exceção de estética**: em cristaleiras com porta de vidro/alumínio ou
+  nichos abertos (fundo exposto), o fundo usa a cor da caixaria em vez do
+  acabamento interno padrão.
+- Apoio por ambiente: pé plástico em áreas molhadas (cozinha, banheiro,
+  lavanderia), rodapé em MDF nas demais.
+- Quantidade de dobradiças por porta, pela faixa de altura do módulo.
+- Sistemas de abertura diferenciados (basculante com pistão a gás, porta de
+  correr) e tipo de corrediça.
+- Itens fora do escopo de marcenaria (pedra/mármore, espelho, serralheria,
+  estofado, fita de LED) classificados à parte, nunca misturados com os
+  módulos de madeira.
+
+Toda vez que uma diretriz padrão é usada em vez de uma especificação do
+próprio desenho, o campo entra em
+`especificacoes_materiais.campos_inferidos` — nunca fica silenciosamente
+implícito que a informação veio do desenho.
 
 ### 3.1 Configurar
 
@@ -145,16 +171,22 @@ Docs interativas em `http://localhost:8000/docs`.
 
 1. `POST /api/v1/jobs` — envia o PDF (`multipart/form-data`, campos
    `arquivo` + `usuario_id`). Retorna `job_id` e dispara a extração via
-   Claude Vision em background.
+   Claude Vision (persona MARC) em background.
 2. `GET /api/v1/jobs/{job_id}` — poll até o `status` sair de
-   `processando`. Cada módulo extraído vem com `confianca` (0-1) e
-   `bounding_boxes` (coordenadas normalizadas, para destacar na página no
-   frontend).
+   `processando`. Cada módulo extraído vem com dimensões, componentes e
+   materiais estruturados em sub-objetos (`dimensoes`, `componentes`,
+   `especificacoes_materiais`), ferragens sugeridas (`ferragens_sugeridas`),
+   itens fora do escopo de marcenaria (`itens_complementares`), `confianca`
+   (0-1) e `auditoria_visual` (`pagina_pdf` + `bounding_box` no formato
+   `[y_min, x_min, y_max, x_max]`, normalizado 0-1000 — para destacar o
+   módulo na página no frontend). Ver o schema completo em
+   `api/schemas/extracao.py`.
 3. **Revisão obrigatória**: `PATCH /api/v1/jobs/{job_id}/modulos/{id}`
-   corrige um módulo; `POST .../modulos` adiciona um que a IA não pegou.
-   `POST /api/v1/jobs/{job_id}/confirmar` só libera o job quando **nenhum**
-   módulo de origem `vision_automatico` tem confiança abaixo de 0.7 — a
-   API responde `409` até isso ser resolvido.
+   corrige um módulo (aceita patch parcial, inclusive em subcampos
+   aninhados como `dimensoes.largura_mm`); `POST .../modulos` adiciona um
+   que a IA não pegou. `POST /api/v1/jobs/{job_id}/confirmar` só libera o
+   job quando **nenhum** módulo de origem `vision_automatico` tem
+   confiança abaixo de 0.7 — a API responde `409` até isso ser resolvido.
 4. `POST /api/v1/orcamentos` — gera o orçamento a partir de um job
    **confirmado**. Só calcula custo de chapa/fita quando você passa
    `fator_area_frontal_para_chapa` (multiplicador de área frontal →
@@ -178,8 +210,8 @@ de API válida e confira:
 
 - Se o modelo respeita o `tool_choice` forçado e retorna o schema
   esperado (`api/prompts/schema_saida.json`).
-- Se os `bounding_boxes` retornados fazem sentido visualmente sobre a
-  página renderizada.
+- Se o `bounding_box` de `auditoria_visual` retornado faz sentido
+  visualmente sobre a página renderizada.
 - Custo/tempo por página — ajuste `PAGINAS_POR_LOTE` em
   `api/services/vision_extractor.py` se necessário.
 
@@ -236,7 +268,7 @@ orcamento-marcenaria/
 pytest
 ```
 
-114 testes cobrindo o pipeline CLI (`engine/`, `extractors/`) e a API
+120 testes cobrindo o pipeline CLI (`engine/`, `extractors/`) e a API
 (`api/`), rodando contra dados reais sempre que possível — o XML/PDF do
 projeto Quarto Maria, um DWG real convertido via LibreDWG (`dwg2dxf`,
 pulado automaticamente se não estiver instalado). As chamadas à API da

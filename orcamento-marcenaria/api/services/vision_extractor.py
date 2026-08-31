@@ -116,8 +116,8 @@ def _chamar_claude_para_lote(
 
 
 def _dict_para_modulo(dado_modulo: dict, contador_id: int) -> Modulo:
-    """Constroi o Modulo a partir do dict retornado pelo tool_use do MAX.
-    O `id` que o MAX sugere (ex: 'MOD-001') pode colidir entre lotes, entao
+    """Constroi o Modulo a partir do dict retornado pelo tool_use do MARC.
+    O `id` que o MARC sugere (ex: 'MOD-001') pode colidir entre lotes, entao
     substituimos por um contador globalmente unico do job; o restante do
     dict ja tem o mesmo formato aninhado do schema Pydantic."""
     dado = dict(dado_modulo)
