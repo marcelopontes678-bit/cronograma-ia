@@ -47,7 +47,10 @@ COPY . .
 
 ENV DWG2DXF_PATH=/usr/local/bin/dwg2dxf
 
-# Ajuste o comando de entrada conforme o servidor/API do MVP for definido
-# (por enquanto os extractors sao rodados via CLI, ex: python
-# extractors/extract_promob_xml.py <arquivo>).
-CMD ["python3", "-c", "print('orcamento-marcenaria backend pronto. Rode um extractor via CLI, ex: python extractors/extract_promob_xml.py <arquivo>')"]
+EXPOSE 8000
+
+# Sobe a API FastAPI (api/main.py). Requer ANTHROPIC_API_KEY no ambiente --
+# o startup falha rapido e alto se faltar (ver api/main.py e .env.example).
+# Os extractors do pipeline CLI continuam disponiveis dentro do container
+# via `docker exec`, ex: python extractors/extract_promob_xml.py <arquivo>.
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

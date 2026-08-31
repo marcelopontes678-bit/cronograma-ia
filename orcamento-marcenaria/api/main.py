@@ -6,6 +6,7 @@ from __future__ import annotations
 import logging
 import shutil
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -24,7 +25,19 @@ from api.services.vision_extractor import ExtracaoVisionError, extrair_de_pdf
 
 logger = logging.getLogger("orcamento_marcenaria.api")
 
-app = FastAPI(title="Orcamento de Marcenaria - API", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Falha rapido e alto no startup em vez de subir uma API que so quebra
+    # depois, dentro do background task de extracao (ver README secao 3.4) --
+    # so roda quando o ASGI lifespan e de fato acionado (uvicorn, ou
+    # `with TestClient(app) as client`), nao em testes que instanciam
+    # TestClient(app) diretamente sem context manager.
+    settings.validar_api_key()
+    yield
+
+
+app = FastAPI(title="Orcamento de Marcenaria - API", version="0.1.0", lifespan=lifespan)
 
 
 # --------------------------------------------------------------------------
@@ -218,4 +231,14 @@ async def gerar_orcamento(request: OrcamentoRequest, fator_area_frontal_para_cha
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    """Checa as dependencias que a API precisa de verdade para funcionar,
+    em vez de so responder 200 fixo -- um deploy quebrado (chave faltando,
+    tabela de precos nao montada) deve aparecer aqui, nao so quando um
+    upload falhar horas depois."""
+    checks = {
+        "anthropic_api_key_configurada": bool(settings.anthropic_api_key),
+        "tabela_precos_encontrada": settings.caminho_tabela_precos_padrao.exists(),
+        "config_precificacao_encontrada": settings.caminho_config_precificacao.exists(),
+    }
+    status = "ok" if all(checks.values()) else "degradado"
+    return JSONResponse(status_code=200 if status == "ok" else 503, content={"status": status, "checks": checks})

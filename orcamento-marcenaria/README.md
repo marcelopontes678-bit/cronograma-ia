@@ -44,6 +44,10 @@ Sem Docker, compile o LibreDWG manualmente (ver comentário no topo do
 `Dockerfile` para os comandos exatos) e informe o caminho do binário via
 variável de ambiente `DWG2DXF_PATH`.
 
+O `Dockerfile` também sobe a API (seção 3) via `uvicorn` — o `docker build`
+acima gera uma imagem pronta para `docker run -p 8000:8000 --env-file .env
+orcamento-marcenaria` (ver `.env.example` para as variáveis).
+
 ---
 
 ## 2. Pipeline por linha de comando
@@ -145,6 +149,10 @@ implícito que a informação veio do desenho.
 
 ### 3.1 Configurar
 
+Copie `.env.example` para `.env` e preencha `ANTHROPIC_API_KEY` (as demais
+variáveis já têm defaults sensatos em `api/config.py`), ou exporte
+diretamente:
+
 ```bash
 export ANTHROPIC_API_KEY="sua-chave-aqui"   # nunca cole a chave no codigo/chat
 # opcionais, com defaults sensatos:
@@ -153,6 +161,13 @@ export ORCAMENTO_STORAGE_DIR="api/storage"
 export ORCAMENTO_TABELA_PRECOS="config/tabela_precos_referencia.xlsx"
 export ORCAMENTO_CONFIG_PRECIFICACAO="config/precificacao.json"
 ```
+
+Sem `ANTHROPIC_API_KEY`, a API **não sobe** — o startup falha rápido e alto
+(`RuntimeError`) em vez de aceitar requisições que só vão quebrar depois,
+dentro do background task de extração. `GET /health` também reflete isso:
+retorna `503` com `checks.anthropic_api_key_configurada: false` (e o mesmo
+para tabela de preços/config de precificação ausentes) em vez de sempre
+`200`.
 
 **Nunca** cole a chave da API direto numa mensagem de chat ou a comite no
 git — use variável de ambiente ou um gerenciador de segredos. Se uma

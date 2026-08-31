@@ -10,11 +10,15 @@ from api.main import app
 @pytest.fixture
 def client(tmp_path):
     """Isola cada teste num storage proprio, sobrescrevendo os diretorios
-    do Settings (usados dinamicamente pelas rotas a cada chamada)."""
+    do Settings (usados dinamicamente pelas rotas a cada chamada). Tambem
+    garante uma api_key "fake" -- as chamadas ao Claude sao mockadas na
+    fronteira do SDK (`anthropic.Anthropic`) em todo teste que precisa
+    delas, nunca reais."""
     config_module.settings.dir_storage = tmp_path
     config_module.settings.dir_jobs = tmp_path / "jobs"
     config_module.settings.dir_preferencias = tmp_path / "preferencias"
     config_module.settings.dir_regras_aprendidas = tmp_path / "regras_aprendidas"
+    config_module.settings.anthropic_api_key = "fake-test-key"
     return TestClient(app)
 
 
@@ -73,7 +77,17 @@ def _fazer_upload(client, caminho_pdf_banheiro):
 
 class TestHealth:
     def test_health(self, client):
-        assert client.get("/health").status_code == 200
+        r = client.get("/health")
+        assert r.status_code == 200
+        assert r.json()["status"] == "ok"
+        assert all(r.json()["checks"].values())
+
+    def test_health_degradado_quando_api_key_ausente(self, client):
+        config_module.settings.anthropic_api_key = ""
+        r = client.get("/health")
+        assert r.status_code == 503
+        assert r.json()["status"] == "degradado"
+        assert r.json()["checks"]["anthropic_api_key_configurada"] is False
 
 
 class TestPreferencias:
