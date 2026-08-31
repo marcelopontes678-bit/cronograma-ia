@@ -1,18 +1,16 @@
 # Orçamento de Marcenaria
 
-Skill/pipeline para gerar orçamento de marcenaria a partir de projetos em
-**PDF**, **DWG**, **SketchUp (relatório CSV)** ou **XML/DXF do Promob**, e
-um protótipo de API (`api/`) que usa **Claude Vision** — através da persona
-**MARC**, um agente especialista em engenharia de marcenaria e leitura de
-projetos — para automatizar a leitura de plantas em PDF.
+Skill/pipeline por linha de comando para gerar orçamento de marcenaria a
+partir de projetos em **PDF**, **DWG**, **SketchUp (relatório CSV)** ou
+**XML/DXF do Promob** (`extractors/` + `engine/`), testado com projetos
+reais, sem depender de API paga.
 
-Duas formas de usar este projeto:
-
-1. **Pipeline por linha de comando** (`extractors/` + `engine/`) — testado
-   com projetos reais, sem depender de API paga.
-2. **API (`api/`)** — protótipo que envia páginas de PDF pro Claude Vision
-   para extrair módulos automaticamente, com revisão humana obrigatória
-   antes de precificar.
+A extração via **Claude Vision** (persona **MARC**, agente especialista em
+engenharia de marcenaria) e a precificação multiusuário em produção vivem
+agora no backend do SmartFactory (`../backend/`, ver
+`../backend/app/routers/orcamento.py`) — o protótipo de API que existia
+aqui (`api/`) foi removido depois que essa integração alcançou paridade
+funcional. Este diretório ficou só com o pipeline CLI.
 
 ---
 
@@ -118,135 +116,26 @@ node engine/gerar_orcamento_docx.js output/orcamento_final_dados.json output/orc
 
 ---
 
-## 3. API (protótipo com Claude Vision — agente MARC)
+## 3. Extração via Claude Vision (agora no backend do SmartFactory)
 
-Arquitetura completa em [`api/ROTAS.md`](api/ROTAS.md).
+O protótipo de API que existia aqui (`api/`) foi removido — a extração via
+Claude Vision (persona **MARC**), a precificação e o auto-aprendizado por
+feedback foram movidos para `../backend/` (rotas em
+`../backend/app/routers/orcamento.py`), multiusuário, autenticado via JWT
+e persistido em Postgres. Veja o README do backend para configurar/rodar.
 
-O agente extrator tem a persona **MARC**, um especialista em engenharia de
-marcenaria (system prompt em `api/prompts/system_extrator.md`). Além de ler
-dimensões e materiais direto do desenho, o MARC aplica diretrizes padrão da
-fábrica (`PreferenciasGlobais`) para inferir o que o projeto não deixa
-explícito:
-
-- Espessuras de caixaria/porta/fundo/sarrafo superior.
-- Método de união (cavilha/minifix/vb35/parafuso direto) e fixação do fundo.
-- **Exceção de estética**: em cristaleiras com porta de vidro/alumínio ou
-  nichos abertos (fundo exposto), o fundo usa a cor da caixaria em vez do
-  acabamento interno padrão.
-- Apoio por ambiente: pé plástico em áreas molhadas (cozinha, banheiro,
-  lavanderia), rodapé em MDF nas demais.
-- Quantidade de dobradiças por porta, pela faixa de altura do módulo.
-- Sistemas de abertura diferenciados (basculante com pistão a gás, porta de
-  correr) e tipo de corrediça.
-- Itens fora do escopo de marcenaria (pedra/mármore, espelho, serralheria,
-  estofado, fita de LED) classificados à parte, nunca misturados com os
-  módulos de madeira.
-
-Toda vez que uma diretriz padrão é usada em vez de uma especificação do
-próprio desenho, o campo entra em
-`especificacoes_materiais.campos_inferidos` — nunca fica silenciosamente
-implícito que a informação veio do desenho.
-
-### 3.1 Configurar
-
-Copie `.env.example` para `.env` e preencha `ANTHROPIC_API_KEY` (as demais
-variáveis já têm defaults sensatos em `api/config.py`), ou exporte
-diretamente:
-
-```bash
-export ANTHROPIC_API_KEY="sua-chave-aqui"   # nunca cole a chave no codigo/chat
-# opcionais, com defaults sensatos:
-export ORCAMENTO_MODELO_CLAUDE="claude-sonnet-5"
-export ORCAMENTO_STORAGE_DIR="api/storage"
-export ORCAMENTO_TABELA_PRECOS="config/tabela_precos_referencia.xlsx"
-export ORCAMENTO_CONFIG_PRECIFICACAO="config/precificacao.json"
-```
-
-Sem `ANTHROPIC_API_KEY`, a API **não sobe** — o startup falha rápido e alto
-(`RuntimeError`) em vez de aceitar requisições que só vão quebrar depois,
-dentro do background task de extração. `GET /health` também reflete isso:
-retorna `503` com `checks.anthropic_api_key_configurada: false` (e o mesmo
-para tabela de preços/config de precificação ausentes) em vez de sempre
-`200`.
-
-**Nunca** cole a chave da API direto numa mensagem de chat ou a comite no
-git — use variável de ambiente ou um gerenciador de segredos. Se uma
-chave já vazou (chat, commit, log), revogue no console da Anthropic e
-gere outra.
-
-### 3.2 Rodar
-
-```bash
-uvicorn api.main:app --reload
-```
-
-Docs interativas em `http://localhost:8000/docs`.
-
-### 3.3 Fluxo de uso (ver `api/ROTAS.md` para o contrato completo de cada rota)
-
-1. `POST /api/v1/jobs` — envia o PDF (`multipart/form-data`, campos
-   `arquivo` + `usuario_id`). Retorna `job_id` e dispara a extração via
-   Claude Vision (persona MARC) em background.
-2. `GET /api/v1/jobs/{job_id}` — poll até o `status` sair de
-   `processando`. Cada módulo extraído vem com dimensões, componentes e
-   materiais estruturados em sub-objetos (`dimensoes`, `componentes`,
-   `especificacoes_materiais`), ferragens sugeridas (`ferragens_sugeridas`),
-   itens fora do escopo de marcenaria (`itens_complementares`), `confianca`
-   (0-1) e `auditoria_visual` (`pagina_pdf` + `bounding_box` no formato
-   `[y_min, x_min, y_max, x_max]`, normalizado 0-1000 — para destacar o
-   módulo na página no frontend). Ver o schema completo em
-   `api/schemas/extracao.py`.
-3. **Revisão obrigatória**: `PATCH /api/v1/jobs/{job_id}/modulos/{id}`
-   corrige um módulo (aceita patch parcial, inclusive em subcampos
-   aninhados como `dimensoes.largura_mm`); `POST .../modulos` adiciona um
-   que a IA não pegou. `POST /api/v1/jobs/{job_id}/confirmar` só libera o
-   job quando **nenhum** módulo de origem `vision_automatico` tem
-   confiança abaixo de 0.7 — a API responde `409` até isso ser resolvido.
-4. `POST /api/v1/orcamentos` — gera o orçamento a partir de um job
-   **confirmado**. Só calcula custo de chapa/fita quando você passa
-   `fator_area_frontal_para_chapa` (multiplicador de área frontal →
-   área real de corte, considerando fundo/laterais/prateleiras) — sem
-   esse fator, cada módulo fica pendente e listado em `avisos`, nunca com
-   custo estimado silenciosamente.
-
-Preferências Globais (`/usuarios/{id}/preferencias`) e Regras Aprendidas
-via feedback (`/usuarios/{id}/feedback`) são injetadas automaticamente no
-prompt do extrator nas próximas execuções desse usuário.
-
-### 3.4 Validação com a API real (feita)
-
-`vision_extractor.py` e `feedback_service.py` já foram testados com uma
-chamada real à API da Anthropic (não só mockada), contra o PDF real
-`tests/arquivos_exemplo/silvana_helio/Banheiro.pdf`. A extração
-completa funciona ponta a ponta e produziu um `ExtracaoResultado`
-válido com 3 módulos, aplicando corretamente as diretrizes de
-engenharia do MARC (método de união/fixação inferidos e registrados em
-`campos_inferidos`, granito/vidro/louças classificados fora do escopo
-de marcenaria).
-
-Dois problemas reais de robustez foram encontrados e corrigidos a
-partir dessa validação (não eram hipotéticos — só apareceram contra a
-API de verdade):
+Duas observações técnicas que continuam valendo (encontradas validando a
+extração contra a API real da Anthropic, não são hipotéticas):
 
 - Às vezes o modelo serializa o objeto `{"ambientes": [...], "avisos": [...]}`
   inteiro como uma **string** dentro do próprio campo `ambientes`, em
   vez de popular o array direto (provavelmente por causa da
-  profundidade do schema aninhado). `_normalizar_input_ferramenta()`
-  detecta e desembrulha esse formato, registrando um aviso explícito.
+  profundidade do schema aninhado) — `_normalizar_input_ferramenta()`
+  em `orcamento_vision_extractor.py` detecta e desembrulha esse formato.
 - O `bounding_box` retornado às vezes estoura levemente o range 0-1000
-  (é uma estimativa visual, não uma cota exata). `_dict_para_modulo()`
-  agora faz *clamp* do valor ao range válido e adiciona um aviso
-  pedindo conferência manual daquele destaque, em vez de descartar o
-  módulo inteiro com um erro de validação.
-
-Ainda vale conferir antes de um uso mais intenso em produção:
-
-- Custo/tempo por página em lotes maiores — ajuste `PAGINAS_POR_LOTE`
-  em `api/services/vision_extractor.py` se necessário.
-- Se o `bounding_box` (já dentro do range, sem o clamp) corresponde
-  visualmente à posição real do módulo na página renderizada — isso
-  exige comparar contra a imagem, o que não foi verificado nesta
-  validação.
+  (é uma estimativa visual, não uma cota exata) — `_dict_para_modulo()`
+  faz *clamp* do valor ao range válido e adiciona um aviso pedindo
+  conferência manual, em vez de descartar o módulo inteiro.
 
 ---
 
@@ -262,9 +151,9 @@ gerar orçamento sem revisão. Duas opções:
   (`extractors/extract_pdf_plant.py` já faz isso pra páginas escaneadas)
   e leia visualmente os módulos, confirmando com o cliente/usuário antes
   de montar a lista de módulos.
-- **Via API**: use o pipeline do Claude Vision (seção 3), que faz
-  exatamente isso de forma automatizada, com bounding boxes e confiança
-  por módulo para orientar a revisão.
+- **Via Claude Vision**: use o módulo de orçamento do backend (seção 3),
+  que faz exatamente isso de forma automatizada, com bounding boxes e
+  confiança por módulo para orientar a revisão.
 
 Em qualquer um dos casos, a conversão de **área frontal** (largura ×
 altura de um módulo) para **área real de chapa** (considerando fundo,
@@ -281,19 +170,13 @@ orcamento-marcenaria/
 ├── engine/               # calculo_projeto.py, orcamento_engine.py,
 │                         # tabela_precos.py, geradores de xlsx/docx
 ├── config/               # precificacao.json, tabela_precos_referencia.xlsx
-├── api/                  # protótipo FastAPI + Claude Vision
-│   ├── main.py            # rotas
-│   ├── config.py          # settings via variavel de ambiente
-│   ├── schemas/            # Pydantic (extracao, preferencias, feedback, orcamento)
-│   ├── services/            # vision_extractor, pricing_service, etc
-│   ├── db/jobs.py            # armazenamento de jobs (arquivo JSON)
-│   ├── prompts/                # system prompt + JSON Schema de saida
-│   ├── storage/                  # dados persistidos (jobs, preferencias, regras)
-│   └── ROTAS.md                    # contrato de cada rota
 ├── tests/arquivos_exemplo/   # arquivos reais usados para testar os extractors
 ├── output/                    # resultados gerados (json, xlsx, docx)
 └── Dockerfile                  # LibreDWG + Python + Node, self-hosted
 ```
+
+A extração via Claude Vision, precificação multiusuário e telas de
+orçamento vivem em `../backend/` e `../frontend/` (fora deste diretório).
 
 ## 6. Testes
 
@@ -301,18 +184,12 @@ orcamento-marcenaria/
 pytest
 ```
 
-120 testes cobrindo o pipeline CLI (`engine/`, `extractors/`) e a API
-(`api/`), rodando contra dados reais sempre que possível — o XML/PDF do
-projeto Quarto Maria, um DWG real convertido via LibreDWG (`dwg2dxf`,
-pulado automaticamente se não estiver instalado). Por padrão, esses 120
-testes mockam a chamada à API da Anthropic na fronteira do SDK
-(`anthropic.Anthropic`), já que não é desejável gastar crédito de API a
-cada execução da suíte automatizada. A extração via Vision e o
-`feedback_service.py` já foram validados **manualmente** contra a API
-real ao menos uma vez (ver seção 3.4) — essa validação real não faz
-parte da suíte `pytest` e precisa ser repetida sempre que o
-`schema_saida.json` ou o `system_extrator.md` mudarem de forma
-relevante.
+54 testes cobrindo o pipeline CLI (`engine/`, `extractors/`), rodando
+contra dados reais sempre que possível — o XML/PDF do projeto Quarto
+Maria, um DWG real convertido via LibreDWG (`dwg2dxf`, pulado
+automaticamente se não estiver instalado). Os testes do módulo de
+orçamento (extração via Vision, precificação, feedback) agora vivem em
+`../backend/tests/`.
 
 ## 7. Princípios do projeto (não violar)
 
