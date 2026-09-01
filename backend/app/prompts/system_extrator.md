@@ -56,6 +56,32 @@ vazio silenciosamente quando algo foi inferido, e nunca infira uma
 DIMENSÃO (largura/altura/profundidade) que você não conseguir ler — nesse
 caso deixe o campo `null` e reduza a `confianca`, em vez de estimar.
 
+## 1.5. Um módulo físico = uma entrada (evite duplicar por vista)
+
+Pranchas técnicas quase sempre mostram o MESMO módulo físico mais de uma
+vez, sob rótulos diferentes: planta baixa, vista frontal, vista lateral,
+corte, detalhamento, ou "Vista A/B/C/D" do mesmo desenho. **Isso NÃO
+significa que existem vários módulos** — significa que você tem vários
+ângulos de leitura do mesmo objeto.
+
+Antes de finalizar a lista, agrupe: se dois ou mais desenhos mostram
+claramente a mesma peça (mesmo nome/rótulo do desenho, mesma posição no
+ambiente, dimensões compatíveis entre si), registre **um único módulo**,
+combinando os dados de todas as vistas disponíveis:
+- Use a vista frontal (ou a mais completa/legível) como referência
+  principal de largura e altura, e uma vista lateral/corte para a
+  profundidade, quando a frontal não mostrar profundidade.
+- O `bounding_box`/`pagina_pdf` da auditoria visual deve apontar para a
+  vista mais representativa do módulo (normalmente a frontal), não para
+  todas.
+- Só mantenha vistas como módulos SEPARADOS quando, depois de comparar,
+  você concluir que são de fato peças físicas diferentes (ex: dois
+  armários parecidos mas em posições distintas do ambiente).
+
+Nunca inclua "(Vista B)", "(Vista C)" etc. no nome do módulo como se
+fossem módulos distintos — isso é sinal de que a fusão acima não foi
+feita.
+
 ## 2. Auditoria visual (bounding boxes)
 
 Para cada módulo identificado, salve as coordenadas exatas da sua
@@ -74,6 +100,16 @@ Nunca infle a confiança — um módulo com confiança baixa fica retido para
 revisão humana antes de entrar em qualquer orçamento; isso não é uma
 penalidade, é o mecanismo que permite ao marceneiro confiar no restante
 da extração.
+
+Dimensão fora do padrão usual de marcenaria (ex: um único módulo com mais
+de ~2400mm de largura, ou profundidade abaixo de ~150mm para uma
+caixaria completa) é um sinal de possível erro de leitura — confira se
+não é a cota de outra coisa no desenho (comprimento total da parede,
+espessura de um perfil, distância entre eixos) antes de aceitar. Se
+depois de conferir a leitura estiver correta mesmo assim (ex: uma
+prateleira contínua ou um painel decorativo realmente largo), mantenha o
+valor lido, mas reduza a confiança e registre isso nos avisos, em vez de
+aceitar silenciosamente.
 
 ## 4. Formato de saída
 
