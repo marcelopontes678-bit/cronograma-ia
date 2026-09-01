@@ -33,7 +33,7 @@ from anthropic import Anthropic
 from pydantic import ValidationError
 
 from app.schemas.orcamento import Ambiente, Modulo, OrigemModulo, PreferenciasGlobaisConfig
-from app.services.orcamento_pdf_to_images import PaginaRenderizada, renderizar_paginas
+from app.services.orcamento_pdf_to_images import PaginaRenderizada, RecortePagina, renderizar_paginas
 
 logger = logging.getLogger(__name__)
 
@@ -78,12 +78,13 @@ def _chamar_claude_para_lote(
     client: Anthropic,
     system_prompt: str,
     lote: list[PaginaRenderizada],
+    recortes_por_pagina: dict[int, list[RecortePagina]],
     ferramenta: dict,
     modelo: str,
 ) -> dict:
     blocos_conteudo = []
     for pagina in lote:
-        blocos_conteudo.append({"type": "text", "text": f"Pagina {pagina.numero} do PDF:"})
+        blocos_conteudo.append({"type": "text", "text": f"Pagina {pagina.numero} do PDF (visao geral):"})
         blocos_conteudo.append(
             {
                 "type": "image",
@@ -94,6 +95,33 @@ def _chamar_claude_para_lote(
                 },
             }
         )
+        for recorte in recortes_por_pagina.get(pagina.numero, []):
+            bbox = recorte.bbox_pagina_normalizado
+            blocos_conteudo.append(
+                {
+                    "type": "text",
+                    "text": (
+                        f"Recorte em alta resolucao da pagina {pagina.numero}, quadrante "
+                        f"{recorte.rotulo} (use para ler texto pequeno/cotas finas ilegiveis na "
+                        f"visao geral acima). Este recorte corresponde a regiao "
+                        f"[y_min={bbox[0]}, x_min={bbox[1]}, y_max={bbox[2]}, x_max={bbox[3]}] "
+                        f"(escala 0-1000 da PAGINA INTEIRA, nao deste recorte). Ao registrar o "
+                        f"bounding_box de um modulo visto so aqui, calcule as coordenadas "
+                        f"relativas a pagina inteira interpolando dentro dessa faixa -- nunca use "
+                        f"a escala 0-1000 deste recorte isolado."
+                    ),
+                }
+            )
+            blocos_conteudo.append(
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": recorte.media_type,
+                        "data": recorte.base64(),
+                    },
+                }
+            )
     blocos_conteudo.append(
         {
             "type": "text",
@@ -201,8 +229,16 @@ def extrair_de_pdf(
     caminho_pdf = Path(caminho_pdf)
     pasta_paginas = Path(pasta_trabalho) / "paginas"
 
-    paginas = renderizar_paginas(caminho_pdf, pasta_paginas)
-    logger.info("job=%s: %d paginas renderizadas", job_id, len(paginas))
+    paginas, recortes = renderizar_paginas(caminho_pdf, pasta_paginas)
+    recortes_por_pagina: dict[int, list[RecortePagina]] = {}
+    for recorte in recortes:
+        recortes_por_pagina.setdefault(recorte.pagina_numero, []).append(recorte)
+    logger.info(
+        "job=%s: %d paginas renderizadas, %d recortes de alta resolucao gerados",
+        job_id,
+        len(paginas),
+        len(recortes),
+    )
 
     system_prompt = _montar_system_prompt(preferencias, regras_ativas)
     ferramenta = _carregar_schema_ferramenta()
@@ -214,7 +250,7 @@ def extrair_de_pdf(
 
     for lote in _paginas_para_lotes(paginas, paginas_por_lote):
         try:
-            resultado_lote = _chamar_claude_para_lote(client, system_prompt, lote, ferramenta, modelo)
+            resultado_lote = _chamar_claude_para_lote(client, system_prompt, lote, recortes_por_pagina, ferramenta, modelo)
         except Exception as exc:  # falha de rede/API -- nao mascarar, propagar com contexto
             paginas_str = ",".join(str(p.numero) for p in lote)
             raise ExtracaoVisionError(f"job={job_id}: falha ao extrair paginas {paginas_str}: {exc}") from exc
