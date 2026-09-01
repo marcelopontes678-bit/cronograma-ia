@@ -1,4 +1,8 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_DIR_BACKEND = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
@@ -12,6 +16,13 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     CORS_ORIGINS: str = "http://localhost:3000"
 
+    # Dominio de orcamento de marcenaria (agente MARC / Claude Vision)
+    ANTHROPIC_API_KEY: str = ""
+    ORCAMENTO_MODELO_CLAUDE: str = "claude-sonnet-5"
+    ORCAMENTO_STORAGE_DIR: str = str(_DIR_BACKEND / "storage" / "orcamentos")
+    ORCAMENTO_TABELA_PRECOS: str = str(_DIR_BACKEND / "config" / "tabela_precos_referencia.xlsx")
+    ORCAMENTO_CONFIG_PRECIFICACAO: str = str(_DIR_BACKEND / "config" / "precificacao.json")
+
     @property
     def cors_origins_list(self) -> list[str]:
         return [o.strip() for o in self.CORS_ORIGINS.split(",")]
@@ -19,6 +30,13 @@ class Settings(BaseSettings):
     @property
     def sync_database_url(self) -> str:
         return self.DATABASE_URL.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
+
+    def validar_anthropic_api_key(self) -> None:
+        if not self.ANTHROPIC_API_KEY:
+            raise RuntimeError(
+                "ANTHROPIC_API_KEY nao configurada. Defina a variavel de ambiente antes de "
+                "iniciar a API -- nunca coloque a chave direto no codigo ou em arquivo versionado."
+            )
 
 
 settings = Settings()

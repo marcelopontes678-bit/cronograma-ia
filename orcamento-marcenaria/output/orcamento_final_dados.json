@@ -1,0 +1,141 @@
+{
+  "cliente": "Paula e Gabriel",
+  "projeto": "Projeto - Quarto Maria",
+  "divisor_markup": 2.7601435274634274,
+  "pct_comissao_vendas_aplicada": 0.05,
+  "faturamento_acumulado": 100000,
+  "chapas": [
+    {
+      "acabamento": "18mm Duratex.Essencial.Rosa Infinito",
+      "num_chapas": 1,
+      "preco_chapa": 591.9,
+      "custo_chapas": 591.9
+    },
+    {
+      "acabamento": "18mm Branco",
+      "num_chapas": 3,
+      "preco_chapa": 334.9,
+      "custo_chapas": 1004.6999999999999
+    },
+    {
+      "acabamento": "9mm Branco",
+      "num_chapas": 1,
+      "preco_chapa": 253.9,
+      "custo_chapas": 253.9
+    },
+    {
+      "acabamento": "18mm Berneck.Unicolors Metallic Suede TX",
+      "num_chapas": 1,
+      "preco_chapa": 539.9,
+      "custo_chapas": 539.9
+    }
+  ],
+  "fitas": [
+    {
+      "acabamento": "18mm Duratex.Essencial.Rosa Infinito",
+      "metros_total": 49.6164,
+      "preco_fita_metro": 32.9,
+      "custo_fita": 1632.3795599999999
+    },
+    {
+      "acabamento": "18mm Branco",
+      "metros_total": 74.248,
+      "preco_fita_metro": 26.9,
+      "custo_fita": 1997.2712
+    },
+    {
+      "acabamento": "9mm Branco",
+      "metros_total": 12.604,
+      "preco_fita_metro": 79.9,
+      "custo_fita": 1007.0596
+    },
+    {
+      "acabamento": "18mm Berneck.Unicolors Metallic Suede TX",
+      "metros_total": 21.68,
+      "preco_fita_metro": 35.9,
+      "custo_fita": 778.312
+    }
+  ],
+  "ferragens": [
+    {
+      "descricao": "Suporte",
+      "custo": 19.8
+    },
+    {
+      "descricao": "Suporte",
+      "custo": 19.8
+    },
+    {
+      "descricao": "Suporte",
+      "custo": 19.8
+    },
+    {
+      "descricao": "Suporte",
+      "custo": 19.8
+    },
+    {
+      "descricao": "Corrediça Telescópica 450",
+      "custo": 280.0
+    },
+    {
+      "descricao": "Corrediça Telescópica 500",
+      "custo": 459.0
+    },
+    {
+      "descricao": "Dobradiça Aço s/ Amort. Reta / Baixa",
+      "custo": 70.0
+    },
+    {
+      "descricao": "Gaveta Interna c/ Contra Frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Gaveta Interna c/ Contra Frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Gaveta Interna c/ Contra Frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Sapateira com contra-frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Sapateira com contra-frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Gaveta Interna c/ Contra Frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Gaveta Interna c/ Contra Frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Gaveta Interna c/ Contra Frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Sapateira com contra-frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Sapateira com contra-frente",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Fechamento p/ Armário",
+      "custo": 0.0
+    },
+    {
+      "descricao": "Processo de Fabricação",
+      "custo": 1462.04
+    }
+  ],
+  "custo_material_total": 10155.662359999998,
+  "preco_venda_material": 30256.451449075342,
+  "custo_mao_de_obra": 806.25,
+  "total": 30256.451449075342
+}

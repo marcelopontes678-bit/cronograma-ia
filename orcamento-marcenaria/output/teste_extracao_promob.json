@@ -1,0 +1,656 @@
+[
+  {
+    "nome": "Projeto - Quarto Maria",
+    "origem": "GUID=91ae440a-e3fe-4733-8df7-bd17db80387f",
+    "modulos": [
+      {
+        "nome": "Cabideiro",
+        "origem": "GUID=59e89972-adbc-40f7-94ee-efdedee2ab87",
+        "itens": [
+          {
+            "descricao": "Suporte",
+            "reference": "2.1029.000",
+            "unidade": "UN",
+            "largura_mm": 18.5,
+            "altura_mm": 43.0,
+            "profundidade_mm": 12.7,
+            "quantidade": 1.0,
+            "repeticao": 2,
+            "origem": "GUID=3c1f4f27-a619-4703-b7bc-1ba8eeaf56f9 UNIQUEID=661"
+          }
+        ]
+      },
+      {
+        "nome": "Cabideiro",
+        "origem": "GUID=343e382d-dcd7-438d-b9de-e2321e110652",
+        "itens": [
+          {
+            "descricao": "Suporte",
+            "reference": "2.1029.000",
+            "unidade": "UN",
+            "largura_mm": 18.5,
+            "altura_mm": 43.0,
+            "profundidade_mm": 12.7,
+            "quantidade": 1.0,
+            "repeticao": 2,
+            "origem": "GUID=c2b67e65-e07e-43b2-9b76-4f1b8aefffc0 UNIQUEID=658"
+          }
+        ]
+      },
+      {
+        "nome": "Cabideiro",
+        "origem": "GUID=7f6d3a64-3dfa-45ba-962d-5cae9ca8f718",
+        "itens": [
+          {
+            "descricao": "Suporte",
+            "reference": "2.1029.000",
+            "unidade": "UN",
+            "largura_mm": 18.5,
+            "altura_mm": 43.0,
+            "profundidade_mm": 12.7,
+            "quantidade": 1.0,
+            "repeticao": 2,
+            "origem": "GUID=dc034d7e-0af0-4ddf-96f0-705ca9d14871 UNIQUEID=315"
+          }
+        ]
+      },
+      {
+        "nome": "Cabideiro",
+        "origem": "GUID=2629dc3a-1b25-43fc-9986-584ad15c1cd7",
+        "itens": [
+          {
+            "descricao": "Suporte",
+            "reference": "2.1029.000",
+            "unidade": "UN",
+            "largura_mm": 18.5,
+            "altura_mm": 43.0,
+            "profundidade_mm": 12.7,
+            "quantidade": 1.0,
+            "repeticao": 2,
+            "origem": "GUID=086a76e1-a191-459e-ba1d-f446c55fc0ab UNIQUEID=312"
+          }
+        ]
+      },
+      {
+        "nome": "Corrediça Telescópica 450",
+        "origem": "GUID=62ef2b21-742e-4be1-85ac-f6ae7484dd9d",
+        "itens": [
+          {
+            "descricao": "Corrediça Telescópica 450",
+            "reference": "1.1089.450",
+            "unidade": "UN",
+            "largura_mm": 744.0,
+            "altura_mm": 37.4,
+            "profundidade_mm": 450.0,
+            "quantidade": 1.0,
+            "repeticao": 4,
+            "origem": "GUID=62ef2b21-742e-4be1-85ac-f6ae7484dd9d UNIQUEID=677"
+          }
+        ]
+      },
+      {
+        "nome": "Corrediça Telescópica 500",
+        "origem": "GUID=54e99315-5ef7-46ae-bcf0-bb1fe7f8f737",
+        "itens": [
+          {
+            "descricao": "Corrediça Telescópica 500",
+            "reference": "1.1089.500",
+            "unidade": "UN",
+            "largura_mm": 758.0,
+            "altura_mm": 37.4,
+            "profundidade_mm": 500.0,
+            "quantidade": 1.0,
+            "repeticao": 6,
+            "origem": "GUID=54e99315-5ef7-46ae-bcf0-bb1fe7f8f737 UNIQUEID=744"
+          }
+        ]
+      },
+      {
+        "nome": "Dobradiça Aço s/ Amort. Reta / Baixa",
+        "origem": "GUID=b732acb7-9355-42c8-9bd3-e83404116bd0",
+        "itens": [
+          {
+            "descricao": "Dobradiça Aço s/ Amort. Reta / Baixa",
+            "reference": "1.1086.000",
+            "unidade": "UN",
+            "largura_mm": 31.0,
+            "altura_mm": 42.0,
+            "profundidade_mm": 2.0,
+            "quantidade": 1.0,
+            "repeticao": 20,
+            "origem": "GUID=b732acb7-9355-42c8-9bd3-e83404116bd0 UNIQUEID=725"
+          }
+        ]
+      },
+      {
+        "nome": "Armário",
+        "origem": "GUID=d5d333a8-b9eb-4ab2-99ad-0f711d5e8a95",
+        "itens": [
+          {
+            "descricao": "Afastador p/ Montante 18",
+            "reference": "2.2035.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 22.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 782.35,
+            "quantidade": 0.02,
+            "repeticao": 4,
+            "origem": "GUID=2dcdf80b-b489-4baa-8c13-389f83db953b UNIQUEID=780"
+          },
+          {
+            "descricao": "Base Linear 18",
+            "reference": "2.2008.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 826.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 564.0,
+            "quantidade": 0.47,
+            "repeticao": 2,
+            "origem": "GUID=91fd7415-a558-4ea3-8d55-3f446ed7aa12 UNIQUEID=653"
+          },
+          {
+            "descricao": "Fundo 9",
+            "reference": "2.2015.9.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 862.0,
+            "altura_mm": 9.0,
+            "profundidade_mm": 2289.0,
+            "quantidade": 1.98,
+            "repeticao": 1,
+            "origem": "GUID=61ddeded-fde0-4a3f-bb6b-2f7baf2f9ee7 UNIQUEID=654"
+          },
+          {
+            "descricao": "Gaveta Interna c/ Contra Frente",
+            "reference": "2.0095C.734.Branco",
+            "unidade": "UN",
+            "largura_mm": 734.0,
+            "altura_mm": 170.31,
+            "profundidade_mm": 504.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=ed24bbe8-9607-43e1-9fa4-2c4af18f51c0 UNIQUEID=740"
+          },
+          {
+            "descricao": "Gaveta Interna c/ Contra Frente",
+            "reference": "2.0095C.734.Branco",
+            "unidade": "UN",
+            "largura_mm": 734.0,
+            "altura_mm": 170.31,
+            "profundidade_mm": 504.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=9208c159-5d1f-4cd2-8712-390e95823260 UNIQUEID=729"
+          },
+          {
+            "descricao": "Gaveta Interna c/ Contra Frente",
+            "reference": "2.0095C.734.Branco",
+            "unidade": "UN",
+            "largura_mm": 734.0,
+            "altura_mm": 91.79,
+            "profundidade_mm": 504.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=8eb7d6b3-637d-44c0-b1c7-40bec3f9b7a3 UNIQUEID=688"
+          },
+          {
+            "descricao": "Lateral 18",
+            "reference": "2.2033.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 2289.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 564.0,
+            "quantidade": 1.3,
+            "repeticao": 2,
+            "origem": "GUID=643c0443-825e-4660-b9d7-25c275d29a36 UNIQUEID=649"
+          },
+          {
+            "descricao": "Lateral Montante 18",
+            "reference": "2.2035.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 782.35,
+            "altura_mm": 18.0,
+            "profundidade_mm": 524.0,
+            "quantidade": 0.41,
+            "repeticao": 2,
+            "origem": "GUID=1ebb961a-6ddc-440f-8509-7377c3773054 UNIQUEID=776"
+          },
+          {
+            "descricao": "Porta Provençal Configurável",
+            "reference": "1.0394.18.Berneck.Unicolors Metallic Suede TX.MDF",
+            "unidade": "M2",
+            "largura_mm": 427.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 2283.0,
+            "quantidade": 0.98,
+            "repeticao": 1,
+            "origem": "GUID=25650d26-5c63-469e-976c-326abc6c1243 UNIQUEID=713"
+          },
+          {
+            "descricao": "Porta Provençal Configurável",
+            "reference": "1.0394.18.Berneck.Unicolors Metallic Suede TX.MDF",
+            "unidade": "M2",
+            "largura_mm": 427.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 2283.0,
+            "quantidade": 0.98,
+            "repeticao": 1,
+            "origem": "GUID=f4fbc8db-99cd-4d88-ad1e-7f853fbf2e0b UNIQUEID=699"
+          },
+          {
+            "descricao": "Prateleira Linear de Madeira 18",
+            "reference": "2.0160.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 826.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 564.0,
+            "quantidade": 0.47,
+            "repeticao": 2,
+            "origem": "GUID=03eb3b30-d48b-4136-b42d-074c29d492a4 UNIQUEID=655"
+          },
+          {
+            "descricao": "Sapateira com contra-frente",
+            "reference": "2.0295.720.Branco",
+            "unidade": "UN",
+            "largura_mm": 720.0,
+            "altura_mm": 49.97,
+            "profundidade_mm": 474.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=a612d7e1-2876-4754-bfba-ceb66272982b UNIQUEID=675"
+          },
+          {
+            "descricao": "Sapateira com contra-frente",
+            "reference": "2.0295.720.Branco",
+            "unidade": "UN",
+            "largura_mm": 720.0,
+            "altura_mm": 49.97,
+            "profundidade_mm": 474.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=bf64bf08-a82a-4d9e-8dfc-c5a60e4c12b4 UNIQUEID=664"
+          },
+          {
+            "descricao": "Sarrafo Linear Horizontal 18",
+            "reference": "2.2029.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 746.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 70.0,
+            "quantidade": 0.06,
+            "repeticao": 6,
+            "origem": "GUID=57ac5ba7-7611-499f-b5b7-a4289cc9dcb1 UNIQUEID=728"
+          }
+        ]
+      },
+      {
+        "nome": "Armário",
+        "origem": "GUID=848b6823-be0a-49ca-af1d-6fb08f6325d0",
+        "itens": [
+          {
+            "descricao": "Afastador p/ Montante 18",
+            "reference": "2.2035.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 22.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 782.35,
+            "quantidade": 0.02,
+            "repeticao": 4,
+            "origem": "GUID=7bd85e77-9aeb-40c4-909b-2e2ea1512e22 UNIQUEID=792"
+          },
+          {
+            "descricao": "Base Linear 18",
+            "reference": "2.2008.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 826.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 564.0,
+            "quantidade": 0.47,
+            "repeticao": 2,
+            "origem": "GUID=d83a5ba7-6635-4b14-ba78-6e4abc96d32c UNIQUEID=279"
+          },
+          {
+            "descricao": "Fundo 9",
+            "reference": "2.2015.9.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 862.0,
+            "altura_mm": 9.0,
+            "profundidade_mm": 2289.0,
+            "quantidade": 1.98,
+            "repeticao": 1,
+            "origem": "GUID=9389250c-e1e8-4522-9522-2d64f617e34c UNIQUEID=306"
+          },
+          {
+            "descricao": "Gaveta Interna c/ Contra Frente",
+            "reference": "2.0095C.734.Branco",
+            "unidade": "UN",
+            "largura_mm": 734.0,
+            "altura_mm": 170.31,
+            "profundidade_mm": 504.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=5925b010-5571-448e-b176-c37f3a6ad731 UNIQUEID=581"
+          },
+          {
+            "descricao": "Gaveta Interna c/ Contra Frente",
+            "reference": "2.0095C.734.Branco",
+            "unidade": "UN",
+            "largura_mm": 734.0,
+            "altura_mm": 170.31,
+            "profundidade_mm": 504.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=d0a0f50d-3cc1-43a2-b9de-5adcc3c652fc UNIQUEID=570"
+          },
+          {
+            "descricao": "Gaveta Interna c/ Contra Frente",
+            "reference": "2.0095C.734.Branco",
+            "unidade": "UN",
+            "largura_mm": 734.0,
+            "altura_mm": 91.79,
+            "profundidade_mm": 504.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=6c2eaa19-ebd3-44ca-bd85-c7760238bd13 UNIQUEID=373"
+          },
+          {
+            "descricao": "Lateral 18",
+            "reference": "2.2033.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 2289.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 564.0,
+            "quantidade": 1.3,
+            "repeticao": 2,
+            "origem": "GUID=d4c5b8a5-0ec3-4b98-8866-2cf33526516c UNIQUEID=275"
+          },
+          {
+            "descricao": "Lateral Montante 18",
+            "reference": "2.2035.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 782.35,
+            "altura_mm": 18.0,
+            "profundidade_mm": 524.0,
+            "quantidade": 0.41,
+            "repeticao": 2,
+            "origem": "GUID=624258b0-cd25-4bbf-9a86-89f616e63399 UNIQUEID=788"
+          },
+          {
+            "descricao": "Porta Provençal Configurável",
+            "reference": "1.0394.18.Berneck.Unicolors Metallic Suede TX.MDF",
+            "unidade": "M2",
+            "largura_mm": 427.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 2283.0,
+            "quantidade": 0.98,
+            "repeticao": 1,
+            "origem": "GUID=c6d30fdd-ce5f-41b8-8277-c9e040ccd6c8 UNIQUEID=517"
+          },
+          {
+            "descricao": "Porta Provençal Configurável",
+            "reference": "1.0394.18.Berneck.Unicolors Metallic Suede TX.MDF",
+            "unidade": "M2",
+            "largura_mm": 427.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 2283.0,
+            "quantidade": 0.98,
+            "repeticao": 1,
+            "origem": "GUID=92e0a1f7-7787-46f0-b229-ca57ac9cebaf UNIQUEID=499"
+          },
+          {
+            "descricao": "Prateleira Linear de Madeira 18",
+            "reference": "2.0160.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 826.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 564.0,
+            "quantidade": 0.47,
+            "repeticao": 2,
+            "origem": "GUID=8be82b72-0661-4d7a-9226-b845927d6f06 UNIQUEID=309"
+          },
+          {
+            "descricao": "Sapateira com contra-frente",
+            "reference": "2.0295.720.Branco",
+            "unidade": "UN",
+            "largura_mm": 720.0,
+            "altura_mm": 49.97,
+            "profundidade_mm": 474.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=9fb2537e-0f71-42d6-9d44-7130366237ec UNIQUEID=335"
+          },
+          {
+            "descricao": "Sapateira com contra-frente",
+            "reference": "2.0295.720.Branco",
+            "unidade": "UN",
+            "largura_mm": 720.0,
+            "altura_mm": 49.97,
+            "profundidade_mm": 474.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=9331af2d-cc57-4c76-b04d-244c56b0b2d6 UNIQUEID=324"
+          },
+          {
+            "descricao": "Sarrafo Linear Horizontal 18",
+            "reference": "2.2029.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 746.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 70.0,
+            "quantidade": 0.06,
+            "repeticao": 6,
+            "origem": "GUID=66b531ca-d12c-4900-bd30-98a268752783 UNIQUEID=563"
+          }
+        ]
+      },
+      {
+        "nome": "Base Linear 18",
+        "origem": "GUID=5cd47f92-5a89-4e36-87be-e94dda6bf148",
+        "itens": [
+          {
+            "descricao": "Base Linear 18",
+            "reference": "2.2008.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 594.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 80.0,
+            "quantidade": 0.05,
+            "repeticao": 2,
+            "origem": "GUID=5cd47f92-5a89-4e36-87be-e94dda6bf148 UNIQUEID=837"
+          }
+        ]
+      },
+      {
+        "nome": "Fechamento Lateral Dir",
+        "origem": "GUID=6ddd7ef7-4486-4c7b-adcd-2a3c97a008df",
+        "itens": [
+          {
+            "descricao": "Fechamento Lateral",
+            "reference": "1.0854.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 2410.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 100.0,
+            "quantidade": 0.25,
+            "repeticao": 1,
+            "origem": "GUID=3c8e257a-ab73-400f-b34d-87c9279bb64b UNIQUEID=20"
+          },
+          {
+            "descricao": "Rodapé Lateral",
+            "reference": "2.2018.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 1.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 62.0,
+            "quantidade": 0.01,
+            "repeticao": 1,
+            "origem": "GUID=bb3e961c-73b0-40ca-b4ec-e98042c53e89 UNIQUEID=19"
+          }
+        ]
+      },
+      {
+        "nome": "Fechamento Lateral Esq",
+        "origem": "GUID=0cd040e8-059a-4e3d-a637-6759664887f1",
+        "itens": [
+          {
+            "descricao": "Fechamento Lateral",
+            "reference": "1.0854.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 2410.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 590.0,
+            "quantidade": 1.43,
+            "repeticao": 1,
+            "origem": "GUID=8e294b43-4914-4c5e-ad0a-9d112772e188 UNIQUEID=17"
+          },
+          {
+            "descricao": "Rodapé Lateral",
+            "reference": "2.2018.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 1.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 552.0,
+            "quantidade": 0.01,
+            "repeticao": 1,
+            "origem": "GUID=bc4b4e06-0612-4fff-baa6-8b88f7c992d9 UNIQUEID=16"
+          }
+        ]
+      },
+      {
+        "nome": "Fechamento p/ armário",
+        "origem": "GUID=ee1a5918-8c77-4a81-bac6-234156aab535",
+        "itens": [
+          {
+            "descricao": "Fechamento p/ Armário",
+            "reference": "2.0135.30.Duratex.Essencial.Rosa Infinito",
+            "unidade": "UN",
+            "largura_mm": 30.0,
+            "altura_mm": 2410.0,
+            "profundidade_mm": 580.0,
+            "quantidade": 1.0,
+            "repeticao": 1,
+            "origem": "GUID=295cbcb3-a433-4b30-9e40-d5c3fcfc4225 UNIQUEID=9"
+          }
+        ]
+      },
+      {
+        "nome": "Fundo 18",
+        "origem": "GUID=c12debc6-88d6-470d-bf83-b0bde4723493",
+        "itens": [
+          {
+            "descricao": "Fundo 18",
+            "reference": "2.2015.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 594.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 82.0,
+            "quantidade": 0.05,
+            "repeticao": 2,
+            "origem": "GUID=c12debc6-88d6-470d-bf83-b0bde4723493 UNIQUEID=836"
+          }
+        ]
+      },
+      {
+        "nome": "Lateral 18",
+        "origem": "GUID=30666c11-93f1-4e7f-9922-fe5ab771df31",
+        "itens": [
+          {
+            "descricao": "Lateral 18",
+            "reference": "2.2033.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 100.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 80.0,
+            "quantidade": 0.01,
+            "repeticao": 4,
+            "origem": "GUID=30666c11-93f1-4e7f-9922-fe5ab771df31 UNIQUEID=839"
+          }
+        ]
+      },
+      {
+        "nome": "Moldura Engros",
+        "origem": "GUID=a8d23c7e-dd9c-4f9a-abc3-0635d2133b4a",
+        "itens": [
+          {
+            "descricao": "Moldura Engros",
+            "reference": "1.0260.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 536.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 70.0,
+            "quantidade": 0.04,
+            "repeticao": 2,
+            "origem": "GUID=a8d23c7e-dd9c-4f9a-abc3-0635d2133b4a UNIQUEID=25"
+          }
+        ]
+      },
+      {
+        "nome": "Moldura Engros",
+        "origem": "GUID=a1126d58-9a77-479d-8756-5508a8a52608",
+        "itens": [
+          {
+            "descricao": "Moldura Engros",
+            "reference": "1.0260.18.Branco.MDF",
+            "unidade": "M2",
+            "largura_mm": 1724.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 70.0,
+            "quantidade": 0.13,
+            "repeticao": 2,
+            "origem": "GUID=a1126d58-9a77-479d-8756-5508a8a52608 UNIQUEID=23"
+          }
+        ]
+      },
+      {
+        "nome": "Rodapé Lateral",
+        "origem": "GUID=cc0ae6d6-f74a-44eb-8063-c7fd086b6c5a",
+        "itens": [
+          {
+            "descricao": "Rodapé Lateral",
+            "reference": "2.2018.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 70.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 1724.0,
+            "quantidade": 0.13,
+            "repeticao": 1,
+            "origem": "GUID=cc0ae6d6-f74a-44eb-8063-c7fd086b6c5a UNIQUEID=34"
+          }
+        ]
+      },
+      {
+        "nome": "Vista Linear",
+        "origem": "GUID=83f7f0f1-7b81-43eb-a904-8d74cd4b8049",
+        "itens": [
+          {
+            "descricao": "Vista Linear",
+            "reference": "2.0109.18.Duratex.Essencial.Rosa Infinito.MDF",
+            "unidade": "M2",
+            "largura_mm": 1724.0,
+            "altura_mm": 18.0,
+            "profundidade_mm": 50.0,
+            "quantidade": 0.09,
+            "repeticao": 1,
+            "origem": "GUID=83f7f0f1-7b81-43eb-a904-8d74cd4b8049 UNIQUEID=271"
+          }
+        ]
+      },
+      {
+        "nome": "Processo de Fabricação",
+        "origem": "GUID=0fbb1eb5-ef80-41c6-a222-94996e60cbe1",
+        "itens": [
+          {
+            "descricao": "Processo de Fabricação",
+            "reference": "Porta Provençal Configurável",
+            "unidade": "UN",
+            "largura_mm": 10.0,
+            "altura_mm": 10.0,
+            "profundidade_mm": 10.0,
+            "quantidade": 1.0,
+            "repeticao": 4,
+            "origem": "GUID=0fbb1eb5-ef80-41c6-a222-94996e60cbe1 UNIQUEID=720"
+          }
+        ]
+      }
+    ]
+  }
+]

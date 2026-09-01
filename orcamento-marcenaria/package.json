@@ -1,0 +1,9 @@
+{
+  "name": "orcamento-marcenaria",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Geracao de orcamento final (.docx) para o skill orcamento-marcenaria",
+  "dependencies": {
+    "docx": "^9.0.0"
+  }
+}
