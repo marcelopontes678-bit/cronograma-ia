@@ -154,6 +154,15 @@ async def rodar_extracao_em_background(
             logger.exception("job=%s: falha na extracao", job_id)
             job.status = StatusOrcamentoJob.ERRO
             job.avisos = [f"Falha na extracao: {exc}"]
+        except Exception as exc:
+            # Rede/parsing conhecidos ja viram ExtracaoVisionError acima; isto
+            # e uma rede de seguranca para qualquer outra falha inesperada --
+            # sem isso o job fica preso em PROCESSANDO para sempre, porque a
+            # excecao nunca chegaria ao commit() abaixo (bug real encontrado
+            # em producao: ValidationError do Pydantic escapando do parsing).
+            logger.exception("job=%s: falha inesperada na extracao", job_id)
+            job.status = StatusOrcamentoJob.ERRO
+            job.avisos = [f"Falha inesperada na extracao: {exc}"]
 
         await db.commit()
 

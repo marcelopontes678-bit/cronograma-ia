@@ -30,6 +30,7 @@ import logging
 from pathlib import Path
 
 from anthropic import Anthropic
+from pydantic import ValidationError
 
 from app.schemas.orcamento import Ambiente, Modulo, OrigemModulo, PreferenciasGlobaisConfig
 from app.services.orcamento_pdf_to_images import PaginaRenderizada, renderizar_paginas
@@ -223,7 +224,17 @@ def extrair_de_pdf(
             ambiente = ambientes_por_nome.setdefault(nome_amb, Ambiente(nome_ambiente=nome_amb))
             for mod_dado in amb_dado.get("modulos", []):
                 contador_id += 1
-                modulo, aviso_bbox = _dict_para_modulo(mod_dado, contador_id)
+                try:
+                    modulo, aviso_bbox = _dict_para_modulo(mod_dado, contador_id)
+                except ValidationError as exc:
+                    nome_mod = mod_dado.get("nome", "?")
+                    avisos.append(
+                        f"mod_{contador_id:04d} ({nome_mod}) no ambiente '{nome_amb}': descartado, "
+                        f"resposta do modelo veio com dados invalidos ({exc.error_count()} erro(s) de validacao) "
+                        f"-- confira o desenho manualmente, este modulo NAO entrou no orcamento. Detalhe: {exc}"
+                    )
+                    logger.warning("job=%s: modulo descartado por ValidationError: %s", job_id, exc)
+                    continue
                 ambiente.modulos.append(modulo)
                 if aviso_bbox:
                     avisos.append(aviso_bbox)

@@ -120,6 +120,40 @@ class TestOrcamentoJobs:
         resp3 = await client.get("/api/v1/orcamentos/jobs", headers=headers)
         assert any(j["id"] == job_id for j in resp3.json())
 
+    async def test_modulo_malformado_do_modelo_e_descartado_sem_derrubar_o_job(
+        self, client: AsyncClient, empresa_a
+    ):
+        """Bug real encontrado em producao: a API do Claude pode devolver um
+        modulo faltando um campo obrigatorio (ex: 'confianca'). Antes da
+        correcao isso derrubava a extracao inteira com um ValidationError
+        nao tratado, deixando o job preso em PROCESSANDO para sempre. Agora
+        so aquele modulo e descartado (com aviso), o resto do lote segue."""
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        headers = {"Authorization": f"Bearer {token}"}
+
+        ambiente_com_modulo_quebrado = _ambiente_banheiro_mock()
+        modulo_valido = ambiente_com_modulo_quebrado[0]["modulos"][0]
+        modulo_sem_confianca = dict(modulo_valido)
+        modulo_sem_confianca["id"] = "MOD-002"
+        modulo_sem_confianca["nome"] = "Modulo Quebrado"
+        del modulo_sem_confianca["confianca"]
+        ambiente_com_modulo_quebrado[0]["modulos"].append(modulo_sem_confianca)
+
+        job_inicial = await _upload_job(client, token, ambientes=ambiente_com_modulo_quebrado)
+        job_id = job_inicial["job_id"]
+
+        resp = await client.get(f"/api/v1/orcamentos/jobs/{job_id}", headers=headers)
+        job = resp.json()
+        assert job["status"] == "aguardando_revisao"
+        # o PDF de exemplo tem mais de uma pagina -> mais de um lote -> o
+        # mock (fixo por lote) roda mais de uma vez; o que importa aqui e
+        # que NENHUM modulo "Modulo Quebrado" sobrevive, e todo modulo que
+        # sobrevive e o valido.
+        modulos = job["ambientes"][0]["modulos"]
+        assert len(modulos) >= 1
+        assert all(m["nome"] == "Armario superior" for m in modulos)
+        assert any("Modulo Quebrado" in aviso and "descartado" in aviso for aviso in job["avisos"])
+
     async def test_job_inexistente_da_404(self, client: AsyncClient, empresa_a):
         token = await obter_token(client, "admin@a.com", "senhaA123!")
         resp = await client.get(
