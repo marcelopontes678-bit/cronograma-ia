@@ -1,11 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { api, extractErrorMessage } from "@/lib/api";
 import { Modulo, OrcamentoJob, OrcamentoResponse } from "@/lib/types";
 import { PaginaComOverlay } from "@/components/orcamento/PaginaComOverlay";
 
-export const runtime = "edge";
+// Rota estatica (nao [jobId] dinamico de arquivo) lendo o id via
+// query string (?job=...) de proposito: o @cloudflare/next-on-pages
+// (adapter deprecated, ver README) nao consegue resolver em runtime o
+// modulo de uma Edge Function cujo nome de arquivo tem colchetes --
+// "No such module .../[jobId].func.js" mesmo o arquivo existindo no
+// bundle (bug real reproduzido com wrangler dev, nao teorico). Uma
+// rota estatica com query string evita depender desse caminho quebrado
+// do adapter por completo.
 
 const LIMIAR_CONFIANCA = 0.7;
 
@@ -21,8 +28,16 @@ function todosModulos(job: OrcamentoJob): { ambiente: string; modulo: Modulo }[]
 }
 
 export default function OrcamentoJobPage() {
-  const params = useParams<{ jobId: string }>();
-  const jobId = params.jobId;
+  return (
+    <Suspense fallback={<p className="text-gray-500">Carregando...</p>}>
+      <OrcamentoJobPageInner />
+    </Suspense>
+  );
+}
+
+function OrcamentoJobPageInner() {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("job") ?? "";
 
   const [job, setJob] = useState<OrcamentoJob | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +54,10 @@ export default function OrcamentoJobPage() {
   };
 
   useEffect(() => {
+    if (!jobId) {
+      setLoading(false);
+      return;
+    }
     carregarJob();
     // job em "processando" ainda esta sendo extraido em background --
     // faz poll ate sair desse estado.

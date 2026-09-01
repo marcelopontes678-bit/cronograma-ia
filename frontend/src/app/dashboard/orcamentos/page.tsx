@@ -116,7 +116,7 @@ export default function OrcamentosPage() {
           {jobs.map((job) => (
             <Link
               key={job.id}
-              href={`/dashboard/orcamentos/${job.id}`}
+              href={`/dashboard/orcamentos/detalhe?job=${job.id}`}
               className="block bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-5 py-4 hover:border-[#444] transition"
             >
               <div className="flex items-center justify-between">
