@@ -20,8 +20,13 @@ router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 async def create_usuario(
     data: UsuarioCreate,
     db: AsyncSession = Depends(get_db),
-    _: Usuario = Depends(require_role(RoleUsuario.ADMIN)),
+    current_user: Usuario = Depends(require_role(RoleUsuario.ADMIN)),
 ):
+    # Sem isso, um ADMIN de uma empresa poderia criar um usuario em
+    # QUALQUER empresa passando um empresa_id arbitrario no corpo -- o
+    # require_role acima so checa o cargo, nunca o tenant (bug real
+    # encontrado ao expor esta rota no frontend gestori).
+    data.empresa_id = current_user.empresa_id
     return await usuario_service.create_usuario(db, data)
 
 
