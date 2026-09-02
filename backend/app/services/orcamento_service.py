@@ -63,8 +63,13 @@ async def atualizar_preferencias(
 
 
 async def criar_job(
-    db: AsyncSession, current_user: Usuario, arquivo_origem: str, projeto_id: uuid.UUID | None
+    db: AsyncSession, current_user: Usuario, arquivos_origem: list[str], projeto_id: uuid.UUID | None
 ) -> OrcamentoJob:
+    """`arquivos_origem` e sempre uma lista (1 a N nomes de arquivo); o
+    caso de um unico arquivo e so o trivial de lista de tamanho 1. Os
+    nomes sao concatenados na coluna `arquivo_origem` (string, sem
+    necessidade de migration) para exibicao/rastreabilidade."""
+    arquivo_origem = " + ".join(arquivos_origem)[:500]
     job = OrcamentoJob(
         empresa_id=current_user.empresa_id,
         usuario_id=current_user.id,
@@ -89,15 +94,18 @@ async def get_job(db: AsyncSession, job_id: uuid.UUID, current_user: Usuario) ->
     return job
 
 
-def caminho_pagina_pdf(job: OrcamentoJob, numero: int) -> Path:
+def caminho_pagina_pdf(job: OrcamentoJob, arquivo_indice: int, numero: int) -> Path:
     """Mesma logica de path usada em criar_job() (router) pra montar
     pasta_trabalho -- a pagina so existe apos rodar_extracao_em_background
-    ter chamado renderizar_paginas()."""
+    ter chamado renderizar_paginas(), que grava cada arquivo do job na sua
+    propria subpasta `arquivo_{indice}/` (paginas nao colidem numeracao
+    entre arquivos diferentes do mesmo job)."""
     return (
         Path(settings.ORCAMENTO_STORAGE_DIR)
         / str(job.empresa_id)
         / str(job.id)
         / "paginas"
+        / f"arquivo_{arquivo_indice}"
         / f"pagina_{numero:03d}.png"
     )
 
@@ -115,7 +123,7 @@ async def listar_jobs(
 
 
 async def rodar_extracao_em_background(
-    job_id: uuid.UUID, caminho_pdf: Path, pasta_trabalho: Path, empresa_id: uuid.UUID
+    job_id: uuid.UUID, caminhos_pdf: list[Path], pasta_trabalho: Path, empresa_id: uuid.UUID
 ) -> None:
     """Roda depois da resposta HTTP ja ter sido enviada (FastAPI
     BackgroundTasks) -- precisa da sua propria sessao de banco, a da
@@ -137,7 +145,7 @@ async def rodar_extracao_em_background(
         try:
             ambientes, avisos = extrair_de_pdf(
                 job_id=str(job_id),
-                caminho_pdf=caminho_pdf,
+                caminhos_pdf=caminhos_pdf,
                 pasta_trabalho=pasta_trabalho,
                 preferencias=preferencias,
                 regras_ativas=regras_ativas,

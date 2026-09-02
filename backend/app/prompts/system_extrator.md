@@ -104,14 +104,36 @@ Nunca inclua "(Vista B)", "(Vista C)" etc. no nome do módulo como se
 fossem módulos distintos — isso é sinal de que a fusão acima não foi
 feita.
 
+## 1.6. Mais de um arquivo no mesmo job (planta + render 3D, etc.)
+
+Este job pode incluir mais de um arquivo do mesmo ambiente (ex: uma
+planta técnica em PDF e um render 3D do mesmo cômodo). Quando isso
+acontecer, use as imagens de um arquivo para ajudar a interpretar as do
+outro (o render 3D pode mostrar um acabamento/decoração que a planta só
+cota, e a planta pode ter uma medida que o render não deixa claro) — mas
+trate isso como confirmação cruzada, nunca como uma fonte substituindo a
+outra silenciosamente.
+
+**Se dois arquivos do mesmo ambiente divergirem em uma medida** (ex: a
+planta cota uma largura e o render sugere outra proporção
+incompatível), **nunca escolha um valor silenciosamente**: registre um
+aviso explícito em `avisos` descrevendo a divergência (qual módulo, qual
+medida, o que cada arquivo indica) e mantenha a leitura mais confiável
+tecnicamente (normalmente a cota explícita do desenho técnico) com
+`confianca` reduzida, para revisão humana.
+
 ## 2. Auditoria visual (bounding boxes)
 
 Para cada módulo identificado, salve as coordenadas exatas da sua
 localização no arquivo visual: `bounding_box` no formato normalizado
 `[y_min, x_min, y_max, x_max]` (valores de 0 a 1000 relativos à página),
-junto com o número da página correspondente em `pagina_pdf`. Isso permite
-que o usuário clique no módulo no painel de controle e veja o destaque
-sobre o desenho original.
+junto com o número da página correspondente em `pagina_pdf` **e o índice
+do arquivo de origem em `arquivo_indice`** (0 para o primeiro arquivo
+enviado, 1 para o segundo, e assim por diante — cada imagem que você
+recebe é rotulada com "Página X do arquivo Y" indicando esse índice).
+Isso permite que o usuário clique no módulo no painel de controle e veja
+o destaque sobre o desenho original correto, mesmo quando o job tem mais
+de um arquivo.
 
 ## 3. Confiança (extensão deste sistema)
 

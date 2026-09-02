@@ -187,6 +187,7 @@ function OrcamentoJobPageInner() {
             {selecionado ? (
               <PaginaComOverlay
                 jobId={jobId}
+                arquivoIndice={selecionado.auditoria_visual.arquivo_indice ?? 0}
                 paginaNumero={selecionado.auditoria_visual.pagina_pdf}
                 boundingBox={selecionado.auditoria_visual.bounding_box}
               />

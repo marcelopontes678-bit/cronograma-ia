@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 
 interface Props {
   jobId: string;
+  arquivoIndice: number;
   paginaNumero: number;
   /** [y_min, x_min, y_max, x_max], normalizado 0-1000 -- mesmo formato de
    * Modulo.auditoria_visual.bounding_box em src/lib/types.ts */
@@ -13,14 +14,14 @@ interface Props {
 
 /**
  * Renderiza a pagina do PDF (servida por
- * GET /orcamentos/jobs/{jobId}/paginas/{numero}, autenticada -- por isso
- * busca como blob via a instancia `api` em vez de um <img src> direto,
- * que não mandaria o Bearer token) com o bounding_box do modulo destacado
- * por cima, usando posicionamento em % (o bounding_box ja vem normalizado
- * 0-1000 relativo a pagina, entao não precisa saber o tamanho real da
- * imagem em pixels).
+ * GET /orcamentos/jobs/{jobId}/paginas/{arquivoIndice}/{numero}, autenticada
+ * -- por isso busca como blob via a instancia `api` em vez de um <img src>
+ * direto, que não mandaria o Bearer token) com o bounding_box do modulo
+ * destacado por cima, usando posicionamento em % (o bounding_box ja vem
+ * normalizado 0-1000 relativo a pagina, entao não precisa saber o tamanho
+ * real da imagem em pixels).
  */
-export function PaginaComOverlay({ jobId, paginaNumero, boundingBox, destaque = true }: Props) {
+export function PaginaComOverlay({ jobId, arquivoIndice, paginaNumero, boundingBox, destaque = true }: Props) {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [erro, setErro] = useState(false);
 
@@ -29,7 +30,7 @@ export function PaginaComOverlay({ jobId, paginaNumero, boundingBox, destaque = 
     let cancelado = false;
 
     api
-      .get(`/orcamentos/jobs/${jobId}/paginas/${paginaNumero}`, { responseType: "blob" })
+      .get(`/orcamentos/jobs/${jobId}/paginas/${arquivoIndice}/${paginaNumero}`, { responseType: "blob" })
       .then((r) => {
         if (cancelado) return;
         urlCriada = URL.createObjectURL(r.data);
@@ -43,7 +44,7 @@ export function PaginaComOverlay({ jobId, paginaNumero, boundingBox, destaque = 
       cancelado = true;
       if (urlCriada) URL.revokeObjectURL(urlCriada);
     };
-  }, [jobId, paginaNumero]);
+  }, [jobId, arquivoIndice, paginaNumero]);
 
   if (erro) {
     return (

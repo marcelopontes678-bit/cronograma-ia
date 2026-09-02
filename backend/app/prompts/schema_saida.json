@@ -79,6 +79,11 @@
                     "type": "object",
                     "properties": {
                       "pagina_pdf": { "type": "integer", "minimum": 1 },
+                      "arquivo_indice": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Indice (comecando em 0) do arquivo de origem dentro deste job, na ordem em que foram enviados"
+                      },
                       "bounding_box": {
                         "type": "array",
                         "items": { "type": "integer", "minimum": 0, "maximum": 1000 },
@@ -87,7 +92,7 @@
                         "description": "[y_min, x_min, y_max, x_max], normalizado 0-1000"
                       }
                     },
-                    "required": ["pagina_pdf", "bounding_box"]
+                    "required": ["pagina_pdf", "arquivo_indice", "bounding_box"]
                   },
                   "descricao_resumida": { "type": "string" },
                   "confianca": {
