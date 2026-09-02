@@ -78,13 +78,21 @@ def _chamar_claude_para_lote(
     client: Anthropic,
     system_prompt: str,
     lote: list[PaginaRenderizada],
-    recortes_por_pagina: dict[int, list[RecortePagina]],
+    recortes_por_pagina: dict[tuple[int, int], list[RecortePagina]],
     ferramenta: dict,
     modelo: str,
 ) -> dict:
     blocos_conteudo = []
     for pagina in lote:
-        blocos_conteudo.append({"type": "text", "text": f"Pagina {pagina.numero} do PDF (visao geral):"})
+        blocos_conteudo.append(
+            {
+                "type": "text",
+                "text": (
+                    f"Pagina {pagina.numero} do arquivo {pagina.arquivo_indice} "
+                    f"({pagina.nome_arquivo}) -- visao geral:"
+                ),
+            }
+        )
         blocos_conteudo.append(
             {
                 "type": "image",
@@ -95,13 +103,14 @@ def _chamar_claude_para_lote(
                 },
             }
         )
-        for recorte in recortes_por_pagina.get(pagina.numero, []):
+        for recorte in recortes_por_pagina.get((pagina.arquivo_indice, pagina.numero), []):
             bbox = recorte.bbox_pagina_normalizado
             blocos_conteudo.append(
                 {
                     "type": "text",
                     "text": (
-                        f"Recorte em alta resolucao da pagina {pagina.numero}, quadrante "
+                        f"Recorte em alta resolucao da pagina {pagina.numero} do arquivo "
+                        f"{pagina.arquivo_indice} ({pagina.nome_arquivo}), quadrante "
                         f"{recorte.rotulo} (use para ler texto pequeno/cotas finas ilegiveis na "
                         f"visao geral acima). Este recorte corresponde a regiao "
                         f"[y_min={bbox[0]}, x_min={bbox[1]}, y_max={bbox[2]}, x_max={bbox[3]}] "
@@ -182,38 +191,48 @@ def _normalizar_input_ferramenta(entrada: dict) -> dict:
     return {"ambientes": desembrulhado["ambientes"], "avisos": avisos}
 
 
-def _dict_para_modulo(dado_modulo: dict, contador_id: int) -> tuple[Modulo, str | None]:
+def _dict_para_modulo(dado_modulo: dict, contador_id: int, total_arquivos: int) -> tuple[Modulo, list[str]]:
     """Constroi o Modulo a partir do dict retornado pelo tool_use do MARC.
     O `id` que o MARC sugere (ex: 'MOD-001') pode colidir entre lotes, entao
     substituimos por um contador globalmente unico do job; o restante do
     dict ja tem o mesmo formato aninhado do schema Pydantic.
 
-    Retorna (modulo, aviso). Confirmado empiricamente contra a API real: o
+    Retorna (modulo, avisos). Confirmado empiricamente contra a API real: o
     modelo as vezes estoura levemente o range 0-1000 do bounding_box (e uma
     coordenada normalizada estimada visualmente, nao uma cota exata) -- em
     vez de descartar o modulo inteiro, o valor e limitado (clamp) ao range
-    valido e o desvio fica registrado num aviso, nunca escondido."""
+    valido e o desvio fica registrado num aviso, nunca escondido. O mesmo
+    vale para `arquivo_indice`: se o modelo relatar um indice fora da faixa
+    de arquivos enviados, ele e limitado a 0 e o desvio e registrado."""
     dado = dict(dado_modulo)
     dado["id"] = f"mod_{contador_id:04d}"
     dado["origem"] = OrigemModulo.VISION_AUTOMATICO
 
-    aviso = None
+    avisos: list[str] = []
     bbox = dado.get("auditoria_visual", {}).get("bounding_box")
     if isinstance(bbox, list) and any(not isinstance(v, int) or v < 0 or v > 1000 for v in bbox):
         bbox_original = list(bbox)
         bbox_corrigido = [max(0, min(1000, round(v))) for v in bbox]
         dado["auditoria_visual"]["bounding_box"] = bbox_corrigido
-        aviso = (
+        avisos.append(
             f"{dado['id']} ({dado.get('nome', '?')}): bounding_box {bbox_original} fora do range 0-1000, "
             f"ajustado para {bbox_corrigido} -- confira a posicao do destaque visual manualmente."
         )
 
-    return Modulo.model_validate(dado), aviso
+    arquivo_indice = dado.get("auditoria_visual", {}).get("arquivo_indice")
+    if isinstance(arquivo_indice, int) and not (0 <= arquivo_indice < total_arquivos):
+        avisos.append(
+            f"{dado['id']} ({dado.get('nome', '?')}): arquivo_indice {arquivo_indice} fora da faixa de "
+            f"arquivos enviados (0-{total_arquivos - 1}), ajustado para 0 -- confira o destaque visual manualmente."
+        )
+        dado["auditoria_visual"]["arquivo_indice"] = 0
+
+    return Modulo.model_validate(dado), avisos
 
 
 def extrair_de_pdf(
     job_id: str,
-    caminho_pdf: str | Path,
+    caminhos_pdf: list[str | Path],
     pasta_trabalho: str | Path,
     preferencias: PreferenciasGlobaisConfig,
     regras_ativas: list[str],
@@ -221,21 +240,26 @@ def extrair_de_pdf(
     modelo: str = MODELO_PADRAO,
     paginas_por_lote: int = PAGINAS_POR_LOTE,
 ) -> tuple[list[Ambiente], list[str]]:
-    """Ponto de entrada principal. Levanta ExtracaoVisionError em falha
-    de comunicacao/parsing -- o chamador decide como marcar o job como
-    status=erro. Sincrono/bloqueante de proposito -- quem chama a partir
-    de uma rota async deve rodar via asyncio.to_thread (ver
+    """Ponto de entrada principal. Aceita um ou mais PDFs do mesmo job (ex:
+    planta tecnica + render 3D do mesmo ambiente) para que o extrator cruze
+    as referencias visuais entre eles na mesma chamada -- o caso de um
+    unico arquivo e so o caso trivial de uma lista de tamanho 1, sem
+    mudanca de comportamento observavel. Levanta ExtracaoVisionError em
+    falha de comunicacao/parsing -- o chamador decide como marcar o job
+    como status=erro. Sincrono/bloqueante de proposito -- quem chama a
+    partir de uma rota async deve rodar via asyncio.to_thread (ver
     orcamento_service.py)."""
-    caminho_pdf = Path(caminho_pdf)
+    caminhos_pdf = [Path(c) for c in caminhos_pdf]
     pasta_paginas = Path(pasta_trabalho) / "paginas"
 
-    paginas, recortes = renderizar_paginas(caminho_pdf, pasta_paginas)
-    recortes_por_pagina: dict[int, list[RecortePagina]] = {}
+    paginas, recortes = renderizar_paginas(caminhos_pdf, pasta_paginas)
+    recortes_por_pagina: dict[tuple[int, int], list[RecortePagina]] = {}
     for recorte in recortes:
-        recortes_por_pagina.setdefault(recorte.pagina_numero, []).append(recorte)
+        recortes_por_pagina.setdefault((recorte.arquivo_indice, recorte.pagina_numero), []).append(recorte)
     logger.info(
-        "job=%s: %d paginas renderizadas, %d recortes de alta resolucao gerados",
+        "job=%s: %d arquivo(s), %d paginas renderizadas, %d recortes de alta resolucao gerados",
         job_id,
+        len(caminhos_pdf),
         len(paginas),
         len(recortes),
     )
@@ -261,7 +285,7 @@ def extrair_de_pdf(
             for mod_dado in amb_dado.get("modulos", []):
                 contador_id += 1
                 try:
-                    modulo, aviso_bbox = _dict_para_modulo(mod_dado, contador_id)
+                    modulo, avisos_modulo = _dict_para_modulo(mod_dado, contador_id, len(caminhos_pdf))
                 except ValidationError as exc:
                     nome_mod = mod_dado.get("nome", "?")
                     avisos.append(
@@ -272,8 +296,7 @@ def extrair_de_pdf(
                     logger.warning("job=%s: modulo descartado por ValidationError: %s", job_id, exc)
                     continue
                 ambiente.modulos.append(modulo)
-                if aviso_bbox:
-                    avisos.append(aviso_bbox)
+                avisos.extend(avisos_modulo)
 
         avisos.extend(resultado_lote.get("avisos", []))
 

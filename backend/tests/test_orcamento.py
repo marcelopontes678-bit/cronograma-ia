@@ -48,7 +48,29 @@ async def _upload_job(client: AsyncClient, token: str, ambientes=None) -> dict:
             resp = await client.post(
                 "/api/v1/orcamentos/jobs",
                 headers={"Authorization": f"Bearer {token}"},
-                files={"arquivo": ("banheiro.pdf", f, "application/pdf")},
+                files={"arquivos": ("banheiro.pdf", f, "application/pdf")},
+            )
+    assert resp.status_code == 202, resp.text
+    return resp.json()
+
+
+async def _upload_job_multi_arquivo(client: AsyncClient, token: str, ambientes=None) -> dict:
+    """Job com 2 arquivos do mesmo ambiente. Nao ha um segundo PDF de
+    exemplo tematicamente diferente no repo (so Banheiro.pdf existe em
+    tests/arquivos_exemplo/) -- usa o mesmo PDF duas vezes, com nomes
+    distintos, o que ja valida a mecanica de indexacao/rastreabilidade
+    por arquivo (o objetivo deste teste)."""
+    ambientes = ambientes if ambientes is not None else _ambiente_banheiro_mock()
+    with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
+        MockAnthropic.return_value.messages.create.return_value = _resposta_tool_use(ambientes)
+        with open(CAMINHO_PDF_BANHEIRO, "rb") as f1, open(CAMINHO_PDF_BANHEIRO, "rb") as f2:
+            resp = await client.post(
+                "/api/v1/orcamentos/jobs",
+                headers={"Authorization": f"Bearer {token}"},
+                files=[
+                    ("arquivos", ("planta_tecnica.pdf", f1, "application/pdf")),
+                    ("arquivos", ("render_3d.pdf", f2, "application/pdf")),
+                ],
             )
     assert resp.status_code == 202, resp.text
     return resp.json()
@@ -180,7 +202,7 @@ class TestOrcamentoJobs:
         headers = {"Authorization": f"Bearer {token}"}
         job = await _upload_job(client, token)
 
-        resp = await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/1", headers=headers)
+        resp = await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/0/1", headers=headers)
         assert resp.status_code == 200
         assert resp.headers["content-type"] == "image/png"
         assert len(resp.content) > 0
@@ -191,7 +213,7 @@ class TestOrcamentoJobs:
         headers = {"Authorization": f"Bearer {token}"}
         job = await _upload_job(client, token)
 
-        resp = await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/999", headers=headers)
+        resp = await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/0/999", headers=headers)
         assert resp.status_code == 404
 
     async def test_get_pagina_pdf_isolamento_multi_tenant(self, client: AsyncClient, empresa_a, empresa_b):
@@ -200,7 +222,7 @@ class TestOrcamentoJobs:
         job = await _upload_job(client, token_a)
 
         resp = await client.get(
-            f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/1", headers={"Authorization": f"Bearer {token_b}"}
+            f"/api/v1/orcamentos/jobs/{job['job_id']}/paginas/0/1", headers={"Authorization": f"Bearer {token_b}"}
         )
         assert resp.status_code == 404
 
@@ -208,6 +230,74 @@ class TestOrcamentoJobs:
             "/api/v1/orcamentos/jobs", headers={"Authorization": f"Bearer {token_b}"}
         )
         assert all(j["id"] != job["job_id"] for j in resp_lista.json())
+
+
+class TestOrcamentoMultiArquivo:
+    async def test_job_com_dois_arquivos_bounding_box_aponta_para_arquivo_correto(
+        self, client: AsyncClient, empresa_a
+    ):
+        """Cobre o checkpoint 3 do estado-alvo multi-arquivo: um job criado
+        com 2 arquivos deve preservar, por modulo, o `arquivo_indice` do
+        arquivo de onde ele foi extraido, mesmo com paginas de arquivos
+        diferentes misturadas nos mesmos lotes enviados ao Claude.
+
+        Nao ha um segundo PDF tematicamente diferente disponivel no repo
+        (so Banheiro.pdf existe em tests/arquivos_exemplo/) -- o teste usa
+        o mesmo PDF duas vezes, com nomes de arquivo distintos. Isso nao
+        valida cruzamento semantico de conteudo entre arquivos diferentes,
+        mas valida exatamente o que este checkpoint pede: que o
+        bounding_box + arquivo_indice retornados apontam para o
+        arquivo+pagina corretos quando o job tem multiplos arquivos."""
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        headers = {"Authorization": f"Bearer {token}"}
+
+        def _resposta_por_lote(**kwargs):
+            # Descobre de qual arquivo a 1a imagem do lote veio, lendo o
+            # rotulo de texto que _chamar_claude_para_lote gera (ex:
+            # "Pagina 1 do arquivo 1 (render_3d.pdf) -- visao geral:").
+            blocos = kwargs["messages"][0]["content"]
+            rotulo = next(b["text"] for b in blocos if b.get("type") == "text" and "do arquivo" in b["text"])
+            arquivo_indice = int(rotulo.split("do arquivo ")[1].split(" ")[0])
+
+            ambiente = _ambiente_banheiro_mock()
+            ambiente[0]["modulos"][0]["id"] = f"MOD-{arquivo_indice}"
+            ambiente[0]["modulos"][0]["nome"] = f"Modulo do arquivo {arquivo_indice}"
+            ambiente[0]["modulos"][0]["auditoria_visual"] = {
+                "pagina_pdf": 1,
+                "arquivo_indice": arquivo_indice,
+                "bounding_box": [400, 100, 700, 400],
+            }
+            return _resposta_tool_use(ambiente)
+
+        with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
+            MockAnthropic.return_value.messages.create.side_effect = _resposta_por_lote
+            with open(CAMINHO_PDF_BANHEIRO, "rb") as f1, open(CAMINHO_PDF_BANHEIRO, "rb") as f2:
+                resp = await client.post(
+                    "/api/v1/orcamentos/jobs",
+                    headers=headers,
+                    files=[
+                        ("arquivos", ("planta_tecnica.pdf", f1, "application/pdf")),
+                        ("arquivos", ("render_3d.pdf", f2, "application/pdf")),
+                    ],
+                )
+        assert resp.status_code == 202, resp.text
+        job_id = resp.json()["job_id"]
+
+        detalhe = (await client.get(f"/api/v1/orcamentos/jobs/{job_id}", headers=headers)).json()
+        modulos = [m for a in detalhe["ambientes"] for m in a["modulos"]]
+        indices_vistos = {m["auditoria_visual"]["arquivo_indice"] for m in modulos}
+        assert indices_vistos == {0, 1}, f"esperava modulos dos arquivos 0 e 1, achou {indices_vistos}"
+
+        for indice in (0, 1):
+            resp_pagina = await client.get(
+                f"/api/v1/orcamentos/jobs/{job_id}/paginas/{indice}/1", headers=headers
+            )
+            assert resp_pagina.status_code == 200
+            assert resp_pagina.content[:8] == b"\x89PNG\r\n\x1a\n"
+
+        arquivo_origem = detalhe["arquivo_origem"]
+        assert "planta_tecnica.pdf" in arquivo_origem
+        assert "render_3d.pdf" in arquivo_origem
 
 
 class TestRevisaoEConfirmacao:

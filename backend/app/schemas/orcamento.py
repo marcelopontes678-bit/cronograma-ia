@@ -26,6 +26,10 @@ class OrigemModulo(str, Enum):
 
 class AuditoriaVisual(BaseModel):
     pagina_pdf: int = Field(..., ge=1)
+    arquivo_indice: int = Field(
+        0, ge=0,
+        description="Indice (0-indexed) do arquivo de origem dentro do job, na ordem em que foram enviados",
+    )
     bounding_box: list[int] = Field(
         ..., min_length=4, max_length=4,
         description="[y_min, x_min, y_max, x_max], normalizado 0-1000 relativo a pagina",

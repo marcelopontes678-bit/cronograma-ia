@@ -56,34 +56,51 @@ async def atualizar_preferencias(
 
 @router.post("/jobs", status_code=202)
 async def criar_job(
-    arquivo: UploadFile,
+    arquivos: list[UploadFile],
     background_tasks: BackgroundTasks,
     projeto_id: uuid.UUID | None = None,
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user),
 ):
-    if arquivo.content_type not in ("application/pdf", "application/octet-stream") and not (
-        arquivo.filename or ""
-    ).lower().endswith(".pdf"):
-        raise HTTPException(400, "Apenas arquivos PDF sao aceitos.")
+    """Aceita 1 a N arquivos PDF do mesmo job (ex: planta tecnica + render
+    3D do mesmo ambiente), para que o extrator cruze as referencias
+    visuais na mesma chamada ao Claude. Um unico arquivo continua
+    funcionando sem mudanca de comportamento -- e so o caso trivial de
+    uma lista de tamanho 1."""
+    if not arquivos:
+        raise HTTPException(400, "Envie pelo menos um arquivo PDF.")
 
-    job = await orcamento_service.criar_job(db, current_user, arquivo.filename or "arquivo.pdf", projeto_id)
+    for arquivo in arquivos:
+        if arquivo.content_type not in ("application/pdf", "application/octet-stream") and not (
+            arquivo.filename or ""
+        ).lower().endswith(".pdf"):
+            raise HTTPException(400, f"Apenas arquivos PDF sao aceitos ({arquivo.filename!r} nao e um PDF).")
+
+    nomes_origem = [arquivo.filename or f"arquivo_{i}.pdf" for i, arquivo in enumerate(arquivos)]
+    job = await orcamento_service.criar_job(db, current_user, nomes_origem, projeto_id)
 
     pasta_trabalho = Path(settings.ORCAMENTO_STORAGE_DIR) / str(current_user.empresa_id) / str(job.id)
     pasta_trabalho.mkdir(parents=True, exist_ok=True)
-    caminho_pdf = pasta_trabalho / "original.pdf"
-    with open(caminho_pdf, "wb") as f:
-        shutil.copyfileobj(arquivo.file, f)
 
-    try:
-        doc = fitz.open(str(caminho_pdf))
-        total_paginas = len(doc)
-        doc.close()
-    except Exception as exc:
-        raise HTTPException(400, f"Nao foi possivel abrir o PDF: {exc}") from exc
+    caminhos_pdf: list[Path] = []
+    total_paginas = 0
+    for indice, arquivo in enumerate(arquivos):
+        nome_original = arquivo.filename or f"arquivo_{indice}.pdf"
+        caminho_pdf = pasta_trabalho / f"arquivo_{indice}_{nome_original}"
+        with open(caminho_pdf, "wb") as f:
+            shutil.copyfileobj(arquivo.file, f)
+
+        try:
+            doc = fitz.open(str(caminho_pdf))
+            total_paginas += len(doc)
+            doc.close()
+        except Exception as exc:
+            raise HTTPException(400, f"Nao foi possivel abrir o PDF {nome_original!r}: {exc}") from exc
+
+        caminhos_pdf.append(caminho_pdf)
 
     background_tasks.add_task(
-        orcamento_service.rodar_extracao_em_background, job.id, caminho_pdf, pasta_trabalho, current_user.empresa_id
+        orcamento_service.rodar_extracao_em_background, job.id, caminhos_pdf, pasta_trabalho, current_user.empresa_id
     )
 
     return {"job_id": str(job.id), "status": "processando", "paginas": total_paginas}
@@ -108,20 +125,23 @@ async def get_job(
     return await orcamento_service.get_job(db, job_id, current_user)
 
 
-@router.get("/jobs/{job_id}/paginas/{numero}")
+@router.get("/jobs/{job_id}/paginas/{arquivo_indice}/{numero}")
 async def get_pagina_pdf(
     job_id: uuid.UUID,
+    arquivo_indice: int,
     numero: int,
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user),
 ):
-    """Serve o PNG da pagina renderizada (para overlay de bounding_box no
-    frontend) -- so existe apos a extracao rodar; 404 antes disso ou se a
-    pagina nao existir no PDF."""
+    """Serve o PNG da pagina renderizada de um arquivo especifico do job
+    (para overlay de bounding_box no frontend) -- so existe apos a
+    extracao rodar; 404 antes disso ou se a pagina/arquivo nao existir."""
     job = await orcamento_service.get_job(db, job_id, current_user)
-    caminho = orcamento_service.caminho_pagina_pdf(job, numero)
+    caminho = orcamento_service.caminho_pagina_pdf(job, arquivo_indice, numero)
     if not caminho.exists():
-        raise HTTPException(404, f"Pagina {numero} nao encontrada para este job.")
+        raise HTTPException(
+            404, f"Pagina {numero} do arquivo {arquivo_indice} nao encontrada para este job."
+        )
     return FileResponse(caminho, media_type="image/png")
 
 

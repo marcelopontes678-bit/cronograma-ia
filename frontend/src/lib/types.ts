@@ -120,6 +120,7 @@ export interface ItemComplementar {
 
 export interface AuditoriaVisual {
   pagina_pdf: number;
+  arquivo_indice?: number; // indice (0-indexed) do arquivo de origem dentro do job
   bounding_box: [number, number, number, number]; // [y_min, x_min, y_max, x_max], 0-1000
 }
 

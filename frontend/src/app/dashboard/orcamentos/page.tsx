@@ -41,13 +41,17 @@ export default function OrcamentosPage() {
   useEffect(carregarJobs, []);
 
   const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const arquivo = e.target.files?.[0];
-    if (!arquivo) return;
+    const arquivos = e.target.files;
+    if (!arquivos || arquivos.length === 0) return;
     setError("");
     setUploading(true);
     try {
       const formData = new FormData();
-      formData.append("arquivo", arquivo);
+      // multiplos arquivos do mesmo ambiente (ex: planta tecnica + render
+      // 3D) sao enviados juntos, no mesmo job, para o extrator cruzar as
+      // referencias visuais na mesma chamada -- um unico arquivo continua
+      // funcionando igual, so uma lista de tamanho 1.
+      Array.from(arquivos).forEach((arquivo) => formData.append("arquivos", arquivo));
       // sobrescreve o Content-Type padrao (application/json) do client --
       // o axios monta o multipart/form-data + boundary sozinho quando o
       // body e um FormData e o header nao esta fixado antes.
@@ -86,11 +90,12 @@ export default function OrcamentosPage() {
             Preferências
           </Link>
           <label className="bg-brand-500 text-black text-sm font-semibold px-4 py-2 rounded-lg hover:bg-brand-600 transition cursor-pointer">
-            {uploading ? "Enviando..." : "+ Enviar PDF"}
+            {uploading ? "Enviando..." : "+ Enviar PDF(s)"}
             <input
               ref={fileInputRef}
               type="file"
               accept="application/pdf"
+              multiple
               className="hidden"
               disabled={uploading}
               onChange={onUpload}
