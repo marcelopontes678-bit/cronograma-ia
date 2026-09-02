@@ -175,8 +175,9 @@ orcamento-marcenaria/
 └── Dockerfile                  # LibreDWG + Python + Node, self-hosted
 ```
 
-A extração via Claude Vision, precificação multiusuário e telas de
-orçamento vivem em `../backend/` e `../frontend/` (fora deste diretório).
+A extração via Claude Vision e precificação multiusuário vivem em
+`../backend/` (fora deste diretório); as telas de orçamento (módulo
+"Orçamento IA") vivem no frontend Gestori, em outro repositório.
 
 ## 6. Testes
 
