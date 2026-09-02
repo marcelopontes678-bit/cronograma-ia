@@ -4,6 +4,14 @@ from app.models.unidade import Unidade
 from app.models.usuario import RefreshToken, Usuario
 from app.models.projeto import Projeto
 from app.models.orcamento import OrcamentoJob, PreferenciasGlobais, RegraAprendida
+from app.models.comercial import (
+    Cliente,
+    FichaTecnica,
+    ItemEstoque,
+    LancamentoFinanceiro,
+    MovimentacaoEstoque,
+    OrcamentoComercial,
+)
 
 __all__ = [
     "Base",
@@ -15,4 +23,10 @@ __all__ = [
     "PreferenciasGlobais",
     "RegraAprendida",
     "OrcamentoJob",
+    "Cliente",
+    "OrcamentoComercial",
+    "FichaTecnica",
+    "ItemEstoque",
+    "MovimentacaoEstoque",
+    "LancamentoFinanceiro",
 ]

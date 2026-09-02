@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.database import engine
 from app.models.base import Base
-from app.routers import auth, empresa, orcamento, projeto, unidade, usuario
+from app.routers import auth, comercial, empresa, orcamento, projeto, unidade, usuario
 
 
 @asynccontextmanager
@@ -43,6 +43,7 @@ app.include_router(unidade.router, prefix=PREFIX)
 app.include_router(usuario.router, prefix=PREFIX)
 app.include_router(projeto.router, prefix=PREFIX)
 app.include_router(orcamento.router, prefix=PREFIX)
+app.include_router(comercial.router, prefix=PREFIX)
 
 
 @app.get("/health", tags=["sistema"])
