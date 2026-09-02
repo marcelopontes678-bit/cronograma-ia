@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+from sqlalchemy.orm.attributes import set_committed_value
 
 from app.core.exceptions import conflict, forbidden_exception, not_found
 from app.models.unidade import Unidade
@@ -33,6 +34,10 @@ async def create_unidade(db: AsyncSession, data: UnidadeCreate) -> Unidade:
     db.add(unidade)
     await db.commit()
     await db.refresh(unidade)
+    # Unidade recem-criada nunca tem a relacao empresa carregada -- sem isso
+    # a serializacao do response_model (UnidadeResponse.empresa, opcional)
+    # tenta lazy-load fora do greenlet async e quebra com MissingGreenlet.
+    set_committed_value(unidade, "empresa", None)
     return unidade
 
 

@@ -24,7 +24,10 @@ class UnidadeBase(BaseModel):
 
 
 class UnidadeCreate(UnidadeBase):
-    empresa_id: uuid.UUID
+    # Opcional no corpo de proposito: o router sempre sobrescreve com o
+    # empresa_id vindo da propria URL (/empresas/{empresa_id}/unidades)
+    # antes de chamar o service -- mesma razao do UsuarioCreate.empresa_id.
+    empresa_id: Optional[uuid.UUID] = None
 
 
 class UnidadeUpdate(BaseModel):

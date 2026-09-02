@@ -16,7 +16,10 @@ class UsuarioBase(BaseModel):
 
 
 class UsuarioCreate(UsuarioBase):
-    empresa_id: uuid.UUID
+    # Opcional no corpo de proposito: o router sempre sobrescreve com o
+    # empresa_id do usuario autenticado antes de chamar o service (nunca
+    # confia no valor enviado pelo cliente -- ver comentario no router).
+    empresa_id: Optional[uuid.UUID] = None
     unidade_id: Optional[uuid.UUID] = None
     password: str
     must_change_password: bool = False
