@@ -81,7 +81,10 @@ async def list_unidades(
         query = query.where(Unidade.tipo == tipo)
 
     result = await db.execute(query)
-    return list(result.scalars().all())
+    unidades = list(result.scalars().all())
+    for unidade in unidades:
+        set_committed_value(unidade, "empresa", None)
+    return unidades
 
 
 async def update_unidade(
