@@ -7,6 +7,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.exceptions import conflict, forbidden_exception, not_found
 from app.models.empresa import Empresa
+from app.models.unidade import Unidade
 from app.models.usuario import RoleUsuario, Usuario
 from app.schemas.empresa import EmpresaCreate, EmpresaUpdate
 
@@ -30,7 +31,7 @@ async def get_empresa(
 ) -> Empresa:
     result = await db.execute(
         select(Empresa)
-        .options(selectinload(Empresa.unidades))
+        .options(selectinload(Empresa.unidades.and_(Unidade.is_active.is_(True))))
         .where(Empresa.id == empresa_id, Empresa.is_active.is_(True))
     )
     empresa = result.scalar_one_or_none()
@@ -49,9 +50,9 @@ async def list_empresas(
     skip: int = 0,
     limit: int = 20,
 ) -> list[Empresa]:
-    query = select(Empresa).options(selectinload(Empresa.unidades)).where(
-        Empresa.is_active.is_(True)
-    )
+    query = select(Empresa).options(
+        selectinload(Empresa.unidades.and_(Unidade.is_active.is_(True)))
+    ).where(Empresa.is_active.is_(True))
     if current_user.role != RoleUsuario.ADMIN:
         query = query.where(Empresa.id == current_user.empresa_id)
 
