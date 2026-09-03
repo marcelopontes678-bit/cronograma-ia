@@ -12,6 +12,7 @@ from app.models.comercial import (
     MovimentacaoEstoque,
     OrcamentoComercial,
 )
+from app.models.producao import AusenciaOperador, TarefaCronograma
 
 __all__ = [
     "Base",
@@ -29,4 +30,6 @@ __all__ = [
     "ItemEstoque",
     "MovimentacaoEstoque",
     "LancamentoFinanceiro",
+    "TarefaCronograma",
+    "AusenciaOperador",
 ]

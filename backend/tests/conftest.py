@@ -45,6 +45,8 @@ _TABELAS_EM_ORDEM_DE_LIMPEZA = [
     "clientes",
     "fichas_tecnicas",
     "refresh_tokens",
+    "ausencias_operador",
+    "tarefas_cronograma",
     "projetos",
     "usuarios",
     "unidades",

@@ -26,6 +26,8 @@ async def create_projeto(
         require_role(RoleUsuario.ADMIN, RoleUsuario.GERENTE)
     ),
 ):
+    # Nunca confia no empresa_id do corpo -- ver comentario no schema.
+    data.empresa_id = current_user.empresa_id
     return await projeto_service.create_projeto(db, data, current_user)
 
 
