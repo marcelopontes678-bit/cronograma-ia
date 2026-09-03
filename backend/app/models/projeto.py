@@ -23,6 +23,20 @@ class StatusProjeto(str, enum.Enum):
     CANCELADO = "cancelado"
 
 
+class StatusProducao(str, enum.Enum):
+    """Etapa do projeto no chao de fabrica (Kanban de Producao) --
+    conceito distinto de StatusProjeto (ciclo de vida comercial: rascunho
+    -> aprovacao -> producao -> concluido). Um projeto so ganha
+    status_producao quando entra de fato na esteira de producao."""
+
+    BACKLOG = "backlog"
+    PLANEJAMENTO = "planejamento"
+    EM_PRODUCAO = "em_producao"
+    ACABAMENTO = "acabamento"
+    QUALIDADE = "qualidade"
+    CONCLUIDO = "concluido"
+
+
 class Projeto(TimestampMixin, Base):
     __tablename__ = "projetos"
 
@@ -60,6 +74,14 @@ class Projeto(TimestampMixin, Base):
         sa.SmallInteger, nullable=False, default=3
     )
     observacoes: Mapped[str | None] = mapped_column(sa.Text)
+    status_producao: Mapped["StatusProducao | None"] = mapped_column(
+        sa.Enum(
+            StatusProducao,
+            name="statusproducao",
+            values_callable=lambda e: [m.value for m in e],
+        ),
+    )
+    cor: Mapped[str | None] = mapped_column(sa.String(20))
 
     __table_args__ = (
         sa.UniqueConstraint("empresa_id", "codigo", name="uq_projeto_codigo_empresa"),

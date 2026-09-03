@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin
@@ -46,6 +46,13 @@ class Usuario(TimestampMixin, Base):
     must_change_password: Mapped[bool] = mapped_column(
         sa.Boolean, default=False, nullable=False
     )
+    # Perfil de operador de producao -- so preenchido para role=OPERADOR
+    # (reaproveita Usuario em vez de uma tabela "Operador" separada; um
+    # operador loga no sistema como qualquer usuario).
+    especialidades: Mapped[list | None] = mapped_column(JSONB)
+    cor: Mapped[str | None] = mapped_column(sa.String(20))
+    capacidade_diaria: Mapped[float | None] = mapped_column(sa.Float)
+    dias_trabalho: Mapped[list | None] = mapped_column(JSONB)
 
     empresa: Mapped["Empresa"] = relationship("Empresa", back_populates="usuarios")
     unidade: Mapped["Unidade | None"] = relationship(

@@ -4,7 +4,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from app.models.projeto import StatusProjeto
+from app.models.projeto import StatusProducao, StatusProjeto
 from app.schemas.usuario import UsuarioSummary
 
 
@@ -21,6 +21,8 @@ class ProjetoBase(BaseModel):
     observacoes: Optional[str] = None
     unidade_id: Optional[uuid.UUID] = None
     responsavel_id: Optional[uuid.UUID] = None
+    status_producao: Optional[StatusProducao] = None
+    cor: Optional[str] = None
 
     @field_validator("prioridade")
     @classmethod
@@ -31,7 +33,11 @@ class ProjetoBase(BaseModel):
 
 
 class ProjetoCreate(ProjetoBase):
-    empresa_id: uuid.UUID
+    # Opcional no corpo de proposito: o router sempre sobrescreve com o
+    # empresa_id do usuario autenticado antes de chamar o service (nunca
+    # confia no valor enviado pelo cliente -- mesma razao de
+    # UsuarioCreate.empresa_id / UnidadeCreate.empresa_id).
+    empresa_id: Optional[uuid.UUID] = None
     codigo: str
 
 
@@ -48,6 +54,8 @@ class ProjetoUpdate(BaseModel):
     observacoes: Optional[str] = None
     unidade_id: Optional[uuid.UUID] = None
     responsavel_id: Optional[uuid.UUID] = None
+    status_producao: Optional[StatusProducao] = None
+    cor: Optional[str] = None
 
     @field_validator("prioridade")
     @classmethod
