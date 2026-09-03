@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _DIR_BACKEND = Path(__file__).resolve().parent.parent
@@ -9,6 +10,18 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     DATABASE_URL: str
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def normaliza_scheme_asyncpg(cls, v: str) -> str:
+        # Provedores de hosting (Render, Railway, Heroku...) entregam a
+        # connection string como postgres:// ou postgresql:// -- o driver
+        # async exige o scheme postgresql+asyncpg:// explicito.
+        if v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+asyncpg://", 1)
+        if v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 480
