@@ -21,6 +21,8 @@
    ela valer — o binding é fixado na versão publicada, não é lido "ao vivo".
 */
 
+import { logError } from './logger.js';
+
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 const MODEL = 'claude-sonnet-5';
@@ -131,7 +133,7 @@ async function handleGenerate(request, env) {
 
   if (!anthropicRes.ok) {
     const detail = await anthropicRes.text().catch(() => '');
-    console.error('Anthropic API error', anthropicRes.status, detail);
+    logError('Anthropic API error', anthropicRes.status, detail);
     return json({ error: 'O serviço de IA retornou um erro.' }, 502);
   }
 

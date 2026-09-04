@@ -84,6 +84,7 @@ export default defineConfig([
         render: "readonly",
         setTab: "readonly",
         ui: "readonly",
+        logError: "readonly",
         MUSCLE_GROUPS: "readonly",
         SEED_EXERCISES: "readonly",
         SEED_ROUTINES: "readonly",
@@ -232,14 +233,15 @@ export default defineConfig([
       ],
       "max-nested-callbacks": ["warn", 3],
       "quality/max-lines": ["error", { max: 350 }],
-      // Baseline as of this install: 5 direct console calls (2 in
-      // orcamento-marcenaria/engine/gerar_orcamento_docx.js, 2 in
-      // treino/app.js, 1 in worker/index.js). No project-wide log adapter
-      // exists yet, so "warn" until one is introduced and the count above
-      // reaches zero -- then promote back to "error".
+      // Baseline reached zero: treino/logger.js (logError) and
+      // worker/logger.js (logError) are now the project's logging
+      // helpers, and every call site in treino/ and worker/ goes through
+      // one of them. orcamento-marcenaria/engine is a CLI script where
+      // console IS the right interface -- see its own override below,
+      // which is a deliberate tracked exception, not a silent gap.
       "quality/no-direct-console": [
-        "warn",
-        { logger: "a project logging helper (none exists yet)" },
+        "error",
+        { logger: "logError (treino/logger.js or worker/logger.js)" },
       ],
     },
     // quality/no-direct-data-access is intentionally not configured: this
@@ -247,6 +249,28 @@ export default defineConfig([
     // reach around. The backend/ Python API owns persistence; the
     // JS/TS side here is a static client app plus a thin Cloudflare Worker
     // proxy, with no data module of its own.
+  },
+  {
+    // The logging adapters themselves -- this block MUST come after the
+    // block that turns quality/no-direct-console on above: for a file
+    // matched by both, flat config applies the later block's rules last,
+    // so an "off" placed earlier would be silently overridden by the
+    // "error" that follows it.
+    files: ["treino/logger.js", "worker/logger.js"],
+    rules: {
+      "quality/no-direct-console": "off",
+    },
+  },
+  {
+    // orcamento-marcenaria/engine/gerar_orcamento_docx.js is a standalone
+    // CLI script (`node gerar_orcamento_docx.js dados.json saida.docx`):
+    // console IS its correct, intended output surface, not a logging
+    // shortcut to clean up. Tracked exception (lint burn-down, 2026-09),
+    // not a silent gap -- see docs/prompts/02-eslint-warning-burndown.md.
+    files: ["orcamento-marcenaria/engine/gerar_orcamento_docx.js"],
+    rules: {
+      "quality/no-direct-console": "off",
+    },
   },
   {
     files: ["eslint-rules/**/*.cjs"],

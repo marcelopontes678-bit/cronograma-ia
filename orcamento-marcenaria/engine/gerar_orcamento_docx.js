@@ -17,6 +17,11 @@
  *   "custo_material_total": 10155.66, "preco_venda_material": 28031.09,
  *   "custo_mao_de_obra": 806.25, "total": 28837.34
  * }
+ *
+ * console.error/console.log neste arquivo são intencionais: é um script de
+ * CLI, e o console É a interface com quem o roda -- por isso
+ * quality/no-direct-console está desligada para ele em eslint.config.mjs
+ * (exceção rastreada, não suprimida em silêncio).
  */
 const fs = require("fs");
 const {

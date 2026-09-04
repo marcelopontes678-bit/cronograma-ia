@@ -31,7 +31,7 @@ function loadState() {
         bodyMeasurements: parsed.bodyMeasurements || [],
       };
     }
-  } catch (e) { console.error('Falha ao carregar dados', e); }
+  } catch (e) { logError('Falha ao carregar dados', e); }
   return defaultState();
 }
 
@@ -44,7 +44,7 @@ function saveState() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) {
-    console.error('Falha ao salvar dados', e);
+    logError('Falha ao salvar dados', e);
     toast('Não foi possível salvar — armazenamento cheio ou indisponível.');
   }
 }
