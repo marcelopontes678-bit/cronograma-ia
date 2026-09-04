@@ -5,7 +5,7 @@
    arquivo chama render() e applyTheme() de imediato, então ele tem que vir depois. */
 
 /* ===================== NAVEGAÇÃO / RENDER ===================== */
-let ui = {
+const ui = {
   tab: 'treino',
   exFilterQuery: '',
   exFilterMuscle: 'Todos',

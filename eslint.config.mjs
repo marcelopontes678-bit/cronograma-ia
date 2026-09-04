@@ -83,7 +83,7 @@ export default defineConfig([
         // (render/setTab live there and are called from every tab module).
         render: "readonly",
         setTab: "readonly",
-        ui: "writable",
+        ui: "readonly",
         MUSCLE_GROUPS: "readonly",
         SEED_EXERCISES: "readonly",
         SEED_ROUTINES: "readonly",

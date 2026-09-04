@@ -46,7 +46,7 @@ function renderRoutineEditor() {
         </div>
         <button class="icon-btn" data-act="del" style="width:28px;height:28px;color:var(--red);flex-shrink:0;">✕</button>
       `;
-      row.querySelector('[data-act="sets"]').onclick = () => openStepperEditor('Número de Séries', x.targetSets, 1, 10, v => { x.targetSets = v; renderRoutineEditor(); });
+      row.querySelector('[data-act="sets"]').onclick = () => openStepperEditor('Número de Séries', x.targetSets, { min: 1, max: 10 }, v => { x.targetSets = v; renderRoutineEditor(); });
       row.querySelector('[data-act="reps"]').onclick = () => openRepRangeEditor(x, () => renderRoutineEditor());
       const removeRow = () => { routineDraft.exercises = routineDraft.exercises.filter(e => e !== x); renderRoutineEditor(); };
       row.querySelector('[data-act="del"]').onclick = removeRow;
@@ -79,7 +79,8 @@ function renderRoutineEditor() {
   };
 }
 
-function openStepperEditor(title, value, min, max, onSave) {
+function openStepperEditor(title, value, range, onSave) {
+  const { min, max } = range;
   let v = value;
   const draw = () => {
     openModal(`

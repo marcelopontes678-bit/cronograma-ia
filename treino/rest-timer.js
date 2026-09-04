@@ -1,5 +1,5 @@
 /* ---------- rest timer ---------- */
-let restTimer = { active: false, endsAt: 0, duration: 0, interval: null, finished: false, contextWeUid: null, contextSetUid: null };
+const restTimer = { active: false, endsAt: 0, duration: 0, interval: null, finished: false, contextWeUid: null, contextSetUid: null };
 
 /* Contexto de áudio compartilhado: navegadores móveis só liberam áudio depois de
    um gesto do usuário, então destravamos no primeiro toque em qualquer lugar do
@@ -12,7 +12,7 @@ function unlockAudio() {
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
     sharedAudioCtx = new AC();
-  } catch (e) { /* áudio indisponível */ }
+  } catch { /* áudio indisponível */ }
 }
 
 document.addEventListener('pointerdown', unlockAudio, { once: true });
@@ -75,7 +75,7 @@ function playRestDoneAlert() {
         o.start(t); o.stop(t + 0.22);
       });
     }
-  } catch (e) { /* som indisponível */ }
+  } catch { /* som indisponível */ }
   if (navigator.vibrate) navigator.vibrate([250, 100, 250, 100, 400]);
 }
 

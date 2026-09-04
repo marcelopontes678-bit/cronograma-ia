@@ -125,7 +125,7 @@ async function handleGenerate(request, env) {
         messages: [{ role: 'user', content: prompt }],
       }),
     });
-  } catch (e) {
+  } catch {
     return json({ error: 'Falha ao contatar o serviço de IA.' }, 502);
   }
 

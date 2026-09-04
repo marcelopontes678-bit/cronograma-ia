@@ -14,14 +14,15 @@ const EXTERNAL_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap'
 ];
 
+async function installAssets() {
+  const c = await caches.open(CACHE);
+  await c.addAll(ASSETS);
+  await Promise.allSettled(EXTERNAL_ASSETS.map(url => c.add(url)));
+  self.skipWaiting();
+}
+
 self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE)
-      .then(c => c.addAll(ASSETS).then(() =>
-        Promise.allSettled(EXTERNAL_ASSETS.map(url => c.add(url)))
-      ))
-      .then(() => self.skipWaiting())
-  );
+  e.waitUntil(installAssets());
 });
 
 self.addEventListener('activate', e => {
