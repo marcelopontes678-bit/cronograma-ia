@@ -516,6 +516,25 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   </button>
 </nav>
 
+<!-- Carregados como scripts globais clássicos (sem bundler): cada um só declara
+     funções e variáveis, então a ordem entre eles não importa -- exceto que
+     app.js precisa vir por último, porque ele chama render() e applyTheme()
+     de imediato ao carregar. -->
+<script src="data.js"></script>
+<script src="state.js"></script>
+<script src="format.js"></script>
+<script src="workout-analytics.js"></script>
+<script src="ui-helpers.js"></script>
+<script src="charts.js"></script>
+<script src="rest-timer.js"></script>
+<script src="exercise-picker.js"></script>
+<script src="workout-exercise-card.js"></script>
+<script src="active-workout.js"></script>
+<script src="tab-treino.js"></script>
+<script src="tab-historico.js"></script>
+<script src="tab-exercicios.js"></script>
+<script src="routine-editor.js"></script>
+<script src="tab-perfil.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

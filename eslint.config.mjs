@@ -49,21 +49,153 @@ export default defineConfig([
     },
   },
   {
-    // treino/app.js and sw.js are plain browser scripts and the Cloudflare
-    // Worker's static-asset service worker: no import/export, loaded via a
-    // <script> tag or registered directly, so they parse as scripts, not
-    // modules.
-    files: ["treino/**/*.js", "sw.js"],
+    // sw.js (root, and its copy served from treino/) is the service worker
+    // registered by treino/app.js: no import/export, registered directly,
+    // so it parses as a script.
+    files: ["sw.js", "treino/sw.js"],
     languageOptions: {
       sourceType: "script",
       globals: {
         caches: "readonly",
         self: "readonly",
+      },
+    },
+  },
+  {
+    // treino/*.js are plain browser scripts, no import/export, loaded via a
+    // sequence of <script> tags (see treino/index.html) rather than a
+    // bundler. Each one only declares top-level functions/variables that
+    // become globals shared with every other script tag on the page --
+    // ESLint lints one file at a time and has no notion of that shared
+    // scope, so every name declared in one of these files but used in
+    // another has to be listed here too, or no-undef misreads a normal
+    // cross-file call as an undefined reference.
+    files: ["treino/**/*.js"],
+    languageOptions: {
+      sourceType: "script",
+      globals: {
         setInterval: "readonly",
         clearInterval: "readonly",
         Blob: "readonly",
         FileReader: "readonly",
+
+        // Cross-file globals declared across treino/*.js, app.js included
+        // (render/setTab live there and are called from every tab module).
+        render: "readonly",
+        setTab: "readonly",
+        ui: "writable",
+        MUSCLE_GROUPS: "readonly",
+        SEED_EXERCISES: "readonly",
+        SEED_ROUTINES: "readonly",
+        MEASURE_FIELDS: "readonly",
+        STORAGE_KEY: "readonly",
+        PLATES_KG: "readonly",
+        PLATES_LB: "readonly",
+        defaultState: "readonly",
+        loadState: "readonly",
+        saveState: "readonly",
+        validateImportedState: "readonly",
+        uid: "readonly",
+        esc: "readonly",
+        getExercise: "readonly",
+        unitLabel: "readonly",
+        formatDuration: "readonly",
+        formatDateShort: "readonly",
+        formatDateFull: "readonly",
+        formatDateTimeFull: "readonly",
+        todayISO: "readonly",
+        epley1RM: "readonly",
+        workoutVolume: "readonly",
+        workoutSetCount: "readonly",
+        getWorkoutExerciseSummaries: "readonly",
+        countWorkoutPRs: "readonly",
+        getExerciseWorkouts: "readonly",
+        getLastPerformance: "readonly",
+        getBestPerformance: "readonly",
+        getProgressionSuggestion: "readonly",
+        getExercisePR: "readonly",
+        isSetPR: "readonly",
+        calculatePlates: "readonly",
+        getWeeklyMuscleVolume: "readonly",
+        getGroupSiblings: "readonly",
+        isLastInGroup: "readonly",
+        computeGroupLabels: "readonly",
+        buildWorkoutSummaryCard: "readonly",
+        renderHistoricoTab: "readonly",
+        renderHistoryDetail: "readonly",
+        enableDragReorder: "readonly",
+        enableSwipeToDelete: "readonly",
+        toast: "readonly",
+        openModal: "readonly",
+        closeModal: "readonly",
+        makeEmpty: "readonly",
+        confirmDialog: "readonly",
+        renderTreinoTab: "readonly",
+        renderRoutineCard: "readonly",
+        startEmptyWorkout: "readonly",
+        startRoutineWorkout: "readonly",
+        makeWorkoutExercise: "readonly",
+        makeEmptySet: "readonly",
+        renderActiveWorkout: "readonly",
+        renderExerciseGroup: "readonly",
+        openGroupPicker: "readonly",
+        startActiveTimer: "readonly",
+        stopActiveTimer: "readonly",
+        openFinishWorkoutModal: "readonly",
+        renderWorkoutExerciseCard: "readonly",
+        openPlateCalculator: "readonly",
+        openExerciseActionMenu: "readonly",
+        openExerciseNoteEditor: "readonly",
+        addWarmupSet: "readonly",
+        openExerciseRestOverrideEditor: "readonly",
+        openReplaceExercise: "readonly",
+        unlockAudio: "readonly",
+        startRestTimer: "readonly",
+        stopRestTimer: "readonly",
+        adjustRestTimer: "readonly",
+        tickRestTimer: "readonly",
+        playRestDoneAlert: "readonly",
+        renderRestBar: "readonly",
+        buildInlineRestDivider: "readonly",
+        openRestTimerEditor: "readonly",
+        openExercisePicker: "readonly",
+        renderExercisePicker: "readonly",
+        updatePickerResults: "readonly",
+        openNewExerciseForm: "readonly",
+        renderExerciciosTab: "readonly",
+        openModalNewExerciseStandalone: "readonly",
+        stopExerciseAnim: "readonly",
+        renderExerciseDetail: "readonly",
+        renderLineChartSVG: "readonly",
+        bodyDiagramSVG: "readonly",
+        openRoutineEditor: "readonly",
+        renderRoutineEditor: "readonly",
+        openStepperEditor: "readonly",
+        openRepRangeEditor: "readonly",
+        renderPerfilTab: "readonly",
+        renderMeasurementsView: "readonly",
+        applyTheme: "readonly",
+
+        state: "writable",
+        activeTimerInterval: "writable",
+        restTimer: "writable",
+        sharedAudioCtx: "writable",
+        picker: "writable",
+        exerciseAnimTimer: "writable",
+        routineDraft: "writable",
       },
+    },
+    rules: {
+      // Every name listed above as a global is ALSO declared locally in
+      // whichever treino/*.js file actually defines it -- that's what makes
+      // it reachable from sibling <script> tags in the first place. Flat
+      // config has no per-file globals, so the same list applies uniformly,
+      // and no-redeclare would flag every one of those defining files as
+      // redeclaring its own global. vars:"local" keeps no-unused-vars
+      // checking real local-scope dead code while not flagging a top-level
+      // function whose only callers live in another file.
+      "no-redeclare": "off",
+      "no-unused-vars": ["error", { vars: "local", argsIgnorePattern: "^_" }],
     },
   },
   {
@@ -99,13 +231,7 @@ export default defineConfig([
         { max: 150, skipBlankLines: true, skipComments: true },
       ],
       "max-nested-callbacks": ["warn", 3],
-      // Only one file over budget today (treino/app.js, ~2099 lines) -- a
-      // handful of offenders, so the gate stays "error" and that file is
-      // listed explicitly instead of the rule being softened for everyone.
-      "quality/max-lines": [
-        "error",
-        { max: 350, ignore: ["treino/app.js"] },
-      ],
+      "quality/max-lines": ["error", { max: 350 }],
       // Baseline as of this install: 5 direct console calls (2 in
       // orcamento-marcenaria/engine/gerar_orcamento_docx.js, 2 in
       // treino/app.js, 1 in worker/index.js). No project-wide log adapter
