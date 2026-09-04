@@ -63,33 +63,43 @@ function renderHistoryDetail(main, workoutId) {
   const w = state.workouts.find(x => x.id === workoutId);
   if (!w) { ui.historyDetailId = null; renderHistoricoTab(main); return; }
 
+  main.appendChild(buildHistoryBackButton());
+  main.appendChild(buildWorkoutSummaryCard(w));
+  main.appendChild(buildHistoryDetailsTitle());
+  w.exercises.forEach(we => main.appendChild(buildHistoryExerciseCard(we)));
+  main.appendChild(buildHistoryDetailActions(w, workoutId));
+}
+
+function buildHistoryBackButton() {
   const back = document.createElement('button');
   back.className = 'btn btn-ghost btn-sm';
   back.style.marginBottom = '14px';
   back.innerHTML = '← Voltar';
   back.onclick = () => { ui.historyDetailId = null; render(); };
-  main.appendChild(back);
+  return back;
+}
 
-  main.appendChild(buildWorkoutSummaryCard(w));
-
+function buildHistoryDetailsTitle() {
   const detailsTitle = document.createElement('div');
   detailsTitle.className = 'section-title';
   detailsTitle.textContent = 'Detalhes de todas as séries';
-  main.appendChild(detailsTitle);
+  return detailsTitle;
+}
 
-  w.exercises.forEach(we => {
-    const ex = getExercise(we.exerciseId);
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.style.marginTop = '12px';
-    const rows = we.sets.map((s, i) => `<div class="set-history-row"><span>${s.warmup ? 'W' : (i+1)}</span><span>${esc(s.weight)}${unitLabel()} × ${esc(s.reps)}${s.rpe ? ` · RPE ${esc(s.rpe)}` : ''}</span></div>`).join('');
-    card.innerHTML = `
-      <div class="ex-card-head"><div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}</div></div>
-      ${rows}
-    `;
-    main.appendChild(card);
-  });
+function buildHistoryExerciseCard(we) {
+  const ex = getExercise(we.exerciseId);
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.marginTop = '12px';
+  const rows = we.sets.map((s, i) => `<div class="set-history-row"><span>${s.warmup ? 'W' : (i+1)}</span><span>${esc(s.weight)}${unitLabel()} × ${esc(s.reps)}${s.rpe ? ` · RPE ${esc(s.rpe)}` : ''}</span></div>`).join('');
+  card.innerHTML = `
+    <div class="ex-card-head"><div class="ex-card-title">${esc(ex ? ex.name : 'Exercício')}</div></div>
+    ${rows}
+  `;
+  return card;
+}
 
+function buildHistoryDetailActions(w, workoutId) {
   const actions = document.createElement('div');
   actions.className = 'modal-footer';
   actions.style.marginTop = '18px';
@@ -97,8 +107,7 @@ function renderHistoryDetail(main, workoutId) {
     <button class="btn btn-ghost" style="flex:1" id="dRepeat">Repetir Treino</button>
     <button class="btn btn-danger" style="flex:1" id="dDelete">Excluir</button>
   `;
-  main.appendChild(actions);
-  document.getElementById('dRepeat').onclick = () => {
+  actions.querySelector('#dRepeat').onclick = () => {
     if (state.activeWorkout) { toast('Finalize ou descarte o treino em andamento primeiro.'); return; }
     state.activeWorkout = {
       id: uid(), name: w.name, date: todayISO(), startedAt: Date.now(), notes: '',
@@ -106,10 +115,11 @@ function renderHistoryDetail(main, workoutId) {
     };
     saveState(); ui.historyDetailId = null; setTab('treino');
   };
-  document.getElementById('dDelete').onclick = () => {
+  actions.querySelector('#dDelete').onclick = () => {
     confirmDialog('Excluir este treino do histórico?', () => {
       state.workouts = state.workouts.filter(x => x.id !== workoutId);
       saveState(); ui.historyDetailId = null; render(); toast('Treino excluído');
     });
   };
+  return actions;
 }

@@ -2,9 +2,24 @@
 function renderTreinoTab(main) {
   if (state.activeWorkout) { renderActiveWorkout(main); return; }
 
+  main.appendChild(buildTreinoStatsRow());
+
+  const weeklyVolumeCard = buildWeeklyVolumeCard();
+  if (weeklyVolumeCard) main.appendChild(weeklyVolumeCard);
+
+  main.appendChild(buildStartEmptyWorkoutButton());
+  main.appendChild(buildRoutinesSectionTitle());
+
+  if (!state.routines.length) {
+    main.appendChild(makeEmpty('Nenhuma rotina criada ainda.'));
+  } else {
+    state.routines.forEach(r => main.appendChild(renderRoutineCard(r)));
+  }
+}
+
+function buildTreinoStatsRow() {
   const totalWorkouts = state.workouts.length;
-  const now = new Date();
-  const weekAgo = new Date(now.getTime() - 7 * 24 * 3600 * 1000);
+  const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000);
   const thisWeek = state.workouts.filter(w => new Date(w.date) >= weekAgo).length;
   const totalVolume = state.workouts.reduce((s, w) => s + workoutVolume(w), 0);
 
@@ -15,32 +30,38 @@ function renderTreinoTab(main) {
     <div class="stat-box"><div class="stat-num">${thisWeek}</div><div class="stat-label">Esta semana</div></div>
     <div class="stat-box"><div class="stat-num">${Math.round(totalVolume).toLocaleString('pt-BR')}</div><div class="stat-label">Volume ${unitLabel()}</div></div>
   `;
-  main.appendChild(stats);
+  return stats;
+}
 
+// null quando não há treinos na última semana -- o chamador decide se anexa.
+function buildWeeklyVolumeCard() {
   const weeklyVolume = getWeeklyMuscleVolume();
-  if (weeklyVolume.length) {
-    const maxVol = weeklyVolume[0].volume;
-    const volCard = document.createElement('div');
-    volCard.className = 'card card-pad';
-    volCard.style.marginTop = '12px';
-    volCard.innerHTML = `<div class="ex-card-title" style="margin-bottom:10px;">Volume por Grupo Muscular (7 dias)</div>` +
-      weeklyVolume.map(v => `
-        <div class="muscle-vol-row">
-          <span class="muscle-vol-label">${esc(v.muscle)}</span>
-          <div class="muscle-vol-bar-wrap"><div class="muscle-vol-bar" style="width:${Math.max(4, (v.volume / maxVol) * 100)}%"></div></div>
-          <span class="muscle-vol-value mono">${Math.round(v.volume).toLocaleString('pt-BR')}</span>
-        </div>
-      `).join('');
-    main.appendChild(volCard);
-  }
+  if (!weeklyVolume.length) return null;
+  const maxVol = weeklyVolume[0].volume;
+  const volCard = document.createElement('div');
+  volCard.className = 'card card-pad';
+  volCard.style.marginTop = '12px';
+  volCard.innerHTML = `<div class="ex-card-title" style="margin-bottom:10px;">Volume por Grupo Muscular (7 dias)</div>` +
+    weeklyVolume.map(v => `
+      <div class="muscle-vol-row">
+        <span class="muscle-vol-label">${esc(v.muscle)}</span>
+        <div class="muscle-vol-bar-wrap"><div class="muscle-vol-bar" style="width:${Math.max(4, (v.volume / maxVol) * 100)}%"></div></div>
+        <span class="muscle-vol-value mono">${Math.round(v.volume).toLocaleString('pt-BR')}</span>
+      </div>
+    `).join('');
+  return volCard;
+}
 
+function buildStartEmptyWorkoutButton() {
   const startBtn = document.createElement('button');
   startBtn.className = 'btn btn-primary btn-block';
   startBtn.style.marginTop = '14px';
   startBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5v14"/></svg> Começar Treino Vazio`;
   startBtn.onclick = startEmptyWorkout;
-  main.appendChild(startBtn);
+  return startBtn;
+}
 
+function buildRoutinesSectionTitle() {
   const sectionTitle = document.createElement('div');
   sectionTitle.className = 'section-title';
   sectionTitle.style.display = 'flex';
@@ -52,13 +73,7 @@ function renderTreinoTab(main) {
   newRoutineBtn.textContent = '+ Nova rotina';
   newRoutineBtn.onclick = () => openRoutineEditor(null);
   sectionTitle.appendChild(newRoutineBtn);
-  main.appendChild(sectionTitle);
-
-  if (!state.routines.length) {
-    main.appendChild(makeEmpty('Nenhuma rotina criada ainda.'));
-  } else {
-    state.routines.forEach(r => main.appendChild(renderRoutineCard(r)));
-  }
+  return sectionTitle;
 }
 
 function renderRoutineCard(r) {

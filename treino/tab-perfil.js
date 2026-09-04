@@ -2,6 +2,19 @@
 function renderPerfilTab(main) {
   if (ui.showMeasurements) { renderMeasurementsView(main); return; }
 
+  main.appendChild(buildSettingsCard());
+  main.appendChild(buildMeasurementsButton());
+
+  const dataTitle = document.createElement('div');
+  dataTitle.className = 'section-title';
+  dataTitle.textContent = 'Dados';
+  main.appendChild(dataTitle);
+  main.appendChild(buildDataCard());
+
+  main.appendChild(buildAboutFooter());
+}
+
+function buildSettingsCard() {
   const card = document.createElement('div');
   card.className = 'card card-pad';
   card.innerHTML = `
@@ -32,24 +45,23 @@ function renderPerfilTab(main) {
     </div>
     <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6;">Alterar a unidade não converte os pesos já registrados — serve apenas para novos registros.</p>
   `;
-  main.appendChild(card);
   card.querySelectorAll('#themeSeg button').forEach(b => b.onclick = () => { state.settings.theme = b.dataset.t; saveState(); applyTheme(); render(); });
   card.querySelectorAll('#unitSeg button').forEach(b => b.onclick = () => { state.settings.unit = b.dataset.u; saveState(); render(); });
   card.querySelectorAll('#restSeg button').forEach(b => b.onclick = () => { state.settings.restDefault = Number(b.dataset.s); saveState(); render(); });
-  document.getElementById('barWeightInput').oninput = (e) => { state.settings.barWeight = Number(e.target.value) || 0; saveState(); };
+  card.querySelector('#barWeightInput').oninput = (e) => { state.settings.barWeight = Number(e.target.value) || 0; saveState(); };
+  return card;
+}
 
+function buildMeasurementsButton() {
   const measureBtn = document.createElement('button');
   measureBtn.className = 'btn btn-ghost btn-block';
   measureBtn.style.marginTop = '12px';
   measureBtn.textContent = '📏 Medidas Corporais';
   measureBtn.onclick = () => { ui.showMeasurements = true; render(); window.scrollTo(0, 0); };
-  main.appendChild(measureBtn);
+  return measureBtn;
+}
 
-  const dataTitle = document.createElement('div');
-  dataTitle.className = 'section-title';
-  dataTitle.textContent = 'Dados';
-  main.appendChild(dataTitle);
-
+function buildDataCard() {
   const dataCard = document.createElement('div');
   dataCard.className = 'card card-pad';
   dataCard.style.display = 'flex';
@@ -61,9 +73,8 @@ function renderPerfilTab(main) {
     <input type="file" id="fileImport" accept="application/json" style="display:none;">
     <button class="btn btn-danger btn-block" id="btnReset">Apagar todos os dados</button>
   `;
-  main.appendChild(dataCard);
 
-  document.getElementById('btnExport').onclick = () => {
+  dataCard.querySelector('#btnExport').onclick = () => {
     const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -72,8 +83,8 @@ function renderPerfilTab(main) {
     URL.revokeObjectURL(url);
     toast('Backup exportado');
   };
-  document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();
-  document.getElementById('fileImport').onchange = (e) => {
+  dataCard.querySelector('#btnImport').onclick = () => dataCard.querySelector('#fileImport').click();
+  dataCard.querySelector('#fileImport').onchange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -92,13 +103,16 @@ function renderPerfilTab(main) {
     reader.readAsText(file);
     e.target.value = '';
   };
-  document.getElementById('btnReset').onclick = () => {
+  dataCard.querySelector('#btnReset').onclick = () => {
     confirmDialog('Isso vai apagar TODOS os treinos, rotinas e exercícios personalizados permanentemente. Tem certeza?', () => {
       state = defaultState();
       saveState(); render(); toast('Dados apagados');
     });
   };
+  return dataCard;
+}
 
+function buildAboutFooter() {
   const about = document.createElement('div');
   about.style.marginTop = '22px';
   about.style.textAlign = 'center';
@@ -106,17 +120,32 @@ function renderPerfilTab(main) {
   about.style.fontSize = '11px';
   about.style.lineHeight = '1.7';
   about.innerHTML = `Gibor — diário de treino inspirado no Strong.<br>Todos os dados ficam salvos apenas neste dispositivo.`;
-  main.appendChild(about);
+  return about;
 }
 
 function renderMeasurementsView(main) {
+  main.appendChild(buildMeasurementsBackButton());
+  main.appendChild(buildMeasurementFormCard());
+
+  const weightPoints = state.bodyMeasurements
+    .filter(m => m.weight)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .map(m => ({ date: m.date, value: Number(m.weight) }));
+  if (weightPoints.length >= 2) main.appendChild(buildMeasurementsChartCard(weightPoints));
+
+  main.appendChild(buildMeasurementsListCard());
+}
+
+function buildMeasurementsBackButton() {
   const back = document.createElement('button');
   back.className = 'btn btn-ghost btn-sm';
   back.style.marginBottom = '14px';
   back.textContent = '← Voltar';
   back.onclick = () => { ui.showMeasurements = false; render(); };
-  main.appendChild(back);
+  return back;
+}
 
+function buildMeasurementFormCard() {
   const formCard = document.createElement('div');
   formCard.className = 'card card-pad';
   const today = new Date().toISOString().split('T')[0];
@@ -140,29 +169,27 @@ function renderMeasurementsView(main) {
     </div>
     <button class="btn btn-primary btn-block" id="mSave" style="margin-top:14px;">Salvar Registro</button>
   `;
-  main.appendChild(formCard);
-  document.getElementById('mSave').onclick = () => {
-    const weight = document.getElementById('mWeight').value;
-    const bodyFat = document.getElementById('mBodyFat').value;
-    const entry = { id: uid(), date: document.getElementById('mDate').value || today, weight, bodyFat };
-    MEASURE_FIELDS.forEach(f => { entry[f.key] = document.getElementById(`m_${f.key}`).value; });
+  formCard.querySelector('#mSave').onclick = () => {
+    const weight = formCard.querySelector('#mWeight').value;
+    const bodyFat = formCard.querySelector('#mBodyFat').value;
+    const entry = { id: uid(), date: formCard.querySelector('#mDate').value || today, weight, bodyFat };
+    MEASURE_FIELDS.forEach(f => { entry[f.key] = formCard.querySelector(`#m_${f.key}`).value; });
     if (!weight && !bodyFat && !MEASURE_FIELDS.some(f => entry[f.key])) { toast('Preencha ao menos um valor.'); return; }
     state.bodyMeasurements.push(entry);
     saveState(); render(); window.scrollTo(0, 0); toast('Registro salvo');
   };
+  return formCard;
+}
 
-  const weightPoints = state.bodyMeasurements
-    .filter(m => m.weight)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .map(m => ({ date: m.date, value: Number(m.weight) }));
-  if (weightPoints.length >= 2) {
-    const chartCard = document.createElement('div');
-    chartCard.className = 'card';
-    chartCard.style.marginTop = '12px';
-    chartCard.innerHTML = `<div class="ex-card-head"><div class="ex-card-title">Progressão do Peso Corporal</div></div><div class="chart-wrap">${renderLineChartSVG(weightPoints, unitLabel())}</div>`;
-    main.appendChild(chartCard);
-  }
+function buildMeasurementsChartCard(weightPoints) {
+  const chartCard = document.createElement('div');
+  chartCard.className = 'card';
+  chartCard.style.marginTop = '12px';
+  chartCard.innerHTML = `<div class="ex-card-head"><div class="ex-card-title">Progressão do Peso Corporal</div></div><div class="chart-wrap">${renderLineChartSVG(weightPoints, unitLabel())}</div>`;
+  return chartCard;
+}
 
+function buildMeasurementsListCard() {
   const listCard = document.createElement('div');
   listCard.className = 'card';
   listCard.style.marginTop = '12px';
@@ -170,29 +197,31 @@ function renderMeasurementsView(main) {
   if (!sorted.length) {
     listCard.appendChild(makeEmpty('Nenhum registro ainda.'));
   } else {
-    sorted.forEach(m => {
-      const detailParts = [];
-      if (m.bodyFat) detailParts.push(`${m.bodyFat}% gordura`);
-      MEASURE_FIELDS.forEach(f => { if (m[f.key]) detailParts.push(`${f.label}: ${m[f.key]}cm`); });
-      const row = document.createElement('div');
-      row.className = 'measure-entry';
-      row.innerHTML = `
-        <div>
-          <div class="measure-entry-date">${esc(formatDateShort(m.date))}</div>
-          <div class="measure-entry-detail">${m.weight ? `${m.weight}${unitLabel()}` : ''}${detailParts.length ? (m.weight ? ' · ' : '') + esc(detailParts.join(' · ')) : ''}</div>
-        </div>
-        <button class="icon-btn" style="width:28px;height:28px;color:var(--red);flex-shrink:0;">✕</button>
-      `;
-      row.querySelector('button').onclick = () => {
-        confirmDialog('Excluir este registro?', () => {
-          state.bodyMeasurements = state.bodyMeasurements.filter(x => x.id !== m.id);
-          saveState(); render();
-        });
-      };
-      listCard.appendChild(row);
-    });
+    sorted.forEach(m => listCard.appendChild(buildMeasurementEntryRow(m)));
   }
-  main.appendChild(listCard);
+  return listCard;
+}
+
+function buildMeasurementEntryRow(m) {
+  const detailParts = [];
+  if (m.bodyFat) detailParts.push(`${m.bodyFat}% gordura`);
+  MEASURE_FIELDS.forEach(f => { if (m[f.key]) detailParts.push(`${f.label}: ${m[f.key]}cm`); });
+  const row = document.createElement('div');
+  row.className = 'measure-entry';
+  row.innerHTML = `
+    <div>
+      <div class="measure-entry-date">${esc(formatDateShort(m.date))}</div>
+      <div class="measure-entry-detail">${m.weight ? `${m.weight}${unitLabel()}` : ''}${detailParts.length ? (m.weight ? ' · ' : '') + esc(detailParts.join(' · ')) : ''}</div>
+    </div>
+    <button class="icon-btn" style="width:28px;height:28px;color:var(--red);flex-shrink:0;">✕</button>
+  `;
+  row.querySelector('button').onclick = () => {
+    confirmDialog('Excluir este registro?', () => {
+      state.bodyMeasurements = state.bodyMeasurements.filter(x => x.id !== m.id);
+      saveState(); render();
+    });
+  };
+  return row;
 }
 
 /* ===================== TEMA ===================== */

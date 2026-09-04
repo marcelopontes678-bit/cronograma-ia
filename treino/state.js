@@ -49,19 +49,30 @@ function saveState() {
   }
 }
 
+/* Cada checagem roda na ordem, e a primeira que devolver uma mensagem vence --
+   mesma semântica da cadeia de "if early-return" que isso substitui. Checagens
+   depois da primeira podem assumir "data" é um objeto porque, se não fosse, o
+   loop já teria parado ali. */
+const IMPORT_VALIDATIONS = [
+  (data) => (!data || typeof data !== 'object') && 'o arquivo não contém um objeto JSON válido.',
+  (data) => !Array.isArray(data.exercises) && 'campo "exercises" ausente ou inválido.',
+  (data) => !Array.isArray(data.workouts) && 'campo "workouts" ausente ou inválido.',
+  (data) => data.routines !== undefined && !Array.isArray(data.routines) && 'campo "routines" inválido.',
+  (data) => data.bodyMeasurements !== undefined && !Array.isArray(data.bodyMeasurements) && 'campo "bodyMeasurements" inválido.',
+  (data) => data.settings !== undefined && (typeof data.settings !== 'object' || data.settings === null) && 'campo "settings" inválido.',
+  (data) => data.exercises.find(e => !e || typeof e.id !== 'string' || typeof e.name !== 'string')
+    && 'um ou mais exercícios estão com formato inválido (faltando id/nome).',
+  (data) => data.workouts.find(w => !w || typeof w.id !== 'string' || !Array.isArray(w.exercises))
+    && 'um ou mais treinos estão com formato inválido.',
+];
+
 /* Validação mínima de um backup importado — o suficiente para recusar arquivos
    claramente malformados antes que quebrem alguma tela mais adiante, sem exigir
    um schema completo. Retorna uma mensagem de erro, ou null se estiver ok. */
 function validateImportedState(data) {
-  if (!data || typeof data !== 'object') return 'o arquivo não contém um objeto JSON válido.';
-  if (!Array.isArray(data.exercises)) return 'campo "exercises" ausente ou inválido.';
-  if (!Array.isArray(data.workouts)) return 'campo "workouts" ausente ou inválido.';
-  if (data.routines !== undefined && !Array.isArray(data.routines)) return 'campo "routines" inválido.';
-  if (data.bodyMeasurements !== undefined && !Array.isArray(data.bodyMeasurements)) return 'campo "bodyMeasurements" inválido.';
-  if (data.settings !== undefined && (typeof data.settings !== 'object' || data.settings === null)) return 'campo "settings" inválido.';
-  const badExercise = data.exercises.find(e => !e || typeof e.id !== 'string' || typeof e.name !== 'string');
-  if (badExercise) return 'um ou mais exercícios estão com formato inválido (faltando id/nome).';
-  const badWorkout = data.workouts.find(w => !w || typeof w.id !== 'string' || !Array.isArray(w.exercises));
-  if (badWorkout) return 'um ou mais treinos estão com formato inválido.';
+  for (const check of IMPORT_VALIDATIONS) {
+    const error = check(data);
+    if (error) return error;
+  }
   return null;
 }

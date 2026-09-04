@@ -57,53 +57,11 @@ async function handleGenerate(request, env) {
     return json({ error: 'Método não permitido, use POST.' }, 405);
   }
 
-  // Restringe o proxy ao próprio app — não é uma API pública aberta a qualquer
-  // origem. Checagem simples (não é proteção completa contra CSRF nem
-  // substitui rate limiting — ver nota no topo do arquivo). Um Origin
-  // malformado (ex.: "null", mandado em navegações sandboxed) é tratado
-  // como não permitido em vez de derrubar a requisição com uma exceção.
-  const origin = request.headers.get('Origin');
-  if (origin) {
-    try {
-      if (new URL(origin).host !== new URL(request.url).host) {
-        return json({ error: 'Origem não permitida.' }, 403);
-      }
-    } catch {
-      return json({ error: 'Origem não permitida.' }, 403);
-    }
-  }
+  const originError = checkOrigin(request);
+  if (originError) return originError;
 
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ error: 'Corpo da requisição precisa ser um JSON válido.' }, 400);
-  }
-  if (!body || typeof body !== 'object') {
-    return json({ error: 'Corpo da requisição precisa ser um objeto JSON.' }, 400);
-  }
-
-  const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
-  if (!prompt) {
-    return json({ error: 'Campo "prompt" é obrigatório.' }, 400);
-  }
-  if (prompt.length > MAX_TEXT_CHARS) {
-    return json({ error: `"prompt" excede o limite de ${MAX_TEXT_CHARS} caracteres.` }, 400);
-  }
-
-  const system = typeof body.system === 'string' ? body.system : undefined;
-  if (system && system.length > MAX_TEXT_CHARS) {
-    return json({ error: `"system" excede o limite de ${MAX_TEXT_CHARS} caracteres.` }, 400);
-  }
-
-  let maxTokens = MAX_TOKENS_CAP;
-  if (body.maxTokens !== undefined) {
-    const n = Number(body.maxTokens);
-    if (!Number.isFinite(n) || n <= 0) {
-      return json({ error: '"maxTokens" precisa ser um número maior que zero.' }, 400);
-    }
-    maxTokens = Math.min(n, MAX_TOKENS_CAP);
-  }
+  const parsed = await parseGenerateBody(request);
+  if (parsed.error) return parsed.error;
 
   // Checa a chave só depois de validar a entrada do cliente — assim um pedido
   // malformado sempre recebe o erro certo, com ou sem a chave configurada.
@@ -111,6 +69,70 @@ async function handleGenerate(request, env) {
     return json({ error: 'Chave de IA não configurada no servidor.' }, 500);
   }
 
+  const anthropicResult = await callAnthropic(env, parsed);
+  if (anthropicResult.error) return anthropicResult.error;
+
+  return json(await buildGenerateResult(anthropicResult.response));
+}
+
+// Restringe o proxy ao próprio app — não é uma API pública aberta a qualquer
+// origem. Checagem simples (não é proteção completa contra CSRF nem
+// substitui rate limiting — ver nota no topo do arquivo). Um Origin
+// malformado (ex.: "null", mandado em navegações sandboxed) é tratado
+// como não permitido em vez de derrubar a requisição com uma exceção.
+function checkOrigin(request) {
+  const origin = request.headers.get('Origin');
+  if (!origin) return null;
+  try {
+    if (new URL(origin).host !== new URL(request.url).host) {
+      return json({ error: 'Origem não permitida.' }, 403);
+    }
+  } catch {
+    return json({ error: 'Origem não permitida.' }, 403);
+  }
+  return null;
+}
+
+function parseMaxTokens(body) {
+  if (body.maxTokens === undefined) return { maxTokens: MAX_TOKENS_CAP };
+  const n = Number(body.maxTokens);
+  if (!Number.isFinite(n) || n <= 0) {
+    return { error: json({ error: '"maxTokens" precisa ser um número maior que zero.' }, 400) };
+  }
+  return { maxTokens: Math.min(n, MAX_TOKENS_CAP) };
+}
+
+async function parseGenerateBody(request) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return { error: json({ error: 'Corpo da requisição precisa ser um JSON válido.' }, 400) };
+  }
+  if (!body || typeof body !== 'object') {
+    return { error: json({ error: 'Corpo da requisição precisa ser um objeto JSON.' }, 400) };
+  }
+
+  const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
+  if (!prompt) {
+    return { error: json({ error: 'Campo "prompt" é obrigatório.' }, 400) };
+  }
+  if (prompt.length > MAX_TEXT_CHARS) {
+    return { error: json({ error: `"prompt" excede o limite de ${MAX_TEXT_CHARS} caracteres.` }, 400) };
+  }
+
+  const system = typeof body.system === 'string' ? body.system : undefined;
+  if (system && system.length > MAX_TEXT_CHARS) {
+    return { error: json({ error: `"system" excede o limite de ${MAX_TEXT_CHARS} caracteres.` }, 400) };
+  }
+
+  const maxTokensResult = parseMaxTokens(body);
+  if (maxTokensResult.error) return maxTokensResult;
+
+  return { prompt, system, maxTokens: maxTokensResult.maxTokens };
+}
+
+async function callAnthropic(env, { prompt, system, maxTokens }) {
   let anthropicRes;
   try {
     anthropicRes = await fetch(ANTHROPIC_API_URL, {
@@ -128,18 +150,22 @@ async function handleGenerate(request, env) {
       }),
     });
   } catch {
-    return json({ error: 'Falha ao contatar o serviço de IA.' }, 502);
+    return { error: json({ error: 'Falha ao contatar o serviço de IA.' }, 502) };
   }
 
   if (!anthropicRes.ok) {
     const detail = await anthropicRes.text().catch(() => '');
     logError('Anthropic API error', anthropicRes.status, detail);
-    return json({ error: 'O serviço de IA retornou um erro.' }, 502);
+    return { error: json({ error: 'O serviço de IA retornou um erro.' }, 502) };
   }
 
+  return { response: anthropicRes };
+}
+
+async function buildGenerateResult(anthropicRes) {
   const data = await anthropicRes.json();
   const text = (data.content || []).map(b => b.text || '').join('').trim();
   // Sinaliza pro cliente quando a resposta foi cortada por atingir max_tokens,
   // em vez de deixar um texto truncado passar como se fosse uma resposta completa.
-  return json({ text, truncated: data.stop_reason === 'max_tokens' });
+  return { text, truncated: data.stop_reason === 'max_tokens' };
 }

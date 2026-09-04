@@ -83,31 +83,11 @@ function renderRestBar() {
   const root = document.getElementById('restBarRoot');
 
   if (!restTimer.active) { root.innerHTML = ''; return; }
-
-  if (restTimer.finished) {
-    if (root.querySelector('.rest-bar-done')) return;
-    root.innerHTML = `
-      <div class="rest-bar rest-bar-done" id="restDoneBar">
-        <div class="rest-bar-left">
-          <span class="rest-bar-time mono">🔔</span>
-          <span class="mono" style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Descanso concluído</span>
-        </div>
-        <div class="rest-bar-actions"><button id="restDismiss">OK</button></div>
-      </div>
-    `;
-    document.getElementById('restDismiss').onclick = stopRestTimer;
-    return;
-  }
+  if (restTimer.finished) { renderRestBarDone(root); return; }
 
   const remaining = Math.max(0, Math.round((restTimer.endsAt - Date.now()) / 1000));
   const hasInlinePosition = restTimer.contextWeUid && document.getElementById('restInlineTime');
-
-  if (hasInlinePosition) {
-    // O cronômetro tem uma posição embutida entre as séries — não duplica na barra flutuante.
-    root.innerHTML = '';
-    document.getElementById('restInlineTime').textContent = formatDuration(remaining);
-    return;
-  }
+  if (hasInlinePosition) { renderRestBarInline(root, remaining); return; }
 
   const existing = root.querySelector('#restEdit');
   if (existing) {
@@ -115,6 +95,30 @@ function renderRestBar() {
     existing.textContent = formatDuration(remaining);
     return;
   }
+  renderRestBarFloating(root, remaining);
+}
+
+function renderRestBarDone(root) {
+  if (root.querySelector('.rest-bar-done')) return;
+  root.innerHTML = `
+    <div class="rest-bar rest-bar-done" id="restDoneBar">
+      <div class="rest-bar-left">
+        <span class="rest-bar-time mono">🔔</span>
+        <span class="mono" style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Descanso concluído</span>
+      </div>
+      <div class="rest-bar-actions"><button id="restDismiss">OK</button></div>
+    </div>
+  `;
+  document.getElementById('restDismiss').onclick = stopRestTimer;
+}
+
+// O cronômetro tem uma posição embutida entre as séries — não duplica na barra flutuante.
+function renderRestBarInline(root, remaining) {
+  root.innerHTML = '';
+  document.getElementById('restInlineTime').textContent = formatDuration(remaining);
+}
+
+function renderRestBarFloating(root, remaining) {
   root.innerHTML = `
     <div class="rest-bar">
       <div class="rest-bar-left">

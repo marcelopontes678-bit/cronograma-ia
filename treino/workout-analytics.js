@@ -45,16 +45,31 @@ function getExerciseWorkouts(exerciseId) {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
+/* Série de trabalho (não-aquecimento) de um treino nessa posição, ou a
+   última série de trabalho se a posição não existir -- o mesmo critério de
+   "qual série representa esse índice" usado tanto pra achar o desempenho
+   mais recente quanto o recorde. */
+function findWorkingSetAt(workout, exerciseId, setIndex) {
+  const we = workout.exercises.find(e => e.exerciseId === exerciseId);
+  if (!we || !we.sets || !we.sets.length) return null;
+  const workingSets = we.sets.filter(s => !s.warmup);
+  return workingSets[setIndex] || workingSets[workingSets.length - 1] || null;
+}
+
 function getLastPerformance(exerciseId, setIndex) {
   const past = getExerciseWorkouts(exerciseId);
   for (const w of past) {
-    const we = w.exercises.find(e => e.exerciseId === exerciseId);
-    if (!we || !we.sets || !we.sets.length) continue;
-    const workingSets = we.sets.filter(s => !s.warmup);
-    const s = workingSets[setIndex] || workingSets[workingSets.length - 1];
+    const s = findWorkingSetAt(w, exerciseId, setIndex);
     if (s && s.weight != null && s.weight !== '') return s;
   }
   return null;
+}
+
+// Carga mais alta vence; empate em carga é desempatado por mais reps.
+function isBetterSet(candidate, best) {
+  if (!best) return true;
+  if (Number(candidate.weight) !== Number(best.weight)) return Number(candidate.weight) > Number(best.weight);
+  return Number(candidate.reps || 0) > Number(best.reps || 0);
 }
 
 /* Maior carga já registrada nessa posição de série (não apenas a última vez) — é essa
@@ -64,15 +79,9 @@ function getBestPerformance(exerciseId, setIndex) {
   const past = getExerciseWorkouts(exerciseId);
   let best = null;
   past.forEach(w => {
-    const we = w.exercises.find(e => e.exerciseId === exerciseId);
-    if (!we || !we.sets || !we.sets.length) return;
-    const workingSets = we.sets.filter(s => !s.warmup);
-    const s = workingSets[setIndex] || workingSets[workingSets.length - 1];
+    const s = findWorkingSetAt(w, exerciseId, setIndex);
     if (!s || s.weight == null || s.weight === '') return;
-    const better = !best
-      || Number(s.weight) > Number(best.weight)
-      || (Number(s.weight) === Number(best.weight) && Number(s.reps || 0) > Number(best.reps || 0));
-    if (better) best = s;
+    if (isBetterSet(s, best)) best = s;
   });
   return best;
 }

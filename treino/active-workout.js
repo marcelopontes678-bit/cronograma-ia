@@ -10,6 +10,19 @@ function makeEmptySet() { return { uid: uid(), weight: '', reps: '', rpe: '', co
 function renderActiveWorkout(main) {
   const aw = state.activeWorkout;
 
+  main.appendChild(buildActiveWorkoutTimerBar(aw));
+  main.appendChild(buildActiveWorkoutProgressBar(aw));
+  startActiveTimer();
+
+  if (!aw.exercises.length) {
+    main.appendChild(makeEmpty('Adicione exercícios para começar a registrar suas séries.'));
+  }
+  renderActiveWorkoutExerciseCards(main, aw);
+
+  main.appendChild(buildActiveWorkoutActionsRow(aw));
+}
+
+function buildActiveWorkoutTimerBar(aw) {
   const timerBar = document.createElement('div');
   timerBar.className = 'workout-timer-bar';
   timerBar.innerHTML = `
@@ -22,7 +35,6 @@ function renderActiveWorkout(main) {
       <button class="btn btn-primary btn-sm" id="btnFinish">Finalizar</button>
     </div>
   `;
-  main.appendChild(timerBar);
   timerBar.querySelector('#btnDiscard').onclick = () => {
     confirmDialog('Descartar este treino? Todo o progresso será perdido.', () => {
       stopActiveTimer();
@@ -30,21 +42,20 @@ function renderActiveWorkout(main) {
     });
   };
   timerBar.querySelector('#btnFinish').onclick = openFinishWorkoutModal;
+  return timerBar;
+}
 
+function buildActiveWorkoutProgressBar(aw) {
   const totalSets = aw.exercises.reduce((s, we) => s + we.sets.filter(x => !x.warmup).length, 0);
   const doneSets = aw.exercises.reduce((s, we) => s + we.sets.filter(x => !x.warmup && x.completed).length, 0);
   const pct = totalSets ? Math.round((doneSets / totalSets) * 100) : 0;
   const progressBar = document.createElement('div');
   progressBar.className = 'workout-progress-bar';
   progressBar.innerHTML = `<div class="workout-progress-fill" style="width:${pct}%"></div>`;
-  main.appendChild(progressBar);
+  return progressBar;
+}
 
-  startActiveTimer();
-
-  if (!aw.exercises.length) {
-    main.appendChild(makeEmpty('Adicione exercícios para começar a registrar suas séries.'));
-  }
-
+function renderActiveWorkoutExerciseCards(main, aw) {
   const groupLabels = computeGroupLabels();
   const rendered = new Set();
   aw.exercises.forEach(we => {
@@ -70,7 +81,9 @@ function renderActiveWorkout(main) {
       saveState(); render();
     });
   }
+}
 
+function buildActiveWorkoutActionsRow(aw) {
   const actionsRow = document.createElement('div');
   actionsRow.style.display = 'flex';
   actionsRow.style.gap = '8px';
@@ -96,7 +109,7 @@ function renderActiveWorkout(main) {
     groupBtn.onclick = openGroupPicker;
     actionsRow.appendChild(groupBtn);
   }
-  main.appendChild(actionsRow);
+  return actionsRow;
 }
 
 function renderExerciseGroup(groupId, members, label) {
