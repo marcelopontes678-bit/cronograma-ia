@@ -39,7 +39,7 @@ class PaginaRenderizada:
 class RecortePagina:
     """Um quadrante de alta resolucao de uma pagina densa (varias vistas
     empacotadas numa prancha so). A API do Claude reamostra imagens acima
-    de ~1568px no lado maior antes do modelo "ver" -- uma pagina inteira
+    de ~2576px no lado maior (Sonnet 5) antes do modelo "ver" -- uma pagina inteira
     nesse formato dilui a resolucao entre os quadrantes, tornando texto
     pequeno (legendas de acabamento, cotas finas) ilegivel mesmo
     renderizando o PDF em alta resolucao no nosso lado. Recortar em
@@ -64,7 +64,7 @@ DPI_PADRAO = 200
 
 # Acima desse tamanho (px, no lado maior) a pagina inteira ja seria
 # reamostrada pela API do Claude -- so entao vale a pena gerar recortes.
-LIMIAR_TILING_PX = 1600
+LIMIAR_TILING_PX = 2576
 DPI_RECORTE = 300
 _GRID_ROTULOS = {
     (0, 0): "superior-esquerdo",

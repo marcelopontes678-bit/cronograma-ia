@@ -50,10 +50,15 @@ def _normalizar_instrucao_via_llm_sync(instrucao: str, api_key: str, modelo: str
     client = Anthropic(api_key=api_key)
     resposta = client.messages.create(
         model=modelo,
-        max_tokens=300,
+        # O thinking adaptativo (padrao no Sonnet 5) conta dentro de max_tokens.
+        max_tokens=2048,
         system=_SYSTEM_PROMPT_NORMALIZACAO,
         messages=[{"role": "user", "content": instrucao}],
+        # extra_body porque anthropic==0.40.0 nao tem o parametro output_config.
+        extra_body={"output_config": {"effort": "low"}},
     )
+    if resposta.stop_reason == "max_tokens":
+        raise FeedbackInvalidoError("A regra normalizada veio cortada (max_tokens) -- nada foi salvo.")
     blocos_texto = [b.text for b in resposta.content if b.type == "text"]
     if not blocos_texto:
         raise FeedbackInvalidoError(f"Claude nao retornou texto ao normalizar a instrucao: {resposta.content}")

@@ -24,7 +24,8 @@
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 const MODEL = 'claude-sonnet-5';
-const MAX_TOKENS_CAP = 1024;
+// Inclui o thinking adaptativo (padrao no Sonnet 5), que conta dentro de max_tokens.
+const MAX_TOKENS_CAP = 2048;
 const MAX_TEXT_CHARS = 8000;
 
 export default {
@@ -121,6 +122,7 @@ async function handleGenerate(request, env) {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: maxTokens,
+        output_config: { effort: 'low' },
         ...(system ? { system } : {}),
         messages: [{ role: 'user', content: prompt }],
       }),
