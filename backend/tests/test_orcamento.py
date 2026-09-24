@@ -25,6 +25,21 @@ def _resposta_tool_use(ambientes, avisos=None):
     return resposta
 
 
+def _mockar_stream(MockAnthropic, resposta=None, side_effect=None):
+    """O extrator usa `with client.messages.stream(...) as stream:
+    stream.get_final_message()`; isto faz o mock devolver `resposta` (ou o
+    resultado de side_effect(**kwargs) da chamada) nesse formato."""
+    def _contexto(resp):
+        ctx = MagicMock()
+        ctx.__enter__.return_value.get_final_message.return_value = resp
+        return ctx
+
+    if side_effect is not None:
+        MockAnthropic.return_value.messages.stream.side_effect = lambda **kw: _contexto(side_effect(**kw))
+    else:
+        MockAnthropic.return_value.messages.stream.return_value = _contexto(resposta)
+
+
 def _ambiente_banheiro_mock(confianca_mod1=0.9):
     return [{
         "nome_ambiente": "Banheiro",
@@ -43,7 +58,7 @@ def _ambiente_banheiro_mock(confianca_mod1=0.9):
 async def _upload_job(client: AsyncClient, token: str, ambientes=None) -> dict:
     ambientes = ambientes if ambientes is not None else _ambiente_banheiro_mock()
     with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
-        MockAnthropic.return_value.messages.create.return_value = _resposta_tool_use(ambientes)
+        _mockar_stream(MockAnthropic, _resposta_tool_use(ambientes))
         with open(CAMINHO_PDF_BANHEIRO, "rb") as f:
             resp = await client.post(
                 "/api/v1/orcamentos/jobs",
@@ -62,7 +77,7 @@ async def _upload_job_multi_arquivo(client: AsyncClient, token: str, ambientes=N
     por arquivo (o objetivo deste teste)."""
     ambientes = ambientes if ambientes is not None else _ambiente_banheiro_mock()
     with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
-        MockAnthropic.return_value.messages.create.return_value = _resposta_tool_use(ambientes)
+        _mockar_stream(MockAnthropic, _resposta_tool_use(ambientes))
         with open(CAMINHO_PDF_BANHEIRO, "rb") as f1, open(CAMINHO_PDF_BANHEIRO, "rb") as f2:
             resp = await client.post(
                 "/api/v1/orcamentos/jobs",
@@ -232,6 +247,19 @@ class TestOrcamentoJobs:
         assert all(j["id"] != job["job_id"] for j in resp_lista.json())
 
 
+class TestRenderizacao:
+    def test_nenhuma_imagem_passa_do_limite_da_api(self, tmp_path):
+        """Toda imagem precisa sair dentro de LADO_MAX_PX: o modelo recebe o
+        tamanho em pixels no rotulo, e a API recusaria (ou reamostraria) uma
+        imagem maior, deixando o bounding_box em outra escala."""
+        from app.services.orcamento_pdf_to_images import LADO_MAX_PX, renderizar_paginas
+
+        paginas, recortes = renderizar_paginas([CAMINHO_PDF_BANHEIRO], tmp_path)
+        assert recortes, "prancha A3 deveria gerar recortes"
+        for imagem in [*paginas, *recortes]:
+            assert max(imagem.largura_px, imagem.altura_px) <= LADO_MAX_PX, imagem.caminho_arquivo.name
+
+
 class TestOrcamentoMultiArquivo:
     async def test_job_com_dois_arquivos_bounding_box_aponta_para_arquivo_correto(
         self, client: AsyncClient, empresa_a
@@ -239,7 +267,9 @@ class TestOrcamentoMultiArquivo:
         """Cobre o checkpoint 3 do estado-alvo multi-arquivo: um job criado
         com 2 arquivos deve preservar, por modulo, o `arquivo_indice` do
         arquivo de onde ele foi extraido, mesmo com paginas de arquivos
-        diferentes misturadas nos mesmos lotes enviados ao Claude.
+        diferentes misturadas nos mesmos lotes enviados ao Claude. Tambem cobre a
+        conversao do bounding_box: o modelo responde em pixels da imagem
+        (tamanho informado no rotulo) e o job guarda 0-1000 da pagina.
 
         Nao ha um segundo PDF tematicamente diferente disponivel no repo
         (so Banheiro.pdf existe em tests/arquivos_exemplo/) -- o teste usa
@@ -251,26 +281,34 @@ class TestOrcamentoMultiArquivo:
         token = await obter_token(client, "admin@a.com", "senhaA123!")
         headers = {"Authorization": f"Bearer {token}"}
 
-        def _resposta_por_lote(**kwargs):
-            # Descobre de qual arquivo a 1a imagem do lote veio, lendo o
-            # rotulo de texto que _chamar_claude_para_lote gera (ex:
-            # "Pagina 1 do arquivo 1 (render_3d.pdf) -- visao geral:").
+        def _resposta_por_chamada(**kwargs):
+            # Um modulo por arquivo presente na chamada, lendo os rotulos de
+            # visao geral que _chamar_claude_para_lote gera (ex: "Pagina 1 do
+            # arquivo 1 (render_3d.pdf) -- visao geral, imagem de 2288x1618 px:").
             blocos = kwargs["messages"][0]["content"]
-            rotulo = next(b["text"] for b in blocos if b.get("type") == "text" and "do arquivo" in b["text"])
-            arquivo_indice = int(rotulo.split("do arquivo ")[1].split(" ")[0])
-
-            ambiente = _ambiente_banheiro_mock()
-            ambiente[0]["modulos"][0]["id"] = f"MOD-{arquivo_indice}"
-            ambiente[0]["modulos"][0]["nome"] = f"Modulo do arquivo {arquivo_indice}"
-            ambiente[0]["modulos"][0]["auditoria_visual"] = {
-                "pagina_pdf": 1,
-                "arquivo_indice": arquivo_indice,
-                "bounding_box": [400, 100, 700, 400],
-            }
-            return _resposta_tool_use(ambiente)
+            rotulos = [
+                b["text"] for b in blocos
+                if b.get("type") == "text" and "visao geral" in b["text"] and b["text"].startswith("Pagina 1 ")
+            ]
+            modulos = []
+            for rotulo in rotulos:
+                arquivo_indice = int(rotulo.split("do arquivo ")[1].split(" ")[0])
+                largura, altura = map(int, rotulo.split("imagem de ")[1].split(" px")[0].split("x"))
+                modulo = _ambiente_banheiro_mock()[0]["modulos"][0]
+                modulo["id"] = f"MOD-{arquivo_indice}"
+                modulo["nome"] = f"Modulo do arquivo {arquivo_indice}"
+                modulo["auditoria_visual"] = {
+                    "pagina_pdf": 1,
+                    "arquivo_indice": arquivo_indice,
+                    # 40%/10%/70%/40% da imagem, em pixels -- deve virar [400, 100, 700, 400]
+                    "bounding_box": [round(altura * 0.4), round(largura * 0.1), round(altura * 0.7), round(largura * 0.4)],
+                    "recorte_rotulo": None,
+                }
+                modulos.append(modulo)
+            return _resposta_tool_use([{"nome_ambiente": "Banheiro", "modulos": modulos}])
 
         with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
-            MockAnthropic.return_value.messages.create.side_effect = _resposta_por_lote
+            _mockar_stream(MockAnthropic, side_effect=_resposta_por_chamada)
             with open(CAMINHO_PDF_BANHEIRO, "rb") as f1, open(CAMINHO_PDF_BANHEIRO, "rb") as f2:
                 resp = await client.post(
                     "/api/v1/orcamentos/jobs",
@@ -287,6 +325,8 @@ class TestOrcamentoMultiArquivo:
         modulos = [m for a in detalhe["ambientes"] for m in a["modulos"]]
         indices_vistos = {m["auditoria_visual"]["arquivo_indice"] for m in modulos}
         assert indices_vistos == {0, 1}, f"esperava modulos dos arquivos 0 e 1, achou {indices_vistos}"
+        for m in modulos:
+            assert m["auditoria_visual"]["bounding_box"] == [400, 100, 700, 400]
 
         for indice in (0, 1):
             resp_pagina = await client.get(
@@ -315,9 +355,9 @@ class TestRevisaoEConfirmacao:
         job = await _upload_job(client, token, ambientes=_ambiente_banheiro_mock(confianca_mod1=0.5))
         job_id = job["job_id"]
 
-        # PDF de 6 paginas / PAGINAS_POR_LOTE=4 default -- 2 lotes, cada um
-        # retornando o mesmo modulo mockado -- corrige TODOS os de baixa
-        # confianca, nao so o primeiro.
+        # PDF de 6 paginas A3 (pagina + 4 recortes cada) / MAX_IMAGENS_POR_CHAMADA=20
+        # -- 2 lotes, cada um retornando o mesmo modulo mockado -- corrige TODOS
+        # os de baixa confianca, nao so o primeiro.
         detalhe = (await client.get(f"/api/v1/orcamentos/jobs/{job_id}", headers=headers)).json()
         modulos = [m for a in detalhe["ambientes"] for m in a["modulos"]]
         assert len(modulos) == 2
@@ -369,7 +409,7 @@ class TestRevisaoEConfirmacao:
 
         detalhe = (await client.get(f"/api/v1/orcamentos/jobs/{job['job_id']}", headers=headers)).json()
         modulos = [m for a in detalhe["ambientes"] for m in a["modulos"]]
-        # PDF de 6 paginas / PAGINAS_POR_LOTE=4 default -- 2 lotes, cada um
+        # PDF de 6 paginas A3 / MAX_IMAGENS_POR_CHAMADA=20 -- 2 lotes, cada um
         # retornando o modulo mockado -- + 1 manual = 3.
         assert len(modulos) == 3
         assert any(m["id"] == "mod_manual_01" for m in modulos)
