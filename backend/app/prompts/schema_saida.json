@@ -92,7 +92,7 @@
                       "bounding_box": {
                         "type": "array",
                         "items": { "type": "integer" },
-                        "description": "[y_min, x_min, y_max, x_max], normalizado 0-1000 (relativo a pagina inteira, ou ao recorte indicado em recorte_rotulo)"
+                        "description": "[y_min, x_min, y_max, x_max] em pixels da imagem em que o modulo foi medido (a visao geral da pagina, ou o recorte indicado em recorte_rotulo), usando o tamanho informado no rotulo da imagem"
                       },
                       "recorte_rotulo": {
                         "type": ["string", "null"],
