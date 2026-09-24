@@ -1,6 +1,7 @@
 {
   "name": "registrar_extracao",
   "description": "Registra os ambientes e modulos de marcenaria identificados nesta(s) pagina(s) do projeto, no formato de levantamento tecnico do MARC.",
+  "strict": true,
   "input_schema": {
     "type": "object",
     "properties": {
@@ -26,15 +27,17 @@
                       "altura_mm": { "type": ["number", "null"] },
                       "profundidade_mm": { "type": ["number", "null"] }
                     },
+                    "additionalProperties": false,
                     "required": ["largura_mm", "altura_mm", "profundidade_mm"]
                   },
                   "componentes": {
                     "type": "object",
                     "properties": {
-                      "portas": { "type": "integer", "minimum": 0 },
-                      "gavetas": { "type": "integer", "minimum": 0 },
-                      "prateleiras_internas": { "type": "integer", "minimum": 0 }
+                      "portas": { "type": "integer" },
+                      "gavetas": { "type": "integer" },
+                      "prateleiras_internas": { "type": "integer" }
                     },
+                    "additionalProperties": false,
                     "required": ["portas", "gavetas", "prateleiras_internas"]
                   },
                   "especificacoes_materiais": {
@@ -51,6 +54,7 @@
                         "description": "Nomes dos campos acima que vieram das Preferencias Globais/regras, nao do desenho"
                       }
                     },
+                    "additionalProperties": false,
                     "required": ["caixaria", "frente", "fundo", "metodo_uniao", "fixacao_fundo", "campos_inferidos"]
                   },
                   "ferragens_sugeridas": {
@@ -59,8 +63,9 @@
                       "type": "object",
                       "properties": {
                         "nome": { "type": "string" },
-                        "quantidade": { "type": "integer", "minimum": 0 }
+                        "quantidade": { "type": "integer" }
                       },
+                      "additionalProperties": false,
                       "required": ["nome", "quantidade"]
                     }
                   },
@@ -72,36 +77,38 @@
                         "nome": { "type": "string" },
                         "tipo": { "type": "string" }
                       },
+                      "additionalProperties": false,
                       "required": ["nome", "tipo"]
                     }
                   },
                   "auditoria_visual": {
                     "type": "object",
                     "properties": {
-                      "pagina_pdf": { "type": "integer", "minimum": 1 },
+                      "pagina_pdf": { "type": "integer" },
                       "arquivo_indice": {
                         "type": "integer",
-                        "minimum": 0,
                         "description": "Indice (comecando em 0) do arquivo de origem dentro deste job, na ordem em que foram enviados"
                       },
                       "bounding_box": {
                         "type": "array",
-                        "items": { "type": "integer", "minimum": 0, "maximum": 1000 },
-                        "minItems": 4,
-                        "maxItems": 4,
-                        "description": "[y_min, x_min, y_max, x_max], normalizado 0-1000"
+                        "items": { "type": "integer" },
+                        "description": "[y_min, x_min, y_max, x_max], normalizado 0-1000 (relativo a pagina inteira, ou ao recorte indicado em recorte_rotulo)"
+                      },
+                      "recorte_rotulo": {
+                        "type": ["string", "null"],
+                        "description": "Quadrante do recorte de alta resolucao em que o bounding_box foi medido (ex: 'superior-esquerdo'); null quando medido na visao geral da pagina"
                       }
                     },
+                    "additionalProperties": false,
                     "required": ["pagina_pdf", "arquivo_indice", "bounding_box"]
                   },
                   "descricao_resumida": { "type": "string" },
                   "confianca": {
                     "type": "number",
-                    "minimum": 0,
-                    "maximum": 1,
-                    "description": "Confianca honesta da leitura (extensao deste sistema, ver secao 3 do prompt). < 0.7 para cotas ilegiveis, rotulos sobrepostos ou dimensoes inferidas por proximidade"
+                    "description": "Confianca honesta da leitura, de 0 a 1 (ver secao 3 do prompt). < 0.7 para cotas ilegiveis, rotulos sobrepostos ou dimensoes inferidas por proximidade"
                   }
                 },
+                "additionalProperties": false,
                 "required": [
                   "id", "nome", "dimensoes", "componentes", "especificacoes_materiais",
                   "auditoria_visual", "confianca"
@@ -109,6 +116,7 @@
               }
             }
           },
+          "additionalProperties": false,
           "required": ["nome_ambiente", "modulos"]
         }
       },
@@ -118,6 +126,7 @@
         "description": "Ambiguidades ou qualquer coisa que precise de revisao humana"
       }
     },
+    "additionalProperties": false,
     "required": ["ambientes", "avisos"]
   }
 }
