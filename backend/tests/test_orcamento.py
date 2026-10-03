@@ -1,8 +1,11 @@
+import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from httpx import AsyncClient
 
+from app.engine.tabela_precos import PrecoReferencia
+from app.services import orcamento_material_matcher
 from tests.conftest import obter_token
 
 CAMINHO_PDF_BANHEIRO = Path(__file__).parent / "arquivos_exemplo" / "Banheiro.pdf"
@@ -410,6 +413,102 @@ class TestOrcamentoPricing:
             headers=headers,
         )
         assert resp.status_code == 409
+
+    async def _job_confirmado(self, client: AsyncClient, token: str, caixaria: str) -> str:
+        headers = {"Authorization": f"Bearer {token}"}
+        ambientes = _ambiente_banheiro_mock()
+        ambientes[0]["modulos"][0]["especificacoes_materiais"] = _materiais(caixaria=caixaria)
+        job_id = (await _upload_job(client, token, ambientes=ambientes))["job_id"]
+        detalhe = (await client.get(f"/api/v1/orcamentos/jobs/{job_id}", headers=headers)).json()
+        for modulo in [m for a in detalhe["ambientes"] for m in a["modulos"]]:
+            await client.patch(
+                f"/api/v1/orcamentos/jobs/{job_id}/modulos/{modulo['id']}", json={"confianca": 1.0}, headers=headers
+            )
+        await client.post(f"/api/v1/orcamentos/jobs/{job_id}/confirmar", headers=headers)
+        return job_id
+
+    async def _precificar_com_casamento(self, client, token, job_id, casamento: dict, monkeypatch):
+        """Mocka a resposta do Claude no casador de materiais. `casamento`
+        usa o REFERENCE da chapa (resolvido aqui para o indice da lista de
+        candidatas, como o modelo responderia)."""
+        from app.config import settings
+        from app.engine.tabela_precos import carregar_tabela_precos
+
+        monkeypatch.setattr(settings, "ANTHROPIC_API_KEY", "sk-ant-teste")
+        candidatas = orcamento_material_matcher.chapas_candidatas(carregar_tabela_precos(settings.ORCAMENTO_TABELA_PRECOS))
+        indice = next(i for i, c in enumerate(candidatas) if c.reference == casamento["reference"])
+        bloco = MagicMock()
+        bloco.type = "text"
+        bloco.text = json.dumps(
+            {"casamentos": [{"indice_material": 0, "indice_chapa": indice, "confianca": casamento["confianca"]}]}
+        )
+        with patch("app.services.orcamento_material_matcher.Anthropic") as MockAnthropic:
+            MockAnthropic.return_value.messages.create.return_value = MagicMock(stop_reason="end_turn", content=[bloco])
+            resp = await client.post(
+                f"/api/v1/orcamentos?job_id={job_id}",
+                json={"faturamento_acumulado": 100_000, "fator_area_frontal_para_chapa": 2.5},
+                headers={"Authorization": f"Bearer {token}"},
+            )
+        assert resp.status_code == 200, resp.text
+        return resp.json(), MockAnthropic
+
+    async def test_material_em_texto_livre_casado_com_chapa_da_tabela(self, client: AsyncClient, empresa_a, monkeypatch):
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        job_id = await self._job_confirmado(client, token, caixaria="MDF Branco TX 18mm")
+
+        corpo, MockAnthropic = await self._precificar_com_casamento(
+            client, token, job_id, {"reference": "2.2032.18.Branco TX.MDF", "confianca": 0.95}, monkeypatch
+        )
+        # chapa (334.90) + fita entram no custo; antes do casamento ficava tudo pendente
+        assert corpo["custo_material_total"] > 334.9
+        assert not any("Branco TX 18mm" in p["reference_ou_acabamento"] for p in corpo["itens_pendentes"])
+        assert any("casado com a chapa '2.2032.18.Branco TX.MDF'" in a for a in corpo["avisos"])
+        # uma chamada so, com o material e a espessura padrao de caixaria (15mm nos defaults)
+        MockAnthropic.return_value.messages.create.assert_called_once()
+        entrada = json.loads(MockAnthropic.return_value.messages.create.call_args.kwargs["messages"][0]["content"])
+        assert entrada["materiais_do_projeto"] == [{"indice": 0, "nome": "MDF Branco TX 18mm"}]
+        assert entrada["espessura_padrao_caixaria_mm"] == 15
+
+    async def test_casamento_com_confianca_baixa_fica_pendente(self, client: AsyncClient, empresa_a, monkeypatch):
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        job_id = await self._job_confirmado(client, token, caixaria="MDF Cinza Cobalto Berneck")
+
+        corpo, _ = await self._precificar_com_casamento(
+            client, token, job_id, {"reference": "1.0394.18.Berneck.Unicolors Metallic Suede TX.MDF", "confianca": 0.4}, monkeypatch
+        )
+        assert corpo["custo_material_total"] == 0.0
+        assert any("MDF Cinza Cobalto Berneck" in p["reference_ou_acabamento"] for p in corpo["itens_pendentes"])
+        assert any("confianca baixa" in a for a in corpo["avisos"])
+
+
+class TestCasadorDeMateriais:
+    def test_precisa_casar_so_texto_livre(self):
+        tabela = {"2.2032.18.Branco TX.MDF": MagicMock()}
+        assert orcamento_material_matcher.precisa_casar("MDF Branco", tabela)
+        assert not orcamento_material_matcher.precisa_casar("2.2032.18.Branco TX.MDF", tabela)
+        assert not orcamento_material_matcher.precisa_casar("2.9999.18.Outro.MDF", tabela)  # padrao Promob
+        assert not orcamento_material_matcher.precisa_casar("", tabela)
+
+    def test_indices_inventados_pelo_modelo_sao_ignorados(self):
+        candidatas = [
+            PrecoReferencia(
+                reference=ref, codigo_interno="", descricao=f"MDF {ref}", categoria="Chapa MDF", espessura_mm=18,
+                unidade="M2", preco_unitario_un=None, preco_chapa_fechada=300.0, preco_fita_metro=10.0, fornecedor="",
+            )
+            for ref in ("A", "B")
+        ]
+        bloco = MagicMock()
+        bloco.type = "text"
+        bloco.text = json.dumps({"casamentos": [
+            {"indice_material": 0, "indice_chapa": 7, "confianca": 0.99},   # chapa inexistente
+            {"indice_material": 5, "indice_chapa": 0, "confianca": 0.99},   # material inexistente
+            {"indice_material": 1, "indice_chapa": 1, "confianca": 0.9},
+        ]})
+        with patch("app.services.orcamento_material_matcher.Anthropic") as MockAnthropic:
+            MockAnthropic.return_value.messages.create.return_value = MagicMock(stop_reason="end_turn", content=[bloco])
+            resultado = orcamento_material_matcher.casar_materiais(["x", "y"], candidatas, 15, "sk-ant-teste")
+        assert resultado["x"].chapa is None and not resultado["x"].aplicavel
+        assert resultado["y"].chapa.reference == "B" and resultado["y"].aplicavel
 
 
 class TestFeedback:
