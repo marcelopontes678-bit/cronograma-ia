@@ -3,3 +3,5 @@ node_modules/
 renders/
 *.log
 renders.log
+final/work-*/
+final/.*hf-transaction*/
