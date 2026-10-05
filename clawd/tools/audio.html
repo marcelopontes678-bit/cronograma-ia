@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head><meta charset="UTF-8" /><title>Clawd soundtrack renderer</title></head>
+  <body>
+    <script type="module">
+      import { renderSoundtrack, encodeWAV } from '../src/audio.js';
+      const stem = new URLSearchParams(location.search).get('stem') || 'mix';
+      const buf = await renderSoundtrack({ stem });
+      const bytes = encodeWAV(buf);
+      let bin = '';
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+      window.__wav = btoa(bin);
+    </script>
+  </body>
+</html>

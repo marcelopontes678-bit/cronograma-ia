@@ -1,0 +1,20 @@
+{
+  "name": "clawd",
+  "version": "1.0.0",
+  "description": "Curta 3D do Clawd (Three.js + HyperFrames + Web Audio)",
+  "main": "index.js",
+  "scripts": {
+    "frames": "node tools/frames.mjs --out verificacao/pranchas --shots",
+    "audio": "node tools/render-audio.mjs",
+    "render": "npx hyperframes render -o final/clawd.mp4 -q delivery -f 30 -w 4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "hyperframes": "^0.8.134",
+    "three": "^0.186.1"
+  },
+  "type": "module"
+}
