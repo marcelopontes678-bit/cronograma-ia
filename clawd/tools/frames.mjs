@@ -8,10 +8,11 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
 import { SHOT } from '../src/timeline.js';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const opt = (k, d) => {
   const i = args.indexOf(k);
@@ -56,7 +57,7 @@ const server = http.createServer((req, res) => {
 await new Promise((r) => server.listen(0, r));
 const port = server.address().port;
 
-const chrome = execFileSync('npx', ['hyperframes', 'browser', 'path'], { cwd: ROOT }).toString().trim().split('\n').pop();
+const chrome = execFileSync('npx hyperframes browser path', { cwd: ROOT, shell: true }).toString().trim().split('\n').pop();
 const browser = await puppeteer.launch({
   executablePath: chrome,
   headless: true,
