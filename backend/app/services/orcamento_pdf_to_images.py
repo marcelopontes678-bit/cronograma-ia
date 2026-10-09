@@ -38,18 +38,19 @@ class PaginaRenderizada:
 @dataclass
 class RecortePagina:
     """Um quadrante de alta resolucao de uma pagina densa (varias vistas
-    empacotadas numa prancha so). A API do Claude reamostra imagens acima
-    de ~2576px no lado maior (Sonnet 5) antes do modelo "ver" -- uma pagina inteira
-    nesse formato dilui a resolucao entre os quadrantes, tornando texto
-    pequeno (legendas de acabamento, cotas finas) ilegivel mesmo
-    renderizando o PDF em alta resolucao no nosso lado. Recortar em
-    quadrantes e reamostrar cada um separadamente evita essa diluicao."""
+    empacotadas numa prancha so). Uma pagina grande precisa ser reduzida
+    para caber no limite de imagem da API (ver _zoom_que_cabe), o que dilui
+    a resolucao e torna texto pequeno (legendas de acabamento, cotas finas)
+    ilegivel. Cada quadrante e renderizado separadamente, entao perde menos
+    resolucao."""
 
     pagina_numero: int  # local ao arquivo, mesmo significado de PaginaRenderizada.numero
     arquivo_indice: int
     nome_arquivo: str
     rotulo: str  # ex: "superior-esquerdo"
     bbox_pagina_normalizado: list[int]  # [y_min, x_min, y_max, x_max] 0-1000, relativo a PAGINA INTEIRA
+    largura_px: int
+    altura_px: int
     caminho_arquivo: Path
     media_type: str = "image/png"
 
@@ -62,9 +63,15 @@ class RecortePagina:
 # cotas de desenho tecnico sem gerar imagens desnecessariamente grandes.
 DPI_PADRAO = 200
 
-# Acima desse tamanho (px, no lado maior) a pagina inteira ja seria
-# reamostrada pela API do Claude -- so entao vale a pena gerar recortes.
-LIMIAR_TILING_PX = 2576
+# Limite de imagem que o modelo le sem reamostrar (Sonnet 5: lado maior
+# 2576px, ~3.75MP) -- valido ate 20 imagens por chamada; acima disso a API
+# recusa (400) imagem com lado maior que 2000px (ver MAX_IMAGENS_POR_CHAMADA
+# em orcamento_vision_extractor.py). Toda imagem e renderizada JA dentro
+# desse limite, para que o tamanho em pixels que o modelo ve seja
+# exatamente o que informamos a ele -- o bounding_box volta em pixels dessa
+# imagem e e convertido para 0-1000 no codigo.
+LADO_MAX_PX = 2576
+AREA_MAX_PX = 3_700_000
 DPI_RECORTE = 300
 _GRID_ROTULOS = {
     (0, 0): "superior-esquerdo",
@@ -75,6 +82,17 @@ _GRID_ROTULOS = {
 _SOBREPOSICAO = 0.1  # fracao da pagina que os quadrantes vizinhos compartilham, para nao cortar um modulo bem na divisa
 
 
+def _zoom_que_cabe(largura_pt: float, altura_pt: float, dpi: int) -> float:
+    """Zoom do fitz (pixels por ponto) no DPI pedido, reduzido o quanto
+    for preciso para a imagem caber em LADO_MAX_PX e AREA_MAX_PX."""
+    zoom = dpi / 72
+    # -4px de margem: o fitz arredonda as bordas do clip para fora e pode
+    # gerar 1-2px a mais que o calculado.
+    zoom = min(zoom, (LADO_MAX_PX - 4) / max(largura_pt, altura_pt))
+    zoom = min(zoom, (AREA_MAX_PX / (largura_pt * altura_pt)) ** 0.5)
+    return zoom
+
+
 def _gerar_recortes_pagina(
     pagina: "fitz.Page", numero: int, arquivo_indice: int, nome_arquivo: str, pasta_saida: Path
 ) -> list[RecortePagina]:
@@ -83,8 +101,6 @@ def _gerar_recortes_pagina(
     nao herdar a perda de nitidez do render em resolucao mais baixa."""
     rect = pagina.rect
     recortes: list[RecortePagina] = []
-    zoom = DPI_RECORTE / 72
-    matriz = fitz.Matrix(zoom, zoom)
 
     for (linha, coluna), rotulo in _GRID_ROTULOS.items():
         x0f = 0.0 if coluna == 0 else 0.5 - _SOBREPOSICAO
@@ -93,7 +109,8 @@ def _gerar_recortes_pagina(
         y1f = 0.5 + _SOBREPOSICAO if linha == 0 else 1.0
 
         clip = fitz.Rect(x0f * rect.width, y0f * rect.height, x1f * rect.width, y1f * rect.height)
-        pix = pagina.get_pixmap(matrix=matriz, clip=clip)
+        zoom = _zoom_que_cabe(clip.width, clip.height, DPI_RECORTE)
+        pix = pagina.get_pixmap(matrix=fitz.Matrix(zoom, zoom), clip=clip)
         caminho_png = pasta_saida / f"pagina_{numero:03d}_recorte_{rotulo}.png"
         pix.save(str(caminho_png))
 
@@ -104,6 +121,8 @@ def _gerar_recortes_pagina(
                 nome_arquivo=nome_arquivo,
                 rotulo=rotulo,
                 bbox_pagina_normalizado=[round(y0f * 1000), round(x0f * 1000), round(y1f * 1000), round(x1f * 1000)],
+                largura_px=pix.width,
+                altura_px=pix.height,
                 caminho_arquivo=caminho_png,
             )
         )
@@ -116,8 +135,6 @@ def _renderizar_paginas_de_um_arquivo(
     pasta_saida: Path,
     dpi: int,
 ) -> tuple[list[PaginaRenderizada], list[RecortePagina]]:
-    zoom = dpi / 72
-    matriz = fitz.Matrix(zoom, zoom)
     nome_arquivo = caminho_pdf.name
 
     paginas_renderizadas: list[PaginaRenderizada] = []
@@ -126,7 +143,8 @@ def _renderizar_paginas_de_um_arquivo(
     try:
         for i in range(len(doc)):
             pagina = doc[i]
-            pix = pagina.get_pixmap(matrix=matriz)
+            zoom = _zoom_que_cabe(pagina.rect.width, pagina.rect.height, dpi)
+            pix = pagina.get_pixmap(matrix=fitz.Matrix(zoom, zoom))
             caminho_png = pasta_saida / f"pagina_{i + 1:03d}.png"
             pix.save(str(caminho_png))
             paginas_renderizadas.append(
@@ -139,7 +157,7 @@ def _renderizar_paginas_de_um_arquivo(
                     caminho_arquivo=caminho_png,
                 )
             )
-            if max(pix.width, pix.height) > LIMIAR_TILING_PX:
+            if zoom < dpi / 72:  # a pagina foi reduzida para caber -- recortes recuperam a resolucao
                 recortes.extend(
                     _gerar_recortes_pagina(pagina, i + 1, arquivo_indice, nome_arquivo, pasta_saida)
                 )
@@ -157,11 +175,10 @@ def renderizar_paginas(
     """Renderiza as paginas de UM OU MAIS PDFs em PNG. Cada arquivo grava
     suas paginas numa subpasta propria (`arquivo_{indice}/`) para nao
     colidir numeracao entre arquivos (pagina 1 do arquivo 0 e pagina 1 do
-    arquivo 1 sao PNGs diferentes). Paginas densas (acima de
-    LIMIAR_TILING_PX no lado maior -- tipico de pranchas com varias vistas
-    empacotadas) tambem ganham recortes em alta resolucao (ver
-    RecortePagina), porque a API do Claude reamostra a pagina inteira
-    antes de qualquer recorte ajudar. Retorna (paginas, recortes), listas
+    arquivo 1 sao PNGs diferentes). Toda imagem e renderizada dentro do
+    limite de LADO_MAX_PX/AREA_MAX_PX; paginas que precisaram ser reduzidas
+    para caber (tipico de pranchas A3 com varias vistas empacotadas)
+    tambem ganham recortes em alta resolucao (ver RecortePagina). Retorna (paginas, recortes), listas
     achatadas de todos os arquivos, na ordem em que foram enviados."""
     if not caminhos_pdf:
         raise ValueError("Nenhum arquivo PDF informado para renderizar.")

@@ -104,6 +104,24 @@ Nunca inclua "(Vista B)", "(Vista C)" etc. no nome do módulo como se
 fossem módulos distintos — isso é sinal de que a fusão acima não foi
 feita.
 
+O mesmo vale para vistas que mostram o móvel por dentro ou por um
+detalhe: uma "vista interna" (armário sem as portas, mostrando maleiro,
+cabideiro, prateleiras e gavetas internas) é o **mesmo** módulo da vista
+externa correspondente — registre os componentes internos nele, não um
+módulo novo. Um "detalhe" (vista de cima, corte, ampliação de canto ou
+de prateleira) também só complementa o módulo que ele detalha.
+
+Plantas que não são de marcenaria (paginação de piso, pontos elétricos,
+iluminação, circuitos, pinturas, layout geral) servem para confirmar
+posição e quantidade, mas não geram módulos sozinhas: se um móvel só
+aparece nelas, sem nenhuma vista ou detalhamento de marcenaria no
+conjunto de pranchas, registre isso em `avisos` em vez de criar um
+módulo com medidas deduzidas.
+
+`nome_ambiente` é o cômodo (ex: "Home Office", "Banheiro"), nunca a
+vista ou o detalhe: módulos das Vistas A, B e C do mesmo cômodo ficam no
+mesmo ambiente.
+
 ## 1.6. Mais de um arquivo no mesmo job (planta + render 3D, etc.)
 
 Este job pode incluir mais de um arquivo do mesmo ambiente (ex: uma
@@ -124,10 +142,11 @@ tecnicamente (normalmente a cota explícita do desenho técnico) com
 
 ## 2. Auditoria visual (bounding boxes)
 
-Para cada módulo identificado, salve as coordenadas exatas da sua
-localização no arquivo visual: `bounding_box` no formato normalizado
-`[y_min, x_min, y_max, x_max]` (valores de 0 a 1000 relativos à página),
-junto com o número da página correspondente em `pagina_pdf` **e o índice
+Para cada módulo identificado, salve a sua localização no arquivo
+visual: `bounding_box` no formato `[y_min, x_min, y_max, x_max]`, **em
+pixels da imagem em que você mediu** (cada imagem vem rotulada com o
+próprio tamanho, ex: "imagem de 2288x1618 px"; o sistema converte para a
+escala da página), junto com o número da página correspondente em `pagina_pdf` **e o índice
 do arquivo de origem em `arquivo_indice`** (0 para o primeiro arquivo
 enviado, 1 para o segundo, e assim por diante — cada imagem que você
 recebe é rotulada com "Página X do arquivo Y" indicando esse índice).
@@ -135,11 +154,10 @@ Isso permite que o usuário clique no módulo no painel de controle e veja
 o destaque sobre o desenho original correto, mesmo quando o job tem mais
 de um arquivo.
 
-Se você localizou o módulo num recorte de alta resolução (e não na visão
-geral da página), meça o `bounding_box` na escala 0-1000 desse recorte e
-preencha `recorte_rotulo` com o quadrante dele (ex: `superior-esquerdo`);
-o sistema converte para a página inteira. Na visão geral, deixe
-`recorte_rotulo` como `null`.
+Se você mediu o módulo num recorte de alta resolução (e não na visão
+geral da página), dê o `bounding_box` em pixels desse recorte e preencha
+`recorte_rotulo` com o quadrante dele (ex: `superior-esquerdo`). Na
+visão geral, deixe `recorte_rotulo` como `null`.
 
 ## 3. Confiança
 
