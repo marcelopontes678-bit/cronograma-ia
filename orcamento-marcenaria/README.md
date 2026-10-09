@@ -52,6 +52,15 @@ orcamento-marcenaria` (ver `.env.example` para as variáveis).
 
 ### 2.1 Extrair um projeto
 
+> **Parser de XML do Promob congelado.** A fonte oficial do parser de XML
+> do Promob passou a ser o **gestori** (`src/lib/promob/`, TypeScript),
+> que desce todos os níveis de itens e extrai também ID, FAMILY/GROUP e
+> material. `extractors/extract_promob_xml.py` continua aqui só como
+> referência: não recebe correções nem campos novos. A paridade entre os
+> dois é testada no gestori (`src/lib/promob/paridade.test.ts`) com a
+> saída deste script para as mesmas amostras.
+
+
 Escolha o extractor de acordo com o formato de entrada:
 
 | Formato | Comando |
