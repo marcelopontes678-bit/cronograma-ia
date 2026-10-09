@@ -247,6 +247,83 @@ class TestOrcamentoJobs:
         assert all(j["id"] != job["job_id"] for j in resp_lista.json())
 
 
+def _resposta_classificacao(paginas_marcenaria: set[int], total_paginas: int = 6):
+    bloco = MagicMock()
+    bloco.type = "tool_use"
+    bloco.name = "registrar_classificacao"
+    bloco.input = {
+        "paginas": [
+            {"arquivo_indice": 0, "pagina": n, "tem_marcenaria": n in paginas_marcenaria, "tipo_prancha": ""}
+            for n in range(1, total_paginas + 1)
+        ]
+    }
+    resposta = MagicMock()
+    resposta.content = [bloco]
+    resposta.stop_reason = "tool_use"
+    return resposta
+
+
+class TestClassificacaoPaginas:
+    async def test_so_pranchas_de_marcenaria_vao_para_o_extrator(self, client: AsyncClient, empresa_a):
+        """O Banheiro.pdf tem 6 paginas; a classificacao mockada marca so a 5 e
+        a 6 como marcenaria. O extrator nao pode receber as outras, e o job
+        avisa quais ficaram de fora."""
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        headers = {"Authorization": f"Bearer {token}"}
+        paginas_enviadas: set[int] = set()
+
+        def _resposta_extracao(**kwargs):
+            for bloco in kwargs["messages"][0]["content"]:
+                if bloco.get("type") == "text" and bloco["text"].startswith("Pagina "):
+                    paginas_enviadas.add(int(bloco["text"].split()[1]))
+            return _resposta_tool_use(_ambiente_banheiro_mock())
+
+        with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
+            MockAnthropic.return_value.messages.create.return_value = _resposta_classificacao({5, 6})
+            _mockar_stream(MockAnthropic, side_effect=_resposta_extracao)
+            with open(CAMINHO_PDF_BANHEIRO, "rb") as f:
+                resp = await client.post(
+                    "/api/v1/orcamentos/jobs",
+                    headers=headers,
+                    files={"arquivos": ("banheiro.pdf", f, "application/pdf")},
+                )
+        assert resp.status_code == 202, resp.text
+        assert paginas_enviadas == {5, 6}
+
+        job = (await client.get(f"/api/v1/orcamentos/jobs/{resp.json()['job_id']}", headers=headers)).json()
+        aviso = next(a for a in job["avisos"] if "nao foram analisadas" in a)
+        for n in (1, 2, 3, 4):
+            assert f"pagina {n} de " in aviso
+        assert "pagina 5 de " not in aviso and "pagina 6 de " not in aviso
+
+    async def test_falha_na_classificacao_extrai_todas_as_paginas(self, client: AsyncClient, empresa_a):
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        headers = {"Authorization": f"Bearer {token}"}
+        paginas_enviadas: set[int] = set()
+
+        def _resposta_extracao(**kwargs):
+            for bloco in kwargs["messages"][0]["content"]:
+                if bloco.get("type") == "text" and bloco["text"].startswith("Pagina "):
+                    paginas_enviadas.add(int(bloco["text"].split()[1]))
+            return _resposta_tool_use(_ambiente_banheiro_mock())
+
+        with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
+            MockAnthropic.return_value.messages.create.side_effect = RuntimeError("API fora do ar")
+            _mockar_stream(MockAnthropic, side_effect=_resposta_extracao)
+            with open(CAMINHO_PDF_BANHEIRO, "rb") as f:
+                resp = await client.post(
+                    "/api/v1/orcamentos/jobs",
+                    headers=headers,
+                    files={"arquivos": ("banheiro.pdf", f, "application/pdf")},
+                )
+        assert resp.status_code == 202, resp.text
+        assert paginas_enviadas == {1, 2, 3, 4, 5, 6}
+
+        job = (await client.get(f"/api/v1/orcamentos/jobs/{resp.json()['job_id']}", headers=headers)).json()
+        assert job["status"] != "erro"
+        assert any("Nao foi possivel separar as pranchas" in a for a in job["avisos"])
+
+
 class TestRenderizacao:
     def test_nenhuma_imagem_passa_do_limite_da_api(self, tmp_path):
         """Toda imagem precisa sair dentro de LADO_MAX_PX: o modelo recebe o

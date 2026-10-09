@@ -2,7 +2,8 @@
 MARC, ver app/prompts/system_extrator.md).
 
 Fluxo:
-  1. Renderiza as paginas do PDF em imagens (orcamento_pdf_to_images.py).
+  1. Renderiza as paginas do PDF em imagens (orcamento_pdf_to_images.py) e
+     separa as pranchas de marcenaria das demais (orcamento_page_classifier.py).
   2. Monta o system prompt: template base + Preferencias Globais da
      empresa + Regras Aprendidas ativas da empresa.
   3. Chama a API de mensagens do Claude com as imagens + tool use
@@ -40,6 +41,7 @@ from anthropic import Anthropic
 from pydantic import ValidationError
 
 from app.schemas.orcamento import Ambiente, Modulo, OrigemModulo, PreferenciasGlobaisConfig
+from app.services.orcamento_page_classifier import classificar_paginas
 from app.services.orcamento_pdf_to_images import PaginaRenderizada, RecortePagina, renderizar_paginas
 
 logger = logging.getLogger(__name__)
@@ -327,11 +329,14 @@ def extrair_de_pdf(
     ferramenta = _carregar_schema_ferramenta()
     client = Anthropic(api_key=api_key)
 
+    # So as pranchas de marcenaria vao para o extrator (ver orcamento_page_classifier.py).
+    classificacao = classificar_paginas(client, paginas, modelo, job_id)
+
     ambientes_por_nome: dict[str, Ambiente] = {}
-    avisos: list[str] = []
+    avisos: list[str] = list(classificacao.avisos)
     contador_id = 0
 
-    for lote in _montar_lotes(paginas, recortes_por_pagina):
+    for lote in _montar_lotes(classificacao.paginas_marcenaria, recortes_por_pagina):
         try:
             resultado_lote = _chamar_claude_para_lote(client, system_prompt, lote, recortes_por_pagina, ferramenta, modelo)
         except Exception as exc:  # falha de rede/API -- nao mascarar, propagar com contexto
