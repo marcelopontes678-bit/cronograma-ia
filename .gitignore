@@ -1,4 +1,5 @@
-﻿.claude/
+﻿.claude/*
+!.claude/settings.json
 
 # Backend Python
 backend/.venv/
