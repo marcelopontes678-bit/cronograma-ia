@@ -1,3 +1,4 @@
+import asyncio
 import shutil
 import uuid
 from pathlib import Path
@@ -234,9 +235,15 @@ async def gerar_orcamento(
     db: AsyncSession = Depends(get_db),
     current_user: Usuario = Depends(get_current_user),
 ):
+    # Preferencias antes do job: get_preferencias pode dar commit (cria os
+    # defaults), o que expiraria os atributos do job lidos depois na thread.
+    prefs = await orcamento_service.get_preferencias(db, current_user)
+    preferencias = PreferenciasGlobaisConfig.model_validate(prefs.configuracao)
     job = await orcamento_service.get_job(db, job_id, current_user)
     try:
-        response, avisos = orcamento_pricing_service.gerar_orcamento(
+        # to_thread: o casamento de materiais chama a API do Claude (SDK sincrono).
+        response, avisos = await asyncio.to_thread(
+            orcamento_pricing_service.gerar_orcamento,
             job,
             settings.ORCAMENTO_TABELA_PRECOS,
             settings.ORCAMENTO_CONFIG_PRECIFICACAO,
@@ -244,6 +251,9 @@ async def gerar_orcamento(
             custo_hora_mao_de_obra=request.custo_hora_mao_de_obra,
             horas_estimadas=request.horas_estimadas,
             fator_area_frontal_para_chapa=request.fator_area_frontal_para_chapa,
+            espessura_padrao_caixa_mm=preferencias.espessuras.caixa_mm,
+            api_key=settings.ANTHROPIC_API_KEY,
+            modelo=settings.ORCAMENTO_MODELO_CLAUDE,
         )
     except orcamento_pricing_service.PrecificacaoInvalidaError as exc:
         raise HTTPException(409, str(exc)) from exc
