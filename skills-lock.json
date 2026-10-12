@@ -1,11 +1,72 @@
 {
   "version": 1,
   "skills": {
+    "audiogram": {
+      "source": "iart-ai/youtube-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/audiogram/SKILL.md",
+      "computedHash": "fc86a13a622c0177a364de1ced4161c894ab5a141ec859ce0e6f436baeeb57ec"
+    },
+    "avoid-ai-writing": {
+      "source": "conorbronsdon/avoid-ai-writing",
+      "ref": "main",
+      "sourceType": "github",
+      "skillPath": "skills/avoid-ai-writing/SKILL.md",
+      "computedHash": "aa40d9ce89813bd5fc0a85e00d2d79760a66f01c7ba150421d4392744c0e126b"
+    },
+    "book-architect": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/non-fiction-book-factory/book-architect/SKILL.md",
+      "computedHash": "99aa52695cc0beacec8e1b71d12eb7a7bf7654db8899a6c04562800b7352781e"
+    },
+    "book-idea-validator": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/non-fiction-book-factory/book-idea-validator/SKILL.md",
+      "computedHash": "2bffa72dfb612ff577613efdefbd7d6afd2951a02daaeabb9364c4e7e396da4e"
+    },
+    "book-ideation": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/non-fiction-book-factory/book-ideation/SKILL.md",
+      "computedHash": "32bfcb4256759b10bf09b58565137e750c6d3d2d075020e12f3548711f838d54"
+    },
+    "book-market-research": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/non-fiction-book-factory/book-market-research/SKILL.md",
+      "computedHash": "5de67ae0bfd9e4b9abca884aedf977baa4d078ae8ae1b7c490e6bd0fcecee9dc"
+    },
+    "book-research-assistant": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/non-fiction-book-factory/book-research-assistant/SKILL.md",
+      "computedHash": "7dbfa3b3f046d0d9018d0ffadc4046c44f22e0923c43efaaab37f0ab49126bba"
+    },
     "brandkit": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/brandkit/SKILL.md",
       "computedHash": "b63012f3c3d21197e0185d3e9cc7ec40c589fb10e0b5a32a561739de31aa3f20"
+    },
+    "capcut-edit": {
+      "source": "renezander030/capcut-cli",
+      "sourceType": "github",
+      "skillPath": "skills/capcut-edit/SKILL.md",
+      "computedHash": "172ddbada3c27da5f409efe24bc29a667650d8ca5c6c5b703b1e42f85b492d6d"
+    },
+    "caption-animation": {
+      "source": "iart-ai/tiktok-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/caption-animation/SKILL.md",
+      "computedHash": "e42c4828d3c6115dfb4d8fd3c3fd485b8e6a89c35a8835eee6dae39fb83210a4"
+    },
+    "chapter-architect": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/non-fiction-book-factory/chapter-architect/SKILL.md",
+      "computedHash": "b75d34f2a42735f6bf70b5d213ed8ec76e98bf26d23edf1c12c48b5326ccee55"
     },
     "code-review": {
       "source": "mattpocock/skills",
@@ -19,6 +80,18 @@
       "skillPath": "skills/engineering/codebase-design/SKILL.md",
       "computedHash": "5a17552cc1482f1a40124bf4e6c9dbd90ac0dbb47e71c07d47369f9e5f2ae3b5"
     },
+    "content-brief": {
+      "source": "inhouseseo/superseo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/content-brief/SKILL.md",
+      "computedHash": "a9a9092d7f46cf5c1143302a86a4ee7e45aae34ea96691757a91c57a80a37ac5"
+    },
+    "countdown-video": {
+      "source": "iart-ai/tiktok-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/countdown-video/SKILL.md",
+      "computedHash": "dafb9127ededa76d0df08be73adc46e18d6ec3955153f6ecfd0f928984ce95b2"
+    },
     "design-taste-frontend": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
@@ -31,11 +104,41 @@
       "skillPath": "skills/taste-skill-v1/SKILL.md",
       "computedHash": "d704ab912c4d0ca954ffa858983da755ae4cd5cad9ba22554db5557382f5bd34"
     },
+    "diagram-animation": {
+      "source": "iart-ai/explainer-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/diagram-animation/SKILL.md",
+      "computedHash": "875808a72e79967c35c1743af1f98d9904d83b5f278e13f248b65d63b7baff2a"
+    },
+    "ebook-concept-development": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ebook-factory/ebook-concept-development/SKILL.md",
+      "computedHash": "d3ff9f87f4ebb3596f96fd9fadcd74103a0fb659c90ef560c4fb21c631ad469e"
+    },
+    "ebook-discovery": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ebook-factory/ebook-discovery/SKILL.md",
+      "computedHash": "593f673906e2b8e09046f6397dce5b62d962d20eb878da19ecbd719d7b6f2c69"
+    },
+    "explainer-video": {
+      "source": "iart-ai/explainer-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/explainer-video/SKILL.md",
+      "computedHash": "ab433063cdff431ee5d10d6ce8b4d2e1cb4b608fa6637c7d05d08580d1b1b08a"
+    },
     "full-output-enforcement": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/output-skill/SKILL.md",
       "computedHash": "26bd29ce4c5e02c7666b2d503609bf466bd32290822e91f0e984147048dbb924"
+    },
+    "ghost-writer": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/writing/ghost-writer/SKILL.md",
+      "computedHash": "6adf9920a1387d9303ea2f2f18fbf879f74fe7c48b14502c5717eb90e944735a"
     },
     "gpt-taste": {
       "source": "leonxlnx/taste-skill",
@@ -73,11 +176,41 @@
       "skillPath": "skills/engineering/implement/SKILL.md",
       "computedHash": "2139cfedf24791adbc839aaab6019cff158af1e28bfead020ec6e0ce01b3e74d"
     },
+    "improve-content": {
+      "source": "inhouseseo/superseo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/improve-content/SKILL.md",
+      "computedHash": "d07e60cc99f71cdb7f0c6242587ac50563feaeed85eb3ecacefa8fc41ba9d425"
+    },
     "industrial-brutalist-ui": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/brutalist-skill/SKILL.md",
       "computedHash": "8fc355c4aadb7d29c53ca28bc41be3cd6eea765d121e3737c4dc2d0f90a8effa"
+    },
+    "keyword-deep-dive": {
+      "source": "inhouseseo/superseo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/keyword-deep-dive/SKILL.md",
+      "computedHash": "cf80857c823da1dba6f4f7858daf1b76ad3cfca8f5645d4d46884dc2f54bdc3e"
+    },
+    "kinetic-typography": {
+      "source": "iart-ai/kinetic-typography-skills",
+      "sourceType": "github",
+      "skillPath": "skills/kinetic-typography/SKILL.md",
+      "computedHash": "1a59da2f9bf89dcdd23ac35248f7e40ae1586e670a10408edad8728169dfb415"
+    },
+    "logo-designer": {
+      "source": "neonwatty/logo-designer-skill",
+      "sourceType": "github",
+      "skillPath": "skills/logo-designer/SKILL.md",
+      "computedHash": "69456cae88ba57420a639ec3183d38fffc690b1a996ccea9b626a45633d3360e"
+    },
+    "lower-thirds": {
+      "source": "iart-ai/lower-thirds-skills",
+      "sourceType": "github",
+      "skillPath": "skills/lower-thirds/SKILL.md",
+      "computedHash": "e72c9b665932bb33b891bdb853685bf7dd23e4b4237c12d5a34f62cfab8d74f6"
     },
     "minimalist-ui": {
       "source": "leonxlnx/taste-skill",
@@ -85,11 +218,23 @@
       "skillPath": "skills/minimalist-skill/SKILL.md",
       "computedHash": "08873a3131d3be27bef9bf3304b310b16b44ca6e3561aebe532797be3443f6bd"
     },
+    "naming": {
+      "source": "glacierphonk/naming",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "cd9ed9afcbc3469728461b75bcaf1bdf6d3ed17cc1f23d6f8f2db59ca631bee5"
+    },
     "redesign-existing-projects": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/redesign-skill/SKILL.md",
       "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
+    },
+    "short-form-video": {
+      "source": "iart-ai/tiktok-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/short-form-video/SKILL.md",
+      "computedHash": "893ea19615f3199159b9fe94f05e37a5e538e7e0c3af7f77f9f9bed7ff933423"
     },
     "stitch-design-taste": {
       "source": "leonxlnx/taste-skill",
@@ -103,11 +248,47 @@
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "e753a5da75292bbe59d302d89566bc2c53d0e73944da2f0e944a7578883c07d0"
     },
+    "topic-cluster-planning": {
+      "source": "inhouseseo/superseo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/topic-cluster-planning/SKILL.md",
+      "computedHash": "40385bc777dfe1a4d08e95d7ba3d6e62ac5dd42a81cf7816c1f3e1fd21226a5c"
+    },
     "watch": {
       "source": "bradautomates/claude-video",
       "sourceType": "github",
       "skillPath": "skills/watch/SKILL.md",
       "computedHash": "657d2765e3c2e2d91fb18bbda0e5f64221543fa9731539a692017d234399fbf3"
+    },
+    "web-asset-generator": {
+      "source": "alonw0/web-asset-generator",
+      "sourceType": "github",
+      "skillPath": "skills/web-asset-generator/SKILL.md",
+      "computedHash": "73cd073db98ba7f397ef380cd9290ca66a1c30dd6c465c40309d56fc26133024"
+    },
+    "whiteboard-animation": {
+      "source": "iart-ai/explainer-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/whiteboard-animation/SKILL.md",
+      "computedHash": "156ea47bbc08e224e42b9e7ea6a35db1a7e08f36294b862eedded3cee8f84d0c"
+    },
+    "write-content": {
+      "source": "inhouseseo/superseo-skills",
+      "sourceType": "github",
+      "skillPath": "skills/write-content/SKILL.md",
+      "computedHash": "117cea2819c5d30721154499556b847ad554c74821e60e0bd9cd3cfc8c819c5d"
+    },
+    "writing-dna-discovery": {
+      "source": "robertguss/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/writing/writing-dna-discovery/SKILL.md",
+      "computedHash": "931f4fe1a6730dd064eb104d74805dfffa07db8af0541e4d22e3807fadac5a60"
+    },
+    "youtube-intro-outro": {
+      "source": "iart-ai/youtube-video-skills",
+      "sourceType": "github",
+      "skillPath": "skills/youtube-intro-outro/SKILL.md",
+      "computedHash": "048d7190bcd6ec26f8700328ee3b59c1d56856e4e5fe9a3b85c7e12e15e3a9fa"
     }
   }
 }
