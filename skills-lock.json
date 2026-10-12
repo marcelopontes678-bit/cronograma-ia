@@ -98,6 +98,12 @@
       "skillPath": "skills/countdown-video/SKILL.md",
       "computedHash": "dafb9127ededa76d0df08be73adc46e18d6ec3955153f6ecfd0f928984ce95b2"
     },
+    "defuddle": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "skillPath": "skills/defuddle/SKILL.md",
+      "computedHash": "5ae2d9f2d5de3f27adb5b4d0a752c16be38f1a2d6316721a74ab721866d5fb2e"
+    },
     "design-taste-frontend": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
@@ -218,6 +224,12 @@
       "skillPath": "skills/brutalist-skill/SKILL.md",
       "computedHash": "8fc355c4aadb7d29c53ca28bc41be3cd6eea765d121e3737c4dc2d0f90a8effa"
     },
+    "json-canvas": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "skillPath": "skills/json-canvas/SKILL.md",
+      "computedHash": "56cbac74a93e4fba97f4d44bccfdeaae89e545b223f47df392c7705e01e6c543"
+    },
     "keyword-deep-dive": {
       "source": "inhouseseo/superseo-skills",
       "sourceType": "github",
@@ -229,6 +241,12 @@
       "sourceType": "github",
       "skillPath": "skills/kinetic-typography/SKILL.md",
       "computedHash": "1a59da2f9bf89dcdd23ac35248f7e40ae1586e670a10408edad8728169dfb415"
+    },
+    "knap": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "skillPath": "skills/knap/SKILL.md",
+      "computedHash": "e376a3f24ed9c48a00afff39372dae304e18c89f5c8bd69d4d6e1819d6333145"
     },
     "logo-designer": {
       "source": "neonwatty/logo-designer-skill",
@@ -253,6 +271,24 @@
       "sourceType": "github",
       "skillPath": "SKILL.md",
       "computedHash": "cd9ed9afcbc3469728461b75bcaf1bdf6d3ed17cc1f23d6f8f2db59ca631bee5"
+    },
+    "obsidian-bases": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "skillPath": "skills/obsidian-bases/SKILL.md",
+      "computedHash": "65db029661f38daadc8b8eb755bd7b96011336f49bdc11e966ec7fd157d8f125"
+    },
+    "obsidian-cli": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "skillPath": "skills/obsidian-cli/SKILL.md",
+      "computedHash": "f46ae626875f7e47c410c2ee93896c4526024ebe127719e8fb430261b5677edc"
+    },
+    "obsidian-markdown": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "skillPath": "skills/obsidian-markdown/SKILL.md",
+      "computedHash": "0f47297035d7824e7bf0f1984e8145a59a123e2258b5d54c9ac9642f9f77e177"
     },
     "receiving-code-review": {
       "source": "obra/superpowers",
