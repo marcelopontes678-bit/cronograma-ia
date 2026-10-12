@@ -44,6 +44,12 @@
       "skillPath": "skills/non-fiction-book-factory/book-research-assistant/SKILL.md",
       "computedHash": "7dbfa3b3f046d0d9018d0ffadc4046c44f22e0923c43efaaab37f0ab49126bba"
     },
+    "brainstorming": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/brainstorming/SKILL.md",
+      "computedHash": "fc6339f0e5b48c63279bd4f6c6340db55301b69ccc37a13e1e52bd5b3062746c"
+    },
     "brandkit": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
@@ -104,11 +110,23 @@
       "skillPath": "skills/taste-skill-v1/SKILL.md",
       "computedHash": "d704ab912c4d0ca954ffa858983da755ae4cd5cad9ba22554db5557382f5bd34"
     },
+    "diagnosing-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/diagnosing-superpowers/SKILL.md",
+      "computedHash": "0f33f20feb5340f7be932581880325725b0d2894e15193bffeab53ad474c3267"
+    },
     "diagram-animation": {
       "source": "iart-ai/explainer-video-skills",
       "sourceType": "github",
       "skillPath": "skills/diagram-animation/SKILL.md",
       "computedHash": "875808a72e79967c35c1743af1f98d9904d83b5f278e13f248b65d63b7baff2a"
+    },
+    "dispatching-parallel-agents": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/dispatching-parallel-agents/SKILL.md",
+      "computedHash": "b011107f17188e0b2898bb1856b5bac8b49537cc86e737c82126558a235bd62a"
     },
     "ebook-concept-development": {
       "source": "robertguss/claude-skills",
@@ -122,11 +140,23 @@
       "skillPath": "skills/ebook-factory/ebook-discovery/SKILL.md",
       "computedHash": "593f673906e2b8e09046f6397dce5b62d962d20eb878da19ecbd719d7b6f2c69"
     },
+    "executing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/executing-plans/SKILL.md",
+      "computedHash": "ebf526e8565d02852f57f473bfb97c1baf142d4afe97dc6d169e966514382963"
+    },
     "explainer-video": {
       "source": "iart-ai/explainer-video-skills",
       "sourceType": "github",
       "skillPath": "skills/explainer-video/SKILL.md",
       "computedHash": "ab433063cdff431ee5d10d6ce8b4d2e1cb4b608fa6637c7d05d08580d1b1b08a"
+    },
+    "finishing-a-development-branch": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/finishing-a-development-branch/SKILL.md",
+      "computedHash": "4f571e7befb8b0946d9d7770232c818812412e9ab1dfb811f847edfba1fc6275"
     },
     "full-output-enforcement": {
       "source": "leonxlnx/taste-skill",
@@ -224,11 +254,23 @@
       "skillPath": "SKILL.md",
       "computedHash": "cd9ed9afcbc3469728461b75bcaf1bdf6d3ed17cc1f23d6f8f2db59ca631bee5"
     },
+    "receiving-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/receiving-code-review/SKILL.md",
+      "computedHash": "59361179fc9225173e0c145ffd9bafbf9fdbf8b43ce3dc308497a0b4f83a6063"
+    },
     "redesign-existing-projects": {
       "source": "leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/redesign-skill/SKILL.md",
       "computedHash": "b405eee0e0e80fc243f731d9aa368bca307e356db7e6157d27101d369dac6726"
+    },
+    "requesting-code-review": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/requesting-code-review/SKILL.md",
+      "computedHash": "b095ac8c980339436b41de9989328f3f288f2e2a70452df28452bbeb6531d604"
     },
     "short-form-video": {
       "source": "iart-ai/tiktok-video-skills",
@@ -242,17 +284,53 @@
       "skillPath": "skills/stitch-skill/SKILL.md",
       "computedHash": "13322f38406cd3abf16ba45e35bdc9b18002d0153a79b4612b97aefc65d5a335"
     },
+    "subagent-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/subagent-driven-development/SKILL.md",
+      "computedHash": "71259c008c49ff734e64c61045f1aa235b9aa99642a9aca9398beb775f6c59c5"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/systematic-debugging/SKILL.md",
+      "computedHash": "276fb0aadb002ab930cc2a56de89e16995a2e3e70b33587652bf0a5fb123148d"
+    },
     "tdd": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "e753a5da75292bbe59d302d89566bc2c53d0e73944da2f0e944a7578883c07d0"
     },
+    "test-driven-development": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/test-driven-development/SKILL.md",
+      "computedHash": "3cfe4ebb6fa7288f668d87880d279c8e48f7a92b63415e296857060f5ce22e05"
+    },
     "topic-cluster-planning": {
       "source": "inhouseseo/superseo-skills",
       "sourceType": "github",
       "skillPath": "skills/topic-cluster-planning/SKILL.md",
       "computedHash": "40385bc777dfe1a4d08e95d7ba3d6e62ac5dd42a81cf7816c1f3e1fd21226a5c"
+    },
+    "using-git-worktrees": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/using-git-worktrees/SKILL.md",
+      "computedHash": "48c8a1040e378e0cb7208107294e3afa9067b9370c3f33b49a443eb6b7528b0d"
+    },
+    "using-superpowers": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/using-superpowers/SKILL.md",
+      "computedHash": "ef8670c2a2d8e2f6ed52d6f3219759903300ca13afc5ec2e25826a735112562b"
+    },
+    "verification-before-completion": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/verification-before-completion/SKILL.md",
+      "computedHash": "b529822bdac4b197b180fe12225cff86b930b65910435103c10622df7f041651"
     },
     "watch": {
       "source": "bradautomates/claude-video",
@@ -283,6 +361,18 @@
       "sourceType": "github",
       "skillPath": "skills/writing/writing-dna-discovery/SKILL.md",
       "computedHash": "931f4fe1a6730dd064eb104d74805dfffa07db8af0541e4d22e3807fadac5a60"
+    },
+    "writing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/writing-plans/SKILL.md",
+      "computedHash": "c2647b5bf067be353a893e5a39a632cbbeb7ad81e61fa5ae227ece5490029073"
+    },
+    "writing-skills": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "skillPath": "skills/writing-skills/SKILL.md",
+      "computedHash": "f06bbb471439736c838e89a57a2a371bcc687931ba878901d97373194e212ea9"
     },
     "youtube-intro-outro": {
       "source": "iart-ai/youtube-video-skills",
