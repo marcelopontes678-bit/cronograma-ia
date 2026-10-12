@@ -103,6 +103,12 @@
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "e753a5da75292bbe59d302d89566bc2c53d0e73944da2f0e944a7578883c07d0"
     },
+    "vibe-trading": {
+      "source": "HKUDS/Vibe-Trading",
+      "sourceType": "github",
+      "skillPath": "agent/SKILL.md",
+      "computedHash": "722477dad69f41b3b222fe13e55113d1be2da53de8a92f740200c61b73658616"
+    },
     "watch": {
       "source": "bradautomates/claude-video",
       "sourceType": "github",
