@@ -12,7 +12,7 @@ Valores em R$. Dólar a **R$ 5,15** (cotação de 16/09/2026 em [Meelion](https:
 | Tokens por página | ~6.500 de entrada, ~4.000 de saída | **ESTIMATIVA**: prompt do sistema tem ~7.300 caracteres (~2.100 tokens) + preferências + a página do PDF; a saída é o JSON dos módulos. **Medir de verdade**: registrar `usage` de cada chamada |
 | Custo de IA por página | ~US$ 0,13 (R$ 0,67) | 6.500 × US$ 5/M + 4.000 × US$ 25/M |
 | Custo de IA por marcenaria | R$ 33,50/mês | 10 orçamentos × 5 páginas × R$ 0,67 |
-| Simples Nacional | ~6% | **ESTIMATIVA**; o anexo e a alíquota dependem do enquadramento. Confirmar com o contador |
+| Simples Nacional | 15,5% | Anexo V inicial para CNAE 6203-1/00 sem Fator R ([Agilize](https://agilize.com.br/artigos/?p=4217), [contabilidade.com](https://contabilidade.com/blog/cnae-6203100-desenvolvimento-e-licenciamento-de-programas-de-computador-nao-customizaveis-simples-nacional-fator-r-e-abertura-de-empresa/)); com Fator R (folha ≥ ~28% da receita) cai para 6% no Anexo III. Confirmar com o contador |
 | Taxa de cobrança | ~5% | **ESTIMATIVA**; não encontrei a tabela atual do Asaas ([docs](https://docs.asaas.com/docs/assinaturas-recorrência)) |
 | Supabase Pro | US$ 25/mês | [makerkit](https://makerkit.dev/blog/md/saas/supabase-pricing), [toolradar](https://toolradar.com/blog/supabase-pricing-2026); confirmar em supabase.com/pricing. Uso extra é cobrado à parte |
 | Render Starter | US$ 7/mês | [costbench](https://costbench.com/software/developer-tools/render/); confirmar em render.com/pricing |
