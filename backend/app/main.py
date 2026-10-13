@@ -3,7 +3,6 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.database import engine
@@ -53,14 +52,13 @@ async def health():
     orcamento de marcenaria (nao bloqueiam o resto do ERP no startup --
     e um bounded context especifico, um deploy sem ANTHROPIC_API_KEY
     ainda serve empresas/usuarios/projetos normalmente, so o modulo de
-    orcamento fica indisponivel)."""
+    orcamento fica indisponivel). Por isso sempre 200: o Render usa esta
+    rota como health check e tiraria o ERP inteiro do ar com um 503;
+    o "degradado" fica so no corpo."""
     checks = {
         "anthropic_api_key_configurada": bool(settings.ANTHROPIC_API_KEY),
         "tabela_precos_encontrada": Path(settings.ORCAMENTO_TABELA_PRECOS).exists(),
         "config_precificacao_encontrada": Path(settings.ORCAMENTO_CONFIG_PRECIFICACAO).exists(),
     }
     status_geral = "ok" if all(checks.values()) else "degradado"
-    return JSONResponse(
-        status_code=200 if status_geral == "ok" else 503,
-        content={"status": status_geral, "version": "0.1.0", "checks": checks},
-    )
+    return {"status": status_geral, "version": "0.1.0", "checks": checks}

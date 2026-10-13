@@ -1,3 +1,4 @@
+import asyncio
 import copy
 import logging
 import uuid
@@ -143,7 +144,11 @@ async def rodar_extracao_em_background(
         regras_ativas = await orcamento_feedback_service.listar_regras_normalizadas_ativas(db, empresa_id)
 
         try:
-            ambientes, avisos = extrair_de_pdf(
+            # Em thread: extrair_de_pdf e sincrona e leva minutos (render +
+            # chamadas ao Claude); rodar direto travaria o event loop e todas
+            # as outras requisicoes, inclusive o /health.
+            ambientes, avisos = await asyncio.to_thread(
+                extrair_de_pdf,
                 job_id=str(job_id),
                 caminhos_pdf=caminhos_pdf,
                 pasta_trabalho=pasta_trabalho,

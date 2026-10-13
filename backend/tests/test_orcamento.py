@@ -1,3 +1,4 @@
+import threading
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -476,3 +477,38 @@ class TestFeedback:
         resp3 = await client.delete(f"/api/v1/orcamentos/regras/{regra_id}", headers=headers)
         assert resp3.status_code == 200
         assert resp3.json()["is_active"] is False
+
+
+class TestNaoTravaOServidor:
+    async def test_extracao_roda_fora_do_event_loop(self, client: AsyncClient, empresa_a):
+        """A extracao leva minutos; se rodar na thread do event loop, todo o
+        ERP (inclusive o /health do Render) fica parado ate ela acabar."""
+        token = await obter_token(client, "admin@a.com", "senhaA123!")
+        threads_da_chamada = []
+
+        def _registra_thread(**kwargs):
+            threads_da_chamada.append(threading.current_thread())
+            return _resposta_tool_use(_ambiente_banheiro_mock())
+
+        with patch("app.services.orcamento_vision_extractor.Anthropic") as MockAnthropic:
+            _mockar_stream(MockAnthropic, side_effect=_registra_thread)
+            with open(CAMINHO_PDF_BANHEIRO, "rb") as f:
+                resp = await client.post(
+                    "/api/v1/orcamentos/jobs",
+                    headers={"Authorization": f"Bearer {token}"},
+                    files={"arquivos": ("banheiro.pdf", f, "application/pdf")},
+                )
+        assert resp.status_code == 202, resp.text
+        assert threads_da_chamada
+        assert all(t is not threading.main_thread() for t in threads_da_chamada)
+
+
+class TestHealth:
+    async def test_sem_chave_de_ia_responde_200_degradado(self, client: AsyncClient):
+        """O Render usa /health como health check: um 503 tiraria o ERP
+        inteiro do ar so porque o modulo de orcamento esta sem chave."""
+        with patch("app.main.settings.ANTHROPIC_API_KEY", ""):
+            resp = await client.get("/health")
+        assert resp.status_code == 200
+        assert resp.json()["status"] == "degradado"
+        assert resp.json()["checks"]["anthropic_api_key_configurada"] is False
