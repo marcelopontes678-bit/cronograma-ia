@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "A parte do desconto item por item me pegou, porque perdi dinheiro numa obra exatamente assim. Mas já paguei sistema, larguei em um mês e voltei pra planilha. Não vou pagar R$ 197 todo mês pra repetir isso.",
+  "objection": "Sistema com CRM, estoque, produção, financeiro, tudo junto: eu não vou ter tempo de alimentar isso tudo, e em um mês volto pro Excel. E não acredito que a IA vai ler um arquivo do Promob e acertar o orçamento sem eu ter que refazer metade.",
+  "would_change_my_mind": "Um teste grátis onde eu mando um projeto real meu e vejo o orçamento sair certo, e alguém que me ajude a passar minha planilha de preços pra dentro, sem eu ter que configurar tudo sozinho.",
+  "price_too_cheap": 40,
+  "price_cheap": 97,
+  "price_expensive": 197,
+  "price_too_expensive": 350
+}

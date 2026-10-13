@@ -1,0 +1,94 @@
+{
+ "n": 20,
+ "seed": 400972,
+ "customer": {
+  "business": "Gestori, ERP com orçamento por IA para marcenarias (Brasil)",
+  "target": "Donos de marcenaria de móveis planejados e sob medida no Brasil. Valores em reais: o 'income' é o faturamento anual da marcenaria em R$, e os preços são em R$ por mês.",
+  "where": "Brasil, venda online",
+  "age": [
+   28,
+   60
+  ],
+  "notes": "Perfil montado por suposição: não há entrevistas nem dados reais de clientes. Faturamentos, proporções e comportamentos são estimativas a validar. As objeções usam os concorrentes e preços de founder/competitors.md.",
+  "segments": [
+   {
+    "name": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+    "share": 0.5,
+    "income": [
+     300000,
+     1200000
+    ]
+   },
+   {
+    "name": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+    "share": 0.3,
+    "income": [
+     1200000,
+     6000000
+    ]
+   },
+   {
+    "name": "Loja de planejados (projeta no Promob, fabrica ou terceiriza)",
+    "share": 0.2,
+    "income": [
+     1000000,
+     5000000
+    ]
+   }
+  ],
+  "behaviours": [
+   {
+    "name": "Planilha e caderno",
+    "share": 0.25,
+    "how": "Orça numa planilha do Excel ou no caderno; nunca pagou sistema de gestão."
+   },
+   {
+    "name": "Orça dentro do Promob",
+    "share": 0.2,
+    "how": "Faz projeto e preço no Promob e acha que já basta."
+   },
+   {
+    "name": "Já usa outro sistema",
+    "share": 0.15,
+    "how": "Paga um sistema de marcenaria (Calcme, Calctto ou parecido) e não quer migrar dados."
+   },
+   {
+    "name": "Caçador de preço",
+    "share": 0.15,
+    "how": "Compara o preço de tudo e escolhe o mais barato que resolve."
+   },
+   {
+    "name": "Pede indicação de colega",
+    "share": 0.1,
+    "how": "Só adota o que algum marceneiro conhecido já usa e aprova."
+   },
+   {
+    "name": "Curioso de IA",
+    "share": 0.1,
+    "how": "Já usa ChatGPT no dia a dia e testa ferramenta nova com IA."
+   },
+   {
+    "name": "Sem tempo para tecnologia",
+    "share": 0.05,
+    "how": "Passa o dia na obra e na fábrica; resolve tudo pelo WhatsApp."
+   }
+  ],
+  "objections": [
+   "R$ 197 por mês é caro; tem sistema de marcenaria por R$ 50 a 100",
+   "Já orço no Promob, não preciso de mais um sistema",
+   "E se a IA errar o orçamento e eu perder dinheiro na obra?",
+   "Não tenho tempo para aprender e cadastrar tudo num sistema novo",
+   "Nunca ouvi falar do Gestori; quem mais usa?",
+   "Já testei sistema antes e larguei depois de um mês",
+   "Minha tabela de preço e meus clientes ficam guardados onde?"
+  ],
+  "habits": [
+   "você desenha no Promob à noite, depois do dia na fábrica",
+   "você manda orçamento para o cliente pelo WhatsApp",
+   "você participa de grupos de marceneiros no WhatsApp e no Facebook",
+   "você compra chapa de MDF e ferragens numa revenda da sua cidade",
+   "você perdeu dinheiro numa obra porque deu desconto demais"
+  ]
+ },
+ "pitch": "Gestori, um sistema online de gestão feito para marcenarias, criado por um dono de marcenaria.\nVocê envia o projeto do cliente (PDF, DWG ou arquivo do Promob) e a IA lê o projeto e monta o orçamento com módulos e peças, para você revisar.\nQuando você dá desconto, o sistema distribui o desconto item por item e avisa se a margem de algum ambiente ficar abaixo do mínimo que você definiu.\nInclui CRM, produção, estoque, financeiro, agenda e uma área para o seu cliente acompanhar o projeto.\nR$ 197 por mês por marcenaria, no navegador, sem instalar nada."
+}

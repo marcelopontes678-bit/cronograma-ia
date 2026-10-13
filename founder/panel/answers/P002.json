@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Já pago um sistema de marcenaria e minha equipe toda está acostumada com ele; trocar tudo agora, com cadastro, histórico e projetista no meio de obra, é dor de cabeça demais. A parte do desconto com aviso de margem me chamou atenção, porque já perdi dinheiro assim, mas não troco o sistema inteiro por causa de uma função.",
+  "objection": "Migrar meus dados e treinar 10, 20 pessoas num sistema novo de uma empresa que eu não conheço, pagando o dobro do que pago hoje.",
+  "would_change_my_mind": "Se eles migrassem meus dados do sistema atual de graça e eu pudesse testar a IA de orçamento e o controle de desconto num projeto real meu antes de pagar.",
+  "price_too_cheap": 39,
+  "price_cheap": 79,
+  "price_expensive": 150,
+  "price_too_expensive": 250
+}

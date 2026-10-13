@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "R$ 197 por mês pra uma marcenaria do meu tamanho é puxado, tem sistema de marcenaria por R$ 50 a 100. E eu não tenho tempo de ficar aprendendo sistema com CRM, estoque, financeiro, eu resolvo tudo no WhatsApp entre a obra e a fábrica.",
+  "objection": "Pagar quase 200 por mês num sistema cheio de coisa que eu não vou usar, e não sei se essa IA lê direito o meu projeto do Promob ou se vou perder mais tempo corrigindo o orçamento do que fazendo na mão.",
+  "would_change_my_mind": "Ver um marceneiro do meu grupo do WhatsApp mostrando que mandou o projeto do Promob e o orçamento saiu certo em minutos, com um teste grátis e um preço perto de R$ 100.",
+  "price_too_cheap": 30,
+  "price_cheap": 70,
+  "price_expensive": 120,
+  "price_too_expensive": 197
+}

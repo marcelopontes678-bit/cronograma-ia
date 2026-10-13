@@ -1,0 +1,161 @@
+{
+ "business": "Gestori, ERP com orçamento por IA para marcenarias (Brasil)",
+ "seed": 400972,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 2,
+ "passes": 18,
+ "buy_rate": 0.1,
+ "by_segment": [
+  [
+   "Loja de planejados (projeta no Promob, fabrica ou terceiriza)",
+   4,
+   0.25
+  ],
+  [
+   "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+   10,
+   0.1
+  ],
+  [
+   "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+   6,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Curioso de IA",
+   2,
+   1.0
+  ],
+  [
+   "Caçador de preço",
+   3,
+   0.0
+  ],
+  [
+   "Já usa outro sistema",
+   3,
+   0.0
+  ],
+  [
+   "Orça dentro do Promob",
+   4,
+   0.0
+  ],
+  [
+   "Pede indicação de colega",
+   2,
+   0.0
+  ],
+  [
+   "Planilha e caderno",
+   5,
+   0.0
+  ],
+  [
+   "Sem tempo para tecnologia",
+   1,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "under $761,000",
+   6,
+   0.16666666666666666
+  ],
+  [
+   "$761,000 to $1,665,000",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "$1,665,000 and up",
+   7,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "habit",
+   9,
+   [
+    "Já pago um sistema de marcenaria e minha equipe toda está acostumada com ele; trocar tudo agora, com cadastro, histórico e projetista no meio de obra, é dor de cabeça demais. A parte do desconto com aviso de margem me chamou atenção, porque já perdi dinheiro assim, mas não troco o sistema inteiro por causa de uma função.",
+    "O preço não me assusta, mas eu já faço projeto e orçamento no Promob e minha equipe toda roda em cima disso. Trocar CRM, produção, estoque e financeiro de uma vez por um sistema novo é mês de bagunça que eu não tenho como bancar agora."
+   ],
+   [
+    "P002",
+    "P003"
+   ]
+  ],
+  [
+   "trust",
+   8,
+   [
+    "Orçamento é onde eu ganho ou perco dinheiro, e não vou entregar isso para uma IA que nunca vi funcionar com projeto meu. Hoje eu faço no Promob e mando pelo WhatsApp, funciona e não pago mais nada por isso.",
+    "Nunca ouvi ninguém dos grupos de marceneiro falar desse Gestori, e eu não coloco meu orçamento na mão de sistema que nenhum colega testou. E R$ 197 por mês pesa quando tem sistema de marcenaria por R$ 50 a 100."
+   ],
+   [
+    "P001",
+    "P005"
+   ]
+  ],
+  [
+   "price",
+   1,
+   [
+    "R$ 197 por mês pra uma marcenaria do meu tamanho é puxado, tem sistema de marcenaria por R$ 50 a 100. E eu não tenho tempo de ficar aprendendo sistema com CRM, estoque, financeiro, eu resolvo tudo no WhatsApp entre a obra e a fábrica."
+   ],
+   [
+    "P015"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "convenience",
+   1,
+   [
+    "Eu já orço no Promob, mas a parte da IA lendo o arquivo e o desconto item por item com aviso de margem é exatamente onde eu perco dinheiro e tempo de noite. Por R$ 197 eu assino um mês para testar com projetos reais; se não acertar, cancelo."
+   ],
+   [
+    "P009"
+   ]
+  ],
+  [
+   "need",
+   1,
+   [
+    "Já perdi dinheiro numa obra por dar desconto no chute, e um sistema que mostra a margem por ambiente na hora do desconto resolve exatamente isso. R$ 197 é pouco perto do que perdi, então assino um mês para testar com um projeto real."
+   ],
+   [
+    "P020"
+   ]
+  ]
+ ],
+ "flip": [
+  "Testar de graça com uns três projetos meus já fechados e ver o orçamento da IA bater com o que eu cobrei, peça por peça.",
+  "Se eles migrassem meus dados do sistema atual de graça e eu pudesse testar a IA de orçamento e o controle de desconto num projeto real meu antes de pagar.",
+  "Ver, com um projeto meu de verdade do Promob, o orçamento saindo certo e o alerta de margem no desconto funcionando, com eles fazendo a implantação e o cadastro inicial por mim.",
+  "Ver uma marcenaria do meu porte, de algum grupo que eu participo, usando há meses, e um teste grátis em que eu subo um projeto real do Promob e o orçamento sai certo, com contrato dizendo que os dados são meus e eu exporto quando quiser.",
+  "Um marceneiro que eu conheço do grupo mostrando que usa há uns meses e que o orçamento pelo projeto do Promob sai certo.",
+  "Se importasse meus dados do sistema atual sem eu digitar nada e me deixasse testar um mês grátis com um projeto real meu, com o orçamento da IA batendo com o que eu faria.",
+  "Ver funcionando com um projeto meu do Promob, de graça por um mês, com o orçamento saindo certo sem eu redigitar nada e alguém me ajudando a implantar na fábrica.",
+  "Um marceneiro que eu conheço e respeito me dizer que usa há alguns meses e que os orçamentos saem certos.",
+  "Testar de graça com uns três projetos meus que já fechei e ver o orçamento da IA bater com o que eu cobrei, peça por peça, ou ver um marceneiro conhecido usando há meses sem dor de cabeça.",
+  "Um teste grátis onde eu mando um projeto real meu e vejo o orçamento sair certo, e alguém que me ajude a passar minha planilha de preços pra dentro, sem eu ter que configurar tudo sozinho.",
+  "Um teste grátis em que eu mando um projeto meu de verdade do Promob e o orçamento sai certo em minutos, sem eu precisar cadastrar o resto do sistema.",
+  "Testar de graça com dois ou três projetos meus já fechados e ver o orçamento da IA bater com o que eu calculei na planilha.",
+  "Ver outro marceneiro que eu conheço usando há alguns meses, e poder testar de graça com um projeto meu de verdade, podendo exportar meus dados para o Excel se eu desistir.",
+  "Ver um marceneiro do meu grupo do WhatsApp mostrando que mandou o projeto do Promob e o orçamento saiu certo em minutos, com um teste grátis e um preço perto de R$ 100.",
+  "Ver funcionando com um arquivo meu do Promob: subir o projeto e sair um orçamento certo com os preços da minha revenda, sem eu ter que cadastrar tudo do zero.",
+  "Um teste grátis em que eu mande três projetos reais do Promob e o orçamento da IA bata com o do meu projetista, mais a migração dos meus dados feita por eles sem custo.",
+  "Um teste grátis de 30 dias com um projeto meu de verdade, mais garantia por escrito de que os dados são meus, ficam no Brasil e eu exporto tudo quando quiser.",
+  "Um teste grátis de 30 dias em que eu mando um projeto meu de verdade e o orçamento sai certo em minutos, sem cartão e sem fidelidade."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}

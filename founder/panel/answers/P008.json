@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "A parte do desconto com aviso de margem é exatamente onde eu perdi dinheiro, então me chamou atenção. Mas nunca ouvi falar do Gestori, e eu não coloco orçamento, produção e financeiro da minha marcenaria num sistema que nenhum colega meu usa.",
+  "objection": "Quem mais usa isso? Não conheço nenhum marceneiro que use, e não sei se a IA lê direito um arquivo do Promob ou se vai me dar mais trabalho revisando orçamento errado do que fazendo na mão.",
+  "would_change_my_mind": "Um marceneiro que eu conheço e respeito me dizer que usa há alguns meses e que os orçamentos saem certos.",
+  "price_too_cheap": 79,
+  "price_cheap": 150,
+  "price_expensive": 450,
+  "price_too_expensive": 900
+}
