@@ -28,7 +28,19 @@ Base: posicionamento em `marketing.md` (o alerta de margem no desconto), concorr
 
 ### Verificações que você precisa fazer (eu só consigo buscas públicas)
 - **Marca no INPI:** buscar "Gestori" e os finalistas em [busca.inpi.gov.br](https://busca.inpi.gov.br/pePI/), nas classes **9** (programa de computador) e **42** (software como serviço). Na minha busca pública **não apareceu nenhuma empresa chamada exatamente "Gestori"**, mas existem nomes parecidos, como GestorSoftware ([b2bstack](https://www.b2bstack.com.br/compare/gestorsoftware-vs-upgestao)) e "Gestor S.A. Tecnologia da Informação" ([MonitorCNPJ](https://monitorcnpj.com.br/cnpj/04861460000165/)). "Gestor" é uma palavra comum, o que pode dificultar o registro. **Um advogado ou agente de marcas deve confirmar.** Nada está protegido até você registrar.
-- **Domínio:** a busca não mostrou site em gestori.com.br nem gestori.com, mas isso **não prova** que estão livres. Confira em [registro.br](https://registro.br) e num registrador de .com. Alternativas: gestori.app, usegestori.com.br, gestorimarcenaria.com.br.
+- **Domínio:** o fundador confirmou que **o domínio "gestori" está indisponível**. Antes de escolher outro:
+  1. Veja **quem é o dono** no WHOIS do [registro.br](https://registro.br) e se o site está ativo. Se for uma empresa de software ou gestão usando "Gestori", o risco de conflito de marca aumenta, e vale falar com o agente de marcas **antes** de investir no nome.
+  2. Se o domínio estiver só estacionado (sem uso), dá para tentar comprar do dono, mas não conte com isso.
+  
+  **Alternativas, em ordem de preferência** (confira cada uma em registro.br; eu não consigo verificar):
+  | Domínio | Por quê |
+  |---|---|
+  | **gestori.app.br** ou **gestori.app** | Mantém o nome puro; ".app" deixa claro que é sistema |
+  | **usegestori.com.br** | Padrão comum de software ("use" + nome); fácil de falar no vídeo |
+  | **gestorimarcenaria.com.br** | Diz o nicho e ajuda na busca, mas é longo |
+  | **sougestori.com.br** / **gestorioficial.com.br** | Últimas opções |
+  
+  Evite variações com hífen ou erro de grafia ("gest0ri", "gestory"): no vídeo e no boca a boca, ninguém acerta.
 - **Perfis:** confira @gestori (ou @gestori.app) no Instagram, TikTok, YouTube e X.
 - **Confusão com concorrentes:** nenhum dos finalistas lembra Calcme, Calctto, WoodOrça+, SisMarcenaria, GestorMarceneiro, Vetrun ou marcenAI. **Evite** "Proteja sua margem", que é o slogan do SisMarcenaria (Jotaerre).
 
