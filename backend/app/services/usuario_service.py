@@ -38,11 +38,7 @@ async def get_usuario(
     if not usuario:
         raise not_found("Usuário")
 
-    if (
-        current_user.role != RoleUsuario.ADMIN
-        and str(current_user.id) != str(usuario_id)
-        and current_user.empresa_id != usuario.empresa_id
-    ):
+    if current_user.empresa_id != usuario.empresa_id:
         raise forbidden_exception
 
     return usuario
@@ -69,6 +65,10 @@ async def update_usuario(
     current_user: Usuario,
 ) -> Usuario:
     usuario = await get_usuario(db, usuario_id, current_user)
+
+    # Fora o ADMIN, cada um so edita o proprio cadastro
+    if current_user.role != RoleUsuario.ADMIN and current_user.id != usuario.id:
+        raise forbidden_exception
 
     # Somente ADMIN pode mudar role
     update_data = data.model_dump(exclude_none=True)

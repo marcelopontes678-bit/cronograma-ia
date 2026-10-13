@@ -8,7 +8,7 @@ from sqlalchemy.orm import selectinload
 from app.core.exceptions import conflict, forbidden_exception, not_found
 from app.models.empresa import Empresa
 from app.models.unidade import Unidade
-from app.models.usuario import RoleUsuario, Usuario
+from app.models.usuario import Usuario
 from app.schemas.empresa import EmpresaCreate, EmpresaUpdate
 
 
@@ -38,7 +38,9 @@ async def get_empresa(
     if not empresa:
         raise not_found("Empresa")
 
-    if current_user.role != RoleUsuario.ADMIN and current_user.empresa_id != empresa_id:
+    # Isolamento estrito por empresa_id, sem excecao pra ADMIN -- ADMIN e
+    # admin da propria empresa, nunca da plataforma (ver routers/usuario.py).
+    if current_user.empresa_id != empresa_id:
         raise forbidden_exception
 
     return empresa
@@ -52,9 +54,7 @@ async def list_empresas(
 ) -> list[Empresa]:
     query = select(Empresa).options(
         selectinload(Empresa.unidades.and_(Unidade.is_active.is_(True)))
-    ).where(Empresa.is_active.is_(True))
-    if current_user.role != RoleUsuario.ADMIN:
-        query = query.where(Empresa.id == current_user.empresa_id)
+    ).where(Empresa.is_active.is_(True), Empresa.id == current_user.empresa_id)
 
     result = await db.execute(query.offset(skip).limit(limit))
     return list(result.scalars().all())

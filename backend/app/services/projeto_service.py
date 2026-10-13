@@ -50,10 +50,7 @@ async def get_projeto(
     if not projeto:
         raise not_found("Projeto")
 
-    if (
-        current_user.role != RoleUsuario.ADMIN
-        and current_user.empresa_id != projeto.empresa_id
-    ):
+    if current_user.empresa_id != projeto.empresa_id:
         raise forbidden_exception
 
     return projeto
@@ -62,18 +59,14 @@ async def get_projeto(
 async def list_projetos(
     db: AsyncSession,
     current_user: Usuario,
-    empresa_id: Optional[uuid.UUID] = None,
     status: Optional[StatusProjeto] = None,
     search: Optional[str] = None,
     skip: int = 0,
     limit: int = 20,
 ) -> list[Projeto]:
-    query = select(Projeto).where(Projeto.is_active.is_(True))
-
-    if current_user.role != RoleUsuario.ADMIN:
-        query = query.where(Projeto.empresa_id == current_user.empresa_id)
-    elif empresa_id:
-        query = query.where(Projeto.empresa_id == empresa_id)
+    query = select(Projeto).where(
+        Projeto.is_active.is_(True), Projeto.empresa_id == current_user.empresa_id
+    )
 
     if status:
         query = query.where(Projeto.status == status)

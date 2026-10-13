@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.exceptions import forbidden_exception
 from app.dependencies import get_current_user, get_db, require_role
 from app.models.usuario import RoleUsuario, Usuario
 from app.schemas.unidade import UnidadeCreate, UnidadeResponse, UnidadeUpdate
@@ -21,6 +22,8 @@ async def create_unidade(
         require_role(RoleUsuario.ADMIN, RoleUsuario.GERENTE)
     ),
 ):
+    if empresa_id != current_user.empresa_id:
+        raise forbidden_exception
     data.empresa_id = empresa_id
     return await unidade_service.create_unidade(db, data)
 

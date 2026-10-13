@@ -7,7 +7,7 @@ from sqlalchemy.orm.attributes import set_committed_value
 
 from app.core.exceptions import conflict, forbidden_exception, not_found
 from app.models.unidade import Unidade
-from app.models.usuario import RoleUsuario, Usuario
+from app.models.usuario import Usuario
 from app.schemas.unidade import UnidadeCreate, UnidadeUpdate
 
 
@@ -53,10 +53,7 @@ async def get_unidade(
     if not unidade:
         raise not_found("Unidade")
 
-    if (
-        current_user.role != RoleUsuario.ADMIN
-        and current_user.empresa_id != unidade.empresa_id
-    ):
+    if current_user.empresa_id != unidade.empresa_id:
         raise forbidden_exception
 
     return unidade
@@ -68,10 +65,7 @@ async def list_unidades(
     current_user: Usuario,
     tipo: str | None = None,
 ) -> list[Unidade]:
-    if (
-        current_user.role != RoleUsuario.ADMIN
-        and current_user.empresa_id != empresa_id
-    ):
+    if current_user.empresa_id != empresa_id:
         raise forbidden_exception
 
     query = select(Unidade).where(

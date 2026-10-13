@@ -33,7 +33,6 @@ async def create_projeto(
 
 @router.get("/", response_model=list[ProjetoListItem])
 async def list_projetos(
-    empresa_id: Optional[uuid.UUID] = Query(None),
     status: Optional[StatusProjeto] = Query(None),
     search: Optional[str] = Query(None),
     skip: int = 0,
@@ -42,7 +41,7 @@ async def list_projetos(
     current_user: Usuario = Depends(get_current_user),
 ):
     return await projeto_service.list_projetos(
-        db, current_user, empresa_id, status, search, skip, limit
+        db, current_user, status, search, skip, limit
     )
 
 
