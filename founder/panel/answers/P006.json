@@ -3,11 +3,11 @@
   "buys": false,
   "purchases_first_month": 0,
   "reason_code": "habit",
-  "reason": "Já orço no Promob e pago um sistema de marcenaria que funciona; migrar cliente, estoque e financeiro de novo me custa semanas que eu não tenho. Mais R$ 197 por mês para fazer o que eu já faço não compensa.",
-  "objection": "Ter que largar o sistema que já pago e redigitar tudo, e confiar que uma IA lê meu projeto do Promob sem errar peça e eu descobrir só na hora de cortar a chapa.",
-  "would_change_my_mind": "Se importasse meus dados do sistema atual sem eu digitar nada e me deixasse testar um mês grátis com um projeto real meu, com o orçamento da IA batendo com o que eu faria.",
-  "price_too_cheap": 49,
-  "price_cheap": 99,
-  "price_expensive": 197,
-  "price_too_expensive": 300
+  "reason": "Já pago um sistema de marcenaria e já orço no Promob; mais R$ 147 por mês para fazer o que eu já faço não entra na minha conta. Talvez eu até mande uns projetos no teste grátis por curiosidade, mas pagar depois eu não pagaria.",
+  "objection": "Ter dois sistemas para a mesma coisa: vou acabar orçando nos dois e conferindo a IA peça por peça, e isso é mais trabalho, não menos.",
+  "would_change_my_mind": "Se no teste a IA acertasse meus projetos fechados quase sem eu mexer e desse para substituir de vez o sistema que eu já pago, sem pagar os dois.",
+  "price_too_cheap": 30,
+  "price_cheap": 60,
+  "price_expensive": 120,
+  "price_too_expensive": 180
 }

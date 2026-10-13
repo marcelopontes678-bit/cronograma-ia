@@ -1,13 +1,13 @@
 {
   "id": "P018",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "O preço é bom, bem abaixo do que os ERPs de marcenaria cobram, mas não vou colocar minha tabela de preço e minha carteira de clientes num sistema novo que eu não sei onde guarda os dados nem quem é a empresa por trás. Mudar 30 pessoas de sistema por causa de R$ 197 e depois descobrir que não presta sai caro.",
-  "objection": "Onde ficam guardados meus preços e meus clientes, quem tem acesso a isso e se eu consigo tirar tudo de lá se quiser sair. E se a IA lê arquivo do Promob direito ou se o projetista vai passar a tarde corrigindo orçamento.",
-  "would_change_my_mind": "Um teste grátis de 30 dias com um projeto meu de verdade, mais garantia por escrito de que os dados são meus, ficam no Brasil e eu exporto tudo quando quiser.",
-  "price_too_cheap": 49,
-  "price_cheap": 150,
-  "price_expensive": 350,
-  "price_too_expensive": 600
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "price",
+  "reason": "Teste grátis sem cartão e R$ 147 é menos que meia diária do meu projetista; se a IA acertar os orçamentos dos projetos que já fechei, pago. Mas antes vou comparar com o que o plugin de orçamento do Promob e os concorrentes cobram.",
+  "objection": "Diz que eu posso exportar, mas não diz onde ficam guardados minha tabela de preço e meus clientes, nem quem mais tem acesso. Minha tabela é meu segredo comercial.",
+  "would_change_my_mind": "Se aparecer outra ferramenta que faz o mesmo por menos, ou se no teste a IA errar peça e ferragem nos projetos que eu já fechei.",
+  "price_too_cheap": 39,
+  "price_cheap": 97,
+  "price_expensive": 197,
+  "price_too_expensive": 297
 }

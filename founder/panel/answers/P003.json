@@ -1,13 +1,13 @@
 {
   "id": "P003",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "habit",
-  "reason": "O preço não me assusta, mas eu já faço projeto e orçamento no Promob e minha equipe toda roda em cima disso. Trocar CRM, produção, estoque e financeiro de uma vez por um sistema novo é mês de bagunça que eu não tenho como bancar agora.",
-  "objection": "Não tenho tempo para aprender e cadastrar tudo num sistema novo, e não acredito que a IA vai ler meu arquivo do Promob e acertar os módulos e as peças sem eu ter que refazer metade na mão.",
-  "would_change_my_mind": "Ver, com um projeto meu de verdade do Promob, o orçamento saindo certo e o alerta de margem no desconto funcionando, com eles fazendo a implantação e o cadastro inicial por mim.",
-  "price_too_cheap": 49,
-  "price_cheap": 150,
-  "price_expensive": 400,
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Acabei de perder dinheiro numa obra por dar desconto no olho, e o Promob me dá preço mas não me avisa quando a margem de um ambiente foi pro chão. Teste grátis sem cartão, o fundador cadastrando a tabela comigo e R$ 147 por mês é troco perto do que perdi naquela obra, então eu testo com 2 projetos fechados e, se bater, deixo o comercial usando.",
+  "objection": "Duvido que a IA leia meu arquivo do Promob e acerte módulo, ferragem e acabamento como meu projetista faz; se eu tiver que corrigir peça por peça, vira retrabalho e volto pro Promob.",
+  "would_change_my_mind": "Se no teste o orçamento da IA errar mais de uns 5% em relação ao que eu cobrei, ou se eu precisar gastar mais de uma tarde configurando, eu largo.",
+  "price_too_cheap": 39,
+  "price_cheap": 97,
+  "price_expensive": 397,
   "price_too_expensive": 800
 }

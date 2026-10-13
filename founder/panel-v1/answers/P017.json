@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Já pago um sistema de marcenaria e minha equipe toda está acostumada com ele; migrar cadastro, clientes e obras em andamento para um sistema novo no meio do ano é dor de cabeça que eu não quero. E não vou deixar uma IA montar orçamento de obra de 30 mil reais sem ter visto funcionar na prática.",
+  "objection": "E se a IA ler o projeto errado, esquecer peça ou ferragem, e eu fechar a obra com prejuízo? Além disso, quem migra meus dados do sistema atual, e o que acontece se essa empresa pequena fechar?",
+  "would_change_my_mind": "Um teste grátis em que eu mande três projetos reais do Promob e o orçamento da IA bata com o do meu projetista, mais a migração dos meus dados feita por eles sem custo.",
+  "price_too_cheap": 79,
+  "price_cheap": 150,
+  "price_expensive": 450,
+  "price_too_expensive": 800
+}

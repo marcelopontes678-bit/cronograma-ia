@@ -2,12 +2,12 @@
   "id": "P019",
   "buys": false,
   "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "A parte do desconto item por item mexe na ferida, porque perdi dinheiro numa obra exatamente assim. Mas já paguei sistema antes e larguei em um mês, e R$ 197 todo mês por um monte de módulo que eu não vou usar é caro perto das planilhas e dos sistemas mais baratos que tem por aí.",
-  "objection": "Não acredito que essa IA leia meu arquivo do Promob e monte o orçamento certo sem eu ter que refazer tudo. Se eu tiver que conferir peça por peça, volto pra planilha igual da outra vez.",
-  "would_change_my_mind": "Um teste grátis de 30 dias em que eu mando um projeto meu de verdade e o orçamento sai certo em minutos, sem cartão e sem fidelidade.",
-  "price_too_cheap": 39,
-  "price_cheap": 79,
-  "price_expensive": 149,
-  "price_too_expensive": 220
+  "reason_code": "habit",
+  "reason": "A parte do desconto com aviso de margem é exatamente onde eu perdi dinheiro, então talvez eu mande um projeto no teste grátis. Mas pagar R$ 147 todo mês? Já paguei sistema antes e larguei em um mês, e na correria eu volto pra minha planilha.",
+  "objection": "Eu mesmo já larguei sistema depois de um mês. Pra montar o orçamento a IA vai precisar dos meus preços, e se eu tiver que ficar corrigindo peça por peça, perco mais tempo do que na planilha.",
+  "would_change_my_mind": "No teste, a IA acertar o orçamento de 2 ou 3 obras que eu já fechei quase sem correção, e me mostrar quanto eu perdi naquela obra do desconto.",
+  "price_too_cheap": 30,
+  "price_cheap": 70,
+  "price_expensive": 120,
+  "price_too_expensive": 180
 }

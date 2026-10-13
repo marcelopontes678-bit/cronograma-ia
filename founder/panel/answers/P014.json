@@ -1,13 +1,13 @@
 {
   "id": "P014",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "Essa parte do desconto item por item me pegou, porque já perdi dinheiro numa obra assim. Mas tenho 58 anos, orço há décadas na planilha e no caderno, e não vou colocar minha tabela de preço e meus clientes num site que eu não conheço só porque vi um anúncio.",
-  "objection": "Minha tabela de preço e meus clientes ficam guardados onde? Se o sistema sair do ar ou eu parar de pagar, perco tudo? E não sei se a IA lê direito um projeto do Promob ou se vou passar mais tempo corrigindo do que orçando na minha planilha.",
-  "would_change_my_mind": "Ver outro marceneiro que eu conheço usando há alguns meses, e poder testar de graça com um projeto meu de verdade, podendo exportar meus dados para o Excel se eu desistir.",
-  "price_too_cheap": 39,
-  "price_cheap": 99,
-  "price_expensive": 197,
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Perdi dinheiro numa obra por dar desconto no chute, e esse aviso de margem por ambiente é exatamente o que me faltou. Teste grátis sem cartão com projeto que eu já fechei eu faço; se a IA errar peça, eu largo e volto pra planilha.",
+  "objection": "Minha tabela de preço e meus clientes ficam guardados onde, e quem mais vê? Tenho 58 anos, nunca paguei sistema, e não quero ficar preso numa coisa que some ou que eu não consigo mexer sozinho.",
+  "would_change_my_mind": "Se no teste a IA errar as peças e eu tiver que refazer o orçamento inteiro na mão, não pago.",
+  "price_too_cheap": 30,
+  "price_cheap": 80,
+  "price_expensive": 200,
   "price_too_expensive": 350
 }

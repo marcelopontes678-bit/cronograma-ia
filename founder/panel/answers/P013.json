@@ -1,13 +1,13 @@
 {
   "id": "P013",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "A parte do desconto que avisa a margem é exatamente o que me fez perder dinheiro, isso me chamou atenção. Mas nunca paguei sistema, minha planilha funciona, e não vou entregar meu orçamento pra uma IA que eu nunca vi acertar um projeto meu.",
-  "objection": "E se a IA ler errado o projeto do Promob, esquecer peça ou ferragem, e eu fechar a obra no prejuízo achando que estava certo? Aí o sistema que era pra me proteger me faz perder dinheiro.",
-  "would_change_my_mind": "Testar de graça com dois ou três projetos meus já fechados e ver o orçamento da IA bater com o que eu calculei na planilha.",
-  "price_too_cheap": 39,
-  "price_cheap": 99,
-  "price_expensive": 197,
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Já perdi dinheiro numa obra por dar desconto demais, e esse aviso de margem por ambiente é exatamente o que me faltou. Teste grátis sem cartão com projeto que eu já fechei eu faço; se a IA bater com o que eu cobrei, R$ 147 é pouco perto do que perdi numa obra só.",
+  "objection": "E se a IA errar a lista de peças ou o preço e eu mandar um orçamento furado pro cliente? Aí o prejuízo é meu, não do sistema. E eu nunca paguei sistema, minha planilha funciona mais ou menos.",
+  "would_change_my_mind": "Se no teste com meus projetos antigos a IA errar muita peça ou eu gastar mais tempo corrigindo do que fazendo na planilha, eu não pago.",
+  "price_too_cheap": 40,
+  "price_cheap": 90,
+  "price_expensive": 200,
   "price_too_expensive": 350
 }

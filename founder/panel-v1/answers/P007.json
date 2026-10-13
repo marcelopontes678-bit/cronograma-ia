@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Meu orçamento já sai do Promob, com projeto e preço juntos, e funciona. Já paguei sistema de gestão antes e larguei em um mês porque ninguém aqui tinha tempo de alimentar; não vou repetir isso por causa de uma IA que monta orçamento que eu já monto.",
+  "objection": "Vou pagar, cadastrar tudo, a equipe não vai usar e em um mês vira mais uma mensalidade esquecida. E duvido que a IA leia meu arquivo do Promob melhor que o próprio Promob.",
+  "would_change_my_mind": "Ver funcionando com um projeto meu do Promob, de graça por um mês, com o orçamento saindo certo sem eu redigitar nada e alguém me ajudando a implantar na fábrica.",
+  "price_too_cheap": 49,
+  "price_cheap": 99,
+  "price_expensive": 297,
+  "price_too_expensive": 500
+}

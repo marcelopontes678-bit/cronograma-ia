@@ -3,11 +3,11 @@
   "buys": false,
   "purchases_first_month": 0,
   "reason_code": "trust",
-  "reason": "Nunca ouvi ninguém dos grupos de marceneiro falar desse Gestori, e eu não coloco meu orçamento na mão de sistema que nenhum colega testou. E R$ 197 por mês pesa quando tem sistema de marcenaria por R$ 50 a 100.",
-  "objection": "Não sei se essa IA lê mesmo um arquivo do Promob ou um DWG direito. Se eu tiver que conferir peça por peça, perco o mesmo tempo e ainda pago R$ 197 todo mês.",
-  "would_change_my_mind": "Um marceneiro que eu conheço do grupo mostrando que usa há uns meses e que o orçamento pelo projeto do Promob sai certo.",
+  "reason": "Nunca ouvi ninguém do grupo de marceneiros falar desse Gestori, e eu só coloco na oficina o que algum colega já usa e aprova. R$ 147 por mês ainda me parece caro perto dos sistemas de R$ 50 a 100 que o pessoal comenta.",
+  "objection": "Não conheço nenhum marceneiro que use, e não sei se a IA acerta peça por peça num projeto do Promob ou se vou perder mais tempo corrigindo do que fazendo na mão.",
+  "would_change_my_mind": "Um marceneiro conhecido do grupo do WhatsApp mostrar que usa e que o orçamento da IA bateu com o que ele cobrou.",
   "price_too_cheap": 30,
   "price_cheap": 70,
   "price_expensive": 120,
-  "price_too_expensive": 200
+  "price_too_expensive": 180
 }

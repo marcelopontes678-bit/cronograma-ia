@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Já perdi dinheiro numa obra por dar desconto no chute, e um sistema que mostra a margem por ambiente na hora do desconto resolve exatamente isso. R$ 197 é pouco perto do que perdi, então assino um mês para testar com um projeto real.",
+  "objection": "Já orço no Promob e não quero mais um sistema para alimentar; duvido que a IA leia meu arquivo do Promob direito e não me faça retrabalhar o orçamento todo.",
+  "would_change_my_mind": "Se no primeiro projeto que eu subir o orçamento da IA vier errado ou der mais trabalho do que o Promob, eu cancelo.",
+  "price_too_cheap": 49,
+  "price_cheap": 120,
+  "price_expensive": 350,
+  "price_too_expensive": 600
+}

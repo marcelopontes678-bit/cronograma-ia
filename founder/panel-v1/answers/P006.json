@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Já orço no Promob e pago um sistema de marcenaria que funciona; migrar cliente, estoque e financeiro de novo me custa semanas que eu não tenho. Mais R$ 197 por mês para fazer o que eu já faço não compensa.",
+  "objection": "Ter que largar o sistema que já pago e redigitar tudo, e confiar que uma IA lê meu projeto do Promob sem errar peça e eu descobrir só na hora de cortar a chapa.",
+  "would_change_my_mind": "Se importasse meus dados do sistema atual sem eu digitar nada e me deixasse testar um mês grátis com um projeto real meu, com o orçamento da IA batendo com o que eu faria.",
+  "price_too_cheap": 49,
+  "price_cheap": 99,
+  "price_expensive": 197,
+  "price_too_expensive": 300
+}

@@ -3,11 +3,11 @@
   "buys": false,
   "purchases_first_month": 0,
   "reason_code": "trust",
-  "reason": "Faço orçamento na planilha há anos e sei onde estão meus números; não vou entregar o orçamento de uma cozinha inteira na mão de uma IA que eu nem conheço. R$ 197 até cabe no bolso, mas pagar todo mês por um sistema que eu ainda não sei se acerta não me convence.",
-  "objection": "E se a IA ler o projeto errado, esquecer peça ou ferragem, e eu só descobrir na obra? Aí o prejuízo é meu, não do sistema. Fora o trabalho de tirar tudo da planilha e aprender sistema novo com a oficina rodando.",
-  "would_change_my_mind": "Testar de graça com uns três projetos meus que já fechei e ver o orçamento da IA bater com o que eu cobrei, peça por peça, ou ver um marceneiro conhecido usando há meses sem dor de cabeça.",
-  "price_too_cheap": 39,
-  "price_cheap": 89,
-  "price_expensive": 197,
+  "reason": "Faço orçamento na planilha há anos e sei onde cada centavo está; não vou entregar o preço da obra para uma IA que eu não conheço. Até posso olhar o teste grátis, mas pagar R$ 147 por mês agora, numa semana normal de correria, não.",
+  "objection": "E se a IA esquecer uma peça, uma ferragem ou errar a chapa e eu só descobrir na montagem? O prejuízo de um orçamento errado paga anos dessa mensalidade, e quem assina o preço sou eu.",
+  "would_change_my_mind": "Mandar três projetos que eu já fechei e a IA bater com o que eu cobrei, peça por peça, com diferença pequena, e me mostrar onde errou antes de eu mandar para o cliente.",
+  "price_too_cheap": 30,
+  "price_cheap": 80,
+  "price_expensive": 200,
   "price_too_expensive": 350
 }

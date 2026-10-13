@@ -3,11 +3,11 @@
   "buys": false,
   "purchases_first_month": 0,
   "reason_code": "habit",
-  "reason": "Meu projetista já faz projeto e preço no Promob e isso funciona pra gente faz anos. R$ 197 não pesa, o que pesa é mexer na rotina de comercial, projetista e produção por causa de um sistema que ninguém do grupo me indicou ainda.",
-  "objection": "Minha tabela de preço e minha carteira de clientes ficam guardadas onde? Se a empresa sumir ou eu quiser sair, levo meus dados comigo? E essa IA lendo arquivo do Promob, acerta mesmo ou vou ter que conferir tudo de novo?",
-  "would_change_my_mind": "Ver uma marcenaria do meu porte, de algum grupo que eu participo, usando há meses, e um teste grátis em que eu subo um projeto real do Promob e o orçamento sai certo, com contrato dizendo que os dados são meus e eu exporto quando quiser.",
-  "price_too_cheap": 49,
-  "price_cheap": 150,
-  "price_expensive": 450,
-  "price_too_expensive": 900
+  "reason": "Meu projetista já faz projeto e preço no Promob e o comercial fecha em cima disso; não vou colocar mais um sistema no meio do processo só para refazer um orçamento que já sai pronto. R$ 147 não pesa no meu caixa, o que pesa é mudar a rotina da equipe.",
+  "objection": "O Promob já me dá o orçamento peça por peça. Não sei se uma IA lendo PDF ou DWG vai acertar melhor que o meu projetista, e minha tabela de preço é o que eu tenho de mais valioso; não gosto da ideia de ela ficar no sistema dos outros.",
+  "would_change_my_mind": "Ver, num grupo de marceneiro, alguém do meu porte mostrando que o controle de desconto por ambiente pegou margem que o Promob deixou passar e evitou prejuízo de verdade.",
+  "price_too_cheap": 40,
+  "price_cheap": 100,
+  "price_expensive": 350,
+  "price_too_expensive": 700
 }

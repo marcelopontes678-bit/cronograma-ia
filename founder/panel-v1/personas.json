@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Noah",
+  "age": 56,
+  "segment": "Loja de planejados (projeta no Promob, fabrica ou terceiriza)",
+  "income": 1319000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Compara o preço de tudo e escolhe o mais barato que resolve.",
+  "objection": "E se a IA errar o orçamento e eu perder dinheiro na obra?",
+  "habit": "você manda orçamento para o cliente pelo WhatsApp"
+ },
+ {
+  "id": "P002",
+  "name": "Seth",
+  "age": 51,
+  "segment": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+  "income": 3623000,
+  "behaviour": "Já usa outro sistema",
+  "behaviour_how": "Paga um sistema de marcenaria (Calcme, Calctto ou parecido) e não quer migrar dados.",
+  "objection": "R$ 197 por mês é caro; tem sistema de marcenaria por R$ 50 a 100",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P003",
+  "name": "Aria",
+  "age": 45,
+  "segment": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+  "income": 4977000,
+  "behaviour": "Orça dentro do Promob",
+  "behaviour_how": "Faz projeto e preço no Promob e acha que já basta.",
+  "objection": "Não tenho tempo para aprender e cadastrar tudo num sistema novo",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P004",
+  "name": "Bilal",
+  "age": 43,
+  "segment": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+  "income": 5370000,
+  "behaviour": "Orça dentro do Promob",
+  "behaviour_how": "Faz projeto e preço no Promob e acha que já basta.",
+  "objection": "Minha tabela de preço e meus clientes ficam guardados onde?",
+  "habit": "você participa de grupos de marceneiros no WhatsApp e no Facebook"
+ },
+ {
+  "id": "P005",
+  "name": "Aisha",
+  "age": 28,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 473000,
+  "behaviour": "Pede indicação de colega",
+  "behaviour_how": "Só adota o que algum marceneiro conhecido já usa e aprova.",
+  "objection": "R$ 197 por mês é caro; tem sistema de marcenaria por R$ 50 a 100",
+  "habit": "você participa de grupos de marceneiros no WhatsApp e no Facebook"
+ },
+ {
+  "id": "P006",
+  "name": "Talia",
+  "age": 58,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 483000,
+  "behaviour": "Já usa outro sistema",
+  "behaviour_how": "Paga um sistema de marcenaria (Calcme, Calctto ou parecido) e não quer migrar dados.",
+  "objection": "Já orço no Promob, não preciso de mais um sistema",
+  "habit": "você compra chapa de MDF e ferragens numa revenda da sua cidade"
+ },
+ {
+  "id": "P007",
+  "name": "Luis",
+  "age": 49,
+  "segment": "Loja de planejados (projeta no Promob, fabrica ou terceiriza)",
+  "income": 1712000,
+  "behaviour": "Orça dentro do Promob",
+  "behaviour_how": "Faz projeto e preço no Promob e acha que já basta.",
+  "objection": "Já testei sistema antes e larguei depois de um mês",
+  "habit": "você desenha no Promob à noite, depois do dia na fábrica"
+ },
+ {
+  "id": "P008",
+  "name": "Celine",
+  "age": 60,
+  "segment": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+  "income": 1609000,
+  "behaviour": "Pede indicação de colega",
+  "behaviour_how": "Só adota o que algum marceneiro conhecido já usa e aprova.",
+  "objection": "Nunca ouvi falar do Gestori; quem mais usa?",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P009",
+  "name": "Sofia",
+  "age": 33,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 540000,
+  "behaviour": "Curioso de IA",
+  "behaviour_how": "Já usa ChatGPT no dia a dia e testa ferramenta nova com IA.",
+  "objection": "Já orço no Promob, não preciso de mais um sistema",
+  "habit": "você desenha no Promob à noite, depois do dia na fábrica"
+ },
+ {
+  "id": "P010",
+  "name": "Nico",
+  "age": 52,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 1167000,
+  "behaviour": "Planilha e caderno",
+  "behaviour_how": "Orça numa planilha do Excel ou no caderno; nunca pagou sistema de gestão.",
+  "objection": "E se a IA errar o orçamento e eu perder dinheiro na obra?",
+  "habit": "você manda orçamento para o cliente pelo WhatsApp"
+ },
+ {
+  "id": "P011",
+  "name": "Ezra",
+  "age": 45,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 642000,
+  "behaviour": "Planilha e caderno",
+  "behaviour_how": "Orça numa planilha do Excel ou no caderno; nunca pagou sistema de gestão.",
+  "objection": "Já testei sistema antes e larguei depois de um mês",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P012",
+  "name": "Hana",
+  "age": 30,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 761000,
+  "behaviour": "Planilha e caderno",
+  "behaviour_how": "Orça numa planilha do Excel ou no caderno; nunca pagou sistema de gestão.",
+  "objection": "Já testei sistema antes e larguei depois de um mês",
+  "habit": "você desenha no Promob à noite, depois do dia na fábrica"
+ },
+ {
+  "id": "P013",
+  "name": "Kenji",
+  "age": 39,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 829000,
+  "behaviour": "Planilha e caderno",
+  "behaviour_how": "Orça numa planilha do Excel ou no caderno; nunca pagou sistema de gestão.",
+  "objection": "E se a IA errar o orçamento e eu perder dinheiro na obra?",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P014",
+  "name": "Finn",
+  "age": 58,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 1169000,
+  "behaviour": "Planilha e caderno",
+  "behaviour_how": "Orça numa planilha do Excel ou no caderno; nunca pagou sistema de gestão.",
+  "objection": "Minha tabela de preço e meus clientes ficam guardados onde?",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P015",
+  "name": "Felix",
+  "age": 28,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 470000,
+  "behaviour": "Sem tempo para tecnologia",
+  "behaviour_how": "Passa o dia na obra e na fábrica; resolve tudo pelo WhatsApp.",
+  "objection": "R$ 197 por mês é caro; tem sistema de marcenaria por R$ 50 a 100",
+  "habit": "você participa de grupos de marceneiros no WhatsApp e no Facebook"
+ },
+ {
+  "id": "P016",
+  "name": "Ravi",
+  "age": 35,
+  "segment": "Loja de planejados (projeta no Promob, fabrica ou terceiriza)",
+  "income": 1665000,
+  "behaviour": "Orça dentro do Promob",
+  "behaviour_how": "Faz projeto e preço no Promob e acha que já basta.",
+  "objection": "Não tenho tempo para aprender e cadastrar tudo num sistema novo",
+  "habit": "você compra chapa de MDF e ferragens numa revenda da sua cidade"
+ },
+ {
+  "id": "P017",
+  "name": "Anya",
+  "age": 52,
+  "segment": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+  "income": 4558000,
+  "behaviour": "Já usa outro sistema",
+  "behaviour_how": "Paga um sistema de marcenaria (Calcme, Calctto ou parecido) e não quer migrar dados.",
+  "objection": "E se a IA errar o orçamento e eu perder dinheiro na obra?",
+  "habit": "você compra chapa de MDF e ferragens numa revenda da sua cidade"
+ },
+ {
+  "id": "P018",
+  "name": "Wes",
+  "age": 29,
+  "segment": "Marcenaria média (10 a 50 pessoas, com comercial e projetista)",
+  "income": 4994000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Compara o preço de tudo e escolhe o mais barato que resolve.",
+  "objection": "Minha tabela de preço e meus clientes ficam guardados onde?",
+  "habit": "você compra chapa de MDF e ferragens numa revenda da sua cidade"
+ },
+ {
+  "id": "P019",
+  "name": "Idris",
+  "age": 58,
+  "segment": "Marcenaria pequena (2 a 10 pessoas, o dono orça e produz)",
+  "income": 308000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Compara o preço de tudo e escolhe o mais barato que resolve.",
+  "objection": "Já testei sistema antes e larguei depois de um mês",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ },
+ {
+  "id": "P020",
+  "name": "Leila",
+  "age": 53,
+  "segment": "Loja de planejados (projeta no Promob, fabrica ou terceiriza)",
+  "income": 1073000,
+  "behaviour": "Curioso de IA",
+  "behaviour_how": "Já usa ChatGPT no dia a dia e testa ferramenta nova com IA.",
+  "objection": "Já orço no Promob, não preciso de mais um sistema",
+  "habit": "você perdeu dinheiro numa obra porque deu desconto demais"
+ }
+]

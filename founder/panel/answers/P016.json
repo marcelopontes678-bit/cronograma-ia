@@ -2,12 +2,12 @@
   "id": "P016",
   "buys": false,
   "purchases_first_month": 0,
-  "reason_code": "habit",
-  "reason": "Eu já faço projeto e orçamento no Promob e pra mim isso resolve. Não vou parar a loja pra cadastrar módulo, chapa e ferragem num sistema novo só pra ter mais uma tela pra olhar.",
-  "objection": "Não tenho tempo de aprender e alimentar outro sistema, e duvido que a IA monte o orçamento com os meus preços e as minhas peças sem eu ter que corrigir tudo.",
-  "would_change_my_mind": "Ver funcionando com um arquivo meu do Promob: subir o projeto e sair um orçamento certo com os preços da minha revenda, sem eu ter que cadastrar tudo do zero.",
-  "price_too_cheap": 49,
-  "price_cheap": 99,
-  "price_expensive": 250,
-  "price_too_expensive": 400
+  "reason_code": "need",
+  "reason": "Eu já faço o projeto e o preço dentro do Promob, então a IA montar o orçamento de um arquivo que já está orçado é fazer o mesmo trabalho duas vezes. A parte do desconto com aviso de margem é interessante, mas não o suficiente para eu parar a semana e mexer em outro sistema.",
+  "objection": "Não tenho tempo para cadastrar tabela e aprender outra ferramenta, e não vejo o que ela faz que o Promob já não me dá.",
+  "would_change_my_mind": "Ver, num projeto meu já fechado, que eu perdi margem dando desconto sem perceber, e o fundador cadastrar tudo por mim de forma que eu só suba o arquivo do Promob.",
+  "price_too_cheap": 40,
+  "price_cheap": 90,
+  "price_expensive": 200,
+  "price_too_expensive": 350
 }

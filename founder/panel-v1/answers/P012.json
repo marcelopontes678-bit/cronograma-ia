@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Já testei sistema e larguei em um mês, porque à noite eu só tenho cabeça pro Promob e a planilha já resolve. Ler o projeto e montar o orçamento sozinho me chama atenção, mas CRM, estoque, financeiro e agenda é coisa demais pra eu alimentar.",
+  "objection": "Vou pagar R$ 197 todo mês por um sistema enorme que eu não vou ter tempo de alimentar, e duvido que a IA leia meu arquivo do Promob certo sem eu ter que refazer tudo.",
+  "would_change_my_mind": "Um teste grátis em que eu mando um projeto meu de verdade do Promob e o orçamento sai certo em minutos, sem eu precisar cadastrar o resto do sistema.",
+  "price_too_cheap": 29,
+  "price_cheap": 79,
+  "price_expensive": 149,
+  "price_too_expensive": 250
+}

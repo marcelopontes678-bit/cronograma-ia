@@ -3,11 +3,11 @@
   "buys": false,
   "purchases_first_month": 0,
   "reason_code": "trust",
-  "reason": "Orçamento é onde eu ganho ou perco dinheiro, e não vou entregar isso para uma IA que nunca vi funcionar com projeto meu. Hoje eu faço no Promob e mando pelo WhatsApp, funciona e não pago mais nada por isso.",
-  "objection": "E se a IA ler errado o projeto, esquecer peça ou ferragem, e eu só descobrir na obra? O prejuízo de um orçamento errado paga anos dessa mensalidade.",
-  "would_change_my_mind": "Testar de graça com uns três projetos meus já fechados e ver o orçamento da IA bater com o que eu cobrei, peça por peça.",
-  "price_too_cheap": 49,
-  "price_cheap": 99,
-  "price_expensive": 197,
-  "price_too_expensive": 300
+  "reason": "Até mando 2 projetos no teste grátis, que não custa nada, mas pagar R$ 147 todo mês para uma IA que eu ainda vou ter que revisar peça por peça, não. Eu já faço meu orçamento no Promob e mando pelo WhatsApp; antes de pagar, quero ver mais barato ou ver ela acertar muitas vezes.",
+  "objection": "E se a IA esquecer uma peça ou errar a ferragem e eu só descobrir na obra? Quem paga o prejuízo sou eu, não o sistema.",
+  "would_change_my_mind": "Se no teste o orçamento da IA bater com o que eu cobrei em todos os projetos fechados, sem faltar peça, e o preço cair para perto de R$ 79 por mês.",
+  "price_too_cheap": 29,
+  "price_cheap": 69,
+  "price_expensive": 120,
+  "price_too_expensive": 180
 }
