@@ -32,6 +32,10 @@ Base: posicionamento em `marketing.md` (o alerta de margem no desconto), concorr
   1. Veja **quem é o dono** no WHOIS do [registro.br](https://registro.br) e se o site está ativo. Se for uma empresa de software ou gestão usando "Gestori", o risco de conflito de marca aumenta, e vale falar com o agente de marcas **antes** de investir no nome.
   2. Se o domínio estiver só estacionado (sem uso), dá para tentar comprar do dono, mas não conte com isso.
   
+  **Resultado do WHOIS (13/10/2026, consultado pelo fundador):** gestori.com.br pertence à **GESTORI Consultoria Empresarial Ltda.** (CNPJ 03.042.490/0001-87), registrado desde **1999**, válido até 2029. O DNS aponta para um serviço de estacionamento (dns-parking), ou seja, **sem site ativo**.
+  **O que isso significa:** existe uma empresa com o nome "Gestori" há mais de 25 anos, na área de **gestão empresarial**, que é vizinha da área do seu produto. Mesmo sem site, ela pode ter a marca registrada no INPI (provavelmente na classe 35, consultoria). Se tiver, usar "Gestori" num sistema de gestão pode gerar notificação ou disputa, principalmente quando o produto crescer.
+  **Próximo passo, antes de gastar com o nome:** buscar "GESTORI" em [busca.inpi.gov.br](https://busca.inpi.gov.br/pePI/) (pesquisa de marca, "radical": GESTORI) e ver se há registro e em quais classes. Leve o resultado a um agente de marcas. **Hoje, sem clientes, trocar de nome custa pouco; depois de 50 clientes, custa muito.**
+
   **Alternativas, em ordem de preferência** (confira cada uma em registro.br; eu não consigo verificar):
   | Domínio | Por quê |
   |---|---|
