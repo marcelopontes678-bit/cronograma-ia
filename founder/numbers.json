@@ -1,0 +1,25 @@
+{
+  "business": "Gestori Orçamento (SaaS para marcenarias)",
+  "unit": "assinatura (1 marcenaria por mês)",
+  "price": 147,
+  "variable": [
+    {"label": "IA lendo projetos: 10 orçamentos x 5 páginas por mês (ESTIMATIVA)", "cost": 33.50},
+    {"label": "Imposto Simples Nacional, cerca de 6% da mensalidade (ESTIMATIVA)", "cost": 8.82},
+    {"label": "Taxa de cobrança (cartão/Pix/boleto), cerca de 5% (ESTIMATIVA)", "cost": 7.35},
+    {"label": "Banco de dados e armazenamento extra por cliente (ESTIMATIVA)", "cost": 2.00}
+  ],
+  "fixed_monthly": [
+    {"label": "Supabase Pro (US$ 25)", "cost": 129},
+    {"label": "Render Starter, backend (US$ 7)", "cost": 36},
+    {"label": "Domínio, e-mail e ferramentas (ESTIMATIVA)", "cost": 30},
+    {"label": "Contador (ESTIMATIVA)", "cost": 300}
+  ],
+  "startup": [
+    {"label": "Abertura e registro da empresa (ESTIMATIVA)", "cost": 500},
+    {"label": "Custo de IA dos testes grátis: 50 testes x R$ 10 (ESTIMATIVA)", "cost": 500},
+    {"label": "Anúncios de teste no lançamento (ESTIMATIVA)", "cost": 1000}
+  ],
+  "days_per_month": 1,
+  "plan_per_day": 50,
+  "ramp_per_day": [2, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
+}
