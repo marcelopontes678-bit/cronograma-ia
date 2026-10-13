@@ -1,4 +1,6 @@
-﻿.claude/
+﻿# Configuração local do Claude Code (as skills do projeto são versionadas)
+.claude/*
+!.claude/skills/
 
 # Backend Python
 backend/.venv/
