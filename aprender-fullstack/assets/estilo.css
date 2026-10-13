@@ -1,0 +1,132 @@
+/* Estilo compartilhado de todas as lições e referências.
+   Inspirado em Tufte: texto em primeiro lugar, pouca decoração. */
+
+:root {
+  --fundo: #fffff8;
+  --texto: #111;
+  --suave: #555;
+  --linha: #ddd;
+  --destaque: #1f3a5f;      /* azul-marinho */
+  --destaque-claro: #e8eef6;
+  --certo: #1d6b3a;
+  --certo-fundo: #e6f4ea;
+  --errado: #9b1c1c;
+  --errado-fundo: #fbeaea;
+  --codigo-fundo: #f3f1e8;
+  --largura: 42rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fundo: #15171a;
+    --texto: #e8e6e1;
+    --suave: #a6a39c;
+    --linha: #33363b;
+    --destaque: #8fb3e0;
+    --destaque-claro: #1f2a38;
+    --certo: #7fd19b;
+    --certo-fundo: #16301f;
+    --errado: #f19a9a;
+    --errado-fundo: #3a1a1a;
+    --codigo-fundo: #23262b;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+main {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+h1, h2, h3 { font-weight: 400; line-height: 1.25; }
+h1 { font-size: 2.1rem; margin: 0.2rem 0 0.4rem; }
+h2 { font-size: 1.5rem; margin-top: 2.6rem; border-top: 1px solid var(--linha); padding-top: 1.4rem; }
+h3 { font-size: 1.2rem; font-style: italic; }
+
+.sobretitulo {
+  font-family: system-ui, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+.resumo { color: var(--suave); font-style: italic; }
+
+a { color: var(--destaque); }
+code, pre { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.9em; }
+code { background: var(--codigo-fundo); padding: 0.1em 0.35em; border-radius: 3px; }
+pre { background: var(--codigo-fundo); padding: 0.9rem 1rem; overflow-x: auto; border-radius: 4px; }
+
+.caixa {
+  background: var(--destaque-claro);
+  border-left: 3px solid var(--destaque);
+  padding: 0.9rem 1.1rem;
+  margin: 1.4rem 0;
+}
+.caixa p:first-child { margin-top: 0; }
+.caixa p:last-child { margin-bottom: 0; }
+
+.nota { font-size: 0.9rem; color: var(--suave); }
+sup a { text-decoration: none; }
+
+ol.passos li { margin-bottom: 0.45rem; }
+
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; margin: 1rem 0; }
+th, td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--linha); vertical-align: top; }
+th { font-weight: 600; font-family: system-ui, sans-serif; font-size: 0.85rem; }
+
+figure { margin: 1.6rem 0; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: 0.9rem; color: var(--suave); margin-top: 0.4rem; }
+
+/* ---------- Componentes interativos (usados por quiz.js) ---------- */
+.quiz-q, .classifica { margin: 1.4rem 0; }
+.quiz-q .pergunta { font-weight: 600; margin-bottom: 0.5rem; }
+.quiz-q .opcoes, .classifica .botoes { display: flex; flex-direction: column; gap: 0.4rem; }
+.classifica .botoes { flex-direction: row; flex-wrap: wrap; }
+
+button.opcao {
+  font: inherit;
+  font-size: 1rem;
+  text-align: left;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--linha);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+button.opcao:hover:not(:disabled) { border-color: var(--destaque); }
+button.opcao:disabled { cursor: default; }
+button.opcao.certo { background: var(--certo-fundo); border-color: var(--certo); color: var(--certo); }
+button.opcao.errado { background: var(--errado-fundo); border-color: var(--errado); color: var(--errado); }
+
+.explica { display: none; font-size: 0.95rem; margin-top: 0.5rem; padding-left: 0.8rem; border-left: 2px solid var(--linha); }
+.respondida .explica { display: block; }
+
+.classifica .item { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.95rem; margin-bottom: 0.4rem; }
+.placar { font-family: system-ui, sans-serif; font-size: 0.9rem; color: var(--suave); }
+
+.checklist { list-style: none; padding-left: 0; }
+.checklist li { margin-bottom: 0.5rem; }
+.checklist input { margin-right: 0.5rem; transform: scale(1.15); }
+
+nav.licoes { font-family: system-ui, sans-serif; font-size: 0.9rem; display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; border-top: 1px solid var(--linha); padding-top: 1rem; }
+
+@media print {
+  body { background: #fff; color: #000; font-size: 11pt; }
+  button.opcao { border: 1px solid #999; }
+  .explica { display: block; }
+  nav.licoes { display: none; }
+}

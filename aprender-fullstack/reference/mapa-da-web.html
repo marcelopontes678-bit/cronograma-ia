@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa da web</title>
+<link rel="stylesheet" href="../assets/estilo.css">
+</head>
+<body>
+<main>
+
+<p class="sobretitulo">Referência · consulta rápida</p>
+<h1>Mapa da web</h1>
+<p class="resumo">As três camadas e a viagem de um clique, numa página.</p>
+
+<h2>As três camadas</h2>
+<table>
+  <tr><th>Camada</th><th>Analogia</th><th>Onde roda</th><th>No seu projeto</th></tr>
+  <tr><td><strong>Frontend</strong></td><td>Salão</td><td>Navegador do usuário</td><td><code>cronograma_app.html</code></td></tr>
+  <tr><td><strong>Backend</strong></td><td>Cozinha</td><td>Servidor</td><td><code>backend/app/</code> (Python + FastAPI)</td></tr>
+  <tr><td><strong>Banco de dados</strong></td><td>Despensa</td><td>Servidor de banco</td><td>PostgreSQL</td></tr>
+</table>
+<p><strong>Regra de ouro:</strong> o usuário pode ver e alterar tudo o que está no frontend. Segurança e regras de negócio ficam no backend.</p>
+
+<h2>A viagem de um clique</h2>
+<ol class="passos">
+  <li>Você digita um endereço ou clica num botão (o navegador é o <em>cliente</em>).</li>
+  <li>O <strong>DNS</strong> troca o nome do site pelo IP do servidor.</li>
+  <li>O navegador envia uma <strong>requisição HTTP</strong>.</li>
+  <li>O servidor executa o backend e, se precisar, consulta o banco.</li>
+  <li>A <strong>resposta</strong> volta (página ou dados) e o navegador monta a tela.</li>
+</ol>
+
+<h2>Onde ver isso acontecendo</h2>
+<p><code>F12</code> → aba <strong>Network</strong> → <code>F5</code>. Cada linha é uma requisição. O filtro <strong>Fetch/XHR</strong> mostra só os pedidos de dados. Status <code>200</code> significa "deu certo".</p>
+
+<h2>Onde entra a IA</h2>
+<ul>
+  <li><strong>Dentro do app:</strong> a IA é mais um servidor. O código faz uma requisição (<code>fetch</code>) para a API e recebe uma resposta.</li>
+  <li><strong>Para programar:</strong> o assistente escreve código em qualquer camada. Você decide a camada e revisa o resultado.</li>
+  <li><strong>Quando quebra:</strong> primeiro descubra a camada (a aba Network ajuda), depois corrija.</li>
+</ul>
+
+<p class="nota">Vem da <a href="../lessons/0001-o-mapa-do-full-stack.html">Lição 1: O mapa do full stack</a>. Fonte: <a href="https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works">MDN: Como a Web funciona</a>.</p>
+
+</main>
+</body>
+</html>

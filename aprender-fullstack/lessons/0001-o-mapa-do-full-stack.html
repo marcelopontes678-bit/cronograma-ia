@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lição 1: O mapa do full stack</title>
+<link rel="stylesheet" href="../assets/estilo.css">
+</head>
+<body>
+<main>
+
+<p class="sobretitulo">Lição 1 · cerca de 25 minutos</p>
+<h1>O mapa do full stack</h1>
+<p class="resumo">Cliente, servidor e banco de dados: as três peças de todo sistema web, vistas dentro do seu próprio projeto.</p>
+
+<div class="caixa">
+  <p><strong>Sua vitória de hoje:</strong> abrir o seu projeto <code>cronograma-ia</code> e apontar o que é frontend, o que é backend e o que é banco de dados. Depois, ver com os próprios olhos uma requisição acontecendo no navegador.</p>
+</div>
+
+<h2>Por que começar por aqui</h2>
+<p>A IA já escreve código nas três camadas de um sistema. O que as empresas cobram de um júnior hoje é saber <em>revisar</em> esse código e dizer onde está o problema.<sup><a href="#f1">1</a></sup> Não dá para revisar o que você não consegue localizar. Por isso a primeira habilidade é ter o mapa.</p>
+
+<h2>As três camadas</h2>
+<p>Pense num restaurante.</p>
+<table>
+  <tr><th>No restaurante</th><th>No sistema</th><th>O que faz</th><th>Onde roda</th></tr>
+  <tr><td><strong>Salão</strong></td><td>Frontend</td><td>O que a pessoa vê e toca: telas, botões, formulários. Feito com HTML, CSS e JavaScript.</td><td>No navegador de quem usa</td></tr>
+  <tr><td><strong>Cozinha</strong></td><td>Backend</td><td>As regras: quem pode entrar, como calcular um orçamento, o que salvar.</td><td>Num servidor</td></tr>
+  <tr><td><strong>Despensa</strong></td><td>Banco de dados</td><td>Guarda os dados de forma organizada e permanente: usuários, orçamentos, projetos.</td><td>Num servidor de banco</td></tr>
+</table>
+<p>Um detalhe que cai em entrevista: tudo o que chega ao salão está na mesa do cliente. Ele pode olhar, mexer e trocar. Por isso <strong>regras importantes, como conferir uma senha, ficam na cozinha (backend)</strong>, nunca só no salão.</p>
+<p><strong>Desenvolvedor full stack</strong> é quem sabe trabalhar nas três camadas.</p>
+
+<h2>A viagem de um clique</h2>
+<figure>
+<svg viewBox="0 0 640 170" role="img" aria-label="O navegador envia uma requisição ao servidor, o servidor consulta o banco de dados, e a resposta volta pelo mesmo caminho">
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <g fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--texto)">
+    <rect x="10" y="45" width="150" height="70" rx="6"/>
+    <rect x="245" y="45" width="150" height="70" rx="6"/>
+    <rect x="480" y="45" width="150" height="70" rx="6"/>
+    <line x1="160" y1="68" x2="243" y2="68" marker-end="url(#seta)"/>
+    <line x1="243" y1="94" x2="162" y2="94" marker-end="url(#seta)"/>
+    <line x1="395" y1="68" x2="478" y2="68" marker-end="url(#seta)"/>
+    <line x1="478" y1="94" x2="397" y2="94" marker-end="url(#seta)"/>
+  </g>
+  <g fill="currentColor" style="color: var(--texto); font-family: system-ui, sans-serif" font-size="21" text-anchor="middle">
+    <text x="85" y="76">Navegador</text>
+    <text x="85" y="100" font-size="16" style="fill: var(--suave)">frontend</text>
+    <text x="320" y="76">Servidor</text>
+    <text x="320" y="100" font-size="16" style="fill: var(--suave)">backend</text>
+    <text x="555" y="76">Banco</text>
+    <text x="555" y="100" font-size="16" style="fill: var(--suave)">dados</text>
+    <text x="202" y="33" font-size="17">requisição</text>
+    <text x="202" y="140" font-size="17">resposta</text>
+    <text x="437" y="33" font-size="17">consulta</text>
+    <text x="437" y="140" font-size="17">dados</text>
+  </g>
+</svg>
+<figcaption>O cliente pede, o servidor busca o que precisa no banco e devolve a resposta pelo mesmo caminho.</figcaption>
+</figure>
+
+<ol class="passos">
+  <li><strong>Você digita um endereço</strong> ou clica num botão. O navegador é o <em>cliente</em>.<sup><a href="#f2">2</a></sup></li>
+  <li><strong>O DNS descobre onde fica o servidor.</strong> Ele funciona como a lista telefônica da internet: troca o nome do site pelo endereço numérico (IP) do servidor.<sup><a href="#f2">2</a></sup></li>
+  <li><strong>O navegador envia uma requisição HTTP</strong> ao servidor, dizendo o que quer.</li>
+  <li><strong>O servidor executa o backend.</strong> Se precisar, consulta o banco de dados.</li>
+  <li><strong>A resposta volta</strong>, com a página (HTML, CSS, JavaScript) ou só dados. O navegador monta tudo na tela.</li>
+</ol>
+
+<h2>E onde entra a IA?</h2>
+<p>No seu próprio projeto. O arquivo <code>cronograma_app.html</code> (frontend) chama a IA assim:</p>
+<pre><code>const resp = await fetch('https://api.anthropic.com/v1/messages', { ... })</code></pre>
+<p><code>fetch</code> é o jeito do JavaScript fazer uma <strong>requisição</strong>. Ou seja, para o seu app a IA é "mais um servidor": recebe um pedido e devolve uma resposta. É a mesma viagem do diagrama.</p>
+<p>E quando você usa um assistente de IA para <em>programar</em>, ele escreve código para qualquer uma das três camadas. O seu valor como dev está em saber qual camada pedir e onde procurar quando algo quebra.</p>
+
+<h2>Pratique: classifique o seu projeto</h2>
+<p>Para cada item do <code>cronograma-ia</code>, escolha a camada. Responda de memória, sem rolar a página para cima. Esforçar-se para lembrar é o que fixa o conteúdo.</p>
+<p class="placar"></p>
+
+<div class="classifica" data-categoria="Frontend">
+  <p class="item">cronograma_app.html</p>
+  <div class="botoes"><button class="opcao">Frontend</button><button class="opcao">Backend</button><button class="opcao">Banco de dados</button></div>
+  <p class="explica">É uma página HTML com JavaScript. Ela é baixada e roda no navegador de quem usa, ou seja, é o salão.</p>
+</div>
+
+<div class="classifica" data-categoria="Backend">
+  <p class="item">backend/app/main.py</p>
+  <div class="botoes"><button class="opcao">Frontend</button><button class="opcao">Backend</button><button class="opcao">Banco de dados</button></div>
+  <p class="explica">É o arquivo que liga o servidor do seu sistema (escrito em Python com FastAPI). Ele roda no servidor: é a cozinha.</p>
+</div>
+
+<div class="classifica" data-categoria="Banco de dados">
+  <p class="item">A lista de orçamentos salvos dos seus clientes</p>
+  <div class="botoes"><button class="opcao">Frontend</button><button class="opcao">Backend</button><button class="opcao">Banco de dados</button></div>
+  <p class="explica">Dados que precisam continuar existindo amanhã ficam guardados no banco. No seu projeto, é um PostgreSQL: a despensa.</p>
+</div>
+
+<div class="classifica" data-categoria="Backend">
+  <p class="item">backend/app/routers/orcamento.py</p>
+  <div class="botoes"><button class="opcao">Frontend</button><button class="opcao">Backend</button><button class="opcao">Banco de dados</button></div>
+  <p class="explica">Fica dentro da pasta <code>backend/</code> e define o que o servidor faz quando recebe pedidos sobre orçamentos. É uma receita da cozinha.</p>
+</div>
+
+<div class="classifica" data-categoria="Frontend">
+  <p class="item">O botão que você toca para gerar um cronograma</p>
+  <div class="botoes"><button class="opcao">Frontend</button><button class="opcao">Backend</button><button class="opcao">Banco de dados</button></div>
+  <p class="explica">Tudo o que a pessoa vê e toca é frontend. O botão só <em>dispara</em> a requisição; quem processa é outro lugar.</p>
+</div>
+
+<h2>Pratique: entenda a viagem</h2>
+
+<div class="quiz-q" data-resposta="2">
+  <p class="pergunta">1. Você digitou o endereço de um site. Quem descobre o número (IP) do servidor?</p>
+  <div class="opcoes">
+    <button class="opcao">O banco PostgreSQL</button>
+    <button class="opcao">O arquivo HTML</button>
+    <button class="opcao">O sistema DNS</button>
+    <button class="opcao">O servidor FastAPI</button>
+  </div>
+  <p class="explica">O DNS é a lista telefônica da internet: transforma o nome do site no endereço numérico do servidor. Só depois disso a requisição pode sair.</p>
+</div>
+
+<div class="quiz-q" data-resposta="0">
+  <p class="pergunta">2. Onde roda o JavaScript que está dentro do seu <code>cronograma_app.html</code>?</p>
+  <div class="opcoes">
+    <button class="opcao">No navegador do usuário</button>
+    <button class="opcao">No servidor do backend</button>
+    <button class="opcao">Dentro do banco PostgreSQL</button>
+    <button class="opcao">Na nuvem da Anthropic</button>
+  </div>
+  <p class="explica">O arquivo HTML é baixado pelo navegador, e o JavaScript dele roda ali, na máquina de quem usa. A Anthropic só recebe a requisição que esse código envia.</p>
+</div>
+
+<div class="quiz-q" data-resposta="3">
+  <p class="pergunta">3. Por que conferir a senha de um usuário <em>só</em> no frontend é um erro grave?</p>
+  <div class="opcoes">
+    <button class="opcao">Porque o HTML fica muito lento</button>
+    <button class="opcao">Porque o banco não aceita senhas</button>
+    <button class="opcao">Porque o navegador apaga as senhas</button>
+    <button class="opcao">Porque o usuário pode alterar tudo</button>
+  </div>
+  <p class="explica">O código do frontend está na máquina do usuário, que pode ler e modificar esse código. Regras de segurança precisam rodar no backend, onde o usuário não consegue mexer.</p>
+</div>
+
+<div class="quiz-q" data-resposta="1">
+  <p class="pergunta">4. A IA gerou um código, e a lista de orçamentos aparece vazia na tela. Qual é o primeiro passo de um bom júnior?</p>
+  <div class="opcoes">
+    <button class="opcao">Pedir para a IA refazer tudo</button>
+    <button class="opcao">Descobrir qual camada está com problema</button>
+    <button class="opcao">Trocar o banco por outro melhor</button>
+    <button class="opcao">Apagar o código e começar outro</button>
+  </div>
+  <p class="explica">Primeiro localize. Se a resposta do servidor trouxe os orçamentos e a tela continua vazia, o erro está no frontend. Se a resposta veio vazia, o erro está no backend ou no banco. A tarefa abaixo mostra onde ver isso.</p>
+</div>
+
+<h2>Tarefa no mundo real (10 minutos)</h2>
+<p>Faça num computador (no celular não funciona). Use o Chrome ou o Edge.</p>
+<ul class="checklist">
+  <li><label><input type="checkbox" id="t1">Abra qualquer site que você usa, por exemplo o YouTube.</label></li>
+  <li><label><input type="checkbox" id="t2">Aperte <code>F12</code> para abrir as ferramentas de desenvolvedor e clique na aba <strong>Network</strong> (Rede).</label></li>
+  <li><label><input type="checkbox" id="t3">Aperte <code>F5</code> para recarregar a página. Cada linha que aparece é uma <strong>requisição</strong>. Repare no total no rodapé.</label></li>
+  <li><label><input type="checkbox" id="t4">Clique na primeira linha. Ache o <strong>Status</strong>: <code>200</code> significa que o servidor respondeu "deu certo".</label></li>
+  <li><label><input type="checkbox" id="t5">Clique no filtro <strong>Fetch/XHR</strong>. O que sobra são pedidos de <em>dados</em> do frontend ao backend: a viagem do diagrama acontecendo ao vivo.</label></li>
+</ul>
+
+<div class="caixa">
+  <p><strong>Para fixar:</strong> amanhã, sem abrir esta página, escreva num papel os 5 passos da viagem de um clique. Daqui a 3 dias, refaça os exercícios acima. Lembrar depois de um intervalo é o que leva o conteúdo para a memória de longo prazo.</p>
+</div>
+
+<h2>Leitura principal</h2>
+<p><a href="https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works">MDN: Como a Web funciona</a>. É a documentação da Mozilla, a referência mais confiável da web, em português. Leva uns 10 minutos.</p>
+
+<p><strong>Ficou alguma dúvida?</strong> Pergunte para mim, o seu professor, aqui na conversa. Exemplos: "o que é exatamente um servidor?" ou "me mostra onde o meu backend conversa com o banco". Nenhuma pergunta é básica demais.</p>
+
+<p class="nota">Resumo para consulta rápida: <a href="../reference/mapa-da-web.html">Mapa da web</a>.</p>
+
+<h2>Fontes</h2>
+<ol class="nota">
+  <li id="f1"><a href="https://www.alura.com.br/artigos/desenvolvedor-junior">Alura: Carreira de desenvolvedor júnior, como está o mercado em 2026</a>. A Alura vende cursos, então leia com senso crítico.</li>
+  <li id="f2"><a href="https://developer.mozilla.org/pt-BR/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works">MDN: Como a Web funciona</a>.</li>
+</ol>
+
+<nav class="licoes">
+  <span>Início do curso</span>
+  <span>Próxima lição: em breve</span>
+</nav>
+
+</main>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
