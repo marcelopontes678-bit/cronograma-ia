@@ -269,26 +269,70 @@ function getBestPerformance(exerciseId, setIndex) {
   return best;
 }
 
-/* Sugestão de progressão de carga pra próxima vez que este exercício for
-   feito nesta posição de série. Progressão linear: prioriza subir o peso
-   (não pedir mais repetições), baseada no desempenho MAIS RECENTE (não no
-   recorde) pra refletir onde você está agora. RPE muito alto na última vez
-   segura a progressão em vez de empurrar mais carga.
-   É uma heurística determinística, não uma chamada de IA — decisão numérica
-   como essa é mais confiável como regra fixa do que como resposta de modelo. */
-function getProgressionSuggestion(exerciseId, setIndex) {
-  const last = getLastPerformance(exerciseId, setIndex);
+/* Regras de progressão (inspirado no openGym). Cada exercício da rotina escolhe uma:
+   - linear: bateu a série (concluída e dentro da faixa mínima) → sobe a carga.
+   - double: dupla progressão — sobe 1 rep por sessão até o máximo da faixa e só então
+     sobe a carga, voltando ao mínimo. Sem faixa definida, cai em linear.
+   - manual: só repete o último desempenho, sem sugerir aumento.
+   Em qualquer regra: série não batida repete a carga (nunca avança), 3 sessões
+   seguidas sem bater na mesma carga → deload de 10%, e RPE >= 9.5 segura a carga.
+   É regra determinística, não chamada de IA: decisão numérica como essa é mais
+   confiável como regra fixa do que como resposta de modelo. */
+const PROGRESSION_RULES = {
+  linear: { label: 'Linear', desc: 'Bateu a série? Sobe a carga na próxima.' },
+  double: { label: 'Dupla progressão', desc: 'Sobe 1 rep por sessão até o máximo da faixa, depois sobe a carga.' },
+  manual: { label: 'Manual', desc: 'Só repete o último treino, sem sugerir aumento.' },
+};
+const DELOAD_AFTER_MISSES = 3;
+
+function getProgressionHistory(exerciseId, setIndex) {
+  return getExerciseWorkouts(exerciseId).map(w => {
+    const we = w.exercises.find(e => e.exerciseId === exerciseId);
+    if (!we || !we.sets) return null;
+    const ws = we.sets.filter(s => !s.warmup);
+    return ws[setIndex] || ws[ws.length - 1] || null;
+  }).filter(s => s && s.weight != null && s.weight !== '');
+}
+
+function getProgressionSuggestion(exerciseId, setIndex, cfg) {
+  cfg = cfg || {};
+  const rule = PROGRESSION_RULES[cfg.rule] ? cfg.rule : 'linear';
+  const hist = getProgressionHistory(exerciseId, setIndex);
+  const last = hist[0];
   if (!last) return null;
   const weight = Number(last.weight), reps = Number(last.reps);
   if (!weight || !reps) return null;
 
+  const u = unitLabel();
   const rpe = last.rpe !== '' && last.rpe != null ? Number(last.rpe) : null;
-  const increment = state.settings.unit === 'lb' ? 5 : 2.5;
+  const inc = state.settings.unit === 'lb' ? 5 : 2.5;
+  const min = Number(cfg.repsMin) || 0, max = Number(cfg.repsMax) || 0;
+  const hit = s => !!s.completed && (!min || Number(s.reps) >= min);
 
+  if (rule === 'manual') {
+    return { weight, reps, reason: `Regra manual: repita ${weight}${u} x ${reps} (última vez).` };
+  }
+  if (!hit(last)) {
+    let misses = 0;
+    for (const s of hist) { if (Number(s.weight) === weight && !hit(s)) misses++; else break; }
+    if (misses >= DELOAD_AFTER_MISSES) {
+      const lighter = Math.max(inc, Math.round(weight * 0.9 / inc) * inc);
+      return { weight: lighter, reps: min || reps, reason: `Deload: ${misses} treinos sem bater ${weight}${u}. Recomece com ${lighter}${u} (-10%).` };
+    }
+    const why = last.completed ? `abaixo do mínimo de ${min} reps` : 'série não concluída';
+    return { weight, reps: min || reps, reason: `${why[0].toUpperCase() + why.slice(1)} na última vez — repita ${weight}${u} antes de subir.` };
+  }
   if (rpe != null && rpe >= 9.5) {
     return { weight, reps, reason: `RPE ${rpe} na última vez — mantenha a carga e foque na execução.` };
   }
-  return { weight: weight + increment, reps, reason: `Aumente para ${weight + increment}${unitLabel()} mantendo ${reps} reps (última vez: ${weight}${unitLabel()}).` };
+  if (rule === 'double' && max) {
+    if (reps < max) {
+      return { weight, reps: reps + 1, reason: `Dupla progressão: mesma carga, tente ${reps + 1} reps (meta ${max}).` };
+    }
+    const next = weight + inc;
+    return { weight: next, reps: min || reps, reason: `Bateu ${max} reps: suba para ${next}${u} e volte para ${min || reps} reps.` };
+  }
+  return { weight: weight + inc, reps, reason: `Aumente para ${weight + inc}${u} mantendo ${reps} reps (última vez: ${weight}${u}).` };
 }
 
 function getExercisePR(exerciseId) {
@@ -637,16 +681,22 @@ function startRoutineWorkout(routineId) {
   if (!r) return;
   state.activeWorkout = {
     id: uid(), name: r.name, date: todayISO(), startedAt: Date.now(), notes: '',
-    exercises: r.exercises.map(x => makeWorkoutExercise(x.exerciseId, x.targetSets)),
+    exercises: r.exercises.map(x => makeWorkoutExercise(x.exerciseId, x.targetSets, x)),
   };
   saveState(); render(); setTab('treino');
 }
 
-function makeWorkoutExercise(exerciseId, targetSets) {
+function makeWorkoutExercise(exerciseId, targetSets, routineItem) {
   const n = targetSets || 3;
   const sets = [];
   for (let i = 0; i < n; i++) sets.push(makeEmptySet());
-  return { uid: uid(), exerciseId, sets, groupId: null };
+  const we = { uid: uid(), exerciseId, sets, groupId: null };
+  if (routineItem) {
+    we.rule = routineItem.progression || 'linear';
+    we.repsMin = routineItem.repsMin || '';
+    we.repsMax = routineItem.repsMax || '';
+  }
+  return we;
 }
 function makeEmptySet() { return { uid: uid(), weight: '', reps: '', rpe: '', completed: false, warmup: false }; }
 
@@ -831,7 +881,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
   // Sugestão da 1ª série representa a tendência geral do exercício — é a que
   // aparece como dica no cabeçalho do card (cada série individual ainda tem
   // sua própria sugestão nos placeholders/preenchimento automático abaixo).
-  const headSuggestion = !allDone ? getProgressionSuggestion(we.exerciseId, 0) : null;
+  const headSuggestion = !allDone ? getProgressionSuggestion(we.exerciseId, 0, { rule: we.rule, repsMin: we.repsMin, repsMax: we.repsMax }) : null;
 
   const head = document.createElement('div');
   head.className = 'ex-card-head';
@@ -869,7 +919,7 @@ function renderWorkoutExerciseCard(we, subLabel) {
   we.sets.forEach((s) => {
     const numLabel = s.warmup ? 'W' : String(++workingIdx);
     const prevIdx = s.warmup ? -1 : workingIdx - 1;
-    const prev = !s.warmup ? getProgressionSuggestion(we.exerciseId, prevIdx) : null;
+    const prev = !s.warmup ? getProgressionSuggestion(we.exerciseId, prevIdx, { rule: we.rule, repsMin: we.repsMin, repsMax: we.repsMax }) : null;
     const pr = s.completed && !s.warmup && isSetPR(we.exerciseId, s.weight, s.reps, state.activeWorkout.id);
 
     const row = document.createElement('div');
@@ -1793,12 +1843,14 @@ function renderRoutineEditor() {
           <div class="routine-chip-row">
             <span class="routine-chip" data-act="sets">${x.targetSets} Séries</span>
             <span class="routine-chip" data-act="reps">${esc(repsLabel)}</span>
+            <span class="routine-chip" data-act="prog">${esc(PROGRESSION_RULES[x.progression || 'linear'].label)}</span>
           </div>
         </div>
         <button class="icon-btn" data-act="del" style="width:28px;height:28px;color:var(--red);flex-shrink:0;">✕</button>
       `;
       row.querySelector('[data-act="sets"]').onclick = () => openStepperEditor('Número de Séries', x.targetSets, 1, 10, v => { x.targetSets = v; renderRoutineEditor(); });
       row.querySelector('[data-act="reps"]').onclick = () => openRepRangeEditor(x, () => renderRoutineEditor());
+      row.querySelector('[data-act="prog"]').onclick = () => openProgressionEditor(x, () => renderRoutineEditor());
       const removeRow = () => { routineDraft.exercises = routineDraft.exercises.filter(e => e !== x); renderRoutineEditor(); };
       row.querySelector('[data-act="del"]').onclick = removeRow;
       enableSwipeToDelete(row, removeRow, '.drag-handle');
@@ -1849,6 +1901,21 @@ function openStepperEditor(title, value, min, max, onSave) {
     document.getElementById('stSave').onclick = () => { onSave(v); };
   };
   draw();
+}
+
+function openProgressionEditor(x, onSave) {
+  const cur = x.progression || 'linear';
+  openModal(`
+    <div class="modal-title">Regra de Progressão</div>
+    ${Object.entries(PROGRESSION_RULES).map(([k, r]) => `
+      <button class="btn ${k === cur ? 'btn-primary' : 'btn-ghost'}" data-rule="${k}" style="width:100%;text-align:left;margin-bottom:8px;display:block;">
+        <b>${esc(r.label)}</b><br><small>${esc(r.desc)}</small>
+      </button>`).join('')}
+    ${cur !== 'manual' ? '<div class="field-label" style="margin-top:6px;">Dupla progressão precisa de faixa de repetições (ex: 8-12).</div>' : ''}
+  `);
+  document.querySelectorAll('[data-rule]').forEach(b => {
+    b.onclick = () => { x.progression = b.dataset.rule; closeModal(); onSave(); };
+  });
 }
 
 function openRepRangeEditor(x, onSave) {
