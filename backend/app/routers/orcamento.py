@@ -1,3 +1,4 @@
+import asyncio
 import shutil
 import uuid
 from pathlib import Path
@@ -6,6 +7,7 @@ import fitz  # PyMuPDF
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from typesafe_sdk import TypeSafeClient
 
 from app.config import settings
 from app.dependencies import get_current_user, get_db
@@ -236,7 +238,10 @@ async def gerar_orcamento(
 ):
     job = await orcamento_service.get_job(db, job_id, current_user)
     try:
-        response, avisos = orcamento_pricing_service.gerar_orcamento(
+        cliente_typesafe = TypeSafeClient(api_key=settings.TYPESAFE_API_KEY) if settings.TYPESAFE_API_KEY else None
+        # sync + chamada de rede (casamento de acabamento): fora do event loop
+        response, avisos = await asyncio.to_thread(
+            orcamento_pricing_service.gerar_orcamento,
             job,
             settings.ORCAMENTO_TABELA_PRECOS,
             settings.ORCAMENTO_CONFIG_PRECIFICACAO,
@@ -244,6 +249,7 @@ async def gerar_orcamento(
             custo_hora_mao_de_obra=request.custo_hora_mao_de_obra,
             horas_estimadas=request.horas_estimadas,
             fator_area_frontal_para_chapa=request.fator_area_frontal_para_chapa,
+            cliente_typesafe=cliente_typesafe,
         )
     except orcamento_pricing_service.PrecificacaoInvalidaError as exc:
         raise HTTPException(409, str(exc)) from exc

@@ -99,6 +99,7 @@ def calcular_projeto(
     tabela: dict[str, PrecoReferencia],
     area_util_chapa_m2: float = AREA_UTIL_CHAPA_M2_PADRAO,
     pct_perda_corte: float = PCT_PERDA_CORTE_PADRAO,
+    aliases_acabamento: dict[tuple[int, str], tuple[int, str]] | None = None,
 ) -> ResultadoCalculoProjeto:
     itens = _itens_flat(ambientes_json)
     resultado = ResultadoCalculoProjeto()
@@ -119,6 +120,9 @@ def calcular_projeto(
         if chave is None:
             # REFERENCE nao seguiu o padrao esperado -- trata como acabamento proprio (fallback)
             chave = (0, ref)
+        # alias (ver engine/casamento_material.py): acabamento em texto livre
+        # ja casado com uma linha cadastrada -- agrupa e precifica como ela
+        chave = (aliases_acabamento or {}).get(chave, chave)
         referencia_exemplo_por_acabamento.setdefault(chave, ref)
 
         repeticao = item.get("repeticao", 1)

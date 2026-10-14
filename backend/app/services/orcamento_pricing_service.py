@@ -21,6 +21,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from app.engine.calculo_projeto import calcular_projeto
+from app.engine.casamento_material import ClienteSystemOne, resolver_acabamentos
 from app.engine.orcamento_engine import calcular_orcamento_projeto, carregar_config
 from app.engine.tabela_precos import carregar_tabela_precos
 from app.models.orcamento import OrcamentoJob, StatusOrcamentoJob
@@ -105,6 +106,7 @@ def gerar_orcamento(
     custo_hora_mao_de_obra: float = 0.0,
     horas_estimadas: float = 0.0,
     fator_area_frontal_para_chapa: float | None = None,
+    cliente_typesafe: ClienteSystemOne | None = None,
 ) -> tuple[OrcamentoResponse, list[str]]:
     """Retorna (OrcamentoResponse, avisos). `job` precisa estar
     CONFIRMADO -- o router e responsavel por checar isso antes de chamar."""
@@ -119,7 +121,14 @@ def gerar_orcamento(
     ambientes_json = _construir_ambientes_json(ambientes, fator_area_frontal_para_chapa, avisos)
 
     tabela = carregar_tabela_precos(caminho_tabela_precos)
-    resultado_calculo = calcular_projeto(ambientes_json, tabela) if ambientes_json else None
+    aliases = None
+    if cliente_typesafe is not None and ambientes_json:
+        casamento = resolver_acabamentos(ambientes_json, tabela, cliente_typesafe)
+        aliases = casamento.aliases
+        avisos.extend(casamento.avisos())
+    resultado_calculo = (
+        calcular_projeto(ambientes_json, tabela, aliases_acabamento=aliases) if ambientes_json else None
+    )
 
     custo_material_total = resultado_calculo.custo_material_total if resultado_calculo else 0.0
 

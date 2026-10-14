@@ -31,6 +31,9 @@ class Settings(BaseSettings):
 
     # Dominio de orcamento de marcenaria (agente MARC / Claude Vision)
     ANTHROPIC_API_KEY: str = ""
+    # Casamento de acabamento em texto livre com a tabela de precos (TypeSafe/Jev).
+    # Vazio = desligado (comportamento anterior: acabamento sem match fica pendente).
+    TYPESAFE_API_KEY: str = ""
     ORCAMENTO_MODELO_CLAUDE: str = "claude-sonnet-5"
     ORCAMENTO_STORAGE_DIR: str = str(_DIR_BACKEND / "storage" / "orcamentos")
     ORCAMENTO_TABELA_PRECOS: str = str(_DIR_BACKEND / "config" / "tabela_precos_referencia.xlsx")
