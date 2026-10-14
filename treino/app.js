@@ -78,6 +78,7 @@ function defaultState() {
     workouts: [],
     activeWorkout: null,
     bodyMeasurements: [],
+    coach: { consent: false, snapshot: null, log: [] },
   };
 }
 
@@ -94,6 +95,7 @@ function loadState() {
         workouts: parsed.workouts || [],
         activeWorkout: parsed.activeWorkout || null,
         bodyMeasurements: parsed.bodyMeasurements || [],
+        coach: { ...def.coach, ...(parsed.coach || {}) },
       };
     }
   } catch (e) { console.error('Falha ao carregar dados', e); }
@@ -1944,6 +1946,210 @@ function openRepRangeEditor(x, onSave) {
   };
 }
 
+
+/* ===================== AI COACH =====================
+   Inspirado no AI Coach do openGym. A divisão é a mesma: a IA decide a ESTRUTURA
+   (regra de progressão, faixa de reps, número de séries) e o motor de progressão
+   local continua calculando a CARGA de cada sessão. A IA nunca mexe em pesos.
+   - Só roda sob demanda e depois de consentimento explícito (o resumo vai ao Worker).
+   - Nada é aplicado sem aprovação: cada proposta é aceita individualmente.
+   - Antes da primeira aplicação guardamos um snapshot das rotinas; um toque desfaz.
+   - Treinos registrados nunca são alterados. */
+const COACH_SYSTEM = `Você é um treinador de musculação experiente. Recebe o resumo dos treinos de um aluno (JSON) e propõe AJUSTES ESTRUTURAIS nas rotinas dele. Você NÃO define cargas em kg — o app calcula isso sozinho.
+Responda APENAS com JSON válido, sem texto fora do JSON, neste formato:
+{"summary":"1-2 frases em português sobre o momento do aluno","proposals":[{"type":"set_rule","routineId":"..","exerciseId":"..","rule":"linear|double|manual","reason":".."},{"type":"set_reps","routineId":"..","exerciseId":"..","repsMin":8,"repsMax":12,"reason":".."},{"type":"set_sets","routineId":"..","exerciseId":"..","targetSets":4,"reason":".."}]}
+Regras: no máximo 5 propostas; use SOMENTE routineId e exerciseId que aparecem nos dados; cada "reason" com no máximo 140 caracteres, em português; só proponha o que os dados sustentam (estagnação, RPE alto, volume baixo de um grupo, faixa de reps incoerente). Se não houver nada claro a mudar, devolva proposals vazio e explique no summary.`;
+
+function getCoach() {
+  if (!state.coach) state.coach = { consent: false, snapshot: null, log: [] };
+  return state.coach;
+}
+
+function buildCoachSummary() {
+  const dayMs = 24 * 3600 * 1000;
+  const now = Date.now();
+  const recent = state.workouts.filter(w => now - new Date(w.date).getTime() <= 28 * dayMs);
+  const exIds = new Set();
+  state.routines.forEach(r => r.exercises.forEach(x => exIds.add(x.exerciseId)));
+
+  const routines = state.routines.map(r => ({
+    id: r.id, name: r.name,
+    exercises: r.exercises.map(x => {
+      const ex = getExercise(x.exerciseId);
+      return {
+        id: x.exerciseId, name: ex ? ex.name : x.exerciseId, muscle: ex ? ex.muscle : '',
+        sets: x.targetSets, reps: x.repsMin && x.repsMax ? `${x.repsMin}-${x.repsMax}` : '', rule: x.progression || 'linear',
+      };
+    }),
+  }));
+
+  const history = {};
+  exIds.forEach(id => {
+    const rows = getExerciseWorkouts(id).slice(0, 4).map(w => {
+      const we = w.exercises.find(e => e.exerciseId === id);
+      const sets = (we.sets || []).filter(st => !st.warmup && st.weight && st.reps);
+      const done = sets.filter(st => st.completed).length;
+      const top = sets.reduce((b, st) => (!b || Number(st.weight) > Number(b.weight) ? st : b), null);
+      return top ? `${String(w.date).slice(0, 10)} ${top.weight}x${top.reps}${top.rpe ? '@' + top.rpe : ''} (${done}/${sets.length} séries ok)` : null;
+    }).filter(Boolean);
+    if (rows.length) history[id] = rows;
+  });
+
+  const bw = state.bodyMeasurements.filter(m => m.weight).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(-6)
+    .map(m => `${String(m.date).slice(0, 10)}: ${m.weight}`);
+
+  return {
+    unit: unitLabel(),
+    treinosUltimas4Semanas: recent.length,
+    volumeSemanalPorGrupo: getWeeklyMuscleVolume(),
+    pesoCorporal: bw,
+    rotinas: routines,
+    historico: history,
+  };
+}
+
+function sanitizeCoachProposals(raw) {
+  const out = [];
+  const list = raw && Array.isArray(raw.proposals) ? raw.proposals : [];
+  list.slice(0, 5).forEach(p => {
+    if (!p) return;
+    const r = state.routines.find(x => x.id === p.routineId);
+    const item = r && r.exercises.find(x => x.exerciseId === p.exerciseId);
+    if (!item) return;
+    const reason = String(p.reason || '').slice(0, 160);
+    if (p.type === 'set_rule' && PROGRESSION_RULES[p.rule]) out.push({ type: 'set_rule', routineId: r.id, exerciseId: item.exerciseId, rule: p.rule, reason });
+    else if (p.type === 'set_reps') {
+      const a = Math.round(Number(p.repsMin)), b = Math.round(Number(p.repsMax));
+      if (a >= 1 && b >= a && b <= 50) out.push({ type: 'set_reps', routineId: r.id, exerciseId: item.exerciseId, repsMin: a, repsMax: b, reason });
+    } else if (p.type === 'set_sets') {
+      const n = Math.round(Number(p.targetSets));
+      if (n >= 1 && n <= 10) out.push({ type: 'set_sets', routineId: r.id, exerciseId: item.exerciseId, targetSets: n, reason });
+    }
+  });
+  return out;
+}
+
+function describeCoachProposal(p) {
+  const r = state.routines.find(x => x.id === p.routineId);
+  const ex = getExercise(p.exerciseId);
+  const where = `${r ? r.name : '?'} · ${ex ? ex.name : p.exerciseId}`;
+  if (p.type === 'set_rule') return { where, change: `Progressão: ${PROGRESSION_RULES[p.rule].label}` };
+  if (p.type === 'set_reps') return { where, change: `Faixa de reps: ${p.repsMin}-${p.repsMax}` };
+  return { where, change: `Séries: ${p.targetSets}` };
+}
+
+function applyCoachProposal(p) {
+  const r = state.routines.find(x => x.id === p.routineId);
+  const item = r && r.exercises.find(x => x.exerciseId === p.exerciseId);
+  if (!item) return false;
+  const coach = getCoach();
+  if (!coach.snapshot) coach.snapshot = { at: todayISO(), routines: JSON.parse(JSON.stringify(state.routines)) };
+  if (p.type === 'set_rule') item.progression = p.rule;
+  else if (p.type === 'set_reps') { item.repsMin = String(p.repsMin); item.repsMax = String(p.repsMax); }
+  else item.targetSets = p.targetSets;
+  const d = describeCoachProposal(p);
+  coach.log.push({ at: todayISO(), where: d.where, change: d.change, reason: p.reason });
+  coach.log = coach.log.slice(-50);
+  saveState();
+  return true;
+}
+
+function undoCoachChanges() {
+  const coach = getCoach();
+  if (!coach.snapshot) return;
+  state.routines = coach.snapshot.routines;
+  coach.snapshot = null;
+  coach.log.push({ at: todayISO(), where: '—', change: 'Alterações do Coach desfeitas', reason: '' });
+  saveState(); render(); toast('Rotinas restauradas');
+}
+
+async function requestCoachAnalysis() {
+  if (!state.routines.length) { toast('Crie uma rotina antes de pedir uma análise.'); return; }
+  if (state.workouts.length < 3) { toast('Registre ao menos 3 treinos para o Coach ter o que analisar.'); return; }
+  const prompt = JSON.stringify(buildCoachSummary());
+  if (prompt.length > 7800) { toast('Muitos dados para uma análise só — reduza o número de rotinas.'); return; }
+  openModal('<div class="modal-title">Coach</div><p style="color:var(--muted);">Analisando seus treinos…</p>');
+  let data;
+  try {
+    const res = await fetch('/api/ai/generate', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ system: COACH_SYSTEM, prompt, maxTokens: 2000 }),
+    });
+    data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'erro');
+  } catch (e) {
+    openModal(`<div class="modal-title">Coach</div><p style="color:var(--muted);">Não consegui falar com a IA agora (${esc(e.message || 'sem conexão')}). Tente de novo mais tarde.</p><div class="modal-footer"><button class="btn btn-ghost" style="flex:1" id="cxClose">Fechar</button></div>`);
+    document.getElementById('cxClose').onclick = closeModal;
+    return;
+  }
+  let parsed = null;
+  try {
+    if (!data.truncated) {
+      const m = String(data.text || '').match(/\{[\s\S]*\}/);
+      parsed = m ? JSON.parse(m[0]) : null;
+    }
+  } catch (e) { parsed = null; }
+  if (!parsed) {
+    openModal(`<div class="modal-title">Coach</div><p style="color:var(--muted);">A resposta veio incompleta ou fora do formato. Tente novamente.</p><div class="modal-footer"><button class="btn btn-ghost" style="flex:1" id="cxClose">Fechar</button></div>`);
+    document.getElementById('cxClose').onclick = closeModal;
+    return;
+  }
+  renderCoachProposals(String(parsed.summary || '').slice(0, 400), sanitizeCoachProposals(parsed));
+}
+
+function renderCoachProposals(summary, proposals) {
+  const items = proposals.map((p, i) => {
+    const d = describeCoachProposal(p);
+    return `<div class="card card-pad" data-i="${i}" style="margin-bottom:8px;">
+      <div class="ex-list-muscle">${esc(d.where)}</div>
+      <div class="ex-list-name" style="margin:2px 0 4px;">${esc(d.change)}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5;">${esc(p.reason)}</div>
+      <button class="btn btn-primary btn-sm" data-apply="${i}" style="margin-top:8px;">Aplicar</button>
+    </div>`;
+  }).join('');
+  openModal(`
+    <div class="modal-title">Coach</div>
+    <p style="font-size:13px;line-height:1.6;margin-bottom:10px;">${esc(summary)}</p>
+    ${items || '<p style="color:var(--muted);">Nenhuma mudança sugerida por enquanto.</p>'}
+    <div class="modal-footer"><button class="btn btn-ghost" style="flex:1" id="cxClose">Fechar</button></div>
+  `);
+  document.getElementById('cxClose').onclick = () => { closeModal(); render(); };
+  document.querySelectorAll('[data-apply]').forEach(btn => {
+    btn.onclick = () => {
+      if (applyCoachProposal(proposals[Number(btn.dataset.apply)])) {
+        btn.textContent = 'Aplicado ✓'; btn.disabled = true;
+      }
+    };
+  });
+}
+
+function renderCoachCard(main) {
+  const coach = getCoach();
+  const title = document.createElement('div');
+  title.className = 'section-title';
+  title.textContent = 'Coach (IA)';
+  main.appendChild(title);
+  const card = document.createElement('div');
+  card.className = 'card card-pad';
+  card.style.display = 'flex';
+  card.style.flexDirection = 'column';
+  card.style.gap = '10px';
+  card.innerHTML = `
+    <p style="font-size:12px;color:var(--muted);line-height:1.6;">A IA lê seus treinos e sugere ajustes nas rotinas (regra de progressão, faixa de reps, séries). Você aprova um por um. Ela nunca define cargas nem altera treinos já registrados.</p>
+    <div class="toggle-row"><span>Permitir enviar meus treinos à IA</span>
+      <div class="seg" id="coachConsent"><button data-v="0" class="${coach.consent ? '' : 'on'}">Não</button><button data-v="1" class="${coach.consent ? 'on' : ''}">Sim</button></div>
+    </div>
+    <button class="btn btn-primary btn-block" id="coachRun" ${coach.consent ? '' : 'disabled'}>Analisar meus treinos</button>
+    ${coach.snapshot ? '<button class="btn btn-ghost btn-block" id="coachUndo">Desfazer alterações do Coach</button>' : ''}
+    ${coach.log.length ? `<div style="font-size:11px;color:var(--muted);line-height:1.6;">Últimas mudanças:<br>${coach.log.slice(-3).reverse().map(l => `• ${esc(l.where)} — ${esc(l.change)}`).join('<br>')}</div>` : ''}
+  `;
+  main.appendChild(card);
+  card.querySelectorAll('#coachConsent button').forEach(b => b.onclick = () => { coach.consent = b.dataset.v === '1'; saveState(); render(); });
+  card.querySelector('#coachRun').onclick = requestCoachAnalysis;
+  const undo = card.querySelector('#coachUndo');
+  if (undo) undo.onclick = () => confirmDialog('Voltar as rotinas ao estado de antes das mudanças do Coach?', undoCoachChanges);
+}
+
 /* ===================== TAB: PERFIL ===================== */
 function renderPerfilTab(main) {
   if (ui.showMeasurements) { renderMeasurementsView(main); return; }
@@ -1990,6 +2196,8 @@ function renderPerfilTab(main) {
   measureBtn.textContent = '📏 Medidas Corporais';
   measureBtn.onclick = () => { ui.showMeasurements = true; render(); window.scrollTo(0, 0); };
   main.appendChild(measureBtn);
+
+  renderCoachCard(main);
 
   const dataTitle = document.createElement('div');
   dataTitle.className = 'section-title';
