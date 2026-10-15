@@ -2038,12 +2038,17 @@ function describeCoachProposal(p) {
   return { where, change: `Séries: ${p.targetSets}` };
 }
 
+function ensureCoachSnapshot() {
+  const coach = getCoach();
+  if (!coach.snapshot) coach.snapshot = { at: todayISO(), routines: JSON.parse(JSON.stringify(state.routines)) };
+}
+
 function applyCoachProposal(p) {
   const r = state.routines.find(x => x.id === p.routineId);
   const item = r && r.exercises.find(x => x.exerciseId === p.exerciseId);
   if (!item) return false;
   const coach = getCoach();
-  if (!coach.snapshot) coach.snapshot = { at: todayISO(), routines: JSON.parse(JSON.stringify(state.routines)) };
+  ensureCoachSnapshot();
   if (p.type === 'set_rule') item.progression = p.rule;
   else if (p.type === 'set_reps') { item.repsMin = String(p.repsMin); item.repsMax = String(p.repsMax); }
   else item.targetSets = p.targetSets;
@@ -2123,6 +2128,115 @@ function renderCoachProposals(summary, proposals) {
   });
 }
 
+/* ---------- Coach: criar rotinas a partir de uma conversa ----------
+   A IA só escolhe entre exercícios que já existem na biblioteca (por id) e monta
+   a estrutura (séries, faixa de reps, regra). Rotinas novas são ADICIONADAS —
+   nenhuma rotina existente é sobrescrita — e entram no mesmo snapshot/desfazer. */
+const COACH_PLAN_SYSTEM = `Você é um treinador de musculação experiente. O aluno descreve em texto livre o objetivo, os dias disponíveis, o equipamento e limitações. Monte rotinas usando SOMENTE exercícios do catálogo recebido (campo "id"). Você NÃO define cargas.
+Responda APENAS com JSON válido, sem texto fora do JSON:
+{"summary":"1-2 frases em português explicando a lógica do plano","routines":[{"name":"Nome curto","exercises":[{"exerciseId":"..","sets":3,"repsMin":8,"repsMax":12,"rule":"linear|double|manual"}]}]}
+Regras: no máximo 5 rotinas e 7 exercícios por rotina; ordem: compostos primeiro; respeite dias, equipamento e limitações citados; use "double" quando houver faixa de reps; se faltar informação, assuma 3 dias por semana, corpo inteiro dividido, equipamento de academia.`;
+
+function sanitizeCoachPlan(raw) {
+  const out = [];
+  const list = raw && Array.isArray(raw.routines) ? raw.routines : [];
+  list.slice(0, 5).forEach(r => {
+    if (!r || !Array.isArray(r.exercises)) return;
+    const seen = new Set();
+    const exercises = [];
+    r.exercises.slice(0, 7).forEach(x => {
+      if (!x || seen.has(x.exerciseId) || !getExercise(x.exerciseId)) return;
+      seen.add(x.exerciseId);
+      const sets = Math.round(Number(x.sets));
+      const a = Math.round(Number(x.repsMin)), b = Math.round(Number(x.repsMax));
+      const okReps = a >= 1 && b >= a && b <= 50;
+      exercises.push({
+        exerciseId: x.exerciseId,
+        targetSets: sets >= 1 && sets <= 10 ? sets : 3,
+        repsMin: okReps ? String(a) : '', repsMax: okReps ? String(b) : '',
+        progression: PROGRESSION_RULES[x.rule] ? x.rule : 'linear',
+      });
+    });
+    const name = String(r.name || '').trim().slice(0, 40);
+    if (name && exercises.length) out.push({ name, exercises });
+  });
+  return out;
+}
+
+function openCoachPlanner() {
+  openModal(`
+    <div class="modal-title">Criar rotinas com IA</div>
+    <div class="field-group">
+      <label class="field-label">Conte seu objetivo, dias por semana, equipamento e limitações</label>
+      <textarea id="cpText" rows="5" maxlength="800" placeholder="Ex: quero ganhar massa, treino 4x por semana, academia completa, ombro direito sensível"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="flex:1" id="cpCancel">Cancelar</button>
+      <button class="btn btn-primary" style="flex:2" id="cpGo">Gerar</button>
+    </div>
+  `);
+  document.getElementById('cpCancel').onclick = closeModal;
+  document.getElementById('cpGo').onclick = async () => {
+    const text = document.getElementById('cpText').value.trim();
+    if (text.length < 10) { toast('Descreva um pouco mais o que você quer.'); return; }
+    const catalog = state.exercises.map(e => `${e.id}|${e.name}|${e.muscle}|${e.equipment || ''}`).join('\n');
+    const prompt = JSON.stringify({ pedido: text, unidade: unitLabel() }) + '\nCATALOGO (id|nome|grupo|equipamento):\n' + catalog;
+    if (prompt.length > 7900) { toast('Biblioteca grande demais para enviar inteira — remova exercícios personalizados não usados.'); return; }
+    openModal('<div class="modal-title">Coach</div><p style="color:var(--muted);">Montando suas rotinas…</p>');
+    let data, plan = null, summary = '';
+    try {
+      const res = await fetch('/api/ai/generate', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ system: COACH_PLAN_SYSTEM, prompt, maxTokens: 2048 }),
+      });
+      data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'erro');
+      if (!data.truncated) {
+        const m = String(data.text || '').match(/\{[\s\S]*\}/);
+        const parsed = m ? JSON.parse(m[0]) : null;
+        if (parsed) { plan = sanitizeCoachPlan(parsed); summary = String(parsed.summary || '').slice(0, 400); }
+      }
+    } catch (e) {
+      openModal(`<div class="modal-title">Coach</div><p style="color:var(--muted);">Não consegui falar com a IA agora (${esc(e.message || 'sem conexão')}). Tente de novo mais tarde.</p><div class="modal-footer"><button class="btn btn-ghost" style="flex:1" id="cxClose">Fechar</button></div>`);
+      document.getElementById('cxClose').onclick = closeModal;
+      return;
+    }
+    renderCoachPlan(summary, plan);
+  };
+}
+
+function renderCoachPlan(summary, plan) {
+  const ok = plan && plan.length;
+  const blocks = ok ? plan.map((r, i) => `
+    <div class="card card-pad" style="margin-bottom:8px;">
+      <div class="ex-list-name">${esc(r.name)}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin:4px 0;">${r.exercises.map(x => {
+        const ex = getExercise(x.exerciseId);
+        return `${esc(ex.name)} · ${x.targetSets}x${x.repsMin ? x.repsMin + '-' + x.repsMax : ''}`;
+      }).join('<br>')}</div>
+      <button class="btn btn-primary btn-sm" data-add="${i}">Adicionar rotina</button>
+    </div>`).join('') : '<p style="color:var(--muted);">A resposta veio incompleta ou sem exercícios válidos. Tente de novo com mais detalhes.</p>';
+  openModal(`
+    <div class="modal-title">Rotinas sugeridas</div>
+    ${summary ? `<p style="font-size:13px;line-height:1.6;margin-bottom:10px;">${esc(summary)}</p>` : ''}
+    ${blocks}
+    <div class="modal-footer"><button class="btn btn-ghost" style="flex:1" id="cxClose">Fechar</button></div>
+  `);
+  document.getElementById('cxClose').onclick = () => { closeModal(); render(); };
+  document.querySelectorAll('[data-add]').forEach(btn => {
+    btn.onclick = () => {
+      const r = plan[Number(btn.dataset.add)];
+      const coach = getCoach();
+      ensureCoachSnapshot();
+      state.routines.push({ id: uid(), name: r.name, exercises: r.exercises.map(x => ({ ...x })) });
+      coach.log.push({ at: todayISO(), where: r.name, change: `Rotina criada (${r.exercises.length} exercícios)`, reason: '' });
+      coach.log = coach.log.slice(-50);
+      saveState();
+      btn.textContent = 'Adicionada ✓'; btn.disabled = true;
+    };
+  });
+}
+
 function renderCoachCard(main) {
   const coach = getCoach();
   const title = document.createElement('div');
@@ -2140,12 +2254,14 @@ function renderCoachCard(main) {
       <div class="seg" id="coachConsent"><button data-v="0" class="${coach.consent ? '' : 'on'}">Não</button><button data-v="1" class="${coach.consent ? 'on' : ''}">Sim</button></div>
     </div>
     <button class="btn btn-primary btn-block" id="coachRun" ${coach.consent ? '' : 'disabled'}>Analisar meus treinos</button>
+    <button class="btn btn-ghost btn-block" id="coachPlan" ${coach.consent ? '' : 'disabled'}>Criar rotinas com IA</button>
     ${coach.snapshot ? '<button class="btn btn-ghost btn-block" id="coachUndo">Desfazer alterações do Coach</button>' : ''}
     ${coach.log.length ? `<div style="font-size:11px;color:var(--muted);line-height:1.6;">Últimas mudanças:<br>${coach.log.slice(-3).reverse().map(l => `• ${esc(l.where)} — ${esc(l.change)}`).join('<br>')}</div>` : ''}
   `;
   main.appendChild(card);
   card.querySelectorAll('#coachConsent button').forEach(b => b.onclick = () => { coach.consent = b.dataset.v === '1'; saveState(); render(); });
   card.querySelector('#coachRun').onclick = requestCoachAnalysis;
+  card.querySelector('#coachPlan').onclick = openCoachPlanner;
   const undo = card.querySelector('#coachUndo');
   if (undo) undo.onclick = () => confirmDialog('Voltar as rotinas ao estado de antes das mudanças do Coach?', undoCoachChanges);
 }
