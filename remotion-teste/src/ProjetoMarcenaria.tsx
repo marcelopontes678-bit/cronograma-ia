@@ -13,10 +13,10 @@ import {
 // Estrutura copiada do vídeo modelo: timelapse do processo em tela cheia
 // -> corte no drop da música para o render final com barra de progresso.
 const SOURCE_SECONDS = 92; // exclui a vinheta do CapCut no fim do vídeo original
-const DROP_SECONDS = 15.14; // drop da trilha (trilha30.mp3), onde ocorre o corte
-const BPM = 136;
-const TOTAL_SECONDS = 30;
+const DROP_SECONDS = 11.17; // drop da trilha original, onde a imagem aparece
+const TOTAL_SECONDS = 23; // duração da trilha original
 const IMAGE_ASPECT = 1672 / 940;
+const IMAGE_HEIGHT = 1280; // imagem encaixada na altura, com panorâmica horizontal
 
 const clamp = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
@@ -54,56 +54,42 @@ const Process: React.FC = () => {
 const Reveal: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames, width } = useVideoConfig();
-  const imageHeight = width / IMAGE_ASPECT; // imagem completa, encaixada na largura
-  const beat = (60 / BPM) * fps;
-  const sinceBeat = frame % beat;
-  // pulso discreto a cada batida
-  const pulse = interpolate(sinceBeat, [0, beat * 0.5], [0.012, 0], {
-    ...clamp,
-    easing: Easing.bezier(0.2, 0.8, 0.3, 1),
-  });
-  const settle = 24;
+  const imageWidth = IMAGE_HEIGHT * IMAGE_ASPECT;
+  const settle = 28;
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <AbsoluteFill
         style={{
           // corte seco no drop: entra ampliado e desfocado, depois assenta
-          scale: interpolate(frame, [0, settle], [2.4, 1], {
+          filter: `blur(${interpolate(frame, [0, settle], [16, 0], clamp)}px)`,
+          scale: interpolate(frame, [0, settle + 15, durationInFrames], [3.6, 1.1, 1.2], {
             ...clamp,
             easing: Easing.bezier(0.1, 0.7, 0.3, 1),
           }),
-          filter: `blur(${interpolate(frame, [0, settle], [16, 0], clamp)}px)`,
         }}
       >
         <CanvasImage
-          name="Fundo"
-          src={staticFile("sala-fundo.png")}
+          name="Sala"
+          src={staticFile("sala.png")}
           style={{
             position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            top: 0,
+            height: IMAGE_HEIGHT,
+            width: imageWidth,
+            // panorâmica da TV até a mesa
+            left: interpolate(frame, [0, durationInFrames], [-596, -1234], {
+              ...clamp,
+              easing: Easing.bezier(0.45, 0, 0.55, 1),
+            }),
           }}
         />
-        <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-          <CanvasImage
-            name="Sala"
-            src={staticFile("sala.png")}
-            style={{
-              width,
-              height: imageHeight,
-              scale: 1 + interpolate(frame, [0, durationInFrames], [0, 0.05], clamp) + pulse,
-            }}
-          />
-        </AbsoluteFill>
       </AbsoluteFill>
       <div
         style={{
           position: "absolute",
           left: 60,
           right: 60,
-          bottom: 110,
+          bottom: 90,
           height: 6,
           borderRadius: 3,
           backgroundColor: "rgba(255,255,255,0.3)",
@@ -128,7 +114,7 @@ export const ProjetoMarcenaria: React.FC = () => {
   const cut = Math.round(DROP_SECONDS * fps);
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
-      <Audio name="Trilha" src={staticFile("trilha30.mp3")} />
+      <Audio name="Trilha" src={staticFile("trilha.mp3")} />
       <Sequence name="Processo" from={0} durationInFrames={cut}>
         <Process />
       </Sequence>
