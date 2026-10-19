@@ -1,0 +1,25 @@
+{
+  "name": "tempo-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vídeo motivacional cinematográfico de 30 s (1080x1920, 30 fps) feito com Remotion.",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "still": "remotion still src/index.ts TempoVideo",
+    "render": "remotion render src/index.ts TempoVideo out/tempo.mp4 --codec=h264 --crf=16 --pixel-format=yuv420p",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.1.0",
+    "@fontsource/inter": "^5.1.0",
+    "@remotion/cli": "4.0.484",
+    "@remotion/fonts": "4.0.484",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "4.0.484"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.4.0"
+  }
+}
