@@ -77,15 +77,13 @@ const Reveal: React.FC = () => {
       >
         <CanvasImage
           name="Fundo"
-          src={staticFile("sala.png")}
+          src={staticFile("sala-fundo.png")}
           style={{
             position: "absolute",
             inset: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            filter: "blur(40px) brightness(0.45)",
-            scale: 1.3,
           }}
         />
         <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
