@@ -7,11 +7,21 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
+import { PROJETO_DURATION, ProjetoMarcenaria } from "./ProjetoMarcenaria";
 
 const FONT = "Helvetica, Arial, sans-serif";
 
 export const MyComposition = () => {
   return (
+    <>
+    <Composition
+      id="ProjetoMarcenaria"
+      component={ProjetoMarcenaria}
+      durationInFrames={PROJETO_DURATION}
+      fps={30}
+      width={720}
+      height={1280}
+    />
     <Composition
       id="Reels"
       component={Reels}
@@ -20,6 +30,7 @@ export const MyComposition = () => {
       width={1080}
       height={1920}
     />
+    </>
   );
 };
 
