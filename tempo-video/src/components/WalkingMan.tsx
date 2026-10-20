@@ -14,7 +14,8 @@ export const WalkingMan: React.FC<{
   rim?: string;
   rimOpacity?: number;
   mirror?: boolean; // reflexo (espelhado no chão)
-}> = ({ x, y, height, phase, coat = true, fill = "#05070a", rim = C.goldBright, rimOpacity = 0.16, mirror = false }) => {
+  umbrella?: boolean;
+}> = ({ x, y, height, phase, coat = true, fill = "#05070a", rim = C.goldBright, rimOpacity = 0.16, mirror = false, umbrella = false }) => {
   const TAU = Math.PI * 2;
   const s = Math.sin(TAU * phase);
   const c = Math.cos(TAU * phase);
@@ -61,6 +62,13 @@ export const WalkingMan: React.FC<{
           fill={fill}
           {...strokeProps}
         />
+        {umbrella && (
+          <g>
+            <line x1={0.118} y1={-1.07} x2={0.118} y2={-0.86} stroke={fill} strokeWidth={0.012} />
+            <path d="M-0.34,-0.985 C-0.31,-1.13 -0.12,-1.2 0.118,-1.2 C0.36,-1.2 0.56,-1.12 0.58,-0.985 C0.5,-1.03 0.42,-1.0 0.35,-1.03 C0.28,-1.0 0.2,-1.03 0.118,-1.0 C0.04,-1.03 -0.04,-1.0 -0.11,-1.03 C-0.2,-1.0 -0.27,-1.03 -0.34,-0.985 Z" fill={fill} {...strokeProps} />
+            <circle cx={0.118} cy={-0.86} r={0.014} fill={fill} />
+          </g>
+        )}
         {/* pescoço e cabeça */}
         <rect x={-0.022} y={-0.885} width={0.044} height={0.03} fill={fill} />
         <ellipse cx={0} cy={-0.928} rx={0.05} ry={0.062} fill={fill} {...strokeProps} />
