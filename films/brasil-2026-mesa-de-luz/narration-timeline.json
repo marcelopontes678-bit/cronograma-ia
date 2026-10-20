@@ -1,0 +1,639 @@
+{
+ "pages": [
+  {
+   "start": 0.25,
+   "end": 1.02,
+   "scene": 1,
+   "words": [
+    {
+     "w": "O",
+     "s": 0.25,
+     "e": 0.27
+    },
+    {
+     "w": "Brasil",
+     "s": 0.27,
+     "e": 0.58
+    },
+    {
+     "w": "se",
+     "s": 0.58,
+     "e": 0.67
+    },
+    {
+     "w": "prepara",
+     "s": 0.75,
+     "e": 1.02
+    }
+   ]
+  },
+  {
+   "start": 1.09,
+   "end": 2.79,
+   "scene": 1,
+   "words": [
+    {
+     "w": "para",
+     "s": 1.09,
+     "e": 1.29
+    },
+    {
+     "w": "mais",
+     "s": 1.29,
+     "e": 1.51
+    },
+    {
+     "w": "uma",
+     "s": 1.51,
+     "e": 1.67
+    },
+    {
+     "w": "decisão",
+     "s": 1.67,
+     "e": 2.06
+    },
+    {
+     "w": "presidencial.",
+     "s": 2.06,
+     "e": 2.79
+    }
+   ]
+  },
+  {
+   "start": 2.904,
+   "end": 3.924,
+   "scene": 1,
+   "words": [
+    {
+     "w": "Mas",
+     "s": 2.904,
+     "e": 3.054
+    },
+    {
+     "w": "o",
+     "s": 3.054,
+     "e": 3.064
+    },
+    {
+     "w": "que",
+     "s": 3.134,
+     "e": 3.254
+    },
+    {
+     "w": "devemos",
+     "s": 3.254,
+     "e": 3.584
+    },
+    {
+     "w": "cobrar",
+     "s": 3.644,
+     "e": 3.924
+    }
+   ]
+  },
+  {
+   "start": 3.924,
+   "end": 5.014,
+   "scene": 1,
+   "words": [
+    {
+     "w": "de",
+     "s": 3.924,
+     "e": 4.024
+    },
+    {
+     "w": "quem",
+     "s": 4.024,
+     "e": 4.234
+    },
+    {
+     "w": "quer",
+     "s": 4.234,
+     "e": 4.354
+    },
+    {
+     "w": "governar?",
+     "s": 4.444,
+     "e": 5.014
+    }
+   ]
+  },
+  {
+   "start": 5.255,
+   "end": 6.635,
+   "scene": 2,
+   "words": [
+    {
+     "w": "Escândalos",
+     "s": 5.255,
+     "e": 5.815
+    },
+    {
+     "w": "políticos",
+     "s": 5.815,
+     "e": 6.315
+    },
+    {
+     "w": "deixam",
+     "s": 6.315,
+     "e": 6.635
+    }
+   ]
+  },
+  {
+   "start": 6.635,
+   "end": 7.915,
+   "scene": 2,
+   "words": [
+    {
+     "w": "perguntas",
+     "s": 6.635,
+     "e": 7.155
+    },
+    {
+     "w": "importantes:",
+     "s": 7.155,
+     "e": 7.915
+    }
+   ]
+  },
+  {
+   "start": 8.021,
+   "end": 9.351,
+   "scene": 2,
+   "words": [
+    {
+     "w": "quem",
+     "s": 8.021,
+     "e": 8.201
+    },
+    {
+     "w": "foi",
+     "s": 8.301,
+     "e": 8.371
+    },
+    {
+     "w": "responsabilizado,",
+     "s": 8.371,
+     "e": 9.351
+    }
+   ]
+  },
+  {
+   "start": 9.483,
+   "end": 11.223,
+   "scene": 2,
+   "words": [
+    {
+     "w": "o",
+     "s": 9.483,
+     "e": 9.513
+    },
+    {
+     "w": "que",
+     "s": 9.513,
+     "e": 9.653
+    },
+    {
+     "w": "dizem",
+     "s": 9.653,
+     "e": 9.933
+    },
+    {
+     "w": "as",
+     "s": 9.933,
+     "e": 10.043
+    },
+    {
+     "w": "decisões",
+     "s": 10.043,
+     "e": 10.503
+    },
+    {
+     "w": "judiciais",
+     "s": 10.503,
+     "e": 11.223
+    }
+   ]
+  },
+  {
+   "start": 11.349,
+   "end": 12.189,
+   "scene": 2,
+   "words": [
+    {
+     "w": "e",
+     "s": 11.349,
+     "e": 11.459
+    },
+    {
+     "w": "quais",
+     "s": 11.459,
+     "e": 11.629
+    },
+    {
+     "w": "mecanismos",
+     "s": 11.629,
+     "e": 12.189
+    }
+   ]
+  },
+  {
+   "start": 12.189,
+   "end": 13.749,
+   "scene": 2,
+   "words": [
+    {
+     "w": "podem",
+     "s": 12.189,
+     "e": 12.469
+    },
+    {
+     "w": "impedir",
+     "s": 12.469,
+     "e": 12.859
+    },
+    {
+     "w": "novos",
+     "s": 12.859,
+     "e": 13.139
+    },
+    {
+     "w": "desvios?",
+     "s": 13.139,
+     "e": 13.749
+    }
+   ]
+  },
+  {
+   "start": 13.996,
+   "end": 15.446,
+   "scene": 3,
+   "words": [
+    {
+     "w": "Conhecer",
+     "s": 13.996,
+     "e": 14.366
+    },
+    {
+     "w": "os",
+     "s": 14.436,
+     "e": 14.546
+    },
+    {
+     "w": "candidatos",
+     "s": 14.546,
+     "e": 15.096
+    },
+    {
+     "w": "exige",
+     "s": 15.096,
+     "e": 15.446
+    }
+   ]
+  },
+  {
+   "start": 15.446,
+   "end": 16.586,
+   "scene": 3,
+   "words": [
+    {
+     "w": "examinar",
+     "s": 15.446,
+     "e": 15.796
+    },
+    {
+     "w": "suas",
+     "s": 15.796,
+     "e": 16.006
+    },
+    {
+     "w": "propostas,",
+     "s": 16.006,
+     "e": 16.586
+    }
+   ]
+  },
+  {
+   "start": 16.586,
+   "end": 17.676,
+   "scene": 3,
+   "words": [
+    {
+     "w": "seus",
+     "s": 16.586,
+     "e": 16.776
+    },
+    {
+     "w": "históricos",
+     "s": 16.776,
+     "e": 17.226
+    },
+    {
+     "w": "públicos,",
+     "s": 17.326,
+     "e": 17.676
+    }
+   ]
+  },
+  {
+   "start": 17.821,
+   "end": 19.001,
+   "scene": 3,
+   "words": [
+    {
+     "w": "as",
+     "s": 17.821,
+     "e": 17.841
+    },
+    {
+     "w": "evidências",
+     "s": 17.841,
+     "e": 18.381
+    },
+    {
+     "w": "disponíveis",
+     "s": 18.381,
+     "e": 19.001
+    }
+   ]
+  },
+  {
+   "start": 19.001,
+   "end": 19.691,
+   "scene": 3,
+   "words": [
+    {
+     "w": "e",
+     "s": 19.001,
+     "e": 19.051
+    },
+    {
+     "w": "a",
+     "s": 19.051,
+     "e": 19.101
+    },
+    {
+     "w": "viabilidade",
+     "s": 19.101,
+     "e": 19.691
+    }
+   ]
+  },
+  {
+   "start": 19.721,
+   "end": 20.991,
+   "scene": 3,
+   "words": [
+    {
+     "w": "de",
+     "s": 19.721,
+     "e": 19.831
+    },
+    {
+     "w": "seus",
+     "s": 19.831,
+     "e": 20.061
+    },
+    {
+     "w": "compromissos.",
+     "s": 20.061,
+     "e": 20.991
+    }
+   ]
+  },
+  {
+   "start": 21.194,
+   "end": 22.114,
+   "scene": 4,
+   "words": [
+    {
+     "w": "Consulte",
+     "s": 21.194,
+     "e": 21.623
+    },
+    {
+     "w": "as",
+     "s": 21.623,
+     "e": 21.733
+    },
+    {
+     "w": "fontes,",
+     "s": 21.733,
+     "e": 22.114
+    }
+   ]
+  },
+  {
+   "start": 22.204,
+   "end": 22.814,
+   "scene": 4,
+   "words": [
+    {
+     "w": "confira",
+     "s": 22.204,
+     "e": 22.514
+    },
+    {
+     "w": "os",
+     "s": 22.514,
+     "e": 22.623
+    },
+    {
+     "w": "fatos",
+     "s": 22.623,
+     "e": 22.814
+    }
+   ]
+  },
+  {
+   "start": 22.893,
+   "end": 23.983,
+   "scene": 4,
+   "words": [
+    {
+     "w": "e",
+     "s": 22.893,
+     "e": 22.933
+    },
+    {
+     "w": "cobre",
+     "s": 22.933,
+     "e": 23.458
+    },
+    {
+     "w": "transparência.",
+     "s": 23.458,
+     "e": 23.983
+    }
+   ]
+  },
+  {
+   "start": 24.083,
+   "end": 25.173,
+   "scene": 4,
+   "words": [
+    {
+     "w": "Uma",
+     "s": 24.083,
+     "e": 24.263
+    },
+    {
+     "w": "democracia",
+     "s": 24.263,
+     "e": 24.873
+    },
+    {
+     "w": "exige",
+     "s": 24.873,
+     "e": 25.173
+    }
+   ]
+  },
+  {
+   "start": 25.173,
+   "end": 26.523,
+   "scene": 4,
+   "words": [
+    {
+     "w": "cidadãos",
+     "s": 25.173,
+     "e": 25.643
+    },
+    {
+     "w": "bem",
+     "s": 25.733,
+     "e": 25.833
+    },
+    {
+     "w": "informados.",
+     "s": 25.833,
+     "e": 26.523
+    }
+   ]
+  }
+ ],
+ "speech": [
+  {
+   "start": 0.25,
+   "end": 2.804
+  },
+  {
+   "start": 2.904,
+   "end": 5.055
+  },
+  {
+   "start": 5.255,
+   "end": 7.921
+  },
+  {
+   "start": 8.021,
+   "end": 9.383
+  },
+  {
+   "start": 9.483,
+   "end": 11.249
+  },
+  {
+   "start": 11.349,
+   "end": 13.796
+  },
+  {
+   "start": 13.996,
+   "end": 17.721
+  },
+  {
+   "start": 17.821,
+   "end": 20.994
+  },
+  {
+   "start": 21.194,
+   "end": 23.983
+  },
+  {
+   "start": 24.083,
+   "end": 26.531
+  }
+ ],
+ "phrases": [
+  {
+   "scene": 1,
+   "start": 0.25,
+   "end": 2.804,
+   "text": "O Brasil se prepara para mais uma decisão presidencial."
+  },
+  {
+   "scene": 1,
+   "start": 2.904,
+   "end": 5.055,
+   "text": "Mas o que devemos cobrar de quem quer governar?"
+  },
+  {
+   "scene": 2,
+   "start": 5.255,
+   "end": 7.921,
+   "text": "Escândalos políticos deixam perguntas importantes:"
+  },
+  {
+   "scene": 2,
+   "start": 8.021,
+   "end": 9.383,
+   "text": "quem foi responsabilizado,"
+  },
+  {
+   "scene": 2,
+   "start": 9.483,
+   "end": 11.249,
+   "text": "o que dizem as decisões judiciais"
+  },
+  {
+   "scene": 2,
+   "start": 11.349,
+   "end": 13.796,
+   "text": "e quais mecanismos podem impedir novos desvios?"
+  },
+  {
+   "scene": 3,
+   "start": 13.996,
+   "end": 17.721,
+   "text": "Conhecer os candidatos exige examinar suas propostas, seus históricos públicos,"
+  },
+  {
+   "scene": 3,
+   "start": 17.821,
+   "end": 20.994,
+   "text": "as evidências disponíveis e a viabilidade de seus compromissos."
+  },
+  {
+   "scene": 4,
+   "start": 21.194,
+   "end": 23.983,
+   "text": "Consulte as fontes, confira os fatos e cobre transparência."
+  },
+  {
+   "scene": 4,
+   "start": 24.083,
+   "end": 26.531,
+   "text": "Uma democracia exige cidadãos bem informados."
+  }
+ ],
+ "marks": {
+  "cut2": 5.0,
+  "cut3": 13.0,
+  "cut4": 21.0,
+  "card1": 7.4,
+  "stamp1": 8.1,
+  "card2": 8.8,
+  "stamp2": 9.5,
+  "legend": [
+   10.2,
+   10.65,
+   11.1,
+   11.55,
+   12.0
+  ],
+  "stamp3": 17.4,
+  "confirm": 25.7,
+  "finalText": 27.4
+ }
+}

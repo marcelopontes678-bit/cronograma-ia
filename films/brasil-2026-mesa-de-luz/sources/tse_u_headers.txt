@@ -1,0 +1,20 @@
+HTTP/1.1 200 Connection Established
+
+HTTP/2 200 
+content-length: 9349
+accept-ranges: bytes
+last-modified: Wed, 07 Oct 2026 23:35:43 GMT
+etag: "2da19dbacd44746287f057d454ed01f0"
+x-amz-request-id: tx000003bab4feb696b5d13-006accb583-3e23089-default
+x-ratelimit-limit: 5000, 5000;w=1
+x-ratelimit-remaining: 4964
+x-ratelimit-reset: 1
+cache-control: max-age=30
+expires: Tue, 20 Oct 2026 17:33:19 GMT
+date: Tue, 20 Oct 2026 17:32:49 GMT
+alt-svc: h3=":443"; ma=93600
+content-type: application/json
+strict-transport-security: max-age=63072000 ; includeSubDomains ; preload
+akamai-grn: 0.9b34d517.1792517569.62fbe2b4
+cdn-cache-status: Hit from child
+
