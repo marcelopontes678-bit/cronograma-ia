@@ -18,6 +18,9 @@ const faces: [string, string, string, "normal" | "italic"][] = [
   [SANS, "inter-latin-400-normal", "400", "normal"],
   [SANS, "inter-latin-500-normal", "500", "normal"],
   [SANS, "inter-latin-600-normal", "600", "normal"],
+  [SANS, "inter-latin-700-normal", "700", "normal"],
+  [SANS, "inter-latin-800-normal", "800", "normal"],
+  [SANS, "inter-latin-900-normal", "900", "normal"],
 ];
 
 export const fontsReady = Promise.all(

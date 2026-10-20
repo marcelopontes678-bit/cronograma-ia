@@ -10,7 +10,8 @@ root = Path(__file__).resolve().parent.parent
 names = [
     "cormorant-garamond-latin-400-normal", "cormorant-garamond-latin-500-normal", "cormorant-garamond-latin-600-normal",
     "cormorant-garamond-latin-400-italic", "cormorant-garamond-latin-500-italic",
-    "inter-latin-400-normal", "inter-latin-500-normal", "inter-latin-600-normal",
+    "inter-latin-400-normal", "inter-latin-500-normal", "inter-latin-600-normal", "inter-latin-700-normal",
+    "inter-latin-800-normal", "inter-latin-900-normal",
 ]
 lines = ["// GERADO por scripts/embed_fonts.py — não edite à mão.", "export const FONT_DATA: Record<string, string> = {"]
 for n in names:

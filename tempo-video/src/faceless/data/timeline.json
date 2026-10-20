@@ -1,0 +1,404 @@
+{
+ "duration": 26.081,
+ "phrases": [
+  {
+   "id": "hook",
+   "start": 0.15,
+   "end": 6.401
+  },
+  {
+   "id": "step1",
+   "start": 6.851,
+   "end": 10.627
+  },
+  {
+   "id": "step2",
+   "start": 10.977,
+   "end": 15.99
+  },
+  {
+   "id": "step3",
+   "start": 16.34,
+   "end": 22.313
+  },
+  {
+   "id": "cta",
+   "start": 22.813,
+   "end": 25.181
+  }
+ ],
+ "captions": [
+  {
+   "text": "Veja",
+   "s": 0.2,
+   "e": 0.41,
+   "hl": false,
+   "hold": 0.41
+  },
+  {
+   "text": "como",
+   "s": 0.41,
+   "e": 0.64,
+   "hl": false,
+   "hold": 0.72
+  },
+  {
+   "text": "criar",
+   "s": 0.72,
+   "e": 1.0,
+   "hl": false,
+   "hold": 1.0
+  },
+  {
+   "text": "vídeos",
+   "s": 1.0,
+   "e": 1.39,
+   "hl": false,
+   "hold": 1.39
+  },
+  {
+   "text": "motivacionais",
+   "s": 1.39,
+   "e": 2.25,
+   "hl": true,
+   "hold": 2.25
+  },
+  {
+   "text": "pro TikTok",
+   "s": 2.25,
+   "e": 3.3,
+   "hl": true,
+   "hold": 3.3
+  },
+  {
+   "text": "e deixar",
+   "s": 3.3,
+   "e": 3.81,
+   "hl": false,
+   "hold": 3.81
+  },
+  {
+   "text": "a IA",
+   "s": 3.81,
+   "e": 4.455,
+   "hl": true,
+   "hold": 4.455
+  },
+  {
+   "text": "postar",
+   "s": 4.455,
+   "e": 4.67,
+   "hl": false,
+   "hold": 4.67
+  },
+  {
+   "text": "por você",
+   "s": 4.67,
+   "e": 5.13,
+   "hl": false,
+   "hold": 5.13
+  },
+  {
+   "text": "no piloto",
+   "s": 5.13,
+   "e": 5.49,
+   "hl": false,
+   "hold": 5.56
+  },
+  {
+   "text": "automático",
+   "s": 5.56,
+   "e": 6.34,
+   "hl": true,
+   "hold": 6.64
+  },
+  {
+   "text": "Primeiro",
+   "s": 6.881,
+   "e": 7.491,
+   "hl": false,
+   "hold": 7.491
+  },
+  {
+   "text": "acesse",
+   "s": 7.491,
+   "e": 7.881,
+   "hl": false,
+   "hold": 7.881
+  },
+  {
+   "text": "faceless.video",
+   "s": 7.881,
+   "e": 8.901,
+   "hl": true,
+   "hold": 8.901
+  },
+  {
+   "text": "e clique",
+   "s": 8.901,
+   "e": 9.291,
+   "hl": false,
+   "hold": 9.401
+  },
+  {
+   "text": "em começar",
+   "s": 9.401,
+   "e": 9.931,
+   "hl": false,
+   "hold": 9.931
+  },
+  {
+   "text": "grátis",
+   "s": 9.931,
+   "e": 10.561,
+   "hl": true,
+   "hold": 10.861
+  },
+  {
+   "text": "Escolha",
+   "s": 11.007,
+   "e": 11.387,
+   "hl": false,
+   "hold": 11.387
+  },
+  {
+   "text": "vídeos",
+   "s": 11.387,
+   "e": 11.757,
+   "hl": false,
+   "hold": 11.767
+  },
+  {
+   "text": "motivacionais",
+   "s": 11.767,
+   "e": 12.627,
+   "hl": true,
+   "hold": 12.787
+  },
+  {
+   "text": "um fundo",
+   "s": 12.787,
+   "e": 13.287,
+   "hl": false,
+   "hold": 13.327
+  },
+  {
+   "text": "uma fonte",
+   "s": 13.327,
+   "e": 13.907,
+   "hl": false,
+   "hold": 14.057
+  },
+  {
+   "text": "uma narração",
+   "s": 14.057,
+   "e": 14.667,
+   "hl": false,
+   "hold": 14.667
+  },
+  {
+   "text": "e clique",
+   "s": 14.667,
+   "e": 15.107,
+   "hl": false,
+   "hold": 15.107
+  },
+  {
+   "text": "em criar",
+   "s": 15.107,
+   "e": 15.537,
+   "hl": false,
+   "hold": 15.537
+  },
+  {
+   "text": "série",
+   "s": 15.537,
+   "e": 15.917,
+   "hl": true,
+   "hold": 16.217
+  },
+  {
+   "text": "Por fim",
+   "s": 16.37,
+   "e": 16.84,
+   "hl": false,
+   "hold": 16.84
+  },
+  {
+   "text": "conecte",
+   "s": 16.84,
+   "e": 17.28,
+   "hl": false,
+   "hold": 17.28
+  },
+  {
+   "text": "sua conta",
+   "s": 17.28,
+   "e": 17.77,
+   "hl": false,
+   "hold": 17.82
+  },
+  {
+   "text": "do TikTok",
+   "s": 17.82,
+   "e": 18.44,
+   "hl": true,
+   "hold": 18.44
+  },
+  {
+   "text": "e a",
+   "s": 18.44,
+   "e": 18.648,
+   "hl": false,
+   "hold": 18.648
+  },
+  {
+   "text": "IA",
+   "s": 18.648,
+   "e": 18.902,
+   "hl": true,
+   "hold": 18.902
+  },
+  {
+   "text": "faz",
+   "s": 18.902,
+   "e": 19.03,
+   "hl": false,
+   "hold": 19.03
+  },
+  {
+   "text": "o resto",
+   "s": 19.03,
+   "e": 19.58,
+   "hl": false,
+   "hold": 19.73
+  },
+  {
+   "text": "cria",
+   "s": 19.73,
+   "e": 19.98,
+   "hl": false,
+   "hold": 19.98
+  },
+  {
+   "text": "e posta",
+   "s": 19.98,
+   "e": 20.34,
+   "hl": false,
+   "hold": 20.45
+  },
+  {
+   "text": "vídeos",
+   "s": 20.45,
+   "e": 20.81,
+   "hl": false,
+   "hold": 20.82
+  },
+  {
+   "text": "motivacionais",
+   "s": 20.82,
+   "e": 21.65,
+   "hl": true,
+   "hold": 21.77
+  },
+  {
+   "text": "todo",
+   "s": 21.77,
+   "e": 22.01,
+   "hl": false,
+   "hold": 22.01
+  },
+  {
+   "text": "dia",
+   "s": 22.01,
+   "e": 22.26,
+   "hl": true,
+   "hold": 22.56
+  },
+  {
+   "text": "Comente",
+   "s": 22.863,
+   "e": 23.293,
+   "hl": false,
+   "hold": 23.293
+  },
+  {
+   "text": "IA",
+   "s": 23.293,
+   "e": 23.443,
+   "hl": true,
+   "hold": 23.443
+  },
+  {
+   "text": "e o",
+   "s": 23.443,
+   "e": 23.583,
+   "hl": false,
+   "hold": 23.583
+  },
+  {
+   "text": "link",
+   "s": 23.583,
+   "e": 23.863,
+   "hl": false,
+   "hold": 23.863
+  },
+  {
+   "text": "chega",
+   "s": 23.863,
+   "e": 24.203,
+   "hl": false,
+   "hold": 24.213
+  },
+  {
+   "text": "no seu",
+   "s": 24.213,
+   "e": 24.553,
+   "hl": false,
+   "hold": 24.553
+  },
+  {
+   "text": "direct",
+   "s": 24.553,
+   "e": 25.181,
+   "hl": true,
+   "hold": 25.481
+  }
+ ],
+ "marks": {
+  "badge": 4.025,
+  "tiktok": 2.775,
+  "tap1": 10.441,
+  "tap2": 15.797,
+  "connect": 16.84,
+  "tiktokTile": 17.9,
+  "everyDay": 22.01,
+  "bubbleIA": 23.293,
+  "bubbleLink": 23.583,
+  "typeUrl": 7.881,
+  "voiceList": 14.167,
+  "bgList": 12.867
+ },
+ "speech": [
+  {
+   "start": 0.15,
+   "end": 6.401
+  },
+  {
+   "start": 6.851,
+   "end": 10.627
+  },
+  {
+   "start": 10.977,
+   "end": 15.99
+  },
+  {
+   "start": 16.34,
+   "end": 22.313
+  },
+  {
+   "start": 22.813,
+   "end": 25.181
+  }
+ ]
+}
