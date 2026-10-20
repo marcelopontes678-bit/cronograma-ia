@@ -57,7 +57,8 @@ const neonsFor = (k: number, side: number): Neon[] => {
 /** Letreiros verticais em japonês (Noto Sans JP 900, só os glifos usados). */
 const WORDS = ["ラーメン", "居酒屋", "カラオケ", "ホテル", "焼鳥", "薬局", "喫茶", "24時間", "寿司", "バー", "酒場", "営業", "新宿", "東京"];
 
-export const TokyoNightOpus: React.FC = () => {
+/** `embedded`: sem áudio e sem o filtro de aberração cromática (para usar dentro de outros vídeos). */
+export const TokyoNightOpus: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -246,7 +247,7 @@ export const TokyoNightOpus: React.FC = () => {
   // zoom lento + leve rotação, como um dolly de cinema
   return (
     <AbsoluteFill style={{ background: "#05030a" }}>
-      <AbsoluteFill style={{ filter: "url(#ca)" }}>
+      <AbsoluteFill style={{ filter: embedded ? undefined : "url(#ca)" }}>
         <Camera from={{ scale: 1.0, x: 0, y: 14 }} to={{ scale: 1.13, x: 0, y: -26, rot: -0.5 }} duration={TOKYO_DURATION} origin={[VX, 1000]} shake={1.0} seed={21}>
           <svg width={WIDTH} height={HEIGHT} style={{ position: "absolute", inset: 0 }}>
             <defs>
@@ -377,7 +378,7 @@ export const TokyoNightOpus: React.FC = () => {
       <Grain opacity={0.13} />
       <AbsoluteFill style={{ background: "#000", opacity: Math.max(ease(frame, [0, 14], [1, 0]), ease(frame, [TOKYO_DURATION - 18, TOKYO_DURATION - 1], [0, 1])) }} />
 
-      <Audio src={staticFile("tokyo/ambience.mp3")} volume={(f) => interpolate(f, [0, 12, TOKYO_DURATION - 24, TOKYO_DURATION - 1], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />
+      {!embedded && <Audio src={staticFile("tokyo/ambience.mp3")} volume={(f) => interpolate(f, [0, 12, TOKYO_DURATION - 24, TOKYO_DURATION - 1], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} />}
     </AbsoluteFill>
   );
 };
