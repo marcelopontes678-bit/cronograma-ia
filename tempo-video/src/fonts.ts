@@ -1,8 +1,10 @@
 import { loadFont } from "@remotion/fonts";
 import { FONT_DATA } from "./generated/fontData";
+import { JP_FONT } from "./generated/jpFontData";
 
 export const SERIF = "Cormorant Garamond";
 export const SANS = "Inter";
+export const JP = "Noto Sans JP";
 
 /**
  * Cormorant Garamond e Inter (SIL OFL), embutidas como data: URL em src/generated/fontData.ts
@@ -27,4 +29,9 @@ export const fontsReady = Promise.all(
   faces.map(([family, key, weight, style]) =>
     loadFont({ family, url: FONT_DATA[key], format: "woff2", weight, style }),
   ),
+);
+
+/** Noto Sans JP 900 (SIL OFL): só os glifos dos letreiros, um pedaço por faixa unicode. */
+export const jpReady = Promise.all(
+  JP_FONT.map((f) => loadFont({ family: JP, url: f.url, format: "woff2", weight: "900", style: "normal", unicodeRange: f.unicodeRange })),
 );
