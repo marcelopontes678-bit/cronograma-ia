@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #2a1d14; color: #fff; font-family: "Inter", sans-serif; }
+      #root { position: absolute; inset: 0; overflow: hidden; background: #2a1d14; }
+
+      /* ---------- ambiente (sala sintética) ---------- */
+      #env { position: absolute; left: -60px; top: -60px; width: 1200px; height: 2040px; }
+      #wall { position: absolute; inset: 0;
+        background: linear-gradient(180deg, #7a4a1f 0%, #c98a3d 13%, #e9dcc6 27%, #d6cdbc 50%, #5a4230 66%, #1d140e 100%); }
+      .strip { position: absolute; height: 22px; border-radius: 11px; background: #fff6df; box-shadow: 0 0 60px 18px rgba(255, 226, 160, 0.75); }
+      #glare { position: absolute; left: 820px; top: 360px; width: 380px; height: 640px;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.75) 100%); }
+      .bk { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,235,190,0.9) 0%, rgba(255,235,190,0) 70%); }
+      #table { position: absolute; left: -200px; top: 1380px; width: 1600px; height: 900px; border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 12%, #4a3a2e 0%, #1a110b 70%); }
+      #laptop { position: absolute; left: 270px; top: 1330px; width: 660px; height: 380px; border-radius: 22px;
+        background: linear-gradient(160deg, #1c3d5c 0%, #5b86a8 45%, #c9d8e4 100%); box-shadow: 0 0 120px rgba(120, 180, 255, 0.45); }
+      #lapbase { position: absolute; left: 190px; top: 1690px; width: 820px; height: 46px; border-radius: 12px 12px 28px 28px; background: linear-gradient(180deg, #c9cdd3, #8b9098); box-shadow: 0 24px 50px rgba(0,0,0,0.5); }
+      #cupin { position: absolute; left: 22px; top: 22px; width: 106px; height: 106px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #6b4423, #2b160a 80%); }
+      #cup { position: absolute; left: 860px; top: 1500px; width: 150px; height: 150px; border-radius: 50%;
+        background: radial-gradient(circle at 40% 35%, #f4efe6 0%, #bdb3a3 70%); box-shadow: 0 20px 40px rgba(0,0,0,0.45); }
+      #shade { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 38%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.45) 100%); }
+
+      .layer { position: absolute; inset: 0; }
+      #ov { z-index: 10; }
+
+      /* ---------- vidro ---------- */
+      .glass { background: linear-gradient(160deg, rgba(30, 36, 64, 0.9), rgba(14, 18, 34, 0.88));
+        border: 2px solid rgba(255,255,255,0.34); border-radius: 46px; box-shadow: 0 30px 80px rgba(0,0,0,0.38); }
+      .tag { position: absolute; left: 0; width: 1080px; top: 190px; text-align: center; font-family: "Space Mono", monospace; font-weight: 700; font-size: 34px; letter-spacing: 0.16em; }
+      .tag span { display: inline-block; padding: 10px 30px; border-radius: 30px; background: rgba(10, 12, 24, 0.7); }
+
+      /* convite */
+      #inv { position: absolute; left: 130px; top: 420px; width: 820px; height: 470px; padding: 44px 50px; }
+      #inv .k { font-weight: 700; font-size: 28px; letter-spacing: 0.14em; color: #aeb6d8; text-transform: uppercase; }
+      #inv h2 { font-family: "Poppins", sans-serif; font-weight: 700; font-size: 54px; line-height: 1.1; margin-top: 14px; }
+      #hello { position: absolute; left: 50px; top: 215px; font-family: "Playfair Display", serif; font-style: italic; font-weight: 700; font-size: 128px; color: #b6ff3b;
+        text-shadow: 0 0 24px rgba(182,255,59,0.9), 0 0 60px rgba(182,255,59,0.6); clip-path: inset(0 100% 0 0); }
+      .btn { position: absolute; bottom: 40px; height: 84px; border-radius: 42px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 36px; }
+      #b-no { right: 330px; width: 220px; background: rgba(255,255,255,0.14); }
+      #b-yes { right: 50px; width: 250px; background: #3b82f6; }
+      #tap { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.9); background: rgba(255,255,255,0.35); z-index: 15; }
+
+      /* orb */
+      #orb { position: absolute; left: 440px; top: 1240px; width: 200px; height: 200px; border-radius: 50%;
+        background: conic-gradient(from 0deg, #ff5ca8, #7c5cff, #22d3ee, #b6ff3b, #ff5ca8); box-shadow: 0 0 80px rgba(124, 92, 255, 0.8); z-index: 12; }
+      #orb::after { content: ""; position: absolute; inset: 30px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffffff, #b9c4ff 60%, #6f7bff 100%); }
+      #orbring { position: absolute; left: 400px; top: 1200px; width: 280px; height: 280px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.7); z-index: 12; }
+
+      /* ícones */
+      .ico { position: absolute; left: 465px; top: 1265px; width: 150px; height: 150px; border-radius: 40px; z-index: 11;
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        font-family: "Poppins", sans-serif; font-weight: 800; font-size: 34px; color: #fff; line-height: 1;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.45); }
+
+      /* check */
+      #chk { opacity: 0; position: absolute; left: 240px; top: 500px; width: 600px; height: 600px; z-index: 13; }
+
+      /* sala 3D */
+      #room { position: absolute; left: 0; top: 160px; width: 1080px; height: 1000px; perspective: 1800px; overflow: hidden; z-index: 6;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 6%, #000 94%, transparent 100%); }
+      #rig { position: absolute; left: 540px; top: 540px; width: 0; height: 0; transform-style: preserve-3d; }
+      .slot { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+      .win { position: absolute; left: -380px; top: -450px; width: 760px; height: 900px; padding: 34px 38px; overflow: hidden; }
+      .wh { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+      .dot { width: 18px; height: 18px; border-radius: 50%; }
+      .wt { margin-left: 14px; font-weight: 800; font-size: 34px; letter-spacing: 0.02em; color: #dfe4ff; }
+      .bub { border-radius: 30px; padding: 22px 28px; font-size: 34px; line-height: 1.25; font-weight: 600; margin-bottom: 20px; width: fit-content; max-width: 600px; }
+      .me { background: #3b82f6; margin-left: auto; border-bottom-right-radius: 8px; }
+      .ai { background: rgba(255,255,255,0.14); border-bottom-left-radius: 8px; }
+      .inp { position: absolute; left: 38px; right: 38px; bottom: 36px; height: 84px; border-radius: 42px; background: rgba(255,255,255,0.12); padding: 0 32px; display: flex; align-items: center; color: #9aa3c8; font-size: 30px; font-weight: 600; }
+      .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .th { height: 200px; border-radius: 26px; position: relative; overflow: hidden; }
+      .th i { position: absolute; left: 14px; bottom: 12px; font-style: normal; font-weight: 800; font-size: 26px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+      .kpi { display: flex; align-items: baseline; gap: 18px; }
+      .kpi b { font-family: "Archivo Black", sans-serif; font-size: 96px; letter-spacing: -0.03em; }
+      .kpi span { font-weight: 800; font-size: 36px; color: #5ef2a2; }
+      .bars { position: absolute; left: 38px; right: 38px; bottom: 40px; height: 480px; display: flex; align-items: flex-end; gap: 20px; }
+      .bars i { flex: 1; border-radius: 18px 18px 0 0; background: linear-gradient(180deg, #5ef2a2, #22d3ee); }
+      .pl { height: 440px; border-radius: 30px; background: linear-gradient(135deg, #ff5ca8, #7c5cff 60%, #22d3ee); position: relative; }
+      .play { position: absolute; left: 50%; top: 50%; width: 140px; height: 140px; margin: -70px 0 0 -70px; border-radius: 50%; background: rgba(255,255,255,0.3); border: 4px solid #fff; }
+      .play::after { content: ""; position: absolute; left: 54px; top: 38px; border-left: 50px solid #fff; border-top: 32px solid transparent; border-bottom: 32px solid transparent; }
+      .prog { height: 14px; border-radius: 7px; background: rgba(255,255,255,0.2); margin-top: 34px; overflow: hidden; }
+      .prog i { display: block; width: 62%; height: 100%; background: #b6ff3b; border-radius: 7px; }
+      .task { display: flex; align-items: center; gap: 24px; font-weight: 700; font-size: 36px; padding: 26px 0; border-bottom: 2px solid rgba(255,255,255,0.12); }
+      .cb { flex: none; width: 52px; height: 52px; border-radius: 16px; border: 4px solid #b6ff3b; }
+      #pin { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; background: rgba(255,255,255,0.55); border: 3px solid #fff; z-index: 14; }
+
+      /* títulos */
+      .big { position: absolute; left: 60px; width: 960px; text-align: center; z-index: 12; text-shadow: 0 6px 30px rgba(0,0,0,0.55); }
+      #t6 { top: 200px; font-family: "Archivo Black", sans-serif; font-size: 100px; line-height: 1; letter-spacing: -0.02em; }
+      #t7a { top: 390px; width: 1080px; left: 0; text-align: center; font-family: "Oswald", sans-serif; font-weight: 700; font-size: 150px; text-transform: uppercase; color: #b6ff3b; line-height: 1; z-index: 12; text-shadow: 0 6px 30px rgba(0,0,0,0.6); }
+      #nuc { position: absolute; left: 380px; top: 560px; width: 320px; height: 320px; border-radius: 50%; z-index: 11;
+        background: radial-gradient(circle at 35% 30%, #ffffff, #8fa0ff 55%, #5b3bff 100%); box-shadow: 0 0 140px rgba(124, 92, 255, 0.9);
+        display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 150px; color: #1a1450; }
+      .nr { position: absolute; left: 380px; top: 560px; width: 320px; height: 320px; border-radius: 50%; border: 4px solid rgba(182,255,59,0.9); z-index: 11; }
+      #t8a { top: 250px; font-family: "Poppins", sans-serif; font-weight: 800; font-size: 78px; line-height: 1.1; color: #fff; }
+      #t8b { top: 440px; font-family: "Archivo Black", sans-serif; font-size: 160px; line-height: 1; color: #ff5ca8; letter-spacing: -0.03em; }
+      #pill { position: absolute; left: 330px; top: 800px; width: 420px; height: 112px; border-radius: 56px; background: #ff5ca8; z-index: 12;
+        display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 46px; color: #1a0612; }
+
+      .cap { position: absolute; left: 0; width: 1080px; top: 1170px; text-align: center; z-index: 20; }
+      .cap span { display: inline-block; padding: 14px 34px; border-radius: 26px; background: rgba(8, 8, 18, 0.82); font-family: "Montserrat", sans-serif; font-weight: 900; font-size: 60px; letter-spacing: -0.01em; color: #fff; }
+      #progress { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: #b6ff3b; transform-origin: left center; z-index: 30; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="23.21" data-width="1080" data-height="1920">
+      <div id="env">
+        <div id="wall"></div>
+        <div class="strip" style="left: 160px; top: 150px; width: 880px"></div>
+        <div class="strip" style="left: 260px; top: 232px; width: 680px"></div>
+        <div id="glare"></div>
+        <div id="bk1" class="bk" style="left: 80px; top: 420px; width: 120px; height: 120px"></div>
+        <div id="bk2" class="bk" style="left: 520px; top: 560px; width: 90px; height: 90px"></div>
+        <div id="bk3" class="bk" style="left: 940px; top: 300px; width: 150px; height: 150px"></div>
+        <div id="bk4" class="bk" style="left: 300px; top: 820px; width: 80px; height: 80px"></div>
+        <div id="bk5" class="bk" style="left: 760px; top: 880px; width: 110px; height: 110px"></div>
+        <div id="table"></div>
+        <div id="laptop"></div>
+        <div id="lapbase"></div>
+        <div id="cup"><div id="cupin"></div></div>
+        <div id="shade"></div>
+      </div>
+      <div id="progress" class="clip" data-start="0" data-duration="23.21" data-track-index="9"></div>
+
+      <!-- tags -->
+      <div id="tg1" class="tag" style="color:#b6ff3b"><span>01 · CONVITE</span></div>
+      <div id="tg2" class="tag" style="color:#ffd166"><span>02 · APPS</span></div>
+      <div id="tg3" class="tag" style="color:#5ef2a2"><span>03 · CONEXÃO</span></div>
+      <div id="tg4" class="tag" style="color:#7cc4ff"><span>04 · CONVERSA</span></div>
+      <div id="tg5" class="tag" style="color:#ff9fd0"><span>05 · NÚMEROS</span></div>
+
+      <!-- convite -->
+      <div id="inv" class="glass" style="z-index: 10">
+        <div class="k">Convite</div>
+        <h2>Entrar no modo<br />escritório com IA</h2>
+        <div id="hello">olá</div>
+        <div id="b-no" class="btn">Agora não</div>
+        <div id="b-yes" class="btn">Aceitar</div>
+      </div>
+      <div id="tap"></div>
+
+      <!-- orb + ícones -->
+      <div id="orbring"></div>
+      <div id="orb"></div>
+      <div id="i0" class="ico" style="background: linear-gradient(145deg,#7c5cff,#3b82f6)">Chat</div>
+      <div id="i1" class="ico" style="background: linear-gradient(145deg,#ff9f0a,#ff5a5f)">Texto</div>
+      <div id="i2" class="ico" style="background: linear-gradient(145deg,#ff5ca8,#b14bff)">Imagem</div>
+      <div id="i3" class="ico" style="background: linear-gradient(145deg,#22d3ee,#3b82f6)">Vídeo</div>
+      <div id="i4" class="ico" style="background: linear-gradient(145deg,#34d399,#0ea5a3)">Agenda</div>
+      <div id="i5" class="ico" style="background: linear-gradient(145deg,#a3e635,#22c55e)">Dados</div>
+      <div id="i6" class="ico" style="background: linear-gradient(145deg,#fbbf24,#f97316)">Voz</div>
+      <div id="i7" class="ico" style="background: linear-gradient(145deg,#6366f1,#22d3ee)">Code</div>
+
+      <!-- check -->
+      <svg id="chk" viewBox="0 0 600 600">
+        <circle id="chk-c" cx="300" cy="300" r="190" fill="none" stroke="#35e08a" stroke-width="22" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 300 300)" />
+        <path id="chk-p" d="M 215 305 L 280 370 L 392 235" fill="none" stroke="#35e08a" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" />
+        <circle id="chk-r" cx="300" cy="300" r="190" fill="none" stroke="#35e08a" stroke-width="6" opacity="0" />
+      </svg>
+
+      <!-- sala -->
+      <div id="room" data-layout-allow-overlap data-layout-allow-occlusion>
+        <div id="rig">
+          <div id="sl1" class="slot"><div id="w-chat" class="win glass" data-layout-allow-overlap data-layout-allow-occlusion>
+            <div class="wh"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><div data-layout-allow-overlap data-layout-allow-occlusion class="wt">Assistente IA</div></div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion id="m1" class="bub me">Crie 3 ideias de Reels sobre IA</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion id="m2" class="bub ai">1. O erro que 90% comete</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion id="m3" class="bub ai">2. Prompt em 3 passos</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion id="m4" class="bub ai">3. IA como funcionário</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion class="inp">Escreva uma mensagem…</div>
+          </div></div>
+          <div id="sl2" class="slot"><div id="w-grid" class="win glass" data-layout-allow-overlap data-layout-allow-occlusion>
+            <div class="wh"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><div data-layout-allow-overlap data-layout-allow-occlusion class="wt">Conteúdos</div></div>
+            <div class="grid">
+              <div class="th" style="background:linear-gradient(135deg,#7c5cff,#22d3ee)"><i data-layout-allow-overlap data-layout-allow-occlusion>Seg</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#ff5ca8,#ff9f0a)"><i data-layout-allow-overlap data-layout-allow-occlusion>Ter</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#34d399,#3b82f6)"><i data-layout-allow-overlap data-layout-allow-occlusion>Qua</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#f97316,#ef4444)"><i data-layout-allow-overlap data-layout-allow-occlusion>Qui</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#6366f1,#ec4899)"><i data-layout-allow-overlap data-layout-allow-occlusion>Sex</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#22d3ee,#a3e635)"><i data-layout-allow-overlap data-layout-allow-occlusion>Sáb</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#fbbf24,#ff5ca8)"><i data-layout-allow-overlap data-layout-allow-occlusion>Dom</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#0ea5a3,#6366f1)"><i data-layout-allow-overlap data-layout-allow-occlusion>Seg</i></div>
+              <div class="th" style="background:linear-gradient(135deg,#ff5a5f,#7c5cff)"><i data-layout-allow-overlap data-layout-allow-occlusion>Ter</i></div>
+            </div>
+          </div></div>
+          <div id="sl3" class="slot"><div id="w-stats" class="win glass" data-layout-allow-overlap data-layout-allow-occlusion>
+            <div class="wh"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><div data-layout-allow-overlap data-layout-allow-occlusion class="wt">Números</div></div>
+            <div class="kpi"><b data-layout-allow-overlap data-layout-allow-occlusion id="kv">0</b><span data-layout-allow-overlap data-layout-allow-occlusion>+12,4%</span></div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion style="font-weight:700;font-size:30px;color:#aeb6d8;margin-top:6px">seguidores neste mês</div>
+            <div class="bars"><i id="br1" style="height:28%"></i><i id="br2" style="height:38%"></i><i id="br3" style="height:46%"></i><i id="br4" style="height:62%"></i><i id="br5" style="height:78%"></i><i id="br6" style="height:100%"></i></div>
+          </div></div>
+          <div id="sl4" class="slot"><div id="w-play" class="win glass" data-layout-allow-overlap data-layout-allow-occlusion>
+            <div class="wh"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><div data-layout-allow-overlap data-layout-allow-occlusion class="wt">Player</div></div>
+            <div class="pl"><div class="play"></div></div>
+            <div class="prog"><i data-layout-allow-overlap data-layout-allow-occlusion></i></div>
+          </div></div>
+          <div id="sl5" class="slot"><div id="w-todo" class="win glass" data-layout-allow-overlap data-layout-allow-occlusion>
+            <div class="wh"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><div data-layout-allow-overlap data-layout-allow-occlusion class="wt">Hoje</div></div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion class="task"><div class="cb"></div>Gravar Reels</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion class="task"><div class="cb"></div>Responder clientes</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion class="task"><div class="cb"></div>Revisar propostas</div>
+            <div data-layout-allow-overlap data-layout-allow-occlusion class="task"><div class="cb"></div>Publicar às 19h</div>
+          </div></div>
+        </div>
+      </div>
+      <div id="pin"></div>
+
+      <!-- títulos -->
+      <div data-layout-allow-overlap data-layout-allow-occlusion id="t6" class="big">COMPUTAÇÃO<br />ESPACIAL</div>
+      <div data-layout-allow-overlap data-layout-allow-occlusion id="nuc">IA</div>
+      <div id="nr1" class="nr"></div>
+      <div id="nr2" class="nr"></div>
+      <div data-layout-allow-overlap data-layout-allow-occlusion id="t7a">cérebro</div>
+      <div data-layout-allow-overlap data-layout-allow-occlusion id="t8a" class="big">Quer ver o futuro?</div>
+      <div data-layout-allow-overlap data-layout-allow-occlusion id="t8b" class="big">SIGA!</div>
+      <div data-layout-allow-overlap data-layout-allow-occlusion id="pill">+ SEGUIR</div>
+
+      <audio id="n1" class="clip" src="assets/vo/n1.mp3" data-start="0.55" data-duration="2.71" data-track-index="2" data-volume="1"></audio>
+      <audio id="n2" class="clip" src="assets/vo/n2.mp3" data-start="3.9" data-duration="3.00" data-track-index="2" data-volume="1"></audio>
+      <audio id="n3" class="clip" src="assets/vo/n3.mp3" data-start="7.1" data-duration="0.86" data-track-index="2" data-volume="1"></audio>
+      <audio id="n4" class="clip" src="assets/vo/n4.mp3" data-start="8.6" data-duration="2.74" data-track-index="2" data-volume="1"></audio>
+      <audio id="n5" class="clip" src="assets/vo/n5.mp3" data-start="11.6" data-duration="3.18" data-track-index="2" data-volume="1"></audio>
+      <audio id="n6" class="clip" src="assets/vo/n6.mp3" data-start="15.2" data-duration="1.35" data-track-index="2" data-volume="1"></audio>
+      <audio id="n7" class="clip" src="assets/vo/n7.mp3" data-start="16.8" data-duration="1.88" data-track-index="2" data-volume="1"></audio>
+      <audio id="n8" class="clip" src="assets/vo/n8.mp3" data-start="19.0" data-duration="2.61" data-track-index="2" data-volume="1"></audio>
+      <div id="cap1" class="cap clip" data-start="0.55" data-duration="1.06" data-track-index="3"><span>Imagine um escritório</span></div>
+      <div id="cap2" class="cap clip" data-start="1.61" data-duration="1.06" data-track-index="3"><span>inteiro, flutuando na</span></div>
+      <div id="cap3" class="cap clip" data-start="2.68" data-duration="0.58" data-track-index="3"><span>sua frente.</span></div>
+      <div id="cap4" class="cap clip" data-start="3.90" data-duration="0.62" data-track-index="3"><span>Um gesto, e</span></div>
+      <div id="cap5" class="cap clip" data-start="4.52" data-duration="0.72" data-track-index="3"><span>todos os seus</span></div>
+      <div id="cap6" class="cap clip" data-start="5.24" data-duration="0.67" data-track-index="3"><span>apps de I.A.</span></div>
+      <div id="cap7" class="cap clip" data-start="5.92" data-duration="0.98" data-track-index="3"><span>aparecem ao redor.</span></div>
+      <div id="cap8" class="cap clip" data-start="7.10" data-duration="0.86" data-track-index="3"><span>Tudo conectado.</span></div>
+      <div id="cap9" class="cap clip" data-start="8.60" data-duration="0.72" data-track-index="3"><span>Converse com a</span></div>
+      <div id="cap10" class="cap clip" data-start="9.32" data-duration="1.11" data-track-index="3"><span>I.A., enquanto planeja</span></div>
+      <div id="cap11" class="cap clip" data-start="10.43" data-duration="0.91" data-track-index="3"><span>os seus conteúdos.</span></div>
+      <div id="cap12" class="cap clip" data-start="11.60" data-duration="0.94" data-track-index="3"><span>Acompanhe os seus</span></div>
+      <div id="cap13" class="cap clip" data-start="12.54" data-duration="0.99" data-track-index="3"><span>números, sem tirar</span></div>
+      <div id="cap14" class="cap clip" data-start="13.53" data-duration="0.63" data-track-index="3"><span>os olhos do</span></div>
+      <div id="cap15" class="cap clip" data-start="14.15" data-duration="0.63" data-track-index="3"><span>mundo real.</span></div>
+      <div id="cap16" class="cap clip" data-start="15.20" data-duration="1.35" data-track-index="3"><span>Isso é computação espacial.</span></div>
+      <div id="cap17" class="cap clip" data-start="16.80" data-duration="0.63" data-track-index="3"><span>E a I.A.</span></div>
+      <div id="cap18" class="cap clip" data-start="17.43" data-duration="1.25" data-track-index="3"><span>é o cérebro dela.</span></div>
+      <div id="cap19" class="cap clip" data-start="19.00" data-duration="0.73" data-track-index="3"><span>Siga para ver</span></div>
+      <div id="cap20" class="cap clip" data-start="19.73" data-duration="0.68" data-track-index="3"><span>o futuro dos</span></div>
+      <div id="cap21" class="cap clip" data-start="20.41" data-duration="1.20" data-track-index="3"><span>negócios e da criação.</span></div>
+    </div>
+
+    <script>
+      const T = {"n1": {"s": 0.55, "d": 2.71, "e": 3.26}, "n2": {"s": 3.9, "d": 3.0, "e": 6.9}, "n3": {"s": 7.1, "d": 0.86, "e": 7.96}, "n4": {"s": 8.6, "d": 2.74, "e": 11.34}, "n5": {"s": 11.6, "d": 3.18, "e": 14.78}, "n6": {"s": 15.2, "d": 1.35, "e": 16.55}, "n7": {"s": 16.8, "d": 1.88, "e": 18.68}, "n8": {"s": 19.0, "d": 2.61, "e": 21.61}, "end": 23.21};
+      const tl = gsap.timeline({ paused: true });
+      const IN = { opacity: 0, y: 50, filter: "blur(8px)" };
+      const ON = { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power4.out" };
+      const show = (sel, t, o) => tl.fromTo(sel, IN, Object.assign({}, ON, o || {}), t);
+      const hide = (sel, t, d) => tl.to(sel, { opacity: 0, duration: d || 0.25, ease: "power2.in" }, t);
+
+      /* ambiente: câmera de mão e bokeh */
+      tl.fromTo("#env", { scale: 1.04, x: 0, y: 0 }, { scale: 1.12, x: -30, y: -40, duration: T.end, ease: "sine.inOut" }, 0);
+      ["#bk1", "#bk2", "#bk3", "#bk4", "#bk5"].forEach((b, i) => {
+        tl.to(b, { x: (i % 2 ? -1 : 1) * 40, y: (i % 2 ? 1 : -1) * 30, duration: T.end, ease: "sine.inOut" }, 0);
+      });
+      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: T.end, ease: "none" }, 0);
+
+      /* ---------- cena A: convite ---------- */
+      gsap.set("#inv", { transformPerspective: 1200, rotationY: -14, rotationX: 6 });
+      tl.fromTo("#inv", { opacity: 0, scale: 0.8, y: 60 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2)" }, 0.05);
+      tl.to("#inv", { rotationY: 8, rotationX: -3, duration: 3.2, ease: "sine.inOut" }, 0.2);
+      show("#tg1", T.n1.s);
+      tl.to("#hello", { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power1.inOut" }, T.n1.s + 0.7);
+      // toque em "Aceitar"
+      tl.fromTo("#tap", { opacity: 0, x: 650, y: 880, scale: 1.6 }, { opacity: 1, x: 760, y: 820, scale: 1, duration: 0.45, ease: "power3.out" }, T.n1.e - 0.1);
+      tl.to("#tap", { scale: 0.7, duration: 0.12, yoyo: true, repeat: 1 }, T.n1.e + 0.45);
+      tl.to("#b-yes", { backgroundColor: "#34d399", duration: 0.15 }, T.n1.e + 0.5);
+      tl.to("#tap", { opacity: 0, duration: 0.2 }, T.n1.e + 0.8);
+      tl.to("#inv", { x: -90, y: 700, scale: 0.12, opacity: 0, duration: 0.5, ease: "power3.in" }, T.n1.e + 0.7);
+      hide("#tg1", T.n1.e + 0.7, 0.2);
+
+      /* ---------- cena B: orb e ícones ---------- */
+      tl.fromTo("#orb", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2.5)" }, T.n1.e + 1.0);
+      tl.fromTo("#orbring", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, T.n1.e + 1.05);
+      tl.to("#orb", { rotation: 360, duration: T.end, ease: "none" }, 0);
+      show("#tg2", T.n2.s);
+      const ICN = 8, CX = 540, CY = 980, RX = 430, RY = 340;
+      for (let i = 0; i < ICN; i++) {
+        const a = Math.PI * (1.07 - (1.14 * i) / (ICN - 1));
+        const tx = CX + RX * Math.cos(a) - 540, ty = CY - RY * Math.sin(a) - 1340;
+        gsap.set("#i" + i, { x: 0, y: 0, scale: 0.2, opacity: 0 });
+        tl.to("#i" + i, { x: tx, y: ty, scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.8)" }, T.n2.s + 0.15 + i * 0.1);
+        tl.to("#i" + i, { y: "+=" + (i % 2 ? 14 : -14), duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, T.n2.s + 1.2);
+      }
+
+      /* ---------- cena C: conexão ---------- */
+      hide("#tg2", T.n3.s - 0.1, 0.2);
+      show("#tg3", T.n3.s);
+      tl.to("#chk-c", { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" }, T.n3.s);
+      tl.to("#chk-p", { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, T.n3.s + 0.35);
+      tl.fromTo("#chk-r", { opacity: 0.9, scale: 1, transformOrigin: "50% 50%" }, { opacity: 0, scale: 1.7, duration: 0.7, ease: "power2.out", immediateRender: false }, T.n3.s + 0.6);
+      tl.fromTo("#chk", { opacity: 0, scale: 0.7, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, T.n3.s);
+      // tudo sobe e vira a sala
+      const gone = T.n3.e + 0.15;
+      tl.to(["#chk", "#orb", "#orbring"], { opacity: 0, duration: 0.3 }, gone);
+      for (let i = 0; i < ICN; i++) tl.to("#i" + i, { y: -500, scale: 0.3, opacity: 0, duration: 0.45, ease: "power3.in" }, gone + i * 0.02);
+      hide("#tg3", gone, 0.2);
+
+      /* ---------- cena D: sala 3D ---------- */
+      const R = 700, ANG = { sl1: -45, sl2: 0, sl3: 45, sl4: -92, sl5: 92 };
+      Object.keys(ANG).forEach((k) => { gsap.set("#" + k, { rotationY: ANG[k] }); gsap.set("#" + k + " .win", { z: -R }); });
+      gsap.set("#rig", { rotationY: 0, z: -150 });
+      tl.fromTo("#room", { opacity: 0 }, { opacity: 1, duration: 0.5 }, gone);
+      tl.fromTo("#rig", { z: -700, rotationY: 20 }, { z: -150, rotationY: 0, duration: T.n4.s - 0.15 - gone, ease: "power3.out" }, gone);
+      // n4: foco no chat
+      show("#tg4", T.n4.s);
+      tl.to("#rig", { rotationY: 45, z: 560, scale: 1.12, duration: 0.7, ease: "power3.inOut" }, T.n4.s - 0.15);
+      ["#m1", "#m2", "#m3", "#m4"].forEach((m, i) => tl.fromTo(m, { opacity: 0, y: 26, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(2)" }, T.n4.s + 0.7 + i * 0.5));
+      tl.fromTo("#pin", { opacity: 0, x: 780, y: 700 }, { opacity: 1, x: 620, y: 520, duration: 0.5, ease: "power3.out" }, T.n4.s + 0.4);
+      tl.to("#pin", { x: 500, y: 640, duration: 0.8, ease: "sine.inOut" }, T.n4.s + 0.95);
+      tl.to("#pin", { scale: 0.7, duration: 0.1, yoyo: true, repeat: 1 }, T.n4.s + 1.9);
+      hide("#pin", T.n4.e + 0.1, 0.2);
+      hide("#tg4", T.n5.s - 0.1, 0.2);
+      // n5: pan para os números
+      show("#tg5", T.n5.s);
+      tl.to("#rig", { rotationY: -45, z: 560, scale: 1.12, duration: 1.0, ease: "power3.inOut" }, T.n5.s - 0.1);
+      const kv = { v: 0 };
+      tl.to(kv, { v: 128, duration: 1.6, ease: "power3.out", onUpdate: () => { document.getElementById("kv").textContent = Math.round(kv.v) + "k"; } }, T.n5.s + 0.7);
+      ["#br1", "#br2", "#br3", "#br4", "#br5", "#br6"].forEach((b, i) => tl.fromTo(b, { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.6, ease: "power3.out" }, T.n5.s + 0.8 + i * 0.12));
+      hide("#tg5", T.n5.e - 0.05, 0.2);
+      // n6: recuo — sala inteira
+      tl.to("#rig", { rotationY: 0, z: -120, scale: 1, duration: 1.0, ease: "power3.inOut" }, T.n6.s - 0.2);
+      show("#t6", T.n6.s - 0.05);
+      tl.to("#rig", { rotationY: 12, duration: T.n7.s - T.n6.e, ease: "sine.inOut" }, T.n6.e);
+      hide("#t6", T.n7.s - 0.1, 0.2);
+      // n7: cérebro
+      tl.fromTo("#nuc", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, T.n7.s + 0.15);
+      tl.fromTo("#nr1", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 2.6, duration: 1.0, ease: "power2.out" }, T.n7.s + 0.5);
+      tl.fromTo("#nr2", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 2.6, duration: 1.0, ease: "power2.out" }, T.n7.s + 1.1);
+      tl.set(["#nr1", "#nr2"], { opacity: 0 }, 0);
+      show("#t7a", T.n7.s + 0.9);
+      tl.to("#rig", { rotationY: -10, duration: T.n8.s - T.n7.s, ease: "sine.inOut" }, T.n7.s);
+      hide(["#nuc", "#t7a"], T.n8.s - 0.15, 0.25);
+      // n8: CTA
+      show("#t8a", T.n8.s);
+      show("#t8b", T.n8.s + 0.5, { duration: 0.5 });
+      tl.fromTo("#pill", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2.5)" }, T.n8.s + 1.2);
+      tl.to("#rig", { rotationY: 0, z: -250, duration: T.end - T.n8.s, ease: "sine.inOut" }, T.n8.s);
+
+      /* ---------- legendas ---------- */
+      const capIn = (sel, t, d) => {
+        tl.fromTo(sel + " span", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.12, ease: "back.out(2)" }, t);
+        tl.to(sel + " span", { opacity: 0, duration: 0.07, ease: "power2.in" }, t + d - 0.07);
+        tl.set(sel, { opacity: 0 }, t + d);
+      };
+      capIn("#cap1", 0.55, 1.06);
+      capIn("#cap2", 1.61, 1.06);
+      capIn("#cap3", 2.68, 0.58);
+      capIn("#cap4", 3.90, 0.62);
+      capIn("#cap5", 4.52, 0.72);
+      capIn("#cap6", 5.24, 0.67);
+      capIn("#cap7", 5.92, 0.98);
+      capIn("#cap8", 7.10, 0.86);
+      capIn("#cap9", 8.60, 0.72);
+      capIn("#cap10", 9.32, 1.11);
+      capIn("#cap11", 10.43, 0.91);
+      capIn("#cap12", 11.60, 0.94);
+      capIn("#cap13", 12.54, 0.99);
+      capIn("#cap14", 13.53, 0.63);
+      capIn("#cap15", 14.15, 0.63);
+      capIn("#cap16", 15.20, 1.35);
+      capIn("#cap17", 16.80, 0.63);
+      capIn("#cap18", 17.43, 1.25);
+      capIn("#cap19", 19.00, 0.73);
+      capIn("#cap20", 19.73, 0.68);
+      capIn("#cap21", 20.41, 1.20);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
