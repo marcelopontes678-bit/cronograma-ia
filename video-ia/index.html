@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #0a0a14;
+        --ink: #ffffff;
+        --muted: #9aa0b8;
+        --accent: #7c5cff;
+        --accent2: #00e5a0;
+        --font-display: "Montserrat", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--ground);
+        font-family: var(--font-display);
+        color: var(--ink);
+      }
+      #root {
+        position: absolute;
+        inset: 0;
+        background: var(--ground);
+      }
+      #bg-glow {
+        position: absolute;
+        left: 140px;
+        top: 360px;
+        width: 800px;
+        height: 800px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(124, 92, 255, 0.55), rgba(124, 92, 255, 0) 70%);
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+      }
+      /* conteúdo dentro da faixa segura 168–1330 */
+      .stack {
+        position: absolute;
+        left: 90px;
+        right: 90px;
+        top: 260px;
+        height: 1000px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 28px;
+      }
+      .big {
+        font-weight: 900;
+        font-size: 112px;
+        line-height: 1.04;
+        letter-spacing: -0.03em;
+        text-transform: uppercase;
+      }
+      .mid {
+        font-weight: 800;
+        font-size: 76px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      .small {
+        font-weight: 600;
+        font-size: 44px;
+        line-height: 1.25;
+        color: var(--muted);
+      }
+      .hl {
+        color: var(--accent2);
+      }
+      .hl2 {
+        color: var(--accent);
+      }
+      .tag {
+        font-weight: 800;
+        font-size: 36px;
+        letter-spacing: 0.18em;
+        color: var(--accent2);
+        text-transform: uppercase;
+      }
+      .step {
+        width: 900px;
+        display: flex;
+        align-items: center;
+        gap: 36px;
+        padding: 34px 40px;
+        border-radius: 36px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        text-align: left;
+      }
+      .num {
+        flex: none;
+        width: 110px;
+        height: 110px;
+        border-radius: 30px;
+        background: var(--accent);
+        font-weight: 900;
+        font-size: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .step b {
+        display: block;
+        font-weight: 900;
+        font-size: 58px;
+        letter-spacing: -0.02em;
+      }
+      .step span {
+        display: block;
+        font-weight: 600;
+        font-size: 36px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .bar {
+        width: 760px;
+        height: 28px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        border-radius: 14px;
+      }
+      .barlabel {
+        width: 760px;
+        text-align: left;
+        font-weight: 700;
+        font-size: 38px;
+        color: var(--muted);
+      }
+      #progress {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 10px;
+        width: 1080px;
+        background: var(--accent2);
+        transform-origin: left center;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="30"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="bg-glow"></div>
+      <div id="progress" class="clip" data-start="0" data-duration="30" data-track-index="9"></div>
+
+      <!-- 1. Gancho 0–4 -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="4" data-track-index="1">
+        <div class="stack">
+          <div id="s1-a" class="big">Você usa <span class="hl">I.A.</span></div>
+          <div id="s1-b" class="big hl2">do jeito errado?</div>
+        </div>
+      </div>
+
+      <!-- 2. Problema 4–10 -->
+      <div id="s2" class="scene clip" data-start="4" data-duration="6" data-track-index="1">
+        <div class="stack">
+          <div id="s2-a" class="tag">O erro número 1</div>
+          <div id="s2-b" class="mid">A maioria usa a I.A. como se fosse o <span class="hl">Google</span>.</div>
+          <div id="s2-c" class="small">Uma pergunta solta.<br />Uma resposta genérica.</div>
+        </div>
+      </div>
+
+      <!-- 3. Virada 10–15 -->
+      <div id="s3" class="scene clip" data-start="10" data-duration="5" data-track-index="1">
+        <div class="stack">
+          <div id="s3-a" class="mid">Trate a I.A. como um</div>
+          <div id="s3-b" class="big hl">funcionário</div>
+          <div id="s3-c" class="small">Ele só entrega bem<br />se você <b style="color:#fff">briefar</b> bem.</div>
+        </div>
+      </div>
+
+      <!-- 4. Os 3 passos 15–23 -->
+      <div id="s4" class="scene clip" data-start="15" data-duration="8" data-track-index="1">
+        <div class="stack">
+          <div id="s4-t" class="tag">O briefing em 3 passos</div>
+          <div id="s4-1" class="step">
+            <div class="num">1</div>
+            <div><b>Papel</b><span>“Aja como um especialista em…”</span></div>
+          </div>
+          <div id="s4-2" class="step">
+            <div class="num">2</div>
+            <div><b>Contexto</b><span>Quem é você, qual o objetivo</span></div>
+          </div>
+          <div id="s4-3" class="step">
+            <div class="num">3</div>
+            <div><b>Formato</b><span>Lista, tabela, tom, tamanho</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Resultado 23–27 -->
+      <div id="s5" class="scene clip" data-start="23" data-duration="4" data-track-index="1">
+        <div class="stack">
+          <div id="s5-a" class="mid">Mesma I.A.</div>
+          <div id="s5-l1" class="barlabel">Pergunta solta</div>
+          <div class="bar"><i id="s5-b1" style="width: 22%; background: #5b6078"></i></div>
+          <div id="s5-l2" class="barlabel">Com briefing</div>
+          <div class="bar"><i id="s5-b2" style="width: 100%; background: var(--accent2)"></i></div>
+          <div id="s5-c" class="big hl">Resultado 10x melhor</div>
+        </div>
+      </div>
+
+      <!-- 6. CTA 27–30 -->
+      <div id="s6" class="scene clip" data-start="27" data-duration="3" data-track-index="1">
+        <div class="stack">
+          <div id="s6-a" class="mid">Quer dominar a I.A.?</div>
+          <div id="s6-b" class="big hl2">Siga e salve</div>
+          <div id="s6-c" class="small">Dicas de I.A. toda semana.</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const IN = { opacity: 0, y: 70, filter: "blur(10px)" };
+      const ON = { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power4.out" };
+      const OUT = { opacity: 0, y: -40, duration: 0.25, ease: "power2.in" };
+      const show = (sel, t) => tl.fromTo(sel, IN, ON, t);
+      const hide = (sels, t) => tl.to(sels, OUT, t);
+
+      // barra de progresso e brilho de fundo
+      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: 30, ease: "none" }, 0);
+      tl.fromTo("#bg-glow", { scale: 0.8, x: -80 }, { scale: 1.3, x: 80, duration: 30, ease: "sine.inOut" }, 0);
+
+      // 1
+      tl.fromTo("#s1-a", { y: 70, opacity: 1 }, { y: 0, duration: 0.45, ease: "power4.out" }, 0);
+      show("#s1-b", 0.8);
+      hide(["#s1-a", "#s1-b"], 3.7);
+      // 2 (local no timeline raiz: tudo em tempo absoluto)
+      show("#s2-a", 4.1);
+      show("#s2-b", 4.6);
+      show("#s2-c", 6.6);
+      hide(["#s2-a", "#s2-b", "#s2-c"], 9.7);
+      // 3
+      show("#s3-a", 10.1);
+      show("#s3-b", 10.9);
+      show("#s3-c", 12.4);
+      hide(["#s3-a", "#s3-b", "#s3-c"], 14.7);
+      // 4
+      show("#s4-t", 15.1);
+      show("#s4-1", 15.8);
+      show("#s4-2", 18);
+      show("#s4-3", 20.2);
+      hide(["#s4-t", "#s4-1", "#s4-2", "#s4-3"], 22.7);
+      // 5
+      show("#s5-a", 23.1);
+      show("#s5-l1", 23.6);
+      tl.fromTo("#s5-b1", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 23.7);
+      show("#s5-l2", 24.3);
+      tl.fromTo("#s5-b2", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 24.4);
+      show("#s5-c", 25.4);
+      hide(["#s5-a", "#s5-l1", "#s5-l2", "#s5-c"], 26.7);
+      // 6
+      show("#s6-a", 27.1);
+      show("#s6-b", 27.5);
+      show("#s6-c", 27.9);
+
+      // movimento contínuo: deriva lenta em cada bloco de texto, para nenhuma cena ficar parada
+      [
+        ["#s1 .stack", 0, 4],
+        ["#s2 .stack", 4, 6],
+        ["#s3 .stack", 10, 5],
+        ["#s4 .stack", 15, 8],
+        ["#s5 .stack", 23, 4],
+        ["#s6 .stack", 27, 3],
+      ].forEach(([sel, t, d]) => {
+        tl.fromTo(sel, { scale: 1 }, { scale: 1.04, duration: d, ease: "none" }, t);
+      });
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
