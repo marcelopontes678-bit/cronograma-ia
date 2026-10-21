@@ -6,382 +6,400 @@
     <script src="assets/vendor/gsap.min.js"></script>
     <style>
       :root {
-        --ground: #0a0a14;
         --ink: #ffffff;
-        --muted: #9aa0b8;
-        --accent: #7c5cff;
-        --accent2: #00e5a0;
-        --font-display: "Montserrat", sans-serif;
+        --muted: #aab0c8;
       }
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px; overflow: hidden;
+        background: #0a0a14; color: var(--ink);
+        font-family: "Montserrat", sans-serif;
       }
-      html,
-      body {
-        width: 1080px;
-        height: 1920px;
-        overflow: hidden;
-        background: var(--ground);
-        font-family: var(--font-display);
-        color: var(--ink);
+      #root { position: absolute; inset: 0; background: #0a0a14; overflow: hidden; }
+
+      /* ---------- fundo dinâmico ---------- */
+      #bg { position: absolute; inset: 0; background: #0a0a14; }
+      .blob {
+        position: absolute; width: 1100px; height: 1100px; border-radius: 50%;
+        background: radial-gradient(circle, currentColor 0%, transparent 68%);
+        opacity: 0.5;
       }
-      #root {
-        position: absolute;
-        inset: 0;
-        background: var(--ground);
+      #b1 { left: -330px; top: 80px; color: #7c5cff; }
+      #b2 { left: 330px; top: 640px; color: #00e5a0; }
+      #b3 { left: -200px; top: 1050px; color: #7c5cff; opacity: 0.32; }
+      #grid {
+        position: absolute; left: 0; top: -900px; width: 1080px; height: 3000px;
+        background-image:
+          linear-gradient(rgba(255,255,255,0.07) 2px, transparent 2px),
+          linear-gradient(90deg, rgba(255,255,255,0.07) 2px, transparent 2px);
+        background-size: 90px 90px;
       }
-      #bg-glow {
-        position: absolute;
-        left: 140px;
-        top: 360px;
-        width: 800px;
-        height: 800px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(124, 92, 255, 0.55), rgba(124, 92, 255, 0) 70%);
+      #vignette {
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse at 50% 42%, transparent 45%, rgba(0,0,0,0.6) 100%);
       }
-      .scene {
-        position: absolute;
-        inset: 0;
+      #sweep {
+        position: absolute; left: 0; top: -250px; width: 420px; height: 2400px; z-index: 2;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+        opacity: 0;
       }
-      /* conteúdo dentro da faixa segura 168–1330 */
-      .stack {
-        position: absolute;
-        left: 90px;
-        right: 90px;
-        top: 260px;
-        height: 1000px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        gap: 28px;
-      }
-      .big {
-        font-weight: 900;
-        font-size: 112px;
-        line-height: 1.04;
-        letter-spacing: -0.03em;
-        text-transform: uppercase;
-      }
-      .mid {
-        font-weight: 800;
-        font-size: 76px;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
-      }
-      .small {
-        font-weight: 600;
-        font-size: 44px;
-        line-height: 1.25;
-        color: var(--muted);
-      }
-      .hl {
-        color: var(--accent2);
-      }
-      .hl2 {
-        color: var(--accent);
-      }
-      .tag {
-        font-weight: 800;
-        font-size: 36px;
-        letter-spacing: 0.18em;
-        color: var(--accent2);
-        text-transform: uppercase;
-      }
-      .step {
-        width: 900px;
-        display: flex;
-        align-items: center;
-        gap: 36px;
-        padding: 34px 40px;
-        border-radius: 36px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 2px solid rgba(255, 255, 255, 0.12);
-        text-align: left;
-      }
-      .num {
-        flex: none;
-        width: 110px;
-        height: 110px;
-        border-radius: 30px;
-        background: var(--accent);
-        font-weight: 900;
-        font-size: 64px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .step b {
-        display: block;
-        font-weight: 900;
-        font-size: 58px;
-        letter-spacing: -0.02em;
-      }
-      .step span {
-        display: block;
-        font-weight: 600;
-        font-size: 36px;
-        color: var(--muted);
-        margin-top: 6px;
-      }
-      .bar {
-        width: 760px;
-        height: 28px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.1);
-        overflow: hidden;
-      }
-      .bar i {
-        display: block;
-        height: 100%;
-        border-radius: 14px;
-      }
-      .barlabel {
-        width: 760px;
-        text-align: left;
-        font-weight: 700;
-        font-size: 38px;
-        color: var(--muted);
-      }
-      .cap {
-        position: absolute;
-        left: 0;
-        width: 1080px;
-        top: 1150px;
-        text-align: center;
-        z-index: 20;
-      }
-      .cap span {
-        display: inline-block;
-        padding: 14px 34px;
-        border-radius: 26px;
-        background: rgba(10, 10, 20, 0.78);
-        font-weight: 900;
-        font-size: 64px;
-        letter-spacing: -0.01em;
-        color: #fff;
-      }
-      #progress {
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        height: 10px;
-        width: 1080px;
-        background: var(--accent2);
-        transform-origin: left center;
-      }
+
+      /* ---------- cenas ---------- */
+      .scene { position: absolute; inset: 0; z-index: 5; }
+      .abs { position: absolute; left: 90px; width: 900px; text-align: center; }
+      .hl { color: #00e5a0; }
+
+      /* ato 1 */
+      #a1-1 { top: 340px; font-family: "Archivo Black", sans-serif; font-size: 124px; line-height: 1.02; letter-spacing: -0.03em; }
+      #a1-2 { top: 520px; font-family: "Archivo Black", sans-serif; font-size: 92px; line-height: 1.05; letter-spacing: -0.02em; color: #ff5a5f; }
+
+      /* ato 2 */
+      #a2-top { top: 300px; font-family: "Poppins", sans-serif; font-weight: 800; font-size: 72px; line-height: 1.12; color: #ffffff; }
+      #a2-frame { position: absolute; left: 110px; top: 570px; width: 860px; height: 230px; }
+      #a2-word { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+        font-family: "League Gothic", sans-serif; font-size: 190px; color: #ffd166; letter-spacing: 0.02em; }
+      .shard { position: absolute; background: #ffffff; border-radius: 6px; }
+      #sh1 { left: 0; top: 0; width: 430px; height: 12px; }
+      #sh2 { left: 430px; top: 0; width: 430px; height: 12px; }
+      #sh3 { left: 0; bottom: 0; width: 430px; height: 12px; }
+      #sh4 { left: 430px; bottom: 0; width: 430px; height: 12px; }
+      #sh5 { left: 0; top: 0; width: 12px; height: 115px; }
+      #sh6 { left: 0; bottom: 0; width: 12px; height: 115px; }
+      #sh7 { right: 0; top: 0; width: 12px; height: 115px; }
+      #sh8 { right: 0; bottom: 0; width: 12px; height: 115px; }
+      #a2-strike { position: absolute; left: 110px; top: 668px; width: 860px; height: 16px; background: #ff3b30; border-radius: 8px; z-index: 3; }
+      #a2-low { top: 900px; font-family: "Space Mono", monospace; font-weight: 700; font-size: 52px; line-height: 1.25; color: #ffb86b; }
+
+      /* ato 3 */
+      #a3-1 { top: 230px; font-family: "Outfit", sans-serif; font-weight: 800; font-size: 64px; line-height: 1.05; color: #ffffff; letter-spacing: -0.01em; }
+      #a3-2 { top: 300px; font-family: "Outfit", sans-serif; font-weight: 900; font-size: 128px; line-height: 1.05; color: #2ee6d6; letter-spacing: -0.03em; }
+      #a3-ring { position: absolute; left: 160px; top: 570px; width: 760px; height: 340px; border-radius: 50%;
+        border: 3px dashed rgba(255,255,255,0.28); }
+      #a3-nuc { position: absolute; left: 425px; top: 635px; width: 230px; height: 230px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #6ff3e6, #1a8f9a 70%);
+        display: flex; align-items: center; justify-content: center;
+        font-family: "Archivo Black", sans-serif; font-size: 100px; color: #04141a;
+        box-shadow: 0 0 90px rgba(46, 230, 214, 0.55); z-index: 12; }
+      .sat { position: absolute; left: 540px; top: 750px; width: 0; height: 0; }
+      .chip { position: absolute; left: 0; top: 0; white-space: nowrap; padding: 16px 34px; border-radius: 40px;
+        font-family: "Inter", sans-serif; font-weight: 800; font-size: 38px; color: #06121a; }
+      #c1 .chip { background: #ffd166; }
+      #c2 .chip { background: #a78bfa; }
+      #c3 .chip { background: #ff7ab6; }
+      #a3-low { top: 960px; font-family: "Playfair Display", serif; font-style: italic; font-weight: 700; font-size: 60px; line-height: 1.12; color: #ffd166; }
+
+      /* ato 4 */
+      #a4-t { top: 200px; font-family: "Oswald", sans-serif; font-weight: 700; font-size: 74px; line-height: 1.05; text-transform: uppercase; color: #7cc4ff; letter-spacing: 0.01em; }
+      #world { position: absolute; left: 0; top: 330px; width: 1080px; height: 780px; perspective: 1500px; overflow: hidden;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%); }
+      #stage { position: absolute; left: 540px; top: 390px; width: 0; height: 0; transform-style: preserve-3d; }
+      #cam { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+      .card { position: absolute; left: -380px; top: -125px; width: 760px; height: 250px; border-radius: 40px;
+        background: rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.22);
+        display: flex; align-items: center; gap: 36px; padding: 0 44px; }
+      .cnum { flex: none; width: 120px; height: 120px; border-radius: 34px; display: flex; align-items: center; justify-content: center;
+        font-family: "Archivo Black", sans-serif; font-size: 72px; color: #05101c; }
+      .card b { display: block; font-size: 66px; line-height: 1.05; }
+      .card span.sub { display: block; font-family: "Inter", sans-serif; font-weight: 600; font-size: 32px; color: var(--muted); margin-top: 8px; }
+      #cd0 .cnum { background: #7cc4ff; } #cd0 b { font-family: "Playfair Display", serif; font-weight: 800; color: #7cc4ff; }
+      #cd1 .cnum { background: #a78bfa; } #cd1 b { font-family: "Space Mono", monospace; font-weight: 700; color: #c4b5fd; font-size: 58px; }
+      #cd2 .cnum { background: #34d399; } #cd2 b { font-family: "Oswald", sans-serif; font-weight: 700; color: #34d399; text-transform: uppercase; font-size: 76px; }
+
+      /* ato 5 */
+      #a5-1 { top: 200px; font-family: "Outfit", sans-serif; font-weight: 800; font-size: 100px; line-height: 1; color: #ffffff; }
+      #a5-2 { top: 330px; font-family: "League Gothic", sans-serif; font-size: 150px; line-height: 0.95; color: #a3e635; text-transform: uppercase; letter-spacing: 0.01em; }
+      .axis { position: absolute; left: 140px; width: 800px; height: 3px; background: rgba(255,255,255,0.25); }
+      .bar { position: absolute; width: 230px; bottom: 0; border-radius: 26px 26px 0 0; }
+      #chart { position: absolute; left: 0; top: 730px; width: 1080px; height: 330px; }
+      #bar1 { left: 230px; height: 34px; background: #6b7090; }
+      #bar2 { left: 620px; height: 330px; background: linear-gradient(180deg, #a3e635, #00e5a0); }
+      .blabel { position: absolute; top: 1068px; width: 330px; text-align: center; font-family: "Inter", sans-serif; font-weight: 700; font-size: 32px; color: var(--muted); }
+      #cnt { position: absolute; left: 570px; top: 625px; width: 330px; text-align: center; font-family: "Archivo Black", sans-serif; font-size: 96px; color: #a3e635; }
+      #trend { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+      /* ato 6 */
+      #a6-1 { top: 340px; font-family: "Poppins", sans-serif; font-weight: 800; font-size: 80px; line-height: 1.1; color: #ffffff; }
+      #a6-2 { top: 520px; font-family: "Archivo Black", sans-serif; font-size: 150px; line-height: 1; color: #ff5ca8; letter-spacing: -0.03em; }
+      #a6-pill { position: absolute; left: 330px; top: 900px; width: 420px; height: 110px; border-radius: 55px; background: #ff5ca8;
+        display: flex; align-items: center; justify-content: center;
+        font-family: "Inter", sans-serif; font-weight: 800; font-size: 46px; color: #1a0612; }
+      #a6-ring { opacity: 0; position: absolute; left: 300px; top: 870px; width: 480px; height: 170px; border-radius: 85px; border: 4px solid #ff5ca8; }
+
+      /* legendas */
+      .cap { position: absolute; left: 0; width: 1080px; top: 1150px; text-align: center; z-index: 20; }
+      .cap span { display: inline-block; padding: 14px 34px; border-radius: 26px; background: rgba(8, 8, 18, 0.8);
+        font-weight: 900; font-size: 62px; letter-spacing: -0.01em; color: #fff; }
+      #progress { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: #00e5a0; transform-origin: left center; z-index: 30; }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="30"
-      data-width="1080"
-      data-height="1920"
-    >
-      <div id="bg-glow"></div>
-      <div id="progress" class="clip" data-start="0" data-duration="30" data-track-index="9"></div>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="22.44" data-width="1080" data-height="1920">
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="b1" class="blob"></div>
+        <div id="b2" class="blob"></div>
+        <div id="b3" class="blob"></div>
+        <div id="vignette"></div>
+      </div>
+      <div id="sweep"></div>
+      <div id="progress" class="clip" data-start="0" data-duration="22.44" data-track-index="9"></div>
 
-      <!-- 1. Gancho 0–4 -->
-      <div id="s1" class="scene clip" data-start="0" data-duration="4" data-track-index="1">
-        <div class="stack">
-          <div id="s1-a" class="big">Você usa <span class="hl">I.A.</span></div>
-          <div id="s1-b" class="big hl2">do jeito errado?</div>
+      <!-- ato 1: gancho -->
+      <div id="s1" class="scene clip" data-start="0.0" data-duration="1.89" data-track-index="1">
+        <div id="a1-1" class="abs">VOCÊ USA <span class="hl">IA</span></div>
+        <div id="a1-2" class="abs">DO JEITO ERRADO?</div>
+      </div>
+
+      <!-- ato 2: frame break -->
+      <div id="s2" class="scene clip" data-start="1.89" data-duration="4.72" data-track-index="1">
+        <div id="a2-top" class="abs">A maioria usa a IA como se fosse o</div>
+        <div id="a2-frame">
+          <div id="a2-word">GOOGLE</div>
+          <div id="sh1" class="shard"></div><div id="sh2" class="shard"></div>
+          <div id="sh3" class="shard"></div><div id="sh4" class="shard"></div>
+          <div id="sh5" class="shard"></div><div id="sh6" class="shard"></div>
+          <div id="sh7" class="shard"></div><div id="sh8" class="shard"></div>
+        </div>
+        <div id="a2-strike"></div>
+        <div id="a2-low" class="abs">uma pergunta solta,<br />uma resposta genérica.</div>
+      </div>
+
+      <!-- ato 3: orbit -->
+      <div id="s3" class="scene clip" data-start="6.61" data-duration="4.29" data-track-index="1">
+        <div id="a3-1" class="abs">TRATE A IA COMO UM</div>
+        <div id="a3-2" class="abs">FUNCIONÁRIO</div>
+        <div id="a3-ring"></div>
+        <div id="a3-nuc">IA</div>
+        <div id="c1" class="sat"><div class="chip">Redator</div></div>
+        <div id="c2" class="sat"><div class="chip">Analista</div></div>
+        <div id="c3" class="sat"><div class="chip">Designer</div></div>
+        <div id="a3-low" class="abs">Ele só entrega bem, se você der um bom briefing.</div>
+      </div>
+
+      <!-- ato 4: ui world -->
+      <div id="s4" class="scene clip" data-start="10.9" data-duration="5.87" data-track-index="1">
+        <div id="a4-t" class="abs">O briefing tem três passos</div>
+        <div id="world" data-layout-allow-overlap>
+          <div id="stage"><div id="cam">
+            <div id="cd0" class="card"><div class="cnum">1</div><div><b>Papel</b><span class="sub">“Aja como um especialista em…”</span></div></div>
+            <div id="cd1" class="card"><div class="cnum">2</div><div><b>Contexto</b><span class="sub">Quem é você e qual o objetivo</span></div></div>
+            <div id="cd2" class="card"><div class="cnum">3</div><div><b>Formato</b><span class="sub">Lista, tabela, tom e tamanho</span></div></div>
+          </div></div>
         </div>
       </div>
 
-      <!-- 2. Problema 4–10 -->
-      <div id="s2" class="scene clip" data-start="4" data-duration="6" data-track-index="1">
-        <div class="stack">
-          <div id="s2-a" class="tag">O erro número 1</div>
-          <div id="s2-b" class="mid">A maioria usa a I.A. como se fosse o <span class="hl">Google</span>.</div>
-          <div id="s2-c" class="small">Uma pergunta solta.<br />Uma resposta genérica.</div>
+      <!-- ato 5: chart grow -->
+      <div id="s5" class="scene clip" data-start="16.77" data-duration="2.9" data-track-index="1">
+        <div id="a5-1" class="abs">Mesma IA.</div>
+        <div id="a5-2" class="abs">Resultado<br />10x melhor</div>
+        <div id="chart">
+          <div class="axis" style="top: 330px"></div>
+          <div id="bar1" class="bar"></div>
+          <div id="bar2" class="bar"></div>
         </div>
+        <div id="cnt">1x</div>
+        <div class="blabel" style="left: 180px">Pergunta solta</div>
+        <div class="blabel" style="left: 570px">Com briefing</div>
+        <svg id="trend" viewBox="0 0 1080 1920"><path id="trendp" d="M 345 1030 C 450 980, 520 900, 600 760" fill="none" stroke="#a3e635" stroke-width="8" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1" /></svg>
       </div>
 
-      <!-- 3. Virada 10–15 -->
-      <div id="s3" class="scene clip" data-start="10" data-duration="5" data-track-index="1">
-        <div class="stack">
-          <div id="s3-a" class="mid">Trate a I.A. como um</div>
-          <div id="s3-b" class="big hl">funcionário</div>
-          <div id="s3-c" class="small">Ele só entrega bem<br />se você <b style="color:#fff">briefar</b> bem.</div>
-        </div>
+      <!-- ato 6: CTA -->
+      <div id="s6" class="scene clip" data-start="19.67" data-duration="2.77" data-track-index="1">
+        <div id="a6-1" class="abs">Quer dominar a IA?</div>
+        <div id="a6-2" class="abs">SIGA E<br />SALVE.</div>
+        <div id="a6-ring"></div>
+        <div id="a6-pill">+ SEGUIR</div>
       </div>
 
-      <!-- 4. Os 3 passos 15–23 -->
-      <div id="s4" class="scene clip" data-start="15" data-duration="8" data-track-index="1">
-        <div class="stack">
-          <div id="s4-t" class="tag">O briefing em 3 passos</div>
-          <div id="s4-1" class="step">
-            <div class="num">1</div>
-            <div><b>Papel</b><span>“Aja como um especialista em…”</span></div>
-          </div>
-          <div id="s4-2" class="step">
-            <div class="num">2</div>
-            <div><b>Contexto</b><span>Quem é você, qual o objetivo</span></div>
-          </div>
-          <div id="s4-3" class="step">
-            <div class="num">3</div>
-            <div><b>Formato</b><span>Lista, tabela, tom, tamanho</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. Resultado 23–27 -->
-      <div id="s5" class="scene clip" data-start="23" data-duration="4" data-track-index="1">
-        <div class="stack">
-          <div id="s5-a" class="mid">Mesma I.A.</div>
-          <div id="s5-l1" class="barlabel">Pergunta solta</div>
-          <div class="bar"><i id="s5-b1" style="width: 22%; background: #5b6078"></i></div>
-          <div id="s5-l2" class="barlabel">Com briefing</div>
-          <div class="bar"><i id="s5-b2" style="width: 100%; background: var(--accent2)"></i></div>
-          <div id="s5-c" class="big hl">Resultado 10x melhor</div>
-        </div>
-      </div>
-
-      <!-- 6. CTA 27–30 -->
-      <div id="s6" class="scene clip" data-start="27" data-duration="3" data-track-index="1">
-        <div class="stack">
-          <div id="s6-a" class="mid">Quer dominar a I.A.?</div>
-          <div id="s6-b" class="big hl2">Siga e salve</div>
-          <div id="s6-c" class="small">Dicas de I.A. toda semana.</div>
-        </div>
-      </div>
-
-      <audio id="v1" class="clip" src="assets/vo-fish/v1.mp3" data-start="0.2" data-duration="1.88" data-track-index="2" data-volume="1"></audio>
-      <audio id="v2" class="clip" src="assets/vo-fish/v2.mp3" data-start="4.3" data-duration="4.99" data-track-index="2" data-volume="1"></audio>
-      <audio id="v3" class="clip" src="assets/vo-fish/v3.mp3" data-start="10.0" data-duration="4.28" data-track-index="2" data-volume="1"></audio>
-      <audio id="v4" class="clip" src="assets/vo-fish/v4.mp3" data-start="15.1" data-duration="1.83" data-track-index="2" data-volume="1"></audio>
-      <audio id="v5" class="clip" src="assets/vo-fish/v5.mp3" data-start="17.1" data-duration="1.41" data-track-index="2" data-volume="1"></audio>
-      <audio id="v6" class="clip" src="assets/vo-fish/v6.mp3" data-start="19.0" data-duration="1.70" data-track-index="2" data-volume="1"></audio>
-      <audio id="v7" class="clip" src="assets/vo-fish/v7.mp3" data-start="21.0" data-duration="1.54" data-track-index="2" data-volume="1"></audio>
-      <audio id="v8" class="clip" src="assets/vo-fish/v8.mp3" data-start="23.1" data-duration="3.19" data-track-index="2" data-volume="1"></audio>
-      <audio id="v9" class="clip" src="assets/vo-fish/v9.mp3" data-start="27.1" data-duration="2.12" data-track-index="2" data-volume="1"></audio>
-      <div id="cap1" class="cap clip" data-start="0.20" data-duration="0.85" data-track-index="3"><span>Você usa I.A.</span></div>
-      <div id="cap2" class="cap clip" data-start="1.05" data-duration="1.03" data-track-index="3"><span>do jeito errado?</span></div>
-      <div id="cap3" class="cap clip" data-start="4.30" data-duration="0.79" data-track-index="3"><span>A maioria usa</span></div>
-      <div id="cap4" class="cap clip" data-start="5.09" data-duration="0.68" data-track-index="3"><span>a I.A. como</span></div>
-      <div id="cap5" class="cap clip" data-start="5.77" data-duration="0.62" data-track-index="3"><span>se fosse o</span></div>
-      <div id="cap6" class="cap clip" data-start="6.40" data-duration="0.45" data-track-index="3"><span>Google.</span></div>
-      <div id="cap7" class="cap clip" data-start="6.85" data-duration="1.13" data-track-index="3"><span>Uma pergunta solta,</span></div>
-      <div id="cap8" class="cap clip" data-start="7.99" data-duration="1.30" data-track-index="3"><span>uma resposta genérica.</span></div>
-      <div id="cap9" class="cap clip" data-start="10.00" data-duration="0.67" data-track-index="3"><span>Trate a I.A.</span></div>
-      <div id="cap10" class="cap clip" data-start="10.67" data-duration="1.08" data-track-index="3"><span>como um funcionário.</span></div>
-      <div id="cap11" class="cap clip" data-start="11.75" data-duration="0.77" data-track-index="3"><span>Ele só entrega</span></div>
-      <div id="cap12" class="cap clip" data-start="12.53" data-duration="0.26" data-track-index="3"><span>bem,</span></div>
-      <div id="cap13" class="cap clip" data-start="12.79" data-duration="0.62" data-track-index="3"><span>se você der</span></div>
-      <div id="cap14" class="cap clip" data-start="13.41" data-duration="0.88" data-track-index="3"><span>um bom briefing.</span></div>
-      <div id="cap15" class="cap clip" data-start="15.10" data-duration="0.98" data-track-index="3"><span>O briefing tem</span></div>
-      <div id="cap16" class="cap clip" data-start="16.08" data-duration="0.85" data-track-index="3"><span>três passos.</span></div>
-      <div id="cap17" class="cap clip" data-start="17.10" data-duration="0.74" data-track-index="3"><span>Primeiro,</span></div>
-      <div id="cap18" class="cap clip" data-start="17.84" data-duration="0.67" data-track-index="3"><span>o papel.</span></div>
-      <div id="cap19" class="cap clip" data-start="19.00" data-duration="0.73" data-track-index="3"><span>Segundo,</span></div>
-      <div id="cap20" class="cap clip" data-start="19.73" data-duration="0.97" data-track-index="3"><span>o contexto.</span></div>
-      <div id="cap21" class="cap clip" data-start="21.00" data-duration="0.73" data-track-index="3"><span>Terceiro,</span></div>
-      <div id="cap22" class="cap clip" data-start="21.73" data-duration="0.81" data-track-index="3"><span>o formato.</span></div>
-      <div id="cap23" class="cap clip" data-start="23.10" data-duration="0.90" data-track-index="3"><span>Mesma I.A.</span></div>
-      <div id="cap24" class="cap clip" data-start="24.00" data-duration="1.63" data-track-index="3"><span>Resultado dez vezes</span></div>
-      <div id="cap25" class="cap clip" data-start="25.63" data-duration="0.65" data-track-index="3"><span>melhor.</span></div>
-      <div id="cap26" class="cap clip" data-start="27.10" data-duration="0.91" data-track-index="3"><span>Quer dominar a</span></div>
-      <div id="cap27" class="cap clip" data-start="28.01" data-duration="0.36" data-track-index="3"><span>I.A.?</span></div>
-      <div id="cap28" class="cap clip" data-start="28.37" data-duration="0.85" data-track-index="3"><span>Siga e salve.</span></div>
+      <audio id="p1" class="clip" src="assets/vo-fish/p1.mp3" data-start="0.1" data-duration="1.64" data-track-index="2" data-volume="1"></audio>
+      <audio id="p2" class="clip" src="assets/vo-fish/p2.mp3" data-start="2.04" data-duration="2.16" data-track-index="2" data-volume="1"></audio>
+      <audio id="p3" class="clip" src="assets/vo-fish/p3.mp3" data-start="4.3" data-duration="2.16" data-track-index="2" data-volume="1"></audio>
+      <audio id="p4" class="clip" src="assets/vo-fish/p4.mp3" data-start="6.76" data-duration="1.46" data-track-index="2" data-volume="1"></audio>
+      <audio id="p5" class="clip" src="assets/vo-fish/p5.mp3" data-start="8.32" data-duration="2.43" data-track-index="2" data-volume="1"></audio>
+      <audio id="p6" class="clip" src="assets/vo-fish/p6.mp3" data-start="11.05" data-duration="1.49" data-track-index="2" data-volume="1"></audio>
+      <audio id="p7" class="clip" src="assets/vo-fish/p7.mp3" data-start="12.64" data-duration="1.09" data-track-index="2" data-volume="1"></audio>
+      <audio id="p8" class="clip" src="assets/vo-fish/p8.mp3" data-start="13.83" data-duration="1.41" data-track-index="2" data-volume="1"></audio>
+      <audio id="p9" class="clip" src="assets/vo-fish/p9.mp3" data-start="15.34" data-duration="1.28" data-track-index="2" data-volume="1"></audio>
+      <audio id="p10" class="clip" src="assets/vo-fish/p10.mp3" data-start="16.92" data-duration="0.68" data-track-index="2" data-volume="1"></audio>
+      <audio id="p11" class="clip" src="assets/vo-fish/p11.mp3" data-start="17.7" data-duration="1.82" data-track-index="2" data-volume="1"></audio>
+      <audio id="p12" class="clip" src="assets/vo-fish/p12.mp3" data-start="19.82" data-duration="0.81" data-track-index="2" data-volume="1"></audio>
+      <audio id="p13" class="clip" src="assets/vo-fish/p13.mp3" data-start="20.73" data-duration="0.81" data-track-index="2" data-volume="1"></audio>
+      <div id="cap1" class="cap clip" data-start="0.10" data-duration="0.74" data-track-index="3"><span>Você usa I.A.</span></div>
+      <div id="cap2" class="cap clip" data-start="0.84" data-duration="0.90" data-track-index="3"><span>do jeito errado?</span></div>
+      <div id="cap3" class="cap clip" data-start="2.04" data-duration="0.67" data-track-index="3"><span>A maioria usa</span></div>
+      <div id="cap4" class="cap clip" data-start="2.71" data-duration="0.58" data-track-index="3"><span>a I.A. como</span></div>
+      <div id="cap5" class="cap clip" data-start="3.29" data-duration="0.91" data-track-index="3"><span>se fosse o Google.</span></div>
+      <div id="cap6" class="cap clip" data-start="4.30" data-duration="1.00" data-track-index="3"><span>Uma pergunta solta,</span></div>
+      <div id="cap7" class="cap clip" data-start="5.30" data-duration="1.16" data-track-index="3"><span>uma resposta genérica.</span></div>
+      <div id="cap8" class="cap clip" data-start="6.76" data-duration="0.56" data-track-index="3"><span>Trate a I.A.</span></div>
+      <div id="cap9" class="cap clip" data-start="7.32" data-duration="0.90" data-track-index="3"><span>como um funcionário.</span></div>
+      <div id="cap10" class="cap clip" data-start="8.32" data-duration="0.74" data-track-index="3"><span>Ele só entrega</span></div>
+      <div id="cap11" class="cap clip" data-start="9.06" data-duration="0.64" data-track-index="3"><span>bem, se você</span></div>
+      <div id="cap12" class="cap clip" data-start="9.71" data-duration="1.04" data-track-index="3"><span>der um bom briefing.</span></div>
+      <div id="cap13" class="cap clip" data-start="11.05" data-duration="0.80" data-track-index="3"><span>O briefing tem</span></div>
+      <div id="cap14" class="cap clip" data-start="11.85" data-duration="0.69" data-track-index="3"><span>três passos.</span></div>
+      <div id="cap15" class="cap clip" data-start="12.64" data-duration="1.09" data-track-index="3"><span>Primeiro, o papel.</span></div>
+      <div id="cap16" class="cap clip" data-start="13.83" data-duration="1.41" data-track-index="3"><span>Segundo, o contexto.</span></div>
+      <div id="cap17" class="cap clip" data-start="15.34" data-duration="1.28" data-track-index="3"><span>Terceiro, o formato.</span></div>
+      <div id="cap18" class="cap clip" data-start="16.92" data-duration="0.68" data-track-index="3"><span>Mesma I.A.</span></div>
+      <div id="cap19" class="cap clip" data-start="17.70" data-duration="1.82" data-track-index="3"><span>Resultado dez vezes melhor.</span></div>
+      <div id="cap20" class="cap clip" data-start="19.82" data-duration="0.81" data-track-index="3"><span>Quer dominar a I.A.?</span></div>
+      <div id="cap21" class="cap clip" data-start="20.73" data-duration="0.81" data-track-index="3"><span>Siga e salve.</span></div>
     </div>
 
     <script>
+      const T = {"p1": {"s": 0.1, "d": 1.64, "e": 1.74}, "a1": {"s": 0.0, "e": 1.89}, "p2": {"s": 2.04, "d": 2.16, "e": 4.2}, "p3": {"s": 4.3, "d": 2.16, "e": 6.46}, "a2": {"s": 1.89, "e": 6.61}, "p4": {"s": 6.76, "d": 1.46, "e": 8.22}, "p5": {"s": 8.32, "d": 2.43, "e": 10.75}, "a3": {"s": 6.61, "e": 10.9}, "p6": {"s": 11.05, "d": 1.49, "e": 12.54}, "p7": {"s": 12.64, "d": 1.09, "e": 13.73}, "p8": {"s": 13.83, "d": 1.41, "e": 15.24}, "p9": {"s": 15.34, "d": 1.28, "e": 16.62}, "a4": {"s": 10.9, "e": 16.77}, "p10": {"s": 16.92, "d": 0.68, "e": 17.6}, "p11": {"s": 17.7, "d": 1.82, "e": 19.52}, "a5": {"s": 16.77, "e": 19.67}, "p12": {"s": 19.82, "d": 0.81, "e": 20.63}, "p13": {"s": 20.73, "d": 0.81, "e": 21.54}, "a6": {"s": 19.67, "e": 22.44}, "end": 22.44};
       const tl = gsap.timeline({ paused: true });
       const IN = { opacity: 0, y: 70, filter: "blur(10px)" };
-      const ON = { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power4.out" };
-      const OUT = { opacity: 0, y: -40, duration: 0.25, ease: "power2.in" };
-      const show = (sel, t) => tl.fromTo(sel, IN, ON, t);
-      const hide = (sels, t) => tl.to(sels, OUT, t);
+      const ON = { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.4, ease: "power4.out" };
+      const show = (sel, t, over) => tl.fromTo(sel, IN, Object.assign({}, ON, over || {}), t);
+      const hide = (sels, t) => tl.to(sels, { opacity: 0, y: -40, duration: 0.22, ease: "power2.in" }, t);
 
-      // barra de progresso e brilho de fundo
-      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: 30, ease: "none" }, 0);
-      tl.fromTo("#bg-glow", { scale: 0.8, x: -80 }, { scale: 1.3, x: 80, duration: 30, ease: "sine.inOut" }, 0);
+      /* ---------- fundo dinâmico ---------- */
+      const ACT = [
+        ["#0a0a14", "#7c5cff", "#00e5a0", "#7c5cff"],
+        ["#190a0a", "#ff3b30", "#ff9f0a", "#ff3b30"],
+        ["#06141a", "#00c2c7", "#7c5cff", "#00c2c7"],
+        ["#070d24", "#3b82f6", "#22d3ee", "#6366f1"],
+        ["#07160e", "#00e5a0", "#a3e635", "#00e5a0"],
+        ["#1a0a1a", "#ff5ca8", "#7c5cff", "#ff5ca8"],
+      ];
+      for (let k = 1; k < 6; k++) {
+        const at = T["a" + (k + 1)].s - 0.25;
+        tl.to("#bg", { backgroundColor: ACT[k][0], duration: 0.7, ease: "power2.inOut" }, at);
+        tl.to("#b1", { color: ACT[k][1], duration: 0.7, ease: "power2.inOut" }, at);
+        tl.to("#b2", { color: ACT[k][2], duration: 0.7, ease: "power2.inOut" }, at);
+        tl.to("#b3", { color: ACT[k][3], duration: 0.7, ease: "power2.inOut" }, at);
+        tl.fromTo("#sweep", { x: -700, opacity: 0, rotation: 14 }, { x: 1500, opacity: 1, duration: 0.7, ease: "power2.inOut" }, at);
+        tl.set("#sweep", { opacity: 0 }, at + 0.75);
+      }
+      let dt = 0;
+      const drift = [[160, 140], [-120, 220], [180, -90], [-160, 120], [140, -160], [-100, 100]];
+      drift.forEach((d, i) => {
+        const dur = T.end / drift.length;
+        tl.to("#b1", { x: d[0], y: d[1], duration: dur, ease: "sine.inOut" }, i * dur);
+        tl.to("#b2", { x: -d[0], y: -d[1] * 0.8, duration: dur, ease: "sine.inOut" }, i * dur);
+        tl.to("#b3", { x: d[1], y: d[0] * 0.5, duration: dur, ease: "sine.inOut" }, i * dur);
+      });
+      tl.fromTo("#grid", { y: 0 }, { y: 540, duration: T.end, ease: "none" }, 0);
+      tl.fromTo("#progress", { scaleX: 0 }, { scaleX: 1, duration: T.end, ease: "none" }, 0);
 
-      // 1
-      tl.fromTo("#s1-a", { y: 70, opacity: 1 }, { y: 0, duration: 0.45, ease: "power4.out" }, 0);
-      show("#s1-b", 0.8);
-      hide(["#s1-a", "#s1-b"], 3.7);
-      // 2 (local no timeline raiz: tudo em tempo absoluto)
-      show("#s2-a", 4.1);
-      show("#s2-b", 4.6);
-      show("#s2-c", 6.6);
-      hide(["#s2-a", "#s2-b", "#s2-c"], 9.7);
-      // 3
-      show("#s3-a", 10.1);
-      show("#s3-b", 10.9);
-      show("#s3-c", 12.4);
-      hide(["#s3-a", "#s3-b", "#s3-c"], 14.7);
-      // 4
-      show("#s4-t", 15.1);
-      show("#s4-1", 17.1);
-      show("#s4-2", 19);
-      show("#s4-3", 21);
-      hide(["#s4-t", "#s4-1", "#s4-2", "#s4-3"], 22.7);
-      // 5
-      show("#s5-a", 23.1);
-      show("#s5-l1", 23.6);
-      tl.fromTo("#s5-b1", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 23.7);
-      show("#s5-l2", 24.3);
-      tl.fromTo("#s5-b2", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 24.4);
-      show("#s5-c", 25.4);
-      hide(["#s5-a", "#s5-l1", "#s5-l2", "#s5-c"], 26.7);
-      // 6
-      show("#s6-a", 27.1);
-      show("#s6-b", 27.5);
-      show("#s6-c", 27.9);
+      /* ---------- ato 1 ---------- */
+      tl.fromTo("#a1-1", { y: 70, opacity: 1 }, { y: 0, duration: 0.45, ease: "power4.out" }, 0);
+      show("#a1-2", T.p1.s + 0.55);
+      tl.to("#a1-2", { scale: 1.06, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, T.p1.s + 1.0);
+      hide(["#a1-1", "#a1-2"], T.a1.e - 0.22);
 
-      // movimento contínuo: deriva lenta em cada bloco de texto, para nenhuma cena ficar parada
-      [
-        ["#s1 .stack", 0, 4],
-        ["#s2 .stack", 4, 6],
-        ["#s3 .stack", 10, 5],
-        ["#s4 .stack", 15, 8],
-        ["#s5 .stack", 23, 4],
-        ["#s6 .stack", 27, 3],
-      ].forEach(([sel, t, d]) => {
-        tl.fromTo(sel, { scale: 1 }, { scale: 1.04, duration: d, ease: "none" }, t);
+      /* ---------- ato 2: frame break ---------- */
+      show("#a2-top", T.p2.s);
+      tl.fromTo("#a2-frame", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }, T.p2.s + 0.2);
+      tl.fromTo("#a2-word", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(3)" }, T.p2.s + T.p2.d * 0.7);
+      const BR = T.p2.e - 0.05;
+      // frame break: o quadro se parte e a palavra vaza para fora
+      const FLY = [
+        ["#sh1", -260, -300, -35], ["#sh2", 280, -320, 40], ["#sh3", -300, 260, 30], ["#sh4", 260, 300, -45],
+        ["#sh5", -420, -80, -80], ["#sh6", -380, 200, 70], ["#sh7", 420, -120, 75], ["#sh8", 380, 160, -65],
+      ];
+      FLY.forEach((f) => tl.to(f[0], { x: f[1], y: f[2], rotation: f[3], opacity: 0, duration: 0.55, ease: "power3.out" }, BR));
+      tl.to("#a2-word", { x: -6, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, BR);
+      tl.to("#a2-word", { scale: 1.3, color: "#ff3b30", duration: 0.3, ease: "power4.out" }, BR);
+      tl.fromTo("#a2-strike", { scaleX: 0, opacity: 1, transformOrigin: "left center" }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, T.p3.s);
+      show("#a2-low", T.p3.s + 0.1);
+      hide(["#a2-top", "#a2-frame", "#a2-strike", "#a2-low"], T.a2.e - 0.22);
+
+      /* ---------- ato 3: orbit ---------- */
+      show("#a3-1", T.p4.s);
+      show("#a3-2", T.p4.s + 0.2, { duration: 0.45 });
+      tl.fromTo("#a3-ring", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, T.p4.s + 0.2);
+      tl.fromTo("#a3-nuc", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, T.p4.s + 0.3);
+      ["#c1", "#c2", "#c3"].forEach((c) => gsap.set(c + " .chip", { xPercent: -50, yPercent: -50 }));
+      const orb = { a: 0 };
+      const RX = 380, RY = 170;
+      function placeOrbit() {
+        ["#c1", "#c2", "#c3"].forEach((id, i) => {
+          const th = orb.a + (i * 2 * Math.PI) / 3;
+          const s = Math.sin(th), c = Math.cos(th), k = (s + 1) / 2;
+          gsap.set(id, { x: RX * c, y: RY * s, scale: 0.78 + 0.3 * k, zIndex: Math.round(8 + 8 * s) });
+        });
+      }
+      placeOrbit();
+      tl.to(orb, { a: Math.PI * 2 * 1.25, duration: T.a3.e - T.a3.s, ease: "none", onUpdate: placeOrbit }, T.a3.s);
+      tl.fromTo("#c1,#c2,#c3", { opacity: 0 }, { opacity: 1, duration: 0.3 }, T.p4.s + 0.4);
+      show("#a3-low", T.p5.s);
+      hide(["#a3-1", "#a3-2", "#a3-ring", "#a3-nuc", "#c1", "#c2", "#c3", "#a3-low"], T.a3.e - 0.22);
+
+      /* ---------- ato 4: ui world ---------- */
+      show("#a4-t", T.p6.s);
+      const L = [[0, -200, 0], [110, 0, -260], [-60, 200, -520]];
+      gsap.set("#stage", { rotationX: 14, rotationY: -18 });
+      L.forEach((p, i) => gsap.set("#cd" + i, { x: p[0], y: p[1], z: p[2], opacity: 0.55 }));
+      gsap.set("#cam", { x: -17, y: 0, z: -330 });
+      tl.fromTo("#world", { opacity: 0 }, { opacity: 1, duration: 0.4 }, T.p6.s + 0.15);
+      tl.to("#cam", { z: -260, duration: T.p6.d, ease: "sine.inOut" }, T.p6.s);
+      const focus = (i, t) => {
+        tl.to("#cam", { x: -L[i][0], y: -L[i][1], z: -L[i][2] + 140, duration: 0.55, ease: "power3.inOut" }, t);
+        [0, 1, 2].forEach((j) => tl.to("#cd" + j, { opacity: j === i ? 1 : 0.4, duration: 0.3 }, t));
+        tl.to("#cd" + i, { borderColor: ["#7cc4ff", "#a78bfa", "#34d399"][i], scale: 1.05, duration: 0.4, ease: "back.out(2)" }, t + 0.1);
+        if (i > 0) tl.to("#cd" + (i - 1), { scale: 1, borderColor: "rgba(255,255,255,0.22)", duration: 0.3 }, t);
+      };
+      focus(0, T.p7.s - 0.1);
+      focus(1, T.p8.s - 0.1);
+      focus(2, T.p9.s - 0.1);
+      tl.to("#stage", { rotationY: 14, duration: T.a4.e - T.a4.s, ease: "sine.inOut" }, T.a4.s);
+      hide(["#a4-t", "#world"], T.a4.e - 0.22);
+
+      /* ---------- ato 5: chart grow ---------- */
+      show("#a5-1", T.p10.s);
+      tl.fromTo("#bar1", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.5, ease: "power3.out" }, T.p10.s + 0.1);
+      tl.fromTo("#cnt", { opacity: 0 }, { opacity: 1, duration: 0.2 }, T.p11.s + 0.1);
+      show("#a5-2", T.p11.s);
+      const cnt = { v: 1 };
+      tl.fromTo("#bar2", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 1.1, ease: "power3.out" }, T.p11.s + 0.1);
+      tl.to(cnt, { v: 10, duration: 1.1, ease: "power3.out", onUpdate: () => { document.getElementById("cnt").textContent = Math.round(cnt.v) + "x"; } }, T.p11.s + 0.1);
+      tl.to("#trendp", { strokeDashoffset: 0, duration: 0.9, ease: "power2.out" }, T.p11.s + 0.3);
+      hide(["#a5-1", "#a5-2", "#chart", "#cnt", ".blabel", "#trend"], T.a5.e - 0.22);
+
+      /* ---------- ato 6: CTA ---------- */
+      show("#a6-1", T.p12.s);
+      show("#a6-2", T.p13.s, { duration: 0.5 });
+      tl.fromTo("#a6-pill", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2.5)" }, T.p13.s + 0.35);
+      tl.fromTo("#a6-ring", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.5, duration: 0.9, ease: "power2.out", immediateRender: false }, T.p13.s + 0.9);
+      tl.fromTo("#a6-ring", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.5, duration: 0.9, ease: "power2.out", immediateRender: false }, T.p13.s + 1.9);
+
+      /* ---------- deriva contínua do texto ---------- */
+      ["s1", "s2", "s3", "s5", "s6"].forEach((s, i) => {
+        const a = { s1: "a1", s2: "a2", s3: "a3", s5: "a5", s6: "a6" }[s];
+        tl.fromTo("#" + s, { scale: 1 }, { scale: 1.03, duration: T[a].e - T[a].s, ease: "none", transformOrigin: "50% 40%" }, T[a].s);
       });
 
+      /* ---------- legendas ---------- */
       const capIn = (sel, t, d) => {
-        tl.fromTo(sel + " span", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.14, ease: "back.out(2)" }, t);
-        tl.to(sel + " span", { opacity: 0, duration: 0.08, ease: "power2.in" }, t + d - 0.08);
+        tl.fromTo(sel + " span", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.12, ease: "back.out(2)" }, t);
+        tl.to(sel + " span", { opacity: 0, duration: 0.07, ease: "power2.in" }, t + d - 0.07);
         tl.set(sel, { opacity: 0 }, t + d);
       };
-      capIn("#cap1", 0.20, 0.85);
-      capIn("#cap2", 1.05, 1.03);
-      capIn("#cap3", 4.30, 0.79);
-      capIn("#cap4", 5.09, 0.68);
-      capIn("#cap5", 5.77, 0.62);
-      capIn("#cap6", 6.40, 0.45);
-      capIn("#cap7", 6.85, 1.13);
-      capIn("#cap8", 7.99, 1.30);
-      capIn("#cap9", 10.00, 0.67);
-      capIn("#cap10", 10.67, 1.08);
-      capIn("#cap11", 11.75, 0.77);
-      capIn("#cap12", 12.53, 0.26);
-      capIn("#cap13", 12.79, 0.62);
-      capIn("#cap14", 13.41, 0.88);
-      capIn("#cap15", 15.10, 0.98);
-      capIn("#cap16", 16.08, 0.85);
-      capIn("#cap17", 17.10, 0.74);
-      capIn("#cap18", 17.84, 0.67);
-      capIn("#cap19", 19.00, 0.73);
-      capIn("#cap20", 19.73, 0.97);
-      capIn("#cap21", 21.00, 0.73);
-      capIn("#cap22", 21.73, 0.81);
-      capIn("#cap23", 23.10, 0.90);
-      capIn("#cap24", 24.00, 1.63);
-      capIn("#cap25", 25.63, 0.65);
-      capIn("#cap26", 27.10, 0.91);
-      capIn("#cap27", 28.01, 0.36);
-      capIn("#cap28", 28.37, 0.85);
+      capIn("#cap1", 0.10, 0.74);
+      capIn("#cap2", 0.84, 0.90);
+      capIn("#cap3", 2.04, 0.67);
+      capIn("#cap4", 2.71, 0.58);
+      capIn("#cap5", 3.29, 0.91);
+      capIn("#cap6", 4.30, 1.00);
+      capIn("#cap7", 5.30, 1.16);
+      capIn("#cap8", 6.76, 0.56);
+      capIn("#cap9", 7.32, 0.90);
+      capIn("#cap10", 8.32, 0.74);
+      capIn("#cap11", 9.06, 0.64);
+      capIn("#cap12", 9.71, 1.04);
+      capIn("#cap13", 11.05, 0.80);
+      capIn("#cap14", 11.85, 0.69);
+      capIn("#cap15", 12.64, 1.09);
+      capIn("#cap16", 13.83, 1.41);
+      capIn("#cap17", 15.34, 1.28);
+      capIn("#cap18", 16.92, 0.68);
+      capIn("#cap19", 17.70, 1.82);
+      capIn("#cap20", 19.82, 0.81);
+      capIn("#cap21", 20.73, 0.81);
 
       window.__timelines["main"] = tl;
       tl.seek(0);
