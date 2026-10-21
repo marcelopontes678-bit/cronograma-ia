@@ -200,7 +200,9 @@ const server = http.createServer(async (req, res) => {
     if (!API_KEY) {
       return json(res, 503, { erro: 'Servidor sem ANTHROPIC_API_KEY configurada. Nenhum roteiro foi gerado.' });
     }
-    if (limitado(req.socket.remoteAddress)) {
+    // Atrás de proxy (Render, Railway…) o IP real vem em x-forwarded-for.
+    const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
+    if (limitado(ip)) {
       return json(res, 429, { erro: 'Muitas requisições. Aguarde um minuto.' });
     }
     let b;
