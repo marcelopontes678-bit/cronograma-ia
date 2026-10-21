@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ViralScript AI</title>
+<style>
+  :root {
+    --bg: #0d0d12; --card: #17171f; --card2: #1e1e29; --line: #2a2a38;
+    --txt: #ececf3; --mut: #9a9ab0; --pri: #8b3dff; --pri2: #a566ff; --ok: #3ddc97; --err: #ff5d6c; --warn: #ffb84d;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--txt); font: 16px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .logo { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--pri), #5b1fd1); display: grid; place-items: center; font-weight: 800; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -.02em; } h1 span { color: var(--pri2); }
+  .sub { color: var(--mut); margin: 0 0 20px; font-size: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--pri2); margin: 0 0 12px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  label { display: block; font-size: 13px; color: var(--mut); margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+  input, select, textarea { width: 100%; background: var(--card2); color: var(--txt); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font: inherit; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--pri); border-color: transparent; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+  button { font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--line); background: var(--card2); color: var(--txt); padding: 8px 14px; }
+  button:hover:not(:disabled) { border-color: var(--pri); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button:focus-visible { outline: 2px solid var(--pri2); outline-offset: 2px; }
+  .go { width: 100%; margin-top: 18px; padding: 14px; font-weight: 800; letter-spacing: .06em; background: linear-gradient(135deg, var(--pri), #6a22e0); border: 0; box-shadow: 0 8px 28px rgba(139,61,255,.35); }
+  .go:hover:not(:disabled) { filter: brightness(1.1); }
+  .mini { font-size: 12px; padding: 5px 10px; text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--txt); }
+  .banner { border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 16px; border: 1px solid; }
+  .banner.err { background: rgba(255,93,108,.1); border-color: var(--err); color: #ffc2c8; }
+  .banner.warn { background: rgba(255,184,77,.1); border-color: var(--warn); color: #ffd9a0; }
+  .titulo { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -.01em; }
+  #roteiro { min-height: 280px; resize: vertical; line-height: 1.65; font-size: 16px; }
+  #roteiro[readonly] { background: var(--card); border-color: var(--line); }
+  .meta { color: var(--mut); font-size: 12px; margin-top: 8px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .actions .copy { background: var(--pri); border-color: var(--pri); font-weight: 700; }
+  ul.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  ul.list li { background: var(--card2); border-radius: 10px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; }
+  ul.list li p { margin: 0; flex: 1; }
+  .btns { display: flex; gap: 6px; flex-shrink: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { background: var(--card2); border: 1px solid var(--pri); border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 14px; }
+  .verificar { color: var(--warn); font-size: 14px; margin: 0; padding-left: 18px; }
+  .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: s .8s linear infinite; vertical-align: -2px; margin-right: 8px; }
+  @keyframes s { to { transform: rotate(360deg); } }
+  [hidden] { display: none !important; }
+  footer { color: var(--mut); font-size: 12px; text-align: center; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="logo">VS</div><h1>ViralScript <span>AI</span></h1></header>
+  <p class="sub">Digite um assunto. A IA cria o roteiro de Reels pronto para narrar.</p>
+
+  <div id="banner" class="banner err" hidden></div>
+
+  <form id="form" class="card" autocomplete="off">
+    <label for="assunto">Qual é o assunto do vídeo?</label>
+    <input id="assunto" maxlength="300" required placeholder="Ex.: O segredo por trás da fortuna da família Hermès">
+    <div class="row">
+      <div>
+        <label for="duracao">Duração</label>
+        <select id="duracao">
+          <option value="30">30 segundos</option>
+          <option value="45">45 segundos</option>
+          <option value="60" selected>60 segundos</option>
+          <option value="90">90 segundos</option>
+        </select>
+      </div>
+      <div>
+        <label for="estilo">Estilo narrativo</label>
+        <select id="estilo">
+          <option value="automatico" selected>Automático</option>
+          <option value="misterio">Mistério e curiosidade</option>
+          <option value="surpreendente">História surpreendente</option>
+          <option value="luxo">Luxo, poder e dinheiro</option>
+          <option value="revelacao">Revelação de fatos desconhecidos</option>
+          <option value="polemico">Polêmico e provocativo</option>
+        </select>
+      </div>
+    </div>
+    <label for="cta">O que existe no link da sua bio? (opcional)</label>
+    <input id="cta" maxlength="300" placeholder="Ex.: e-book gratuito sobre marcas de luxo">
+    <button class="go" id="gerar" type="submit">GERAR ROTEIRO VIRAL</button>
+  </form>
+
+  <div id="resultado" hidden>
+    <div class="card"><h2>Título do vídeo <button class="mini" data-copy="titulo" type="button">Copiar</button></h2><p class="titulo" id="titulo"></p></div>
+
+    <div class="card">
+      <h2>Roteiro final <button class="mini" id="editar" type="button">Editar</button></h2>
+      <textarea id="roteiro" readonly aria-label="Roteiro final"></textarea>
+      <div class="meta" id="meta"></div>
+      <div class="actions">
+        <button class="copy" id="copiar" type="button">COPIAR ROTEIRO</button>
+        <button data-acao="regenerar" type="button">Gerar novamente</button>
+        <button data-acao="misterioso" type="button">Deixar mais misterioso</button>
+        <button data-acao="impactante" type="button">Tornar mais impactante</button>
+        <button data-acao="encurtar" type="button">Encurtar roteiro</button>
+        <button data-acao="expandir" type="button">Expandir roteiro</button>
+        <button data-acao="gancho" type="button">Melhorar gancho</button>
+        <button data-acao="cta" type="button">Melhorar CTA</button>
+      </div>
+    </div>
+
+    <div class="card" id="cardVerificar" hidden><h2>Confira antes de gravar</h2><ul class="verificar" id="verificar"></ul></div>
+    <div class="card"><h2>Ganchos alternativos</h2><ul class="list" id="ganchos"></ul></div>
+    <div class="card"><h2>Texto na tela</h2><div class="chips" id="telas"></div></div>
+    <div class="card"><h2>Legenda do Reels <button class="mini" data-copy="legenda" type="button">Copiar</button></h2><p id="legenda" style="margin:0;white-space:pre-wrap"></p></div>
+  </div>
+
+  <footer>A IA pode errar fatos sobre pessoas e marcas reais — confira antes de publicar. Nenhuma ferramenta garante viralização.</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const botoes = () => document.querySelectorAll('button');
+let estado = null; // último resultado + parâmetros usados
+let ocupado = false;
+
+function banner(msg, tipo = 'err') {
+  const b = $('banner');
+  b.className = 'banner ' + tipo;
+  b.textContent = msg || '';
+  b.hidden = !msg;
+}
+
+function contar() {
+  const n = $('roteiro').value.trim().split(/\s+/).filter(Boolean).length;
+  $('meta').textContent = n ? `${n} palavras · cerca de ${Math.round(n / 2.5)}s de narração` : '';
+}
+
+async function copiar(texto, btn) {
+  const original = btn.textContent;
+  try { await navigator.clipboard.writeText(texto); btn.textContent = 'Copiado ✓'; }
+  catch {
+    const t = document.createElement('textarea'); t.value = texto; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); btn.textContent = 'Copiado ✓'; } catch { btn.textContent = 'Falhou'; }
+    t.remove();
+  }
+  setTimeout(() => { btn.textContent = original; }, 1500);
+}
+
+function render(r) {
+  $('titulo').textContent = r.titulo;
+  $('roteiro').value = r.roteiro;
+  $('roteiro').readOnly = true; $('editar').textContent = 'Editar';
+  $('legenda').textContent = r.legenda;
+  contar();
+
+  const v = $('verificar'); v.replaceChildren();
+  r.verificar.forEach((t) => { const li = document.createElement('li'); li.textContent = t; v.appendChild(li); });
+  $('cardVerificar').hidden = !r.verificar.length;
+
+  const g = $('ganchos'); g.replaceChildren();
+  r.ganchos_alternativos.forEach((h) => {
+    const li = document.createElement('li');
+    const p = document.createElement('p'); p.textContent = h;
+    const bt = document.createElement('div'); bt.className = 'btns';
+    const usar = document.createElement('button'); usar.className = 'mini'; usar.type = 'button'; usar.textContent = 'Usar';
+    usar.onclick = () => usarGancho(h);
+    const cp = document.createElement('button'); cp.className = 'mini'; cp.type = 'button'; cp.textContent = 'Copiar';
+    cp.onclick = () => copiar(h, cp);
+    bt.append(usar, cp); li.append(p, bt); g.appendChild(li);
+  });
+
+  const t = $('telas'); t.replaceChildren();
+  r.textos_tela.forEach((x) => { const s = document.createElement('span'); s.className = 'chip'; s.textContent = x; t.appendChild(s); });
+
+  $('resultado').hidden = false;
+}
+
+// Troca a primeira frase do roteiro pelo gancho escolhido (edição de texto local).
+function usarGancho(h) {
+  const el = $('roteiro');
+  const m = el.value.match(/^[\s\S]*?[.!?…](?=\s|$)/);
+  el.value = m ? h + el.value.slice(m[0].length) : h + '\n\n' + el.value;
+  contar();
+}
+
+async function executar(acao) {
+  if (ocupado) return;
+  const assunto = $('assunto').value.trim();
+  if (!assunto) { $('assunto').focus(); return; }
+  ocupado = true; banner('');
+  const principal = $('gerar'), rotuloOriginal = principal.textContent;
+  botoes().forEach((b) => (b.disabled = true));
+  const spin = '<span class="spin"></span>';
+  if (acao === 'gerar') principal.innerHTML = spin + 'CRIANDO ROTEIRO…';
+
+  const corpo = {
+    assunto, acao,
+    duracao: $('duracao').value, estilo: $('estilo').value, cta: $('cta').value.trim(),
+  };
+  if (estado && acao !== 'gerar') corpo.atual = { titulo: $('titulo').textContent, roteiro: $('roteiro').value };
+
+  try {
+    const resp = await fetch('/api/generate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(corpo) });
+    const dados = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(dados.erro || `Erro ${resp.status}`);
+    estado = dados; render(dados);
+    if (acao === 'gerar') $('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (e) {
+    banner('Não foi possível gerar: ' + e.message);
+  } finally {
+    ocupado = false; principal.textContent = rotuloOriginal;
+    botoes().forEach((b) => (b.disabled = false));
+    if (!statusOk) $('gerar').disabled = true;
+  }
+}
+
+let statusOk = true;
+fetch('/api/status').then((r) => r.json()).then((s) => {
+  if (!s.configurado) {
+    statusOk = false; $('gerar').disabled = true;
+    banner('Integração indisponível: o servidor não tem ANTHROPIC_API_KEY configurada. Nenhum roteiro será simulado — defina a chave e reinicie.');
+  }
+}).catch(() => banner('Não foi possível falar com o servidor. Inicie com "npm start" e abra pelo endereço do servidor.'));
+
+$('form').addEventListener('submit', (e) => { e.preventDefault(); executar('gerar'); });
+document.querySelectorAll('[data-acao]').forEach((b) => b.addEventListener('click', () => executar(b.dataset.acao)));
+$('copiar').addEventListener('click', (e) => copiar($('roteiro').value, e.currentTarget));
+document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', () => copiar($(b.dataset.copy).textContent, b)));
+$('roteiro').addEventListener('input', contar);
+$('editar').addEventListener('click', () => {
+  const el = $('roteiro'); el.readOnly = !el.readOnly;
+  $('editar').textContent = el.readOnly ? 'Editar' : 'Concluir';
+  if (!el.readOnly) el.focus();
+});
+</script>
+</body>
+</html>
