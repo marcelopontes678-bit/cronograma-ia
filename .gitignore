@@ -29,3 +29,6 @@ frontend/.vercel/
 # OS
 .DS_Store
 
+
+# vídeos gerados (não versionados)
+receita-rins/*.mp4
