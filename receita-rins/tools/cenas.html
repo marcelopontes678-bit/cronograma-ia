@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Inter;src:url("Inter%5Bopsz,wght%5D.ttf");font-weight:100 900}
+@font-face{font-family:News;src:url("Newsreader%5Bopsz,wght%5D.ttf");font-weight:200 800}
+:root{--bg:#F5F0E6;--ink:#1E2A24;--verde:#2F6B4F;--verdeE:#1F4D3A;--limao:#F2C94C;--limaoE:#D9A92B;--agua:#7CC3E3;--aguaE:#3D8FB8;--alerta:#D64545;--rim:#C96B5B;--rimE:#9E4A3D}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:Inter,sans-serif;color:var(--ink)}
+.c{position:absolute;inset:0}
+.tag{position:absolute;left:84px;top:150px;font:700 26px Inter;letter-spacing:.28em;color:var(--verde)}
+.h{position:absolute;left:84px;right:84px;top:205px;font:700 96px/1.02 News;letter-spacing:-.01em}
+.h em{font-style:normal;color:var(--verde)}
+.s{position:absolute;left:84px;right:84px;font:500 40px/1.35 Inter;color:#3B4740}
+.pill{display:inline-block;padding:10px 22px;border-radius:999px;font:700 30px Inter;margin:0 10px 14px 0}
+.foot{position:absolute;left:84px;right:84px;bottom:120px;font:500 24px/1.4 Inter;color:#6B746E}
+.notext .tag,.notext .h,.notext .s,.notext .foot,.notext .pills{display:none}
+</style></head>
+<body><div id="root" class="c"></div>
+<script>
+const q = new URLSearchParams(location.search), N = +q.get('cena'), TXT = q.get('texto') !== '0';
+document.body.classList.toggle('notext', !TXT);
+// --- ilustrações (SVG original) ---
+const lemon = (x, y, r, rot = 0, half = false) => half ? `
+ <g transform="translate(${x} ${y}) rotate(${rot})">
+  <circle r="${r}" fill="var(--limaoE)"/><circle r="${r * .9}" fill="#FFF6C9"/><circle r="${r * .8}" fill="var(--limao)"/>
+  ${[...Array(10)].map((_, i) => { const a = i / 10 * Math.PI * 2; return `<path d="M0 0 L${Math.cos(a - .27) * r * .74} ${Math.sin(a - .27) * r * .74} A${r * .74} ${r * .74} 0 0 1 ${Math.cos(a + .27) * r * .74} ${Math.sin(a + .27) * r * .74} Z" fill="#FFE27A" stroke="#FFF6C9" stroke-width="${r * .05}"/>`; }).join('')}
+  <circle r="${r * .1}" fill="#FFF6C9"/></g>` : `
+ <g transform="translate(${x} ${y}) rotate(${rot})">
+  <ellipse rx="${r * 1.25}" ry="${r}" fill="var(--limao)"/>
+  <ellipse rx="${r * 1.25}" ry="${r}" fill="none" stroke="var(--limaoE)" stroke-width="6"/>
+  <ellipse cx="${r * 1.28}" rx="${r * .14}" ry="${r * .12}" fill="var(--limaoE)"/>
+  <ellipse cx="${-r * .35}" cy="${-r * .4}" rx="${r * .38}" ry="${r * .14}" fill="#FFF3B0" opacity=".7"/>
+  <path d="M${-r * 1.1} ${-r * .2} q-30 -60 40 -95 q10 70 -40 95z" fill="var(--verde)" transform="translate(${-r * .2} ${-r * .55}) rotate(-20)"/></g>`;
+const kidneys = (x, y, s, glow = 0) => `
+ <g transform="translate(${x} ${y}) scale(${s})">
+  ${glow ? `<circle r="260" fill="var(--alerta)" opacity="${glow}"/>` : ''}
+  <path d="M-40 -150 C-150 -170 -210 -60 -190 30 C-170 130 -80 170 -40 120 C-10 85 -60 40 -40 0 C-25 -35 20 -40 10 -90 C5 -125 -10 -145 -40 -150Z" fill="var(--rim)" stroke="var(--rimE)" stroke-width="8"/>
+  <path d="M40 -150 C150 -170 210 -60 190 30 C170 130 80 170 40 120 C10 85 60 40 40 0 C25 -35 -20 -40 -10 -90 C-5 -125 10 -145 40 -150Z" fill="var(--rim)" stroke="var(--rimE)" stroke-width="8"/>
+  <path d="M-30 20 C-10 60 -15 140 -10 230 M30 20 C10 60 15 140 10 230" stroke="#E9A79A" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <ellipse cx="-120" cy="-60" rx="30" ry="50" fill="#E08D7D" opacity=".6"/><ellipse cx="120" cy="-60" rx="30" ry="50" fill="#E08D7D" opacity=".6"/></g>`;
+const bottle = (x, y, h, fill = .85, label = '2 L') => {
+  const w = h * .36, top = -h / 2, lv = top + h * (1 - fill) + 60;
+  return `<g transform="translate(${x} ${y})">
+  <defs><clipPath id="bc${x}"><path d="M${-w / 2} ${top + 90} q0 -40 ${w * .3} -50 v-40 h${w * .4} v40 q${w * .3} 10 ${w * .3} 50 v${h - 110} q0 20 -20 20 h${-w + 40} q-20 0 -20 -20z"/></clipPath></defs>
+  <rect x="${-w / 2}" y="${lv}" width="${w}" height="${h}" fill="var(--agua)" opacity=".8" clip-path="url(#bc${x})"/>
+  <path d="M${-w / 2} ${top + 90} q0 -40 ${w * .3} -50 v-40 h${w * .4} v40 q${w * .3} 10 ${w * .3} 50 v${h - 110} q0 20 -20 20 h${-w + 40} q-20 0 -20 -20z" fill="none" stroke="var(--aguaE)" stroke-width="8"/>
+  <rect x="${-w * .22}" y="${top - 22}" width="${w * .44}" height="34" rx="8" fill="var(--verde)"/>
+  <rect x="${-w / 2 + 20}" y="${top + h * .45}" width="${w - 40}" height="${h * .2}" rx="10" fill="#fff" opacity=".9"/>
+  <text x="0" y="${top + h * .45 + h * .14}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="${h * .1}" fill="var(--aguaE)">${label}</text>
+  <path d="M${-w / 2 + 26} ${top + 130} v${h * .3}" stroke="#fff" stroke-width="10" stroke-linecap="round" opacity=".6"/></g>`;
+};
+const glass = (x, y, h, straw = true) => `
+ <g transform="translate(${x} ${y})">
+  <path d="M${-h * .32} ${-h / 2} L${-h * .25} ${h / 2} H${h * .25} L${h * .32} ${-h / 2}Z" fill="#fff" opacity=".55"/>
+  <path d="M${-h * .3} ${-h / 2 + 60} L${-h * .25} ${h / 2} H${h * .25} L${h * .3} ${-h / 2 + 60}Z" fill="var(--agua)" opacity=".65"/>
+  ${straw ? `<path d="M${h * .05} ${h / 2 - 30} L${h * .2} ${-h * .72} l60 -40" stroke="var(--verde)" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+  ${lemon(h * .1, -h / 2 + 60, 55, 15, true)}
+  <path d="M${-h * .32} ${-h / 2} L${-h * .25} ${h / 2} H${h * .25} L${h * .32} ${-h / 2}" fill="none" stroke="var(--aguaE)" stroke-width="8" stroke-linejoin="round"/>
+  ${[0, 1, 2].map(i => `<circle cx="${-h * .1 + i * 30}" cy="${h * .1 + i * 60}" r="${10 + i * 3}" fill="#fff" opacity=".7"/>`).join('')}</g>`;
+const drops = (x, y, n, s = 1) => [...Array(n)].map((_, i) => `<path transform="translate(${x + i * 80 * s} ${y + (i % 2) * 40}) scale(${s})" d="M0 -40 C20 -10 30 5 30 18 A30 30 0 0 1 -30 18 C-30 5 -20 -10 0 -40Z" fill="var(--agua)" stroke="var(--aguaE)" stroke-width="5"/>`).join('');
+const warn = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 -120 L115 90 H-115Z" fill="var(--alerta)" stroke="#fff" stroke-width="14" stroke-linejoin="round"/><rect x="-11" y="-55" width="22" height="90" rx="11" fill="#fff"/><circle cy="62" r="13" fill="#fff"/></g>`;
+const clock = (x, y, r) => `<g transform="translate(${x} ${y})"><circle r="${r}" fill="#fff" stroke="var(--verde)" stroke-width="12"/>${[...Array(12)].map((_, i) => { const a = i / 12 * Math.PI * 2; return `<line x1="${Math.cos(a) * r * .78}" y1="${Math.sin(a) * r * .78}" x2="${Math.cos(a) * r * .88}" y2="${Math.sin(a) * r * .88}" stroke="var(--verde)" stroke-width="8" stroke-linecap="round"/>`; }).join('')}<line y2="${-r * .55}" stroke="var(--ink)" stroke-width="12" stroke-linecap="round"/><line x2="${r * .4}" y2="${r * .15}" stroke="var(--ink)" stroke-width="12" stroke-linecap="round"/></g>`;
+const tooth = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-70 -60 C-70 -110 -20 -100 0 -85 C20 -100 70 -110 70 -60 C70 -10 50 20 45 70 C40 110 15 110 10 70 C5 40 -5 40 -10 70 C-15 110 -40 110 -45 70 C-50 20 -70 -10 -70 -60Z" fill="#fff" stroke="#B9C3BD" stroke-width="7"/></g>`;
+const heart = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 60 C-80 0 -90 -60 -45 -75 C-20 -82 -5 -65 0 -50 C5 -65 20 -82 45 -75 C90 -60 80 0 0 60Z" fill="var(--alerta)" opacity=".85"/></g>`;
+const phone = (x, y, s) => `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-120" y="-220" width="240" height="440" rx="36" fill="var(--ink)"/><rect x="-104" y="-190" width="208" height="380" rx="14" fill="var(--bg)"/><path d="M-40 -90 h80 v150 l-40 -32 l-40 32z" fill="var(--verde)"/><circle cy="200" r="10" fill="#555"/></g>`;
+const bg = (a, b) => `<rect width="1080" height="1920" fill="${a}"/><circle cx="980" cy="1500" r="520" fill="${b}"/><circle cx="60" cy="1880" r="260" fill="${b}" opacity=".7"/>`;
+
+const CENAS = [
+  { tag: 'SAÚDE DOS RINS', h: 'A receita natural que os <em>urologistas</em> levam a sério', s: ['Cabe numa garrafa de água.', 560],
+    svg: bg('#F5F0E6', '#E9F3EC') + kidneys(560, 1260, 1.35) + lemon(250, 1580, 95, -15) + lemon(860, 1650, 80, 20, true) + drops(240, 1030, 3, .9) },
+  { tag: 'ANTES DE TUDO', h: 'Não é para <em style="color:var(--alerta)">crise</em> de dor', s: ['', 0], pills: true,
+    svg: bg('#FBEDEA', '#F6D9D3') + kidneys(560, 1050, 1.0, .12) + warn(800, 860, .9) },
+  { tag: 'A RECEITA', h: 'Água com <em>limão</em>', s: ['2 limões espremidos (≈ ½ xícara de suco)<br>+ 2 litros de água<br>Sem açúcar.', 430],
+    svg: bg('#F5F0E6', '#FFF4CC') + bottle(700, 1350, 760, .82) + lemon(300, 1240, 120, -20, true) + lemon(330, 1520, 110, 10) + drops(230, 1000, 3) },
+  { tag: 'COMO TOMAR', h: 'Aos poucos, <em>ao longo do dia</em>', s: ['Meta: urinar pelo menos 2 litros por dia.', 480],
+    svg: bg('#F5F0E6', '#E3F1F8') + clock(300, 1120, 170) + glass(700, 1240, 420) + drops(200, 1560, 4, .8) },
+  { tag: 'POR QUE FUNCIONA', h: 'A água é o que tem <em>mais evidência</em>', s: ['Urina mais diluída = menos risco de pedra.<br>O citrato do limão pode ajudar —<br>estudos ainda mistos.', 480],
+    svg: bg('#F5F0E6', '#E3F1F8') + kidneys(540, 1340, 1.05) + drops(180, 1030, 4, .9) + lemon(830, 1660, 85, 0, true) },
+  { tag: 'CUIDADOS', h: 'Fale com seu <em>médico</em> antes se…', s: ['• tem doença nos rins<br>• tem problema no coração<br>• precisa restringir líquidos<br>• e use canudo: protege os dentes', 480],
+    svg: bg('#F5F0E6', '#EDE7F5') + glass(760, 1420, 380) + tooth(330, 1390, 1.2) + heart(330, 1640, 1.0) },
+  { tag: 'SALVE ESTE VÍDEO', h: 'Mande para quem vive <em>esquecendo de beber água</em>', s: ['', 0],
+    svg: bg('#F5F0E6', '#E9F3EC') + phone(540, 1300, 1.25) + drops(180, 1640, 3, .9) + lemon(860, 1660, 80, 15, true) },
+];
+const c = CENAS[N - 1];
+document.getElementById('root').innerHTML = `
+ <svg class="c" width="1080" height="1920" viewBox="0 0 1080 1920">${c.svg}</svg>
+ <div class="tag">${c.tag}</div><div class="h">${c.h}</div>
+ ${c.s[0] ? `<div class="s" style="top:${c.s[1]}px">${c.s[0]}</div>` : ''}
+ ${c.pills ? `<div class="s pills" style="top:440px">Procure atendimento hoje se a dor vier com:<br><br>
+   <span class="pill" style="background:var(--alerta);color:#fff">febre</span><span class="pill" style="background:var(--alerta);color:#fff">sangue na urina</span><span class="pill" style="background:var(--alerta);color:#fff">vômito</span><span class="pill" style="background:var(--alerta);color:#fff">dor muito forte</span></div>` : ''}
+ <div class="foot">Conteúdo informativo. Não substitui consulta médica.</div>`;
+document.fonts.ready.then(() => { window.READY = true; });
+</script></body></html>

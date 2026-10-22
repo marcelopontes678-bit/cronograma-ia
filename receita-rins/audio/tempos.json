@@ -1,0 +1,44 @@
+[
+ {
+  "id": "1-gancho",
+  "inicio": 0.0,
+  "fim": 5.77,
+  "texto": "Existe uma receita natural para os rins que os urologistas levam a sério. E ela cabe numa garrafa de água."
+ },
+ {
+  "id": "2-alerta",
+  "inicio": 6.12,
+  "fim": 13.841,
+  "texto": "Mas atenção: ela não trata uma crise. Dor forte nas costas com febre, sangue na urina ou vômito é motivo para procurar atendimento hoje."
+ },
+ {
+  "id": "3-receita",
+  "inicio": 14.191,
+  "fim": 21.071,
+  "texto": "A receita é água com limão. Esprema dois limões, mais ou menos meia xícara de suco, em dois litros de água. Sem açúcar."
+ },
+ {
+  "id": "4-como",
+  "inicio": 21.421,
+  "fim": 29.517,
+  "texto": "Beba aos poucos ao longo do dia, junto com a sua água de sempre. O objetivo, segundo os especialistas, é urinar pelo menos dois litros por dia."
+ },
+ {
+  "id": "5-porque",
+  "inicio": 29.867,
+  "fim": 41.528,
+  "texto": "Beber mais água deixa a urina mais diluída, e é a medida com mais evidência para prevenir pedras nos rins. O limão traz uma substância chamada citrato, que pode ajudar. Mas os estudos ainda são mistos."
+ },
+ {
+  "id": "6-cuidados",
+  "inicio": 41.878,
+  "fim": 50.532,
+  "texto": "Se você tem doença nos rins, problema no coração ou restrição de líquidos, fale com o seu médico antes. E use canudo, para proteger os dentes do ácido."
+ },
+ {
+  "id": "7-cta",
+  "inicio": 50.882,
+  "fim": 54.701,
+  "texto": "Salve este vídeo e mande para quem vive esquecendo de beber água."
+ }
+]
