@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "Quando eu ordeno por menor preço aparece kit de 3 prateleiras em MDF por uns R$60-70 com milhares de avaliações. Pinus maciço é melhor, mas R$119 numa loja sem avaliação ainda me faz pegar o mais barato ou esperar.",
+  "objection": "Loja nova com poucas avaliações: não sei se a madeira chega bem acabada e se o suporte invisível aguenta mesmo, foto e vídeo do vendedor eu não considero prova.",
+  "would_change_my_mind": "Ver umas 30-50 avaliações reais com foto de comprador, ou um cupom que deixe o kit perto de R$89 com frete grátis.",
+  "price_too_cheap": 45,
+  "price_cheap": 79,
+  "price_expensive": 110,
+  "price_too_expensive": 150
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Tenho um vão que não fecha com tamanho pronto, e sob medida com refação por conta deles por R$169-189 é barato perto de chamar marceneiro. Madeira maciça e a foto do meu kit antes de despachar responde minha dúvida do MDF com adesivo.",
+  "objection": "Pinus pode parecer barato, cheio de nó e com verniz amarelado, e com loja nova sem avaliação eu não sei se o acabamento fica bonito na minha parede.",
+  "would_change_my_mind": "Se a foto pelo chat mostrar pinus cheio de nó ou acabamento grosseiro, eu desisto antes do envio; se tivesse fotos reais de clientes com o tingido freijó, eu compraria sem pensar.",
+  "price_too_cheap": 70,
+  "price_cheap": 120,
+  "price_expensive": 250,
+  "price_too_expensive": 380
+}
