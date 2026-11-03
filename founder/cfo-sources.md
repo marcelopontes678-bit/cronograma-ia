@@ -1,4 +1,21 @@
-# Fontes dos números (founder/numbers.json)
+# Fontes dos números: tábua end grain (numbers.json atual)
+
+| item | valor | origem |
+|---|---:|---|
+| Madeira nobre (marfim + muiracatiara) | R$60 por tábua | **[estimativa]**: ~0,01 m³ (o dobro do volume final de 0,0048 m³) a ~R$6.000/m³. Não achei preço público dessas espécies. O [CEPEA](https://cepea.org.br/br/categoria/acessar/informativo-florestal-293.aspx) publica preços de nativas por região. **Cote na madeireira.** |
+| Cola Titebond III | R$5,30 (~50 g) | Público: R$110,94 por 1,05 kg ([Magalu](https://www.magazineluiza.com.br/busca/cola+titebond)). A [ficha técnica](https://ardec.ca/media/catalog/specs/fs-titebond-III-colle-a-bois-ultime.pdf) diz "aprovada pela FDA para contato indireto com alimentos" |
+| Frasco de óleo mineral de 100 ml | R$8,56 | Público: farmácia ([Cliquefarma](https://www.cliquefarma.com.br/preco/oleo-mineral-1l)). Confirme o grau USP ou alimentar |
+| Lixas, óleo e cera do acabamento, pés, embalagem de presente, caixa | R$8 / R$4 / R$4 / R$10 / R$6 | [estimativa] |
+| Comissão ML | 12% | Blogs (ver abaixo). Confirme no simulador do ML |
+| Frete grátis (~4,5 kg) | R$25 | [estimativa]. Simule no ML |
+| Reserva de garantia e de atraso de Natal | R$4,90 | [estimativa]: 3% × R$80 + 5% × R$50 |
+| DAS MEI | R$87/mês | Público ([fonte](https://soubrasilia.com/servicos/mei/)) |
+| Tempo por tábua | 3,5 h | [estimativa]. Cronometre |
+
+---
+
+# Arquivo: fontes das prateleiras
+
 
 Pesquisa feita em 2026-11-03. Tudo em R$. **[estimativa]** = palpite do CFO, troque pelo valor real.
 

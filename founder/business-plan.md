@@ -1,11 +1,11 @@
-# Kit Parede Pronta (nome de trabalho) · Business plan
+# Veio Certo: tábua de corte end grain · Business plan
 
-**Verdict: Not yet**
+**Verdict: Profitable**
 
 - ✓ Each tabua end grain 40x30x4 earns $83.36 before fixed costs (33% contribution).
 - ✓ Year 1 operating profit: $35,619.
 - ✓ Break-even is 1 tabua end grain 40x30x4s a day against a capacity of 3.
-- ✗ 2 of 20 simulated buyers buy (10%, the bar is 25%).
+- ✓ 10 of 20 simulated buyers buy (50%, the bar is 25%).
 
 | key number | |
 | --- | ---: |
@@ -16,51 +16,56 @@
 | Startup spend | $2,000 |
 | Cash needed before it pays for itself | $2,000 |
 | Startup money earned back | month 3 |
-| Buyer panel | 2 buy · 18 pass |
+| Buyer panel | 10 buy · 10 pass |
 
 ## The idea
 
-- O que é: uma marcenaria nova que fabrica prateleiras e nichos em madeira maciça e vende pelos marketplaces brasileiros (Mercado Livre, Shopee e, depois, Elo7 e MadeiraMadeira).
-- Para quem: brasileiros de 25 a 45 anos montando ou decorando apartamento, que compram móveis pequenos pelo celular em marketplaces.
-- O que vende e a que preço: kit com 3 prateleiras flutuantes 60x20 em pinus maciço, R$139 (lançamento a R$119 nos 30 primeiros pedidos ou até 31/12/2026); sob medida até 120 cm a R$169; sob medida com acabamento tingido a R$189.
-- Onde e como: online, com envio pelos Correios ou transportadora do marketplace; postagem em 1 dia útil; sob medida em 7 dias úteis.
-- Orçamento e restrições: o fundador é marceneiro há mais de 20 anos. Orçamento disponível: R$2.000. Antes ele disse que começa do zero (sem oficina nem máquinas); falta confirmar quais máquinas e que espaço já tem. Os custos são estimativas até chegarem orçamentos reais.
-- Padrão de qualidade: `founder/quality-spec.md`.
+- **O que é:** um marceneiro com 20+ anos de oficina fabrica em casa tábuas de corte end grain (madeira de topo) em xadrez de madeiras nobres brasileiras e vende pelo Mercado Livre.
+- **Para quem:** brasileiros de 28 a 55 anos que fazem churrasco ou cozinham em casa e se importam com as facas, e quem procura um presente marcante (Natal e Dia dos Pais).
+- **O que vende e a que preço:** tábua 40x30x4 cm, numerada e assinada, a **R$249 de lançamento** (30 primeiros pedidos ou até 31/12/2026) e **R$349 depois**. Planejada, ainda não testada: tábua de presente menor, 30x20, a R$149–179.
+- **Onde e como:** Mercado Livre, envio pelo vendedor e postagem em até 5 dias úteis.
+- **Orçamento e restrições:** R$2.000. O fundador é marceneiro experiente. Produção em casa, como MEI.
+- **Madeiras:** Marfim (clara) e Muiracatiara (escura) são **sugestão a confirmar** pelo marceneiro.
+- **Histórico:** o pack começou com prateleiras de pinus. A análise mostrou prejuízo por peça (`arquivo-prateleiras/`) e o produto mudou para a tábua em 03/11/2026.
 
 ## Summary
 
-**Veredito: Not yet (ainda não).** Três das quatro checagens falham por causa do custo, não da demanda. O que precisa mudar, em ordem:
+**Veredito: Profitable** (calculado pelo `compile.py`), **com base em estimativas e compradores simulados.** Ainda não houve nenhuma venda real. A madeira, o frete e o tempo por tábua precisam ser cotados e medidos antes de qualquer gasto.
 
-1. **Custo por kit** (`/founder-cfo`). O kit de R$139 custa R$159,17 para produzir e entregar e **perde R$20,17 por venda**. O item mais caro são os 6 suportes invisíveis (R$48). Cote no atacado ou troque o tipo de suporte.
-2. **Estrutura** (`/founder-ops` + `/founder-cfo`). Galpão e ajudante somam R$8.300 por mês de custo fixo, contra um produto que hoje não contribui nada. Comece produzindo em casa ou numa garagem.
-3. **Mix de preço** (`/founder-pricing`). O dinheiro está no sob medida (R$169) e no tingido (R$189), não no kit pronto.
+**O negócio:** um marceneiro com 20+ anos de oficina faz em casa tábuas de corte end grain (madeira de topo), em xadrez de duas madeiras nobres brasileiras, numeradas e assinadas, e vende no Mercado Livre. O público é quem faz churrasco ou cozinha a sério e quem procura um presente marcante. O produto substituiu as prateleiras, que davam prejuízo ou margem quase nula por peça (`arquivo-prateleiras/`).
 
-**O negócio:** uma marcenaria nova vendendo prateleiras em madeira maciça de pinus pelo Mercado Livre e pela Shopee. O público são pessoas de 25 a 45 anos decorando apartamento pelo celular. A oferta é o *Kit Parede Pronta*: foto do kit do cliente antes do envio, reposição sem devolver a peça e acabamento à escolha.
+**Os três números (R$249 de lançamento, até 2 tábuas/dia):**
+- **Lucro por tábua: R$83,36 (33%).** Margem no plano: 31%.
+- **Equilíbrio: ~0,15 tábua/dia** (uns 5 por mês). A capacidade estimada é de 3/dia.
+- **Ano 1: +R$35.619 de operação.** Os R$2.000 voltam no 3º mês. A R$349, o lucro por tábua vai a R$171 e o ano 1 a +R$78.123.
 
-**Os três números (plano a R$139, 5 kits/dia):**
-- Contribuição por kit: **-R$20,17 (-15%)**. Margem no plano: **-54%**.
-- Ponto de equilíbrio: **nunca**, porque cada venda perde dinheiro.
-- Ano 1: **-R$122.291** de operação e -R$162.591 depois do investimento de R$40.300.
+**Painel e conselho:**
+- O painel da tábua subiu de **10% para 50% de compra** quando a oferta passou a nomear as madeiras, enviar a foto da tábua do cliente, numerar e assinar, e garantir o prazo de presente, junto com o preço de lançamento.
+- A renda alta comprou toda. Quem caça preço e quem compra presente com orçamento apertado não comprou.
+- O conselho avaliou a ideia anterior (prateleiras). As condições dele continuam valendo e estão atendidas: um produto, um canal, sem galpão e sem funcionário. O prejuízo por peça foi resolvido.
 
-Com suporte a ~R$4, frete a R$15, preço médio de R$169 e sem galpão nem ajudante (custo fixo de R$1.200/mês), a ferramenta dá **+R$38,43 por kit, equilíbrio em ~1 kit/dia e +R$28.834 no ano 1** de operação. Esse cenário ainda não é o plano: ele depende de uma cotação de suporte que ainda não existe.
+**Maior risco:** os números de custo e tempo. Se a madeira passar de R$60 por tábua ou o tempo passar de 5 h, a margem cai muito. No pior caso testado (R$249, madeira a R$90, frete a R$35), ainda sobram R$43 por tábua, mas sem pagar o seu trabalho de forma justa. **O que fazer:** cotar antes de comprar, cronometrar o 1º lote e subir para R$349.
 
-**O que o painel disse:**
-- Com o pitch original (R$149), compraram **2 de 20 (10%)**. Esse é o número que o compilador usa, e ele fica abaixo da meta de 25%.
-- Com o Kit Parede Pronta a R$119 (`founder/panel-v2/`), compraram **5 de 20 (25%)**. Mas R$119 perde R$36,57 por kit, e o preço mudou junto com a oferta.
-- Nas duas rodadas o principal motivo de recusa foi o mesmo: **loja nova sem avaliações** (14 e 11 recusas). O preço veio bem atrás (3 em cada rodada).
-- O conselho (`/founder-board`) não rodou, então não há com o que comparar.
+**Outros riscos:**
+- Loja nova, sem avaliações.
+- Teto do MEI estourando por volta do 8º mês.
+- Regras da Anvisa e do Inmetro para utensílio em contato com alimento.
+- Um concorrente já usa marfim e muiracatiara.
 
-**Concorrência:** existe uma lacuna real entre o MDF de R$60–72 e a madeira de R$246 ou mais. As reclamações mais comuns do setor são peça faltando e produto chegando quebrado. Isso é problema de processo e embalagem, e a oferta resolve as duas.
+**Para começar:** R$2.000, que cabem no orçamento, para o 1º lote de ~15 tábuas e os insumos. O teste real é vender 10 tábuas entre 30/11 e 13/12, com lucro por tábua ≥ R$60 e ≤ 5 h por peça (`launch.md`).
 
-**Maior risco:** confiança. Ninguém compra de loja sem avaliações, e cada avaliação inicial custa prejuízo. O plano é vender os 30 primeiros a preço de lançamento, pedir foto da prateleira instalada e não oferecer nada em troca de nota positiva. O custo desses 30 é de cerca de R$1.100 a R$119, ou zero se o custo for corrigido antes.
+**Esta semana:**
+1. Escolher o par de madeiras e **cotar na madeireira**.
+2. **Simular o frete** da caixa no Mercado Livre.
+3. Confirmar as regras da **Anvisa e do Inmetro** para tábua de madeira.
 
-**Para começar:** no modelo atual, o caixa necessário passa de R$162 mil, o que é inviável. No modelo enxuto, ele cai para cerca de R$41 mil, quase todo em máquinas e caução. Quem já tiver as máquinas precisa de bem menos. O primeiro teste real (`/founder-launch`): anunciar o kit no Mercado Livre com 10 a 20 unidades e medir visitas, conversão e reclamações.
-
-**Esta semana:** pedir **cotação de atacado do suporte invisível 20 cm** (Desicon, MFL ou distribuidor) e **simular o frete real** da caixa no Mercado Livre. São os dois números que decidem se o kit dá lucro.
-
-_O painel são compradores simulados e os números são projeções a partir de estimativas. Orçamentos e clientes reais confirmam tudo isso. Isto não é aconselhamento financeiro, jurídico nem tributário: um contador deve revisar enquadramento, folha e impostos._
+_O painel são compradores simulados e os números são projeções a partir de estimativas. Clientes e orçamentos reais confirmam ou derrubam tudo isso. Isto não é aconselhamento financeiro, jurídico nem tributário: um contador deve revisar o enquadramento e os impostos._
 
 ## What the board said
+
+> **Nota (03/11/2026):** o conselho avaliou a ideia anterior, as prateleiras. O produto mudou para a tábua end grain. Os riscos levantados continuam válidos: loja nova sem avaliações, um produto e um canal por 90 dias, e evitar galpão e funcionário. O risco de prejuízo por peça foi resolvido pela tábua (ver `cfo.md`). Para uma avaliação nova, rode o `/founder-board` de novo.
+
+## Conselho: Kit Parede Pronta
 
 **Votação: 2 FUND IF, 1 PASS. Nota média: 3,7 de 10.**
 - Ofertas: 4 (FUND IF)
@@ -110,6 +115,47 @@ Os memos completos estão em `founder/board/`. As lentes são resumos de framewo
 Os primeiros 30 pedidos servem para gerar avaliações com foto e medir o tempo de produção. Com isso, fica claro se o sob medida paga a mão de obra. Só depois disso se discute galpão, segundo canal ou marca própria fora do marketplace, que é a única defesa real contra cópia que o Monopólio aceitaria.
 
 ## The competition
+
+Pesquisa de 2026-11-03. Os dados vêm de **trechos de busca**, porque o Mercado Livre bloqueia acesso automatizado daqui. Os preços são de anúncio. Confira antes de decidir.
+
+### Quem já vende
+
+| Concorrente / anúncio | Canal | Preço | Madeira | Fonte |
+|---|---|---:|---|---|
+| End grain carvalho europeu | ML | — | carvalho | [ML](https://produto.mercadolivre.com.br/MLB-3813436327-tabua-de-corte-end-grain-madeira-carvalho-europeu-exclusiva-_JM) |
+| End grain teca (frete grátis) | ML | R$329 | teca | [ML end grain](https://lista.mercadolivre.com.br/tabuas-de-corte-end-grain) |
+| End grain peroba | ML | R$354,25 | peroba | [ML end grain](https://lista.mercadolivre.com.br/tabuas-de-corte-end-grain) |
+| Faixa geral end grain | ML | R$329–440 | teca, peroba, eucalipto, carvalho | [ML](https://lista.mercadolivre.com.br/tabua-end-grain) |
+| Ponciano Tábuas Artesanais (teca premium 50x30) | loja própria | R$480 (R$456 Pix) | teca | [Ponciano](https://poncianotabuasartesanais.com/products/tabua-end-grain-retangular-teca-premium) |
+| Original Woodcraft | loja própria | R$600 (R$570 Pix) | imbuia, marfim, muiracatiara | [Original Woodcraft](https://www.originalwoodcraft.com.br/157-tabua-de-corte-end-grain) |
+| Rickgreen Woodworks | loja própria | — | — | [Rickgreen](https://rickgreen.com.br/tabuas-de-corte) |
+| Cutelaria Cimo (teca) | loja própria | — | teca | [Cimo](https://www.cutelariacimo.com.br/products/tabua-end-grain-teca) |
+| Tábua artesanal de angelim (substituto) | ML | R$78,90 | angelim | [ML](https://lista.mercadolivre.com.br/tabua-de-corte-madeira) |
+| Tábuas comuns e personalizadas (substituto) | ML | R$38–240 | pinus, teca | [ML](https://lista.mercadolivre.com.br/tabua-de-frios-personalizada) |
+
+**Faixa de preço da end grain:** de R$329 (ML) a R$600 (loja artesanal). Os substitutos ficam entre R$38 e R$100.
+
+> ⚠️ **Atenção:** a Original Woodcraft já usa **marfim e muiracatiara**, as mesmas madeiras sugeridas para a nossa oferta. Para não parecer cópia, considere outro par de madeiras ou um desenho próprio.
+
+### A lacuna
+
+- O painel simulado mostrou que o comprador desconfia de **madeira tingida** e de **cola que solta**, e que acha o **xadrez genérico**.
+- Ninguém nas fontes encontradas promete, ao mesmo tempo:
+  - **foto da tábua do próprio cliente antes do envio**;
+  - **peça numerada e assinada** por um marceneiro;
+  - **prazo de presente garantido**.
+- **R$249** fica abaixo de toda end grain encontrada, mas o plano é subir para R$349.
+
+### A ameaça
+
+- Quem já vende end grain no ML (teca, peroba) pode copiar a foto antes do envio e a numeração em uma semana.
+- A defesa é a assinatura de um marceneiro real, com 20 anos de oficina mostrados no Instagram, e a mesma pessoa no chat.
+- Reclamações públicas de clientes desses concorrentes **não foram pesquisadas**. Faça isso antes de lançar.
+
+---
+
+## Arquivo: concorrentes das prateleiras (análise anterior)
+
 
 Data da pesquisa: 2026-11-03. Fontes: só páginas públicas. **Limite:** a rede desta sessão não abre o Mercado Livre, então os números do ML vêm de trechos de resultados de busca, não das páginas abertas. Preços e notas mudam o tempo todo, então confira os anúncios antes de decidir. As premissas sobre a ideia estão em `founder/idea.md`.
 
@@ -208,7 +254,7 @@ Ressalva honesta: **no MDF padrão de R$60–75 não há lacuna**. Ali vence que
 
 ## The buyer panel
 
-**2 buy · 18 pass** (10% buy) out of 20 simulated buyers. Seed 493632, so the same cards can be dealt again.
+**10 buy · 10 pass** (50% buy) out of 20 simulated buyers. Seed 825715, so the same cards can be dealt again.
 
 These are simulated buyers, not customers. Use this to find objections and weak spots, then confirm the big ones with real people before you spend.
 
@@ -216,57 +262,56 @@ These are simulated buyers, not customers. Use this to find objections and weak 
 
 | group | buyers | buy rate |
 | --- | ---: | ---: |
-| Renda alta que valoriza design, renda anual em R$ | 4 | 25%  (thin) |
-| Classe média que reforma ou decora, renda anual em R$ | 8 | 12% |
-| Primeiro apê / aluguel, renda anual em R$ | 8 | 0% |
+| Renda alta, gosta de cozinha e design, renda anual em R$ | 7 | 100%  (thin) |
+| Classe media que cozinha em casa, renda anual em R$ | 9 | 33% |
+| Renda mais apertada, compra para presentear, renda anual em R$ | 4 | 0%  (thin) |
 
 ### By buying behaviour
 
 | group | buyers | buy rate |
 | --- | ---: | ---: |
-| Precisa de medida exata | 2 | 100%  (thin) |
-| Caçador de preço | 5 | 0%  (thin) |
-| Já se queimou com MDF ruim | 3 | 0%  (thin) |
-| Quer o visual do Pinterest | 3 | 0%  (thin) |
-| Lê todas as avaliações | 4 | 0%  (thin) |
-| Compra rápido | 3 | 0%  (thin) |
+| Quer peca de design | 2 | 100%  (thin) |
+| Cozinheiro entusiasta | 4 | 75%  (thin) |
+| Churrasqueiro de fim de semana | 5 | 60%  (thin) |
+| Procurando presente | 4 | 50%  (thin) |
+| Le todas as avaliacoes | 2 | 0%  (thin) |
+| Cacador de preco | 3 | 0%  (thin) |
 
 ### By income
 
 | group | buyers | buy rate |
 | --- | ---: | ---: |
-| $57,000 to $110,000 | 7 | 14%  (thin) |
-| $110,000 and up | 7 | 14%  (thin) |
-| under $57,000 | 6 | 0%  (thin) |
+| $186,000 and up | 7 | 100%  (thin) |
+| $73,000 to $186,000 | 7 | 43%  (thin) |
+| under $73,000 | 6 | 0%  (thin) |
 
 ### Why they pass
 
 | reason | buyers | in their words |
 | --- | ---: | --- |
-| trust | 14 | "Ordenei por menor preço e achei kits de 3 prateleiras por bem menos de R$149; pagar mais só faria sentido se eu tivesse certeza de que é pinus maciço mesmo, e uma loja nova com quase nenhuma avaliação não me dá essa certeza. Vou favoritar e esperar." (P002) · "Gostei de ser pinus maciço e não MDF, e o preço é ok, mas loja nova sem avaliação eu não arrisco de novo. Prefiro esperar ver fotos de compradores reais ou pegar de uma loja com reputação, mesmo pagando um pouco mais." (P003) |
-| price | 3 | "Quando ordeno por menor preço aparece kit de 3 prateleiras flutuantes por bem menos de R$149, e na foto do celular parece tudo igual. Pagar o dobro numa loja nova sem avaliação eu não faço, vou no mais barato que tem nota boa." (P007) · "R$149 é mais que o dobro do kit de MDF de R$70 que chega amanhã pelo Full. Pinus maciço é bonito, mas pra prateleira de sala eu não vejo diferença que valha isso, ainda mais de uma loja nova que demora até 3 dias úteis." (P009) |
-| quality | 1 | "Pelo menos é madeira maciça e não MDF com adesivo, e o preço não me pesa. Mas pinus com verniz costuma ficar amarelado, com cara de móvel de chácara, e não é o visual de madeira clara e fosca que eu quero no home office. Numa loja nova sem avaliações e sem fotos de cliente, prefiro pagar mais numa marca que já mostra o acabamento." (P013) |
+| price | 8 | "Minha tabua ta riscada e preciso trocar, mas R$249 numa tabua de loja nova, sem quase nenhuma avaliacao, e muito pra arriscar quando acho tabua de madeira por R$80. Vou deixar no favorito e ver se aparecem avaliacoes de gente que usou no churrasco." (P002) · "Achei bonita, a embalagem e a garantia de entrega antes do Natal ajudam, mas R$249 numa tabua ainda pesa demais pro meu orcamento de presente. Com esse dinheiro eu resolvo dois presentes, e tem tabua boa de madeira por R$80 a R$120." (P004) |
+| trust | 2 | "Achei a tabua bonita e a proposta parece seria, mas eu so compro de anuncio com muitas avaliacoes, e loja nova com quase nenhuma eu nao arrisco R$249. Vou salvar o anuncio e voltar quando tiver gente contando como a tabua ficou depois de uns meses." (P005) · "Loja nova com quase nenhuma avaliacao, e eu so compro anuncio que tem muita avaliacao pra eu ler as de 1 e 2 estrelas primeiro. R$249 pra presentear e muito dinheiro pra apostar numa loja que eu nao conheco, ainda mais com o orcamento apertado." (P016) |
 
 ### Why they buy
 
 | reason | buyers | in their words |
 | --- | ---: | --- |
-| need | 2 | "Tenho um vão com medida certa e nunca acho prateleira pronta que encaixe; pagar R$30 a mais para vir no tamanho exato, em madeira maciça e com gabarito de furação, resolve meu problema por uns R$179. Como compro pelo Mercado Livre, se der errado tenho a garantia da plataforma." (P001) · "Tenho um vão na parede que nenhuma prateleira pronta encaixa, e a medida sob encomenda até 120 cm por só R$30 a mais resolve exatamente isso. Por R$179 em madeira maciça, com troca garantida se chegar danificada, o risco é pequeno para mim." (P004) |
+| quality | 6 | "Numerada, assinada e com a foto do topo da minha tabua antes de mandar: isso e presente que ninguem mais vai ter, e fica lindo no Instagram. Chegando ate 23/12 e com caixa de presente, por R$249 eu resolvo o Natal." (P001) · "Tábua end grain de 40x30x4 em Muiracatiara por R$249 com frete grátis é preço bom pra mim, e a foto da minha tábua antes de despachar mais a garantia de 12 meses tiram boa parte do risco. Se pagar R$249 e vier bem colada, vai virar a tábua do churrasco de sábado." (P003) |
+| need | 3 | "Minha tabua ja esta riscada e com cheiro, e end grain de Muiracatiara a R$249 e mais barato que as importadas que eu vinha olhando. A foto do topo da minha tabua antes do envio e a compra pelo Mercado Livre me deixam arriscar mesmo com loja nova." (P006) · "Preciso de um presente nas proximas semanas e uma tabua end grain de Muiracatiara, numerada e assinada, e exatamente o tipo de coisa que um churrasqueiro guarda como trofeu. A R$249 com frete gratis e garantia de entrega antes do Natal, e mais barato que as end grain boas que vejo por ai, e o Mercado Livre me devolve o dinheiro se vier errado." (P012) |
+| timing | 1 | "Preciso resolver o presente do meu marido para o Natal e isso parece especial de verdade: numerada, assinada, com caixa de presente e prazo claro se eu pedir até 10/12. Por R$249 com frete grátis fica dentro do que eu gastaria num presente bom, então eu peço cedo, lá pelo fim de novembro, para ter folga." (P018) |
 
 ### What would flip a no
 
-- Ver várias avaliações com fotos reais mostrando a borda e o veio da madeira e a prateleira instalada com peso em cima, ou um cupom que deixasse o kit perto de R$110.
-- Ver umas 30 ou mais avaliações com fotos de clientes mostrando a prateleira instalada e carregada, e reputação verde no Mercado Livre.
-- Ver várias avaliações com fotos reais de clientes mostrando a prateleira instalada na parede, com o veio da madeira e o acabamento de perto.
-- Ver umas 50 avaliações ou mais, com fotos das prateleiras instaladas, e as negativas mostrando que a loja resolveu rápido.
-- Um cupom ou preço perto de R$110 com várias avaliações com foto de quem já instalou.
-- Ver dezenas de avaliações com fotos reais de clientes mostrando a prateleira carregada de livros e plantas, e poucas reclamações nas de 1 e 2 estrelas.
-- Ficar perto de R$100 com entrega Full em 1 ou 2 dias, e várias avaliações com foto mostrando que a madeira é boa mesmo.
-- Ver umas 20 ou 30 avaliações com fotos de clientes mostrando a prateleira instalada, com o acabamento e o suporte invisível de verdade.
-- Ver umas 30 ou mais avaliações boas com foto da prateleira instalada e carregada, e o anúncio no Full chegando em 1 ou 2 dias.
-- Ver umas 20 ou 30 avaliações com fotos de clientes mostrando a madeira de perto, o suporte instalado e coisa pesada em cima.
-- Fotos reais de clientes com as prateleiras instaladas, ou uma opção de acabamento fosco/tingido tipo freijó ou carvalho claro.
-- Ver umas 50 ou mais avaliações reais com fotos das prateleiras instaladas e carregadas, incluindo como a loja respondeu às reclamações.
+- Ver umas 20 avaliacoes boas com foto de quem usa no churrasco, ou o preco cair para uns R$199.
+- Se ficasse em torno de R$150 com frete gratis e a loja ja tivesse um bom numero de avaliacoes de quem comprou.
+- Ver umas 30 ou mais avaliacoes reais com foto, inclusive as negativas, de pessoas que usam a tabua ha alguns meses.
+- Ter umas 50 avaliacoes boas com foto de gente que ja usa ha meses, e o preco cair perto de R$150.
+- Ver avaliacoes de outros compradores com fotos de tabuas reais que chegaram no prazo, ou o preco perto de R$180 com a embalagem de presente incluida.
+- Ver umas 20 ou 30 avaliacoes boas com foto de gente que usa ha meses, ou o preco cair pra perto de R$180 parcelado sem juros.
+- Preco perto de R$150 com varias avaliacoes boas de quem ja comprou, e alguma explicacao simples de por que madeira de topo nao e menos higienica que plastico.
+- Ver umas 50 avaliacoes reais no Mercado Livre, inclusive as ruins, mostrando que a tabua aguenta e que a loja resolve problema, e o preco ficar perto de R$180.
+- Ver várias avaliações de gente que comprou mostrando a tábua depois de meses de uso, e um cupom que deixasse ela perto de R$170 a R$180.
+- Uma versão menor ou um cupom que deixasse ela por uns R$170, com algumas avaliações reais de compradores mostrando a tábua que chegou.
 
 Buyers say they would buy **1.0 times** in the first month on average.
 
@@ -274,195 +319,133 @@ Buyers say they would buy **1.0 times** in the first month on average.
 
 ## Pricing
 
-Base: 20 compradores simulados (`founder/panel/`), curva em `founder/pricing-curve.md` e concorrentes em `founder/competitors.md`. Os números do painel servem para **escolher o que testar**, não provam nada.
+Fontes: painéis `panel-tabua/` (v1, R$349) e `panel/` (= `panel-tabua-v2`, oferta nova a R$249), concorrentes em `competitors.md` e números em `cfo.md`. As respostas dos compradores simulados servem para **escolher o que testar**, não provam demanda.
 
-> **Falta a margem.** Ainda não existe `founder/numbers.json`, então não há custo por kit (madeira, verniz, suporte, parafusos, caixa, comissão e frete do marketplace). Por isso nenhum preço abaixo tem margem calculada. Rode o `/founder-cfo` com os custos reais e confira cada preço antes de publicar.
+### 1. O que os compradores disseram (Van Westendorp)
 
-### 1. O que o painel disse (Van Westendorp)
+| | Painel v1 (viu R$349) | Painel v2 (viu R$249) |
+|---|---:|---:|
+| Barato demais (PMC) | R$121 | R$121 |
+| Menor resistência (OPP) | R$150 | R$121 |
+| Indiferença (IPP) | R$250 | R$200 |
+| Caro demais (PME) | R$399 | R$321 |
+| Mediana "começa a ficar caro" | R$330 | R$300 |
 
-| ponto | preço | leitura |
-|---|---:|---|
-| PMC | R$80 | abaixo disso, parece barato demais para ser madeira maciça |
-| OPP | R$80 | ponto de menor resistência |
-| IPP | R$121 | metade acha barato, metade acha caro |
-| PME | R$190 | acima disso, a maioria não compra |
+- **Ver R$249 ancorou os compradores para baixo.** O teto caiu de R$399 para R$321.
+- **A renda alta é outro público:** deu "começa a ficar caro" entre R$380 e R$450 e "caro demais" entre R$550 e R$900.
 
-**Faixa aceitável: R$80 a R$190.** Medianas: "barato" R$110, "começa a ficar caro" R$180, "caro demais" R$230.
+### 2. Contra os concorrentes
 
-O preço atual, R$149, está dentro da faixa, mas acima do IPP. E, no painel, **o preço não foi o que barrou a compra**: 14 de 18 recusas foram por confiança (loja nova sem avaliações) e só 3 por preço. Baixar o preço sozinho não resolve. O que resolve é juntar avaliações com foto.
+Fonte: `competitors.md`.
 
-### 2. Contra os concorrentes (kit 3 prateleiras 60x20)
+- **End grain no Mercado Livre:** R$329–440 (teca R$329, peroba R$354,25).
+- **Loja artesanal:** R$456–600 (teca 50x30 a R$480; imbuia, marfim ou muiracatiara a R$600).
+- **Tábua comum de madeira:** R$78,90–100. É a referência de quem caça preço, e esse grupo não é o público.
 
-| concorrente | preço | o que inclui |
-|---|---:|---|
-| Bignotto (ML) | R$59,94 | MDF 15mm, suporte invisível |
-| Anúncio MLB44200402 (ML) | R$69,90–72,11 | MDF, aguenta 10 kg |
-| Pesmah (ML) | R$70,71 | MDF (dado não confirmado) |
-| Kit em madeira com suporte transparente (ML) | R$246,05–259 | madeira real |
-| Studio Home Marcenaria (Elo7) | R$279,90 | nicho artesanal (outro item) |
+R$249 fica **abaixo** de toda end grain encontrada, e R$349 fica no meio do Mercado Livre.
 
-Entre o MDF de R$60–72 e a madeira de R$246+ quase não há oferta. Qualquer preço entre R$110 e R$180 fica nessa lacuna. Não dá para competir com o MDF pelo preço, e o painel confirmou isso: os caçadores de preço compararam com o kit de R$70 e passaram.
+### 3. O preço e a margem
 
-### 3. O preço
+Valores da ferramenta do CFO (`cfo.md`):
 
-**Kit padrão 60x20 em pinus maciço: R$139**, ainda a confirmar com a margem do CFO.
-- Fica entre o IPP (R$121) e a mediana de "começa a ficar caro" (R$180), dentro da faixa aceitável.
-- É praticamente metade do kit de madeira real mais próximo (R$246) e o dobro do MDF, o que é coerente com "madeira de verdade".
-- Cai de R$149 para R$139 para sair da zona em que 5 compradores já disseram "caro" (P005, P015, P016, P017, P019 deram "começa a ficar caro" entre R$129 e R$140).
+| preço | lucro por tábua | margem | ano 1 |
+|---|---:|---:|---:|
+| R$249 (lançamento) | R$83,36 | 33% | +R$35.619 |
+| R$349 (preço cheio) | R$171,36 | 49% | +R$78.123 |
 
-### 4. A escada (bom / melhor / top)
+**Recomendação:** lançar a **R$249** para os 30 primeiros pedidos ou até 31/12/2026, para comprar as primeiras avaliações. Depois, ir para **R$349**. O lucro dobra e o público que mais comprou (renda alta, 7 de 7 no painel v2) aceita esse preço.
 
-| degrau | o quê | preço | por que subir |
+### 4. A escada
+
+| degrau | produto | preço | por quê |
 |---|---|---:|---|
-| Bom | Kit 3 prateleiras 60x20, pinus com verniz, pronto para envio (idealmente Full) | R$139 | — |
-| Melhor | **Sob medida até 120 cm**, 7 dias úteis | R$169 | O único grupo que comprou no painel (2 de 2) foi o de quem precisa de medida exata. Ambos aceitavam R$179. |
-| Top | Sob medida **+ acabamento fosco ou tingido** (tipo freijó ou carvalho claro) | R$189 | P004 e P013 (renda alta) recusaram o pinus "amarelado" e pediram exatamente esse acabamento. Para esse grupo, "caro demais" começou em R$450. |
+| Entrada | Tábua de presente 30x20x3 | R$149–179 | Para quem compra presente com orçamento apertado, que no painel parou em R$150–200. **Não testada.** |
+| Principal | End grain 40x30x4 xadrez, numerada | R$249 → R$349 | A peça testada no painel |
+| Topo | End grain 50x35x5 para churrasco, com canaleta | a definir | Para o churrasqueiro de renda alta. **Não testada.** |
 
-O degrau top fica no limite da faixa (PME R$190). Ele é para o segmento de renda alta, não para o caçador de preço.
+### 5. Oferta de abertura
 
-### 5. A oferta de abertura
-
-**Preço de lançamento: R$119 no kit padrão, para os primeiros 30 pedidos ou até 31/12/2026, o que acontecer primeiro.** Depois disso, R$139.
-- O objetivo não é margem, é **comprar as primeiras avaliações com foto**, que é o que 12 dos 18 "não" pediram para mudar de ideia. Junto com o produto, envie um cartão pedindo foto da prateleira instalada.
-- R$119 fica perto do "barato" mediano (R$110) e do que P002, P007, P017 e P019 pediram ("cupom perto de R$110").
-- Mostre "Preço de lançamento" com a data de fim. **Não use "de R$X por R$Y"** com um preço que nunca foi cobrado.
-- Antes de lançar, confirme com o CFO que R$119 cobre o custo variável. Se não cobrir, é venda com prejuízo para comprar avaliação, e o CFO precisa dizer por quantos pedidos isso cabe no caixa.
+- **R$249 para os 30 primeiros pedidos ou até 31/12/2026**, o que acontecer primeiro. Depois, R$349.
+- No anúncio, use "preço de lançamento" com a data de fim. **Não use "de R$349 por R$249" antes de ter vendido a R$349.**
 
 ### 6. O que testar com compradores reais
 
-1. **R$119 contra R$139 no kit padrão**: dois anúncios iguais, um em cada preço, por 2 a 3 semanas. Compare conversão (visitas → vendas) e margem total, não só o volume.
-2. **Sob medida a R$169 contra R$189**: o painel sugere que esse grupo é pouco sensível ao preço. Confirme com pedidos reais.
+1. A mesma oferta nova a **R$249 e a R$349**, em dois anúncios ou em períodos alternados. Compare conversão e lucro total.
+2. A tábua de presente 30x20 a **R$159**, a partir de dezembro, para quem compra presente.
 
-Teste também, sem mudar o preço: fotos com a prateleira carregada (livros e vasos) e um vídeo do teste de carga. Isso responde à objeção que mais apareceu.
-
-### 7. As objeções de preço do painel (para o marketing responder)
+### 7. Objeções de preço do painel
 
 Simulações, não depoimentos:
 
-1. "R$149 é caro perto dos kits de MDF que vejo por R$60-80, e a loja é nova com poucas avaliações, então não sei se o pinus maciço e o suporte de 15 kg são de verdade." (P007)
-2. "Pagar o dobro numa loja quase sem avaliação, sem Full, e ainda esperar uns dias. Se der problema, não sei se eles respondem rápido." (P009)
-3. "Loja nova com poucas avaliações: não sei se o suporte invisível aguenta mesmo 15 kg ou se a prateleira vai entortar na parede, e R$149 já é dinheiro pra arriscar." (P016)
+1. "R$249 numa tabua e duas vezes e meia o que eu pago numa boa no Mercado Livre. [...] pra mim tabua e tabua, nao vejo motivo pra pagar tanto mais." (P009)
+2. "R$249 numa tabua ainda pesa no meu orcamento de presente. [...] ou pego uma tabua boa de R$80 a R$120 e completo com outra coisa." (P011)
+3. "R$249 é mais que o dobro do que eu pago numa tábua boa de R$80 a R$100. Pra cortar carne e legume em casa, a minha atual dá conta." (P017)
 
-Nas três, o preço vem junto com a desconfiança. A resposta tem duas partes: prova (fotos, teste de carga, avaliações) e velocidade (Full).
+Esse público não é o alvo. A resposta para ele é a tábua de presente menor, não baixar o preço da principal.
 
 ## The offer
 
-Método: a lente de Ofertas em `../.claude/skills/founder-board/lenses.md`, um resumo nosso do framework de *$100M Offers*. Fontes usadas: `founder/panel/results.md` (painel v1), `founder/competitors.md` e `founder/pricing.md`.
+**Pitch antigo:** `pitch-tabua-v1.md` (R$349). **Pitch novo:** `pitch-tabua.md`. Mesmos 20 compradores simulados (seed 825715). Painéis em `panel-tabua/` e `panel-tabua-v2/`.
 
-> **Atenção:** ainda não existe `founder/numbers.json` nem `founder/board.md`. Os **custos abaixo são estimativas relativas (1 a 5), não reais**, e a garantia **não foi modelada com a ferramenta do CFO**. Rode o `/founder-cfo` antes de publicar qualquer promessa.
+### O que mudou na oferta
 
-### 1. Lista de problemas (como o comprador diz)
+| Objeção do v1 | O que entrou no v2 |
+|---|---|
+| "Não diz quais madeiras" (6 pediram) | **Marfim (clara) e Muiracatiara (escura)**, compradas com nota fiscal de madeireira. As espécies foram escolhidas por mim, a partir de anúncios reais de end grain: **o marceneiro precisa confirmar ou trocar** |
+| "Pode ser madeira tingida" / "fotos genéricas" | **Foto do topo da SUA tábua** enviada pelo chat antes de despachar |
+| "Xadrez já vejo em todo lugar" | **Numerada e assinada** pelo marceneiro, gravado na lateral |
+| "A cola solta?" | Cola à prova d'água citada no anúncio |
+| "Presente, chega a tempo?" | **Embalagem de presente grátis**. Pedidos até 10/12 postados até 14/12; se não chegar até 23/12, devolvemos R$50 |
+| "R$349 é muito" | **Lançamento a R$249** para os 30 primeiros pedidos ou até 31/12/2026; depois, R$349 |
 
-**Antes de comprar**
-1. "Loja nova sem avaliações, não arrisco." (14 de 18 recusas no painel v1)
-2. "Será que é madeira maciça ou MDF com adesivo?"
-3. "O suporte invisível aguenta mesmo 15 kg?"
-4. "Pagar o dobro de um kit de MDF de R$70?"
-5. "Pinus com verniz fica amarelado, com cara de chácara."
-6. "As fotos do anúncio todo mundo caprichou; quero ver o real."
-7. "Não tenho a medida que preciso pronta."
-8. "Se der problema, eles respondem?"
+### Resultado
 
-**Durante**
-9. "Demora até 3 dias úteis e ainda tem o frete; o Full chega amanhã."
-10. "Sob medida: 7 dias úteis podem virar três semanas."
-11. "Vou ter que furar a parede sozinho."
-12. "Tenho medo de errar a furação e entortar."
-13. "E se errarem a medida do sob medida?"
-
-**Depois**
-14. "Chega quebrado ou faltando parafuso." (o tema mais comum no Reclame Aqui, 5 relatos)
-15. "A troca vai virar novela no chat."
-16. "Vou ter que devolver a peça quebrada e esperar."
-17. "A prateleira vai ceder ou soltar depois de uns meses?"
-18. "A madeira vai empenar?"
-19. "Não sei se o suporte serve em drywall ou tijolo." (painel v2)
-
-### 2. Soluções, pontuadas
-
-Valor para o comprador e custo para entregar, de 1 a 5. O custo é uma estimativa até o CFO confirmar.
-
-| # | Solução | Problemas | Valor | Custo | Fica? |
-|---|---|---|---:|---:|---|
-| A | Foto do kit DO CLIENTE, embalado, enviada pelo chat antes de despachar | 2, 5, 6, 14 | 5 | 1 | ✅ |
-| B | Vídeo do teste de carga de 15 kg no anúncio | 3, 17 | 4 | 1 | ✅ |
-| C | Reposição em até 2 dias úteis, sem devolver a peça danificada | 14, 15, 16 | 5 | 2–3 | ✅ (modelar) |
-| D | Garantia de 12 meses contra entortar com até 15 kg | 17, 18 | 4 | 2 | ✅ (modelar) |
-| E | Escolha de acabamento sem custo extra: verniz natural ou fosco incolor | 5 | 4 | 1–2 | ✅ |
-| F | Gabarito de furação + QR code com vídeo de instalação de 3 minutos | 11, 12 | 4 | 1 | ✅ |
-| G | Sob medida com "erro de medida é nosso, refazemos" | 7, 13 | 5 | 3 | ✅ (modelar) |
-| H | Acabamento tingido (freijó ou carvalho claro) como degrau premium | 5 | 4 | 2 | ✅ (R$189) |
-| I | Postagem em 1 dia útil | 9 | 3 | 2 | ✅ se a operação aguentar |
-| J | Estoque no Full do Mercado Livre | 9 | 5 | 3–4 | ⏳ depois das primeiras vendas |
-| K | Data total de entrega garantida no sob medida, com desconto se atrasar | 10 | 4 | 2 | ➕ pedido no v2, ainda não está na oferta |
-| L | Indicar no anúncio o tipo de parede (drywall/alvenaria) e mandar a bucha certa | 19 | 3 | 1 | ➕ pedido no v2 |
-| M | Preço de lançamento R$119 (30 pedidos ou até 31/12/2026) | 4 | 4 | ? | ✅ (CFO precisa confirmar que cobre o custo) |
-
-Ficou de fora: amostra física de madeira pelo correio (custo alto) e montagem em casa (não escala por marketplace).
-
-### 3. A pilha
-
-- **O núcleo:** *"Parede pronta numa tarde, em madeira de verdade."* Três prateleiras flutuantes 60x20 em pinus maciço, com suporte invisível testado com 15 kg.
-- **Bônus 1, "Foto do seu kit" (A):** derruba "é MDF com adesivo?" e "a foto do anúncio não é real".
-- **Bônus 2, "Instala sozinho" (F + L):** gabarito, buchas, parafusos e vídeo de 3 minutos. Derruba "vou ter que furar sozinho".
-- **Bônus 3, "Acabamento à escolha" (E):** natural ou fosco, mesmo preço. Derruba "pinus amarelado".
-- **Garantia (C + D):** chegou quebrado ou faltando peça, a reposição sai em até 2 dias úteis, sem devolver nada. Entortou em 12 meses com até 15 kg, trocamos. No sob medida, se a medida sair diferente da pedida, refazemos.
-  - *Custo ainda não modelado.* Exemplo do cálculo que o CFO deve fazer: com 5% de pedidos pedindo reposição, cada 100 kits custam 5 × (custo de uma prateleira + frete). Rode com o custo real antes de prometer.
-  - O Código de Defesa do Consumidor já garante 7 dias de arrependimento na compra online e garantia legal para produto durável. A oferta precisa ir **além disso** e não pode vender o mínimo legal como bônus. Isto não é aconselhamento jurídico.
-- **Urgência real:** preço de lançamento R$119 para os **primeiros 30 pedidos ou até 31/12/2026**. É verdadeiro, porque o objetivo é juntar as primeiras avaliações. Sem contagem regressiva falsa nem "só restam 3".
-- **Escada:** kit pronto R$119 (lançamento) e depois R$139 · sob medida R$169 · sob medida tingido R$189.
-- **Nome:** **Kit Parede Pronta**.
-
-### 4. Equação de valor (1 a 10)
-
-| | antes (pitch v1) | depois (v2) | o que mudou |
-|---|---:|---:|---|
-| Resultado dos sonhos | 6 | 7 | Acabamento à escolha e o tingido aproximam do "visual do Pinterest" |
-| Probabilidade percebida | 3 | 5 | Foto do kit, vídeo de carga e reposição sem devolver. Ainda limitada por falta de avaliações reais |
-| Tempo até o resultado | 5 | 6 | Postagem em 1 dia útil e vídeo de instalação. Sem Full, continua atrás do MDF |
-| Esforço e sacrifício | 5 | 7 | Gabarito, vídeo e "não precisa devolver nada" |
-
-O ponto fraco continua sendo a **probabilidade percebida**: compradores disseram que "o vídeo de teste é da própria loja". Só avaliações reais resolvem isso, e a oferta não pode inventá-las.
-
-### 5. Reteste: mesmos 20 compradores, mesma seed (493632)
-
-Pitch antigo em `founder/pitch-v1.md`, novo em `founder/pitch.md`, painel novo em `founder/panel-v2/`.
-
-| | v1 (R$149) | v2 (Kit Parede Pronta, R$119) |
+| | v1 (R$349) | v2 (oferta nova, R$249) |
 |---|---:|---:|
-| Compram | **2 de 20 (10%)** | **5 de 20 (25%)** |
-| Recusa por confiança | 14 | 11 |
-| Recusa por preço | 3 | 3 |
-| Recusa por acabamento | 1 | 0 |
-| Recusa por prazo | 0 | 1 |
+| **Compram** | **2 de 20 (10%)** | **10 de 20 (50%)** |
+| Recusa por confiança | 10 | 2 |
+| Recusa por preço | 7 | 8 |
+| Recusa por design | 1 | 0 |
 
-- **Passaram a comprar:**
-  - P010 (visual Pinterest): pela foto do kit e pela reposição sem devolver.
-  - P012 (home office): a foto do kit resolveu a dúvida "é MDF com adesivo?".
-  - P013 (renda alta): comprou o tingido de R$189.
-  - P017 (caçador de preço): pelo R$119.
-- **Continuou comprando:** P004 (precisa de medida exata).
-- **Deixou de comprar:** P001 (medida exata). Agora, com o prazo do sob medida escrito explicitamente, recusou por **prazo**: *"7 dias úteis só pra produzir, mais o frete, e se errar a medida ainda tem que refazer... vira um mês"*. Correção: prazo total garantido por escrito (solução K).
-- **Objeções que caíram:** o acabamento (o pinus amarelado sumiu como motivo de recusa) e "é MDF com adesivo?" (respondida pela foto do kit).
-- **Objeções que ficaram:**
-  - Loja sem avaliações. A pergunta deles mudou de "é real?" para "quero ver outros compradores primeiro".
-  - Falta de Full (P011, P020).
-  - Preço contra o MDF de R$70 (P007, P009, P019).
-- **Por segmento:**
-  - O primeiro apê subiu de 0% para 38%.
-  - A classe média caiu de 12% para 0%.
-  - Os grupos "lê todas as avaliações" e "compra rápido" seguem em 0%: só avaliações reais e Full mudam isso.
+**Por segmento (v2), todos com amostra pequena:**
+- Renda alta: 100% (7 de 7)
+- Classe média: 33%
+- Renda apertada que compra para presente: 0%
 
-**Ressalva importante:** a oferta e o preço mudaram juntos (R$149 → R$119). Não dá para separar quanto da melhora veio da pilha e quanto do desconto. A faixa de preço aceitável do v2 também caiu (teto de R$190 para R$160), sinal de que mostrar R$119 ancorou os compradores mais para baixo. Isso reforça usar o R$119 só como lançamento com data de fim. No teste real, rode a pilha nova a R$139 contra a pilha nova a R$119.
+**Por comportamento (v2):**
+- Quer peça de design: 100%
+- Cozinheiro entusiasta: 75%
+- Churrasqueiro: 60%
+- Procurando presente: 50%
+- Lê todas as avaliações: 0%
+- Caçador de preço: 0%
 
-São compradores simulados. A taxa de 25% é teto, não previsão, e trata-se de uma amostra de 20 (todos os segmentos marcados como "thin").
+**Objeções que caíram:** "é madeira tingida?" (resolvida pela foto da própria tábua), "peça genérica" (resolvida pela numeração e assinatura) e "chega antes do Natal?". **A confiança caiu de 10 para 2 recusas.**
 
-### 6. Próximos passos
+**Objeções que ficaram:**
+- **Preço para quem compra presente com orçamento apertado.** Esse grupo para em R$150–200 e compara com tábuas de R$80.
+- **Higiene da madeira** (P008, P015, P020). A oferta não responde.
+- **A expressão "contato indireto" na cola confundiu** dois compradores (P007, P008), que cortam alimento direto na tábua.
+- Os grupos "lê todas as avaliações" e "caçador de preço" seguem em 0%. Só avaliações reais mudam isso.
 
-1. `/founder-cfo`: custo real por kit, custo da garantia com uma taxa de reclamação realista e se R$119 cobre o custo variável.
-2. Incluir K (prazo total garantido no sob medida) e L (tipo de parede e bucha certa) no anúncio.
-3. Planejar a entrada no Full depois das primeiras ~30 vendas.
-4. `/founder-marketing`: os 30 primeiros compradores existem para gerar avaliações com foto. Peça a foto no cartão da caixa, **sem oferecer desconto em troca de avaliação positiva**.
+**Faixa de preço (Van Westendorp):**
+- v1: R$121–399
+- v2: R$121–321, com "barato" mediano em R$180 e "começa a ficar caro" em R$300
+
+Mostrar R$249 **ancorou os compradores para baixo**. Os de renda alta deram "começa a ficar caro" entre R$380 e R$450.
+
+### ⚠️ Ressalvas
+
+- **O preço caiu junto com a oferta** (R$349 → R$249). Não dá para separar o efeito das melhorias do efeito do desconto. No teste real, rode a oferta nova a R$249 contra a oferta nova a R$349.
+- São compradores simulados (que tendem a ser agradáveis) e a amostra é de 20. Trate os 50% como **teto**.
+- Não use as frases dos compradores simulados como depoimento.
+
+### Próximos ajustes sugeridos
+
+1. **Escada de tamanhos para quem compra presente:** uma tábua de presente menor (ex.: 30x20x3) a **R$149–179**, para o grupo que parou em R$150–200, e a 40x30 como peça principal.
+2. **Responder à higiene com fato verificável:** cuidados de limpeza e secagem, sem promessa de saúde que não dê para comprovar.
+3. **Cola:** troque "contato indireto" pelo nome e pela especificação reais da cola usada, depois de conferir a ficha técnica do fabricante.
+4. **CFO da tábua:** custo da madeira (marfim e muiracatiara por m³ ou por tábua), tempo por peça, caixa e frete reais.
 
 ## The numbers
 
@@ -574,139 +557,108 @@ No red flags in these numbers. They are only as good as the inputs: check every 
 
 ## Marketing
 
-Baseado em `panel/results.md` (v1), `panel-v2/results.md`, `competitors.md`, `offer.md`, `pricing.md`, `numbers.json`, `brand.md` e `launch.md`.
-Lançamento fechado: **21/11/2026**. Lançamento público: **30/11/2026**.
+Base: o painel da tábua `panel/` (oferta nova, 10 de 20 compram), `panel-tabua/` (v1), `competitors.md`, `pricing.md` e `cfo.md`. O plano anterior das prateleiras está em `arquivo-prateleiras/marketing.md`.
 
-### 1. O que as evidências dizem
+### 1. Evidência
 
-**Quem compra, nos painéis simulados (amostras pequenas):**
-- Medida exata: 100% no v1 e 50% no v2.
-- Visual de Pinterest: 67% no v2.
-- Renda alta: 50% no v2.
-- Primeiro apê: 38% no v2.
+**Quem comprou no v2** (amostras pequenas):
+- Renda alta: 7 de 7
+- Quer peça de design: 2 de 2
+- Cozinheiro entusiasta: 3 de 4
+- Churrasqueiro: 3 de 5
+- Procurando presente: 2 de 4
 
-**Quem não compra:**
-- Quem lê todas as avaliações: 0% nas duas rodadas.
-- Quem quer receber rápido: 0% nas duas rodadas.
+**Quem não comprou:**
+- Lê todas as avaliações: 0 de 2
+- Caçador de preço: 0 de 3
+- Renda apertada que compra presente: 0 de 4
 
-**Objeções a responder:**
-1. Loja nova sem avaliações (14 e 11 recusas)
-2. "Aguenta 15 kg mesmo?"
-3. "É madeira ou MDF com adesivo?"
-4. "Pinus amarelado"
-5. Preço contra o MDF de R$70
-6. Demora (sem Full, sob medida em 7 dias)
-7. "Serve no drywall?"
+**Objeções que restam:** preço contra tábuas de R$80, higiene da madeira, a expressão "contato indireto" da cola e "loja nova".
 
-**O que os concorrentes fazem:** os vendedores de MDF vendem preço e volume, e o artesanal do Elo7 tem poucas avaliações. Ninguém vende **marceneiro, sob medida e chegar certo** ao mesmo tempo.
+### 2. Posicionamento (recomendado)
 
-### 2. Posicionamento
+> *Para quem leva churrasco e cozinha a sério e quer uma peça que ninguém tem, a Veio Certo é a tábua end grain numerada e assinada por um marceneiro de 20 anos, que você vê antes de sair da oficina. Diferente das tábuas de série, de fábrica ou importadas.*
 
-1. **(Recomendado)** *Para quem tem uma parede ou um vão que nenhuma prateleira pronta encaixa e não quer arriscar MDF que chega quebrado, a Veio Certo é a marcenaria de prateleiras sob medida em madeira maciça, feita e testada por um marceneiro de 20 anos, que chega inteira e completa. Diferente dos kits de MDF de fábrica.*
-   - **Por quê:** o único grupo que comprou nas duas rodadas foi o de quem precisa de medida exata. O ofício responde ao "loja nova não confio".
-2. *Para quem quer o visual de madeira de revista sem pagar móvel planejado, a Veio Certo é a prateleira de madeira de verdade com acabamento à escolha, a partir de R$119. Diferente do MDF com adesivo.*
-   - **Por quê:** o grupo do visual de Pinterest teve 67% de compra no v2. Mas são só 3 compradores, então a evidência é fraca.
-3. *Para quem já recebeu móvel quebrado ou sem parafuso, a Veio Certo é a prateleira que você vê embalada antes de sair, com reposição em 2 dias sem devolver nada.*
-   - **Por quê:** é a reclamação nº 1 do setor. Mas só 1 de 3 compradores desse grupo comprou no v2.
-
-**Recomendo a versão 1.** Ela segue a condição do conselho (sob medida e um canal) e a evidência mais repetida. As versões 2 e 3 viram ganchos de conteúdo.
+O porquê: a numeração, a assinatura e a foto da tábua do próprio cliente foram o que tirou "desconfiança" de 10 para 2 recusas no painel.
 
 ### 3. Canais
 
-| Canal | Por que serve | Custo | Como saber se funcionou | Começa? |
-|---|---|---|---|---|
-| **Anúncio no Mercado Livre** (busca orgânica) | É onde o comprador já procura "prateleira sob medida" e "prateleira madeira maciça" | Só a comissão (~12%) | Visitas/dia ≥ 30 e conversão ≥ 1% (painel do vendedor) | ✅ sim |
-| **Seu Instagram e TikTok** (você já cria conteúdo) | O marceneiro e o processo são o conteúdo. Vídeo de oficina e de teste de carga gera confiança, e é isso que falta à loja nova | R$0 + seu tempo | Cliques no link do anúncio e mensagens "quero uma na medida X" | ✅ sim |
-| **WhatsApp: sua lista, clientes antigos e grupos do bairro** | Gente que já confia em você compra primeiro e gera as primeiras avaliações | R$0 | Pedidos com origem "indicação" | ✅ sim |
-| Mercado Livre Ads (anúncio pago) | Acelera visitas | Por clique | Custo por venda < limite da seção 5 | ⏸ só depois que a margem real for positiva |
-| Shopee, Elo7, MadeiraMadeira | Mais alcance | Comissões (MadeiraMadeira ~19%) | — | ❌ não: o conselho pediu 1 canal por 90 dias |
-| Influenciadores pagos | Alcance | Variável | — | ❌ não: sem verba e sem margem ainda |
+| Canal | Por quê | Custo | Sinal de que funcionou |
+|---|---|---|---|
+| **Mercado Livre** (orgânico) | Onde se busca "tábua end grain" e "tábua de churrasco" | Comissão de ~12% | ≥ 30 visitas/dia, conversão ≥ 1% |
+| **Seu Instagram e TikTok** | A colagem em xadrez e o topo sendo lixado são conteúdo muito visual. Mostra o marceneiro real | R$0 + tempo | Mensagens e cliques no link |
+| **WhatsApp (rede e clientes antigos)** | Primeiras vendas e avaliações | R$0 | Pedidos "por indicação" |
+| Mercado Livre Ads | Acelera visitas no Natal | Por clique | Custo por venda < limite abaixo. **Só depois das 3 primeiras avaliações** |
+| Outros marketplaces e influenciador pago | — | — | **Não agora** (um canal por 90 dias) |
 
 ### 4. Dez ganchos
 
-Cada um responde a uma objeção ou usa um motivo de compra:
-
 | # | Formato | Gancho | Responde a |
 |---|---|---|---|
-| 1 | Vídeo (3 s) | "Coloquei 30 kg nessa prateleira e deixei 3 dias. Olha o que aconteceu." | "Aguenta 15 kg?" |
-| 2 | Vídeo (3 s) | "Isso aqui é MDF com adesivo. Isso aqui é madeira. Repara no topo." | "É madeira de verdade?" |
-| 3 | Vídeo (3 s) | "Seu vão tem 87 cm e nenhuma prateleira pronta cabe? Eu faço na medida." | Medida exata |
-| 4 | Título do anúncio | "Prateleira Sob Medida Madeira Maciça — Feita por Marceneiro, Até 120 cm" | Busca e medida exata |
-| 5 | Vídeo (3 s) | "Antes de despachar, eu te mando a foto do SEU kit embalado." | "Loja nova, não confio" |
-| 6 | Post ou carrossel | "Pinus fica amarelado? Depende do verniz. Natural, fosco ou freijó: veja os três na parede." | "Pinus amarelado" |
-| 7 | Vídeo (3 s) | "20 anos de marcenaria e a reclamação que mais escuto é: 'faltou parafuso'. Por isso vai um a mais de cada." | Peça faltando |
-| 8 | Stories | "Drywall? Me fala sua parede antes de comprar. Te digo a carga certa e mando a bucha certa." | Drywall |
-| 9 | Vídeo (3 s) | "Por que minha prateleira custa R$119 e a de MDF R$70? Te mostro em 20 segundos." | Preço contra o MDF |
-| 10 | Mensagem de WhatsApp | "Abri a minha loja: prateleira sob medida em madeira maciça, feita por mim. Os 30 primeiros pedidos saem a preço de lançamento até 31/12." | Primeiras vendas |
+| 1 | Vídeo 3 s | "Essa tábua começou como 40 ripas. Olha a segunda colagem." | "É madeira de verdade?" |
+| 2 | Vídeo 3 s | "Por que a faca dura mais na tábua de topo? Olha a fibra de perto." | Por que end grain |
+| 3 | Vídeo 3 s | "Antes de despachar, você recebe a foto da SUA tábua." | Desconfiança da loja nova |
+| 4 | Título do anúncio | "Tábua de Corte End Grain Marfim e Muiracatiara 40x30 Numerada — Feita por Marceneiro" | Busca e madeiras |
+| 5 | Vídeo 3 s | "Tábua nº 001. Cada uma sai numerada e com a minha assinatura." | "Xadrez genérico" |
+| 6 | Post | "Presente de Natal: pedidos até 10/12 são postados até 14/12. Se não chegar até 23/12, devolvo R$50." | Prazo de presente |
+| 7 | Stories | "Como cuidar: lavar à mão, secar em pé, óleo uma vez por mês. Pronto." | Trabalho de manutenção |
+| 8 | Vídeo 3 s | "Tábua de R$80 e tábua de R$249: a diferença está aqui." (mostrar a colagem e o topo) | Preço |
+| 9 | Post | "Qual cola eu uso e por quê." (nome e ficha técnica reais) | Cola e alimento |
+| 10 | WhatsApp | "Abri minha loja: tábua end grain feita por mim, numerada. Os 30 primeiros pedidos saem a R$249 até 31/12." | Primeiras vendas |
 
-**Oferta de lançamento** (de `pricing.md`): kit a R$119 para os primeiros 30 pedidos ou até 31/12/2026, depois R$139. Sob medida a R$169 e tingido a R$189. Sempre com a data de fim. **Nunca "de R$X por R$Y"** com um preço que nunca foi cobrado.
+**Oferta de lançamento:** R$249 para os 30 primeiros pedidos ou até 31/12/2026; depois, R$349. Sempre com a data de fim e sem "de/por" falso.
 
 ### 5. Verba e números
 
-**Verba de anúncio pago: R$0 no lançamento.** O motivo:
-- Com os custos de hoje, cada kit perde R$20,17 (`numbers.json`). O limite para pagar por cliente é **contribuição por kit × compras por comprador** = -R$20,17 × 1,0 = **menos que zero**.
-- No cenário enxuto de `terceirizacao.md` (R$169, suporte a R$4, frete R$15, terceirizado a R$20), a conta é **R$18,43 × 1,0 = no máximo ~R$18 por cliente**. A média de 1,0 compra no 1º mês vem dos painéis.
-- Os R$2.000 já estão no primeiro lote (`launch.md`). Se a margem real ficar positiva depois das cotações, teste **R$100 de Mercado Livre Ads** tirados da reserva, só no sob medida, com limite de custo por venda abaixo da contribuição real.
+**Máximo que vale pagar por cliente:** lucro por tábua × compras do cliente no 1º mês = **R$83,36 × 1,0 ≈ R$83** a R$249 (ou R$171 a R$349). A média de 1,0 compra vem do painel.
 
-**Os três números da semana** (fechamento de sexta):
+- **Anúncio pago no lançamento: R$0.** Os R$2.000 vão para o lote. Depois de 3 avaliações, teste **R$100–150 de Mercado Livre Ads** no Natal, com teto de custo por venda **< R$60**.
+- **Três números por semana:** visitas por dia (< 30), conversão (< 1%) e avaliações com foto (< 3 até 31/12).
 
-| Número | Limite que pede mudança |
-|---|---|
-| Visitas por dia no anúncio | < 30 → mudar título, palavras-chave e foto principal |
-| Conversão (visitas → vendas) | < 1% → fotos, ganchos 1, 2 e 5 no anúncio, responder as perguntas repetidas na descrição |
-| Avaliações com foto | < 3 até 31/12 → reforçar o cartão e a mensagem pós-entrega (sem trocar por desconto) |
+### 6. Calendário (16/11 a 16/12/2026)
 
-### 6. Calendário de 30 dias (16/11 a 16/12/2026)
-
-IG = Instagram, TT = TikTok, WA = WhatsApp, ML = Mercado Livre.
-
-| Data | Canal | O que sai |
+| Data | Canal | O quê |
 |---|---|---|
-| seg 16/11 | IG/TT | "Vou abrir minha loja online. 20 anos de marcenaria, agora prateleira sob medida." Rosto e oficina |
-| ter 17/11 | IG/TT | Bastidores: escolhendo e conferindo tábuas (higrômetro, sem miolo) |
-| qua 18/11 | IG/TT | Gancho 2: madeira × MDF com adesivo (topo e veio) |
-| qui 19/11 | IG/TT | Gancho 1, parte 1: começa o teste de 30 kg ("volto em 72 h") |
-| sex 20/11 | WA | Convite pessoal para 5 conhecidos comprarem no lançamento fechado (link do anúncio) |
-| sáb 21/11 | ML/WA | **Lançamento fechado**: 5 pedidos reais. Stories da produção |
-| dom 22/11 | IG/TT | Gancho 1, parte 2: resultado do teste de 72 h |
-| seg 23/11 | IG/TT | Gancho 5: a foto do kit antes de despachar (mostrar a do lançamento fechado) |
-| ter 24/11 | IG/TT | Gancho 7: "vai um parafuso a mais de cada" |
-| qua 25/11 | IG/TT | Gancho 6: os 3 acabamentos lado a lado |
-| qui 26/11 | IG/TT | Gancho 3: "seu vão tem 87 cm?" + como medir em 3 pontos |
-| sex 27/11 | IG/TT | Black Friday: **sem desconto extra.** "Não entro em guerra de preço, entro em prateleira que dura." Processo da oficina |
-| sáb 28/11 | IG/TT | Caixa e teste de queda de 1 m |
-| dom 29/11 | IG/TT | "Amanhã abre. Os 30 primeiros a preço de lançamento até 31/12." |
-| **seg 30/11** | **ML/IG/TT/WA** | **Lançamento público**: gancho 10 no WhatsApp, post e stories com o link (roteiro em `launch.md`) |
-| ter 01/12 | IG/TT | Gancho 9: R$119 × R$70 em 20 segundos |
-| qua 02/12 | IG/TT | Bastidores: furação do pino no gabarito |
-| qui 03/12 | IG/TT | Gancho 8: drywall, me fala sua parede |
-| sex 04/12 | IG | Números verdadeiros da semana ("X kits saíram") |
-| sáb 05/12 | IG/TT | Instalação em 3 minutos (o vídeo do QR code) |
-| dom 06/12 | IG | Pergunta nos stories: "qual vão da sua casa está vazio?" |
-| seg 07/12 | — | **Revisão do dia 7** (visitas e conversão). Ajustar o anúncio |
-| ter 08/12 | IG/TT | Responder em vídeo a pergunta mais repetida no ML |
-| qua 09/12 | IG/TT | Gancho 3 de novo, com um pedido sob medida real (com permissão do cliente) |
-| qui 10/12 | IG/TT | Bastidores: aplicação do tingido freijó |
-| sex 11/12 | IG | Números da semana. Quantos dos 30 de lançamento restam (só o número real) |
-| sáb 12/12 | IG/TT | Presente de Natal: "prateleira na medida, para chegar antes do dia 24", com o prazo real de produção e entrega |
-| dom 13/12 | IG | Fotos de clientes, **só as enviadas com autorização** |
-| seg 14/12 | — | **Revisão do dia 14: linha de sucesso** (10 pedidos, 1% de conversão, margem positiva) |
-| ter 15/12 | IG/TT | Gancho 2 ou 1, o que tiver performado melhor, repostado |
-| qua 16/12 | IG/TT | "Último prazo para chegar antes do Natal", só se for verdade |
-
-**Quando não há novidade:** bastidores da oficina, a escolha da tábua, erros e acertos de 20 anos, antes e depois de uma parede **da sua casa**, explicação de madeira, verniz ou parede, e respostas às perguntas do Mercado Livre.
+| 16/11 | IG/TT | "20 anos de marcenaria. Agora, tábuas end grain feitas por mim." |
+| 17/11 | IG/TT | Gancho 1, parte 1: as ripas e a 1ª colagem |
+| 18/11 | IG/TT | Gancho 1, parte 2: a 2ª colagem em xadrez |
+| 19/11 | IG/TT | Gancho 2: por que o topo preserva o fio da faca |
+| 20/11 | WA | Convite para o lançamento fechado |
+| 21/11 | ML/WA | **Lançamento fechado** (5 tábuas) |
+| 22/11 | IG/TT | Gancho 5: gravação da tábua nº 001 |
+| 23/11 | IG | Gancho 7: como cuidar |
+| 24/11 | IG/TT | Planificando o topo, antes e depois da lixa |
+| 25/11 | IG | Gancho 9: a cola que eu uso |
+| 26/11 | IG/TT | Gancho 3: a foto antes de despachar |
+| 27/11 | IG/TT | Black Friday: **sem desconto**. "Uma tábua para 20 anos." |
+| 28/11 | IG | Embalagem de presente |
+| 29/11 | IG/TT | "Amanhã abre. Os 30 primeiros a R$249." |
+| **30/11** | **todos** | **Lançamento público** (gancho 10 no WA) |
+| 01/12 | IG/TT | Gancho 8: R$80 contra R$249 |
+| 02/12 | IG/TT | Gancho 6: prazo de Natal |
+| 03/12 | IG/TT | Tábua em uso no churrasco (a sua) |
+| 04/12 | IG | Números verdadeiros da semana |
+| 05/12 | IG/TT | Escolhendo a madeira na madeireira |
+| 07/12 | — | **Revisão do dia 7** |
+| 08/12 | IG/TT | "Faltam 2 dias para o prazo de Natal" (só se for verdade) |
+| 09/12 | IG/TT | Tábuas numeradas lado a lado (só as reais) |
+| 10/12 | IG/WA | **Último dia** para a garantia de Natal |
+| 11–13/12 | IG | Bastidores e respostas a perguntas do ML |
+| 14/12 | — | **Revisão: linha de sucesso** |
+| 15–16/12 | IG/TT | Foto de cliente (**só com autorização por escrito**) |
 
 ### Regras
 
-- **Nada de avaliação, depoimento, antes e depois ou número de seguidores falso.** Foto de cliente só com autorização por escrito.
-- As frases dos painéis são **pesquisa simulada**: nunca use em anúncio como fala de cliente.
-- Parceria paga deve ser sinalizada (#publi). As promessas de carga, garantia e prazo precisam ser cumpridas: o CDC e o CONAR valem para anúncio. Isto não é aconselhamento jurídico.
+- Nada de avaliação, depoimento ou número de seguidores falso.
+- As frases do painel são **pesquisa simulada**: nunca use em anúncio.
+- Afirmações de higiene ou de segurança alimentar, só com base verificável (ficha técnica, norma).
+- O CDC e o CONAR valem para anúncio. Isto não é aconselhamento jurídico.
 
 ## Brand
 
 **Posicionamento usado aqui:** ainda não existe `founder/marketing.md`. Por isso o posicionamento abaixo foi tirado do conselho, da oferta e dos painéis. Confirme ou ajuste no `/founder-marketing`.
 
-> **Prateleira sob medida em madeira de verdade, feita por um marceneiro com 20 anos de oficina, que chega inteira e completa.**
+> **Tábua end grain numerada e assinada por um marceneiro com 20 anos de oficina, que você vê antes de sair da oficina.** (Atualizado em 03/11/2026: o produto mudou de prateleiras para tábuas. O nome, a voz e o visual abaixo continuam valendo. Adapte os pontos de contato: a caixa vira embalagem de presente, e o primeiro post vira o vídeo da colagem em xadrez.)
 
 Por que esse posicionamento:
 - Os compradores que fecharam compra queriam **medida exata** e **madeira de verdade** (ver `panel/results.md` e `panel-v2/results.md`).
@@ -750,7 +702,7 @@ Plano B se o .com.br estiver ocupado: veiocertomarcenaria.com.br ou veiocerto.ar
 **A promessa, numa linha:** *Chega na medida, inteira e completa. Se não chegar, o problema é nosso.*
 
 **Três opções de slogan:**
-1. **Veio Certo. Madeira de verdade, na medida da sua parede.**
+1. **Veio Certo. Madeira de verdade, na medida da sua parede.** (para a tábua: *Veio Certo. Cada tábua tem número, nome e veio próprio.*)
 2. Feito por marceneiro, não por fábrica.
 3. Do jeito que você pediu, do jeito que chegou.
 
@@ -801,243 +753,164 @@ Próximos passos: `/founder-marketing` (posicionamento final e calendário de po
 
 ## Operations
 
-Modelo assumido (conversa de 2026-11-03):
-- Um marceneiro com 20+ anos de experiência e orçamento de R$2.000.
-- **Corte e aparelhamento terceirizados na madeireira.**
-- Em casa: furação do pino com gabarito, lixa, selador e verniz à base d'água, conferência com foto e embalagem.
-- Venda no Mercado Livre primeiro, conforme a condição do conselho (um produto e um canal por 90 dias, com foco no sob medida).
+Um marceneiro, em casa, como MEI, vendendo no Mercado Livre. A operação das prateleiras está em `arquivo-prateleiras/ops.md`. As regras de MEI, alvará e CDC continuam valendo e estão lá.
 
-A cidade ainda não foi informada, então os fornecedores locais aparecem como "como achar". Os padrões de qualidade estão em `founder/quality-spec.md`.
+### 1. O ciclo de produção (em lote de 5 a 10 tábuas)
 
-### 1. O ciclo de cada dia
+👁 = etapa que o cliente vê.
 
-Os passos que o cliente vê estão marcados com 👁.
+| Dia | Etapa |
+|---|---|
+| 1 | Conferir a madeira (umidade de 8–12% no higrômetro, sem racha nem medula). Cortar as ripas e fazer a **1ª colagem** (face). Grampos até o dia seguinte |
+| 2 | Aplainar o bloco, cortar fatias no **topo** e fazer a **2ª colagem** em xadrez |
+| 3 | Planificar o topo (lixadeira de cinta ou gabarito de tupia: o topo lasca na desengrossadeira), lixar 80 → 120 → 180 → 220, chanfrar e arredondar as arestas |
+| 4 | Gravar número e assinatura na lateral. Aplicar óleo mineral até saturar, depois cera. Instalar os pés |
+| 5 | 👁 **Foto do topo de cada tábua enviada ao cliente.** Embalagem de presente, cartão e frasco de óleo. 👁 Postagem |
 
-1. **8h00 — Pedidos:** abrir o Mercado Livre, separar os pedidos do dia (kit pronto × sob medida) e responder perguntas de quem ainda não comprou. 👁
-2. **Sob medida:** confirmar a medida por escrito no chat, com o vão medido em 3 pontos e a data total de entrega. 👁
-3. **Receber madeira** (quando chegar lote): conferir umidade no higrômetro, medula, empeno e esquadro, e devolver o que estiver fora do padrão.
-4. **Furação** dos pinos com gabarito e conferência da altura dos dois lados.
-5. **Lixa** (80 → 120 → 180) e **selador** em todas as faces, topos e furos.
-6. **Verniz ou tingido**, 2 a 3 demãos, respeitando a secagem. É o gargalo do dia: as peças de hoje viram o envio de amanhã.
-7. **Conferência:** checklist e foto do kit embalado, enviada ao cliente pelo chat. 👁
-8. **Embalar:** separadores, cantoneiras, saquinho de ferragens fixado (com 1 peça extra de cada) e cartão pedindo foto da prateleira instalada.
-9. **Etiqueta e postagem** até o horário de coleta ou agência do Mercado Livre. 👁
-10. **Pós-venda:** responder mensagens e abrir reposição se alguém reclamar, com prazo de 2 dias úteis. 👁
-11. **Fim do dia:** anotar no controle os kits feitos, o tempo gasto e a madeira usada.
+Todos os dias:
+- 👁 Responder perguntas em até 2 h úteis.
+- 👁 Confirmar o pedido e a data de postagem.
 
-**Capacidade (estimativa a medir):** com uma pessoa, a secagem do verniz limita mais do que a mão de obra. Cronometre os 10 primeiros kits. O CFO usou 5 kits/dia como plano e 20 como capacidade, mas a capacidade da casa provavelmente é menor.
+**Capacidade:** o CFO usou 3 tábuas/dia e 3,5 h por tábua, mas isso é estimativa. Em lote, a secagem da cola define o ritmo, não as horas de bancada. **Cronometre o primeiro lote.**
 
 ### 2. Fornecedores
 
-| Insumo | Opções | Preço público | Mínimo e prazo | Pendente |
-|---|---|---|---|---|
-| Pinus seco aparelhado 20 cm | Madeireira local (corte no comprimento); [Beija-Flor Madeiras](https://www.beijaflormadeiras.com.br/tabua-de-20-pinus-aparelhada/); [Leroy Merlin](https://www.leroymerlin.com.br/tabua-de-20-pinus-aparelhada_1570817377) | R$44,90 e R$58,37 por 3 m (~R$15–19,50/m) | Sem mínimo no varejo | **Cotar** corte no comprimento por kit e confirmar que é seco em estufa |
-| Suporte invisível 20 cm | [MFL Acessórios](https://www.mflacessorios.com.br/suporte-metalico-invisivel-para-prateleira-20cm-ferro-38); [Desicon](https://www.desicon.com.br/suporte-invisivel-20-cm-preta) | R$7,60–9,55 a unidade | Desicon: frete grátis a partir de 36 un. | **Cotar atacado** (100+ un.) ou calcular o custo de fabricar pino e chapa |
-| Caixa de papelão onda dupla (BC) ~70x25x15 | Fabricante de caixa sob medida da região; lojas de caixa no ML, como [GP Caixas](https://www.mercadolivre.com.br/loja/gp-caixas-de-papelao) | Não achei essa medida. Referência: caixas de onda dupla 40x30x30 de ~R$15 a R$30 a unidade ([busca ML](https://lista.mercadolivre.com.br/caixa-de-papelao-onda-dupla)) | Fabricantes costumam ter mínimo | **Cotar** com medida, onda BC e quantidade (50 un.) |
-| Selador e verniz à base d'água | Loja de tintas local ou home center | — | — | Medir o rendimento por kit |
-| Parafusos, buchas, cantoneiras, plástico | Distribuidor de ferragens local | — | — | Comprar em caixa fechada |
-| Higrômetro de madeira | Home center ou ML | — | — | Compra única, entra no orçamento inicial |
+| Insumo | Onde | Preço | Pendente |
+|---|---|---|---|
+| Madeira nobre (par claro + escuro) | Madeireira local de nativas, com nota fiscal e DOF | Não encontrado | **Cotar** por m³ ou por prancha, seca em estufa |
+| Cola Titebond III | Lojas de ferramentas e Magalu | R$110,94 por 1,05 kg ([Magalu](https://www.magazineluiza.com.br/busca/cola+titebond)) | — |
+| Óleo mineral USP | Farmácia ou distribuidor | 100 ml a R$8,56 ([Cliquefarma](https://www.cliquefarma.com.br/preco/oleo-mineral-1l)) | Comprar 1 L para o acabamento |
+| Cera (abelha ou carnaúba) | Loja de artesanato | — | Cotar |
+| Pés de borracha, lixas, caixa kraft, cartões | Distribuidores e lojas de embalagem | — | Cotar |
+| Ferro de marcar ou carimbo de fogo (número e assinatura) | Gravação sob encomenda | — | Cotar (custo único) |
 
-**Frete:** é o maior custo ainda sem cotação, estimado em R$25. Simule com a caixa e o peso reais no simulador de custos do vendedor no Mercado Livre e atualize `numbers.json`.
+### 3. Máquinas
 
-### 3. Pessoas
+Lista das que o processo pede. **Confirme quais você já tem:**
+- serra circular de bancada ou esquadrejadeira, com guia para fatiar o topo;
+- desempenadeira e desengrossadeira, só para as ripas, **não para o topo**;
+- lixadeira de cinta ou tupia com gabarito para planificar o topo;
+- lixadeira orbital;
+- grampos;
+- tupia para chanfro.
 
-- **Mês 1 (0,5–1 kit/dia):** só você.
-  - Produção: 2 a 3 manhãs por semana.
-  - Atendimento: 30 min por dia, de segunda a sábado.
-  - Postagem: dia sim, dia não.
-- **Plano (5 kits/dia):** ainda só você, em tempo integral.
-  - **Produção:** segunda a sexta, de manhã.
-  - **Verniz e secagem:** à tarde.
-  - **Embalagem e postagem:** final da tarde.
-  - **Atendimento:** duas janelas por dia (8h e 17h).
-- **Quando contratar:** só quando a medição mostrar que você não dá conta e a margem real permitir. O CFO considerou um ajudante a R$4.000/mês com encargos (estimativa). Encargos de folha ficam para o contador.
+### 4. Rotinas (resumo)
 
-### 4. Rotinas (SOPs)
+- **Pedido:** confirmar no chat, informar a data de postagem e, perto do Natal, lembrar o prazo de 10/12.
+- **Antes de enviar:** checklist com tábua sem marcas de lixa, juntas fechadas, número gravado, óleo, cartão e frasco. Foto do topo para o cliente.
+- **Reclamação** (descolou ou rachou): pedir foto, responder em até 4 h e enviar outra (garantia de 12 meses). Registrar a causa (madeira, cola ou uso).
+- **Semana:** conferir o estoque de madeira e embalagem e anotar o tempo por tábua e as vendas.
 
-**A. Abrir o dia (10 min)**
-1. Ver os pedidos novos e o prazo de postagem de cada um.
-2. Ver as mensagens e responder as perguntas de pré-venda primeiro (elas viram venda).
-3. Conferir se as peças de ontem secaram e separar o que pode ser embalado hoje.
+### 5. Regras específicas da tábua
 
-**B. Pedido sob medida**
-1. Pedir no chat a medida do vão em 3 pontos (em cima, no meio e embaixo) e o tipo de parede.
-2. Responder por escrito: medida final (a menor das 3), acabamento, data de postagem e data prevista de entrega.
-3. Só começar a produzir depois do "ok" do cliente.
-4. Cortar ou receber a peça, furar, conferir a medida com trena e anotar.
+Confirme com o órgão ou com um profissional. Isto não é aconselhamento jurídico nem regulatório.
 
-**C. Embalar e enviar**
-1. Seguir o checklist: 3 prateleiras, pinos, parafusos e buchas (+1 de cada), gabarito, cartão.
-2. Cada prateleira embrulhada, com separadores e cantoneiras.
-3. Fotografar a caixa aberta com tudo dentro e enviar ao cliente pelo chat.
-4. Fechar, etiquetar e postar.
+- [ ] **Utensílio em contato com alimento:** verifique as exigências da **Anvisa** e do **Inmetro** para tábua de madeira (materiais, acabamento, rotulagem).
+- [ ] **Origem da madeira nativa:** compre com nota fiscal e documento de origem florestal (DOF) da madeireira.
+- [ ] **Cola:** a ficha técnica da Titebond III fala em contato **indireto** com alimentos. Explique isso com clareza no anúncio, sem prometer mais do que a ficha diz.
+- [ ] **Teto do MEI (R$81 mil/ano):** o plano passa do limite por volta do 8º mês. Combine a migração para ME com o contador.
 
-**D. Reclamação**
-1. Responder em até 4 horas úteis, com educação e sem discutir.
-2. Pedir uma foto do problema.
-3. Peça quebrada ou faltando: enviar a reposição em até 2 dias úteis, sem pedir devolução.
-4. Medida errada por culpa nossa: refazer. Medida errada informada pelo cliente: oferecer refazer a preço de custo.
-5. Registrar a causa no controle. Se a mesma causa aparecer 2 vezes, mudar o processo.
+### 6. Riscos
 
-**E. Fechamento semanal (sexta, 30 min)**
-1. Contar o estoque de madeira, suportes, caixas e ferragens.
-2. Repor o que fica abaixo de 2 semanas de uso.
-3. Anotar vendas, tempo por kit, reclamações e avaliações da semana.
-4. Teste de carga do lote, se fecharam 50 peças.
-
-### 5. Ferramentas
-
-- **Mercado Livre e Mercado Pago:** venda e recebimento. Comissão do Clássico em Casa de cerca de 12% ([fonte](https://ecommercenapratica.com/blog/comissao-mercado-livre/), confirmar no simulador oficial).
-- **Nota fiscal:** como MEI, pelo emissor gratuito do governo. Se precisar de integração, o Bling custa a partir de ~R$55/mês no plano Cobalto, segundo um [guia de 2026](https://gosmarter.com.br/?p=6032) (confirmar na página oficial). Comece sem ele e contrate só quando o volume pedir.
-- **Controle:** uma planilha simples com pedidos, tempo por kit, custos, estoque e reclamações.
-
-### 6. Registro, impostos e seguros
-
-Confirme cada item com o órgão oficial ou com um contador. As regras mudam e variam por cidade. Isto não é aconselhamento jurídico nem tributário.
-
-- [ ] **MEI:** confirme no [Portal do Empreendedor](https://www.gov.br/empresas-e-negocios/pt-br/empreendedor) qual ocupação de marceneiro é permitida e se ela recolhe ICMS e/ou ISS. O DAS em 2026 fica entre R$82,05 e R$87,05/mês, com base no salário mínimo de R$1.621 ([fonte](https://soubrasilia.com/servicos/mei/)).
-- [ ] ⚠️ **Teto do MEI: R$81 mil/ano**, cerca de R$6.750/mês ([fonte](https://triviumcontabil.com.br/mei-em-2026-regras-custos-e-limites/)). O plano do CFO (5 kits/dia a R$169) daria uns R$25 mil/mês, muito acima disso. **No ritmo do plano, o MEI estoura por volta do 3º ou 4º mês.** Combine com o contador a passagem para ME no Simples, e saiba que o imposto muda: o CFO estimou 6%.
-- [ ] **Alvará e uso do imóvel:** marcenaria em casa gera ruído e pó. Confira com a prefeitura (zoneamento e alvará do MEI) e com o condomínio, se houver.
-- [ ] **CDC:** 7 dias de arrependimento em compra online e garantia legal de produto durável. A garantia de 12 meses vem por cima disso.
-- [ ] **Seguro:** opcional no começo. Avalie seguro das ferramentas e responsabilidade civil quando o volume crescer.
-
-### 7. Riscos
-
-| # | Risco | Chance | Impacto | Plano |
-|---|---|---|---|---|
-| 1 | Suporte continua a ~R$8 a unidade e o kit dá prejuízo | Alta | Alto | Cotar atacado ou fabricar. Até resolver, vender só sob medida a R$169+ |
-| 2 | Frete real acima de R$25 | Média | Alto | Simular antes de anunciar, reduzir dimensões da caixa e embutir parte no preço |
-| 3 | Madeira da madeireira úmida ou com medula, que empena depois | Média | Alto | Conferir lote com higrômetro, devolver fora do padrão e ter 2 madeireiras |
-| 4 | Poucas vendas no começo (loja sem avaliações) | Alta | Alto | Lançamento para os 30 primeiros, cartão pedindo foto e responder pré-venda rápido |
-| 5 | Erro de medida no sob medida | Média | Médio | Confirmação por escrito em 3 pontos e conferência com trena antes de embalar |
-| 6 | Chegar quebrado | Média | Médio | Teste de queda antes de lançar e reposição em 2 dias úteis |
-| 7 | Avaliação negativa logo no começo | Média | Alto | Responder em público com a solução e corrigir a causa |
-| 8 | Você doente ou sem tempo, e os pedidos atrasam | Baixa a média | Alto | Prazo de postagem com folga e pausar o anúncio se precisar |
-| 9 | Estourar o teto do MEI sem perceber | Média (se vender bem) | Médio | Acompanhar o faturamento mensal e falar com o contador ao passar de R$5 mil/mês |
-| 10 | Vizinho ou prefeitura reclamando do barulho | Baixa a média | Médio | Furação e lixa em horário comercial e confirmar o zoneamento antes |
-
-### Perguntas em aberto
-
-- Em que cidade você está? Define a madeireira, a caixa e o frete.
-- Que máquinas você já tem: furadeira de bancada, lixadeira orbital, compressor ou pistola?
-- Quanto custa o corte no comprimento na madeireira e o suporte no atacado (ou fabricado)?
-- Qual é o frete real da caixa?
-- Quanto tempo leva cada kit (medir nos 10 primeiros)?
-
-**O CFO deve rodar de novo** depois das cotações, com o modelo enxuto e o imposto do MEI no lugar dos 6%. O `numbers.json` atual ainda é o cenário com galpão e ajudante.
+| Risco | Chance | Impacto | Plano |
+|---|---|---|---|
+| Madeira nobre mais cara que R$60/tábua | Média | Alto | Cotar antes, aproveitar sobras, ter um par alternativo de madeiras |
+| Tábua racha ou descola depois de vendida | Média | Alto | Madeira seca e conferida, colagem em 2 etapas, teste de lavagem nas primeiras peças |
+| Tempo por tábua acima de 5 h | Média | Alto | Produzir em lote; se não resolver, subir o preço para R$349 mais cedo |
+| Atraso no Natal | Média | Médio | Corte de pedidos em 10/12, estoque de 5 tábuas prontas no início de dezembro |
+| Poucas avaliações | Alta | Alto | Lançamento para 30 pedidos, cartão pedindo foto, rede própria |
+| Ficar parecido com concorrente que usa as mesmas madeiras | Média | Médio | Escolher um par próprio de madeiras ou um desenho exclusivo |
+| Exigência sanitária não atendida | Baixa a média | Alto | Confirmar com Anvisa e Inmetro antes de anunciar |
 
 ## Launch plan
 
-Hoje é terça, 03/11/2026. Ainda não há data-alvo informada. Proponho a mais cedo que dá para cumprir com os prazos de `founder/ops.md`:
-
-- **Lançamento fechado:** sábado, **21/11/2026**.
-- **Lançamento público:** segunda, **30/11/2026**, logo depois da Black Friday (27/11), com o preço de lançamento valendo até 31/12/2026, como está na oferta.
-
-Responsável por tudo: **você**. Ainda não há mais ninguém no time.
+Hoje é 03/11/2026. **Lançamento fechado: sáb 21/11. Público: seg 30/11.** O prazo de Natal fecha em 10/12, com postagem até 14/12. Responsável: você.
 
 ### 1. O teste antes de gastar
 
-**O teste:** em vez de fazer estoque, publicar o anúncio real no Mercado Livre e produzir **por pedido**. O sob medida já funciona assim. Do kit pronto, só um lote pequeno de 5 unidades. Em paralelo, faça uma **pré-venda para a sua rede** (Instagram, WhatsApp, quem já é cliente da marcenaria). É o seu ponto forte como criador de conteúdo.
+Anúncio real no Mercado Livre com **um lote de 10 tábuas** (as 5 primeiras vão para o lançamento fechado) e pré-venda para a sua rede no Instagram e no WhatsApp.
 
-**Linha de sucesso, definida antes de começar** (14 dias de anúncio público, 30/11 a 13/12):
-- [ ] **10 pedidos pagos**, com pelo menos 5 do sob medida (R$169 ou mais)
-- [ ] **Conversão no anúncio ≥ 1%** (visitas → vendas, no painel do Mercado Livre)
+**Linha de sucesso (30/11 a 13/12):**
+- [ ] **10 tábuas vendidas** a R$249
+- [ ] Conversão no anúncio ≥ 1%
 - [ ] **3 avaliações com foto** até 31/12
-- [ ] **Margem real por kit positiva**, medida com custo e frete reais
-- [ ] **Zero reclamações** por peça faltando ou medida errada
+- [ ] Lucro real por tábua ≥ R$60, com custo e frete reais
+- [ ] Tempo real ≤ 5 h por tábua
+- [ ] Nenhuma tábua descolada ou rachada
 
-**Como comparar com o painel:** o painel simulado chegou a 25% de intenção de compra, mas mede quem viu a oferta inteira e decidiu, não quem passou pelo anúncio. A conversão real de marketplace costuma ser muito menor que isso. Se em 14 dias vierem **menos de 5 pedidos**, confie nos compradores reais e volte ao `/founder-offer` ou ao `/founder-pricing`. Se a **margem real for negativa**, pare o kit pronto e mantenha só o sob medida.
+**Como comparar com o painel:** o painel simulado deu 50% de intenção, mas mede quem viu a oferta inteira. A conversão de marketplace é muito menor. **Menos de 5 vendas em 14 dias** → volte ao `/founder-offer` com os dados reais.
 
-**Orçamento do teste (de R$2.000).** Valores estimados, exceto madeira e suporte, que vêm dos preços públicos do `cfo-sources.md`:
+**Os R$2.000** (estimativa, a confirmar com as cotações):
 
-| item | valor |
+| Item | Valor |
 |---|---:|
-| Madeira para ~10 kits (R$37,40 por kit) | R$374 |
-| 60 suportes (R$8 a unidade) | R$480 |
-| 15 caixas onda dupla (~R$20 cada) | R$300 |
-| Selador e verniz à base d'água | R$150 |
-| Ferragens, cantoneiras e plástico | R$80 |
-| Higrômetro de madeira | R$150 |
-| **Reserva** para reposições, frete de troca e imprevistos | **R$466** |
+| Madeira para ~15 tábuas (R$60 cada) | ~R$900 |
+| Cola | ~R$111 |
+| Lixas | ~R$120 |
+| Óleo, cera e 15 frascos | ~R$180 |
+| Pés | ~R$60 |
+| Embalagens de presente e de envio | ~R$240 |
+| Ferro de marcar | ~R$150 |
+| Higrômetro | ~R$150 |
+| **Reserva** | **~R$89** |
 | **Total** | **R$2.000** |
 
-### 2. A contagem regressiva
+### 2. Contagem regressiva (🔴 = caminho crítico)
 
-🔴 = caminho crítico: se atrasar, o lançamento atrasa.
+**Semana 1 (03 a 08/11): números**
+- [ ] 🔴 Escolher o par de madeiras e cotar na madeireira (05/11)
+- [ ] 🔴 Simular o frete da caixa no Mercado Livre (06/11)
+- [ ] 🔴 Confirmar as regras da Anvisa e do Inmetro para tábua (07/11)
+- [ ] Refazer o `/founder-cfo` com os números reais (08/11)
 
-**Semana 1 — 03/11 a 08/11: números reais**
-- [ ] 🔴 Cotar o corte e o aparelhamento na madeireira (2 madeireiras), até 05/11
-- [ ] 🔴 Cotar o suporte no atacado **ou** fazer 6 pinos e chapas e anotar custo e tempo, até 06/11
-- [ ] 🔴 Cotar a caixa onda dupla na medida certa, com prazo de entrega, até 06/11
-- [ ] 🔴 Simular o frete real no Mercado Livre com o peso e a caixa, até 07/11
-- [ ] Rodar o `/founder-cfo` de novo com os números reais e o modelo enxuto, até 08/11. **Se a margem por kit continuar negativa, lance só o sob medida.**
+**Semana 2 (09 a 15/11): legal e primeiro lote**
+- [ ] 🔴 Abrir o MEI (10/11)
+- [ ] 🔴 Comprar madeira e insumos (10/11)
+- [ ] 🔴 Produzir o lote 1 de 10 tábuas, **cronometrando**, de 10 a 15/11
+- [ ] 🔴 Teste de durabilidade: 2 tábuas lavadas e secas todos os dias por 7 dias, olhando as juntas
+- [ ] Encomendar o ferro de marcar (11/11)
 
-**Semana 2 — 09/11 a 15/11: legal e protótipo**
-- [ ] 🔴 Abrir o MEI no Portal do Empreendedor, confirmando a ocupação, até 10/11
-- [ ] Conta PJ ou Mercado Pago no CNPJ, até 11/11
-- [ ] Confirmar com a prefeitura ou o condomínio o trabalho em casa, até 12/11
-- [ ] 🔴 Comprar o primeiro lote de madeira, suportes, verniz e ferragens, até 11/11 (as caixas dependem do prazo do fabricante)
-- [ ] 🔴 Fazer 3 kits de protótipo seguindo o `quality-spec.md`, até 14/11
-- [ ] 🔴 **Teste de carga de 30 kg por 72 h** em 1 prateleira, de 12/11 a 15/11, filmado
-- [ ] 🔴 **Teste de queda** de 1 m numa caixa pronta, até 15/11
-- [ ] Rodar `/founder-brand` (nome final, se não for "Kit Parede Pronta") e `/founder-marketing` (calendário), até 15/11
+**Semana 3 (16 a 22/11): anúncio**
+- [ ] 🔴 Fotos: topo, lateral com a assinatura, em uso no churrasco, embalagem de presente (17/11)
+- [ ] 🔴 Anúncio com as madeiras nomeadas, a cola especificada, os cuidados, a garantia, o prazo de Natal e "loja nova" (19/11)
+- [ ] **Sáb 21/11: lançamento fechado** para 5 conhecidos que vão usar a tábua de verdade. Peça avaliação honesta, com foto se quiserem, e **sem trocar por desconto**
 
-**Semana 3 — 16/11 a 22/11: anúncio e lançamento fechado**
-- [ ] 🔴 Fotos do anúncio: prateleira instalada e carregada, veio de perto, as duas opções de acabamento e o tingido, até 17/11
-- [ ] 🔴 Vídeo curto do teste de carga e vídeo de instalação de 3 minutos (QR code no cartão), até 18/11
-- [ ] 🔴 Criar o anúncio no Mercado Livre, até 19/11. Incluir: carga por tipo de parede, data total no sob medida, garantia e "loja nova". **Sem "de R$X por R$Y" falso.**
-- [ ] Imprimir o cartão da caixa (pedido de foto, QR do vídeo) e o checklist de conferência, até 19/11
-- [ ] **Sábado 21/11 — lançamento fechado:** vender pelo anúncio real para 5 pessoas conhecidas, a preço cheio ou de lançamento. Elas compram, instalam e contam o que deu errado, com honestidade. **Não peça avaliação positiva:** peça avaliação sincera, com foto, se quiserem.
+**Semana 4 (23 a 29/11)**
+- [ ] Produzir o lote 2 para o estoque de Natal (5 tábuas prontas)
+- [ ] Black Friday (27/11): sem desconto extra. Mostrar o processo
+- [ ] **Seg 30/11: lançamento público**
 
-**Semana 4 — 23/11 a 29/11: ajustes**
-- [ ] Corrigir o que os 5 primeiros apontaram (embalagem, instrução, ferragem), até 25/11
-- [ ] Preparar o estoque mínimo: 5 kits prontos e material para 10 sob medida, até 27/11
-- [ ] Posts de pré-lançamento no seu Instagram (bastidores da marcenaria, teste de carga), de 24/11 a 29/11
-- [ ] Black Friday (27/11): não entre na guerra de desconto. Use os dias para mostrar o processo.
+### 3. Dia do lançamento (30/11)
 
-**Segunda 30/11 — lançamento público**
-
-### 3. Dia do lançamento (segunda, 30/11/2026)
-
-| hora | o quê |
+| Hora | O quê |
 |---|---|
-| 07h30 | Conferir que o anúncio está ativo, com preço R$119 e as variações sob medida (R$169 e R$189) |
-| 08h00 | Post de lançamento no Instagram e Stories (vídeo do teste de carga e link do anúncio). Mensagem no WhatsApp para a lista de contatos e clientes antigos |
-| 08h00–12h00 | Responder **toda** pergunta do anúncio em até 30 minutos. Pergunta de pré-venda vira venda |
-| 10h00 | Stories: bastidores da furação e do acabamento |
-| 12h00 | Confirmar a medida dos pedidos sob medida por escrito no chat |
-| 13h00–16h00 | Produzir os pedidos do dia (furação, lixa e selador) |
-| 16h00 | Embalar o que estiver pronto, tirar a foto de conferência e enviar ao cliente |
-| 17h00 | Postar. Segunda janela de respostas |
-| 18h00 | Stories: "primeiro dia, X pedidos". Só números verdadeiros |
-| 21h00 | Anotar no controle: visitas, pedidos, perguntas mais repetidas, tempo por kit |
+| 07h30 | Anúncio ativo a R$249 com "preço de lançamento até 31/12 ou 30 pedidos" |
+| 08h00 | Post e Stories com o vídeo da 2ª colagem e da gravação da assinatura, e o link. WhatsApp para a lista |
+| 08–12h | Responder toda pergunta em até 30 min |
+| 13–16h | Produção (lote em andamento) |
+| 16h | Foto do topo para cada comprador. Embalar e postar |
+| 18h | Stories com números verdadeiros |
+| 21h | Anotar visitas, vendas, perguntas e tempo |
 
-**Se algo der errado** (do registro de riscos em `ops.md`):
-- **Anúncio pausado ou recusado pelo Mercado Livre:** revisar o motivo, corrigir e reativar. Enquanto isso, vender pela rede com link de pagamento do Mercado Pago.
-- **Muitos pedidos sob medida ao mesmo tempo:** aumentar o prazo no anúncio antes de prometer. Melhor 10 dias cumpridos que 7 estourados.
-- **Primeira reclamação:** seguir a rotina D, com resposta em até 4 horas e reposição em até 2 dias úteis.
-- **Faltou material:** pausar a variação do kit pronto e manter o sob medida.
+**Se algo der errado:**
+- **Pedidos acima da capacidade:** aumente o prazo de postagem antes de aceitar mais pedidos.
+- **Tábua com defeito no controle final:** não envie. Avise o cliente e produza outra.
 
-### 4. Os primeiros 30 dias (30/11 a 29/12)
+### 4. Primeiros 30 dias (30/11 a 29/12)
 
-**Números da semana** (fechamento de sexta):
-
-| número | de onde vem | limite que força mudança |
-|---|---|---|
-| Pedidos por dia | Mercado Livre | Menos de 0,5/dia na 2ª semana → rever foto, título e preço |
-| Conversão (visitas → vendas) | Painel do vendedor no ML | Menos de 1% → rever fotos e as perguntas que ficaram sem resposta |
-| Visitas por dia | Painel do vendedor no ML | Menos de 30/dia → título e palavras-chave (`/founder-marketing`) |
-| Margem real por kit | Seu controle com custos reais | Negativa → parar o kit pronto e vender só sob medida |
-| Tempo por kit | Cronômetro | Sob medida acima de 2× o tempo do kit pronto → subir o preço do sob medida |
-| Reclamações | Chat e avaliações | 2 com a mesma causa → mudar o processo na hora |
-| Avaliações com foto | Mercado Livre | Menos de 3 até 31/12 → reforçar o cartão e a mensagem pós-entrega |
-| Faturamento do mês | Controle | Acima de R$5.000/mês → falar com o contador sobre o teto do MEI |
-
-O plano do CFO (5 kits/dia) ainda é o cenário com galpão. **O ponto de equilíbrio do modelo enxuto só sai depois das cotações da semana 1.**
+| Número | Limite que força mudança |
+|---|---|
+| Visitas/dia | < 30 → título, foto principal, palavras-chave ("tábua end grain", "tábua de churrasco") |
+| Conversão | < 1% → fotos e respostas às dúvidas repetidas no anúncio |
+| Lucro real por tábua | < R$60 → subir para R$349 antes de 31/12 |
+| Tempo por tábua | > 5 h → mudar o processo ou o preço |
+| Avaliações com foto | < 3 até 31/12 → reforçar o cartão e a mensagem pós-entrega |
+| Faturamento do mês | > R$5 mil → falar com o contador sobre o teto do MEI |
 
 **Revisões:**
-- **Dia 7 (07/12):** as pessoas veem o anúncio? (visitas) Quem vê, compra? (conversão) Que pergunta todo mundo faz e o anúncio não responde?
-- **Dia 14 (14/12): a linha de sucesso.** Bateu 10 pedidos, 1% de conversão e margem positiva? Se **não**: voltar ao `/founder-offer` ou ao `/founder-pricing` com os dados reais, não com o painel. Se **sim**: manter e planejar o estoque de dezembro.
-- **Dia 30 (29/12):** quanto sobrou de verdade? Quanto tempo leva cada peça? O sob medida paga a sua hora? Depois de 31/12, o preço do kit sobe para R$139 como prometido? Qual é o próximo passo: segundo canal (Shopee ou Elo7), mais um produto, ou continuar focado mais 60 dias, como pediu o conselho?
+- **07/12:** visitas e conversão.
+- **10/12 (corte de Natal):** quantos pedidos de presente chegaram?
+- **14/12:** linha de sucesso.
+- **29/12:** quanto sobrou de verdade, horas reais e a decisão de janeiro (R$349, tábua de presente 30x20 para o Dia dos Pais, ou segundo canal).
 
 _The panel is simulated buyers and the numbers are projections from your inputs. Confirm demand with real customers and costs with real quotes before you spend. Not financial, legal or tax advice._

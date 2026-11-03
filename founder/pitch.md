@@ -1,7 +1,7 @@
-Kit Parede Pronta: 3 prateleiras flutuantes 60x20 cm em madeira maciça de pinus, feitas por uma marcenaria e vendidas no Mercado Livre e na Shopee.
-Escolha o acabamento sem pagar a mais: verniz natural ou fosco incolor. Suporte invisível testado com 15 kg por prateleira; o vídeo do teste está no anúncio.
-Antes de despachar, mandamos pelo chat a foto do SEU kit embalado, com as peças e o acabamento de perto. Na caixa: parafusos, buchas, gabarito de furação e QR code com vídeo de instalação de 3 minutos.
-Garantia: chegou quebrado ou faltando peça, mandamos a reposição em até 2 dias úteis, sem precisar devolver nada. Se entortar em 12 meses com até 15 kg, trocamos.
-Preço de lançamento R$119 com frete grátis para os primeiros 30 pedidos ou até 31/12/2026; depois, R$139. Postagem em 1 dia útil.
-Sob medida até 120 cm: R$169, 7 dias úteis; se a medida sair diferente da que você pediu, refazemos por nossa conta. Acabamento tingido (freijó ou carvalho claro): R$189.
+Tábua de corte end grain (madeira de topo) 40x30x4 cm, em xadrez de Marfim (clara) e Muiracatiara (escura), madeiras brasileiras compradas com nota fiscal de madeireira. Feita à mão por um marceneiro com 20 anos de oficina e vendida no Mercado Livre.
+Cada tábua sai numerada e com a assinatura do marceneiro gravada na lateral. Antes de despachar, mandamos pelo chat a foto do topo da SUA tábua, para você ver o desenho real.
+Colagem com cola à prova d'água para contato indireto com alimentos; acabamento com óleo mineral e cera de uso alimentar; pés antiderrapantes. Vem com um frasco de óleo e um cartão de cuidados (lavar à mão, secar em pé, óleo uma vez por mês).
+Garantia: se descolar ou rachar em 12 meses com o uso indicado, enviamos outra.
+Embalagem de presente grátis (caixa kraft e cartão para mensagem). Pedidos até 10/12 são postados até 14/12; se não chegar até 23/12, devolvemos R$50.
+Preço de lançamento R$249 com frete grátis para os 30 primeiros pedidos ou até 31/12/2026; depois, R$349.
 Loja nova no marketplace: ainda com poucas avaliações.

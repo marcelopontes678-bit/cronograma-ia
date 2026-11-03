@@ -1,3 +1,5 @@
+> **Nota (03/11/2026):** o conselho avaliou a ideia anterior, as prateleiras. O produto mudou para a tábua end grain. Os riscos levantados continuam válidos: loja nova sem avaliações, um produto e um canal por 90 dias, e evitar galpão e funcionário. O risco de prejuízo por peça foi resolvido pela tábua (ver `cfo.md`). Para uma avaliação nova, rode o `/founder-board` de novo.
+
 # Conselho: Kit Parede Pronta
 
 **Votação: 2 FUND IF, 1 PASS. Nota média: 3,7 de 10.**

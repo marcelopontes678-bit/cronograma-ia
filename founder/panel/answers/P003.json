@@ -1,13 +1,13 @@
 {
   "id": "P003",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "Gostei de ser pinus maciço e não MDF, e o preço é ok, mas loja nova sem avaliação eu não arrisco de novo. Prefiro esperar ver fotos de compradores reais ou pegar de uma loja com reputação, mesmo pagando um pouco mais.",
-  "objection": "Qualquer um escreve 'madeira maciça' e 'enviamos outra peça' no anúncio. Sem avaliação, não sei se o suporte invisível aguenta mesmo 15 kg nem se a troca vai acontecer ou se vou ficar brigando no chat.",
-  "would_change_my_mind": "Ver umas 30 ou mais avaliações com fotos de clientes mostrando a prateleira instalada e carregada, e reputação verde no Mercado Livre.",
-  "price_too_cheap": 70,
-  "price_cheap": 110,
-  "price_expensive": 190,
-  "price_too_expensive": 250
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "quality",
+  "reason": "Tábua end grain de 40x30x4 em Muiracatiara por R$249 com frete grátis é preço bom pra mim, e a foto da minha tábua antes de despachar mais a garantia de 12 meses tiram boa parte do risco. Se pagar R$249 e vier bem colada, vai virar a tábua do churrasco de sábado.",
+  "objection": "Vai rachar ou descolar com o tempo? Loja nova, quase sem avaliação, e 4 cm de espessura é pouco pra end grain aguentar faca de açougueiro toda semana. Garantia de loja nova só vale se a loja ainda existir daqui a um ano.",
+  "would_change_my_mind": "Se a foto do topo que mandarem pelo chat mostrar emenda mal feita ou fresta entre os blocos, eu cancelo.",
+  "price_too_cheap": 120,
+  "price_cheap": 200,
+  "price_expensive": 350,
+  "price_too_expensive": 500
 }

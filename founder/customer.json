@@ -1,36 +1,36 @@
 {
-  "business": "Marcenaria que vende prateleiras e nichos em madeira de verdade pelos marketplaces (Mercado Livre, Shopee, Elo7)",
-  "target": "Brasileiros de 25 a 45 anos montando ou decorando apartamento, que compram móveis pequenos pelo celular em marketplaces (valores em reais, R$)",
+  "business": "Veio Certo - tabua de corte end grain feita por marceneiro, vendida no Mercado Livre (valores em reais, R$)",
+  "target": "Brasileiros de 28 a 55 anos que cozinham ou fazem churrasco em casa, ou que procuram um presente marcante, e compram pelo celular em marketplaces (valores em reais, R$)",
   "where": "Brasil, compra online com entrega em casa",
-  "age": [25, 45],
+  "age": [28, 55],
   "segments": [
-    {"name": "Primeiro apê / aluguel, renda anual em R$", "share": 0.40, "income": [30000, 60000]},
-    {"name": "Classe média que reforma ou decora, renda anual em R$", "share": 0.40, "income": [60000, 140000]},
-    {"name": "Renda alta que valoriza design, renda anual em R$", "share": 0.20, "income": [140000, 300000]}
+    {"name": "Classe media que cozinha em casa, renda anual em R$", "share": 0.45, "income": [60000, 140000]},
+    {"name": "Renda alta, gosta de cozinha e design, renda anual em R$", "share": 0.35, "income": [140000, 350000]},
+    {"name": "Renda mais apertada, compra para presentear, renda anual em R$", "share": 0.20, "income": [35000, 60000]}
   ],
   "behaviours": [
-    {"name": "Caçador de preço", "share": 0.25, "how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre."},
-    {"name": "Lê todas as avaliações", "share": 0.20, "how": "Só compra de anúncio com muitas avaliações e lê primeiro as de 1 e 2 estrelas."},
-    {"name": "Quer o visual do Pinterest", "share": 0.15, "how": "Compra pela foto e pelo acabamento, quer madeira aparente e estilo."},
-    {"name": "Já se queimou com MDF ruim", "share": 0.15, "how": "Já recebeu móvel quebrado ou faltando parafuso e hoje desconfia de qualquer anúncio."},
-    {"name": "Compra rápido", "share": 0.15, "how": "Quer chegar em 1 ou 2 dias, prefere Full e frete grátis, não espera produção."},
-    {"name": "Precisa de medida exata", "share": 0.10, "how": "Tem um vão ou parede com medida específica e não acha o tamanho pronto."}
+    {"name": "Churrasqueiro de fim de semana", "share": 0.25, "how": "Faz churrasco quase todo fim de semana e cuida das ferramentas como se fossem trofeu."},
+    {"name": "Cozinheiro entusiasta", "share": 0.20, "how": "Assiste receitas, tem facas boas e quer utensilio que dure anos."},
+    {"name": "Procurando presente", "share": 0.20, "how": "Quer um presente de Natal ou Dia dos Pais que pareca especial e chegue no prazo."},
+    {"name": "Cacador de preco", "share": 0.15, "how": "Compara com tabuas de R$50 a R$100 e so paga mais se ver motivo claro."},
+    {"name": "Le todas as avaliacoes", "share": 0.10, "how": "So compra de anuncio com muitas avaliacoes e le primeiro as de 1 e 2 estrelas."},
+    {"name": "Quer peca de design", "share": 0.10, "how": "Compra pelo visual, posta a cozinha no Instagram e quer algo que ninguem tem."}
   ],
   "objections": [
-    "Por que pagar mais que o dobro de um kit de MDF de R$70?",
-    "E se chegar quebrado ou faltando parafuso, como sempre acontece?",
-    "Loja nova, sem avaliações: é confiável?",
-    "Será que é madeira mesmo ou MDF com adesivo?",
-    "Vou ter que furar a parede e instalar sozinho",
-    "Demora para produzir e entregar",
-    "Aguenta peso de livro e planta?"
+    "R$349 numa tabua? Tem tabua de madeira por R$80",
+    "Madeira acumula bacteria, nao e menos higienica que plastico?",
+    "Vai rachar ou descolar com o tempo?",
+    "Da trabalho cuidar, passar oleo, nao pode lavar na maquina",
+    "Loja nova, sem avaliacoes: e confiavel?",
+    "Sera que e madeira nobre de verdade ou so tingida?",
+    "Chega antes do Natal ou do Dia dos Pais?"
   ],
   "habits": [
-    "você mora num apartamento de 50 m² e quer usar a parede da sala",
-    "você salva ideias de decoração no Pinterest e no Instagram",
-    "você compra quase tudo da casa pelo Mercado Livre e pela Shopee",
-    "você tem uma furadeira emprestada do vizinho",
-    "você está montando um home office no quarto",
-    "você acabou de se mudar e a casa ainda está pela metade"
+    "voce faz churrasco com os amigos quase todo sabado",
+    "voce tem um jogo de facas que cuida bem",
+    "voce precisa resolver um presente nas proximas semanas",
+    "voce compra quase tudo da casa pelo Mercado Livre",
+    "voce segue perfis de culinaria e churrasco no Instagram",
+    "sua tabua atual esta riscada e com cheiro"
   ]
 }

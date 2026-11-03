@@ -2,7 +2,7 @@
 
 **Posicionamento usado aqui:** ainda não existe `founder/marketing.md`. Por isso o posicionamento abaixo foi tirado do conselho, da oferta e dos painéis. Confirme ou ajuste no `/founder-marketing`.
 
-> **Prateleira sob medida em madeira de verdade, feita por um marceneiro com 20 anos de oficina, que chega inteira e completa.**
+> **Tábua end grain numerada e assinada por um marceneiro com 20 anos de oficina, que você vê antes de sair da oficina.** (Atualizado em 03/11/2026: o produto mudou de prateleiras para tábuas. O nome, a voz e o visual abaixo continuam valendo. Adapte os pontos de contato: a caixa vira embalagem de presente, e o primeiro post vira o vídeo da colagem em xadrez.)
 
 Por que esse posicionamento:
 - Os compradores que fecharam compra queriam **medida exata** e **madeira de verdade** (ver `panel/results.md` e `panel-v2/results.md`).
@@ -46,7 +46,7 @@ Plano B se o .com.br estiver ocupado: veiocertomarcenaria.com.br ou veiocerto.ar
 **A promessa, numa linha:** *Chega na medida, inteira e completa. Se não chegar, o problema é nosso.*
 
 **Três opções de slogan:**
-1. **Veio Certo. Madeira de verdade, na medida da sua parede.**
+1. **Veio Certo. Madeira de verdade, na medida da sua parede.** (para a tábua: *Veio Certo. Cada tábua tem número, nome e veio próprio.*)
 2. Feito por marceneiro, não por fábrica.
 3. Do jeito que você pediu, do jeito que chegou.
 

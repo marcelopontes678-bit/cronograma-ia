@@ -2,12 +2,12 @@
   "id": "P016",
   "buys": false,
   "purchases_first_month": 0,
-  "reason_code": "price",
-  "reason": "Quando ordeno por menor preço aparece kit de 3 prateleiras flutuantes de 60 cm por uns R$70 a R$90. Madeira maciça é legal, mas pagar quase o dobro numa loja que quase ninguém avaliou não fecha a conta pro meu home office.",
-  "objection": "Loja nova com poucas avaliações: não sei se o suporte invisível aguenta mesmo 15 kg ou se a prateleira vai entortar na parede, e R$149 já é dinheiro pra arriscar.",
-  "would_change_my_mind": "Cupom ou preço de lançamento perto de R$99, ou umas avaliações com foto de gente mostrando a prateleira carregada depois de um tempo.",
-  "price_too_cheap": 50,
-  "price_cheap": 89,
-  "price_expensive": 129,
-  "price_too_expensive": 169
+  "reason_code": "trust",
+  "reason": "Loja nova com quase nenhuma avaliacao, e eu so compro anuncio que tem muita avaliacao pra eu ler as de 1 e 2 estrelas primeiro. R$249 pra presentear e muito dinheiro pra apostar numa loja que eu nao conheco, ainda mais com o orcamento apertado.",
+  "objection": "Nao tem avaliacao de ninguem dizendo se a tabua racha, empena ou descola depois de uns meses, e a garantia de 12 meses so vale se a loja ainda existir e responder.",
+  "would_change_my_mind": "Ver umas 50 avaliacoes reais no Mercado Livre, inclusive as ruins, mostrando que a tabua aguenta e que a loja resolve problema, e o preco ficar perto de R$180.",
+  "price_too_cheap": 70,
+  "price_cheap": 150,
+  "price_expensive": 220,
+  "price_too_expensive": 300
 }

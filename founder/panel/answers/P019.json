@@ -2,12 +2,12 @@
   "id": "P019",
   "buys": false,
   "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "Gostei de ser pinus maciço e da promessa de trocar se chegar quebrado, mas loja nova com quase nenhuma avaliação eu não arrisco R$149. Na Shopee eu acho kit de 3 prateleiras de MDF por bem menos, e de loja com milhares de vendas.",
-  "objection": "Promessa de troca qualquer loja faz; com poucas avaliações não tenho como saber se eles cumprem, se o suporte invisível aguenta mesmo 15 kg ou se vai faltar parafuso e eu ficar esperando dias pela peça.",
-  "would_change_my_mind": "Ver umas 50 avaliações com foto de gente que instalou e disse que chegou inteiro e completo, ou um cupom que deixasse o kit perto de R$110.",
-  "price_too_cheap": 60,
-  "price_cheap": 99,
-  "price_expensive": 139,
-  "price_too_expensive": 189
+  "reason_code": "price",
+  "reason": "Gostei muito da tábua, e o prazo de Natal com os R$50 de volta se atrasar me deixou tranquila. Mas R$249 passa do que eu consigo gastar num presente este ano, meu teto fica perto de R$150 a R$180, e não dá pra arriscar isso numa loja nova com quase nenhuma avaliação.",
+  "objection": "R$249 é muito pro meu orçamento de presente, ainda mais numa loja com poucas avaliações. Se der problema, fico sem o presente e sem o dinheiro.",
+  "would_change_my_mind": "Uma versão menor ou um cupom que deixasse ela por uns R$170, com algumas avaliações reais de compradores mostrando a tábua que chegou.",
+  "price_too_cheap": 70,
+  "price_cheap": 140,
+  "price_expensive": 200,
+  "price_too_expensive": 260
 }

@@ -1,6 +1,6 @@
-# Buyer panel: Marcenaria que vende prateleiras e nichos em madeira de verdade pelos marketplaces (Mercado Livre, Shopee, Elo7)
+# Buyer panel: Veio Certo - tabua de corte end grain feita por marceneiro, vendida no Mercado Livre (valores em reais, R$)
 
-**2 buy · 18 pass** (10% buy) out of 20 simulated buyers. Seed 493632, so the same cards can be dealt again.
+**10 buy · 10 pass** (50% buy) out of 20 simulated buyers. Seed 825715, so the same cards can be dealt again.
 
 These are simulated buyers, not customers. Use this to find objections and weak spots, then confirm the big ones with real people before you spend.
 
@@ -8,57 +8,56 @@ These are simulated buyers, not customers. Use this to find objections and weak 
 
 | group | buyers | buy rate |
 | --- | ---: | ---: |
-| Renda alta que valoriza design, renda anual em R$ | 4 | 25%  (thin) |
-| Classe média que reforma ou decora, renda anual em R$ | 8 | 12% |
-| Primeiro apê / aluguel, renda anual em R$ | 8 | 0% |
+| Renda alta, gosta de cozinha e design, renda anual em R$ | 7 | 100%  (thin) |
+| Classe media que cozinha em casa, renda anual em R$ | 9 | 33% |
+| Renda mais apertada, compra para presentear, renda anual em R$ | 4 | 0%  (thin) |
 
 ## By buying behaviour
 
 | group | buyers | buy rate |
 | --- | ---: | ---: |
-| Precisa de medida exata | 2 | 100%  (thin) |
-| Caçador de preço | 5 | 0%  (thin) |
-| Já se queimou com MDF ruim | 3 | 0%  (thin) |
-| Quer o visual do Pinterest | 3 | 0%  (thin) |
-| Lê todas as avaliações | 4 | 0%  (thin) |
-| Compra rápido | 3 | 0%  (thin) |
+| Quer peca de design | 2 | 100%  (thin) |
+| Cozinheiro entusiasta | 4 | 75%  (thin) |
+| Churrasqueiro de fim de semana | 5 | 60%  (thin) |
+| Procurando presente | 4 | 50%  (thin) |
+| Le todas as avaliacoes | 2 | 0%  (thin) |
+| Cacador de preco | 3 | 0%  (thin) |
 
 ## By income
 
 | group | buyers | buy rate |
 | --- | ---: | ---: |
-| $57,000 to $110,000 | 7 | 14%  (thin) |
-| $110,000 and up | 7 | 14%  (thin) |
-| under $57,000 | 6 | 0%  (thin) |
+| $186,000 and up | 7 | 100%  (thin) |
+| $73,000 to $186,000 | 7 | 43%  (thin) |
+| under $73,000 | 6 | 0%  (thin) |
 
 ## Why they pass
 
 | reason | buyers | in their words |
 | --- | ---: | --- |
-| trust | 14 | "Ordenei por menor preço e achei kits de 3 prateleiras por bem menos de R$149; pagar mais só faria sentido se eu tivesse certeza de que é pinus maciço mesmo, e uma loja nova com quase nenhuma avaliação não me dá essa certeza. Vou favoritar e esperar." (P002) · "Gostei de ser pinus maciço e não MDF, e o preço é ok, mas loja nova sem avaliação eu não arrisco de novo. Prefiro esperar ver fotos de compradores reais ou pegar de uma loja com reputação, mesmo pagando um pouco mais." (P003) |
-| price | 3 | "Quando ordeno por menor preço aparece kit de 3 prateleiras flutuantes por bem menos de R$149, e na foto do celular parece tudo igual. Pagar o dobro numa loja nova sem avaliação eu não faço, vou no mais barato que tem nota boa." (P007) · "R$149 é mais que o dobro do kit de MDF de R$70 que chega amanhã pelo Full. Pinus maciço é bonito, mas pra prateleira de sala eu não vejo diferença que valha isso, ainda mais de uma loja nova que demora até 3 dias úteis." (P009) |
-| quality | 1 | "Pelo menos é madeira maciça e não MDF com adesivo, e o preço não me pesa. Mas pinus com verniz costuma ficar amarelado, com cara de móvel de chácara, e não é o visual de madeira clara e fosca que eu quero no home office. Numa loja nova sem avaliações e sem fotos de cliente, prefiro pagar mais numa marca que já mostra o acabamento." (P013) |
+| price | 8 | "Minha tabua ta riscada e preciso trocar, mas R$249 numa tabua de loja nova, sem quase nenhuma avaliacao, e muito pra arriscar quando acho tabua de madeira por R$80. Vou deixar no favorito e ver se aparecem avaliacoes de gente que usou no churrasco." (P002) · "Achei bonita, a embalagem e a garantia de entrega antes do Natal ajudam, mas R$249 numa tabua ainda pesa demais pro meu orcamento de presente. Com esse dinheiro eu resolvo dois presentes, e tem tabua boa de madeira por R$80 a R$120." (P004) |
+| trust | 2 | "Achei a tabua bonita e a proposta parece seria, mas eu so compro de anuncio com muitas avaliacoes, e loja nova com quase nenhuma eu nao arrisco R$249. Vou salvar o anuncio e voltar quando tiver gente contando como a tabua ficou depois de uns meses." (P005) · "Loja nova com quase nenhuma avaliacao, e eu so compro anuncio que tem muita avaliacao pra eu ler as de 1 e 2 estrelas primeiro. R$249 pra presentear e muito dinheiro pra apostar numa loja que eu nao conheco, ainda mais com o orcamento apertado." (P016) |
 
 ## Why they buy
 
 | reason | buyers | in their words |
 | --- | ---: | --- |
-| need | 2 | "Tenho um vão com medida certa e nunca acho prateleira pronta que encaixe; pagar R$30 a mais para vir no tamanho exato, em madeira maciça e com gabarito de furação, resolve meu problema por uns R$179. Como compro pelo Mercado Livre, se der errado tenho a garantia da plataforma." (P001) · "Tenho um vão na parede que nenhuma prateleira pronta encaixa, e a medida sob encomenda até 120 cm por só R$30 a mais resolve exatamente isso. Por R$179 em madeira maciça, com troca garantida se chegar danificada, o risco é pequeno para mim." (P004) |
+| quality | 6 | "Numerada, assinada e com a foto do topo da minha tabua antes de mandar: isso e presente que ninguem mais vai ter, e fica lindo no Instagram. Chegando ate 23/12 e com caixa de presente, por R$249 eu resolvo o Natal." (P001) · "Tábua end grain de 40x30x4 em Muiracatiara por R$249 com frete grátis é preço bom pra mim, e a foto da minha tábua antes de despachar mais a garantia de 12 meses tiram boa parte do risco. Se pagar R$249 e vier bem colada, vai virar a tábua do churrasco de sábado." (P003) |
+| need | 3 | "Minha tabua ja esta riscada e com cheiro, e end grain de Muiracatiara a R$249 e mais barato que as importadas que eu vinha olhando. A foto do topo da minha tabua antes do envio e a compra pelo Mercado Livre me deixam arriscar mesmo com loja nova." (P006) · "Preciso de um presente nas proximas semanas e uma tabua end grain de Muiracatiara, numerada e assinada, e exatamente o tipo de coisa que um churrasqueiro guarda como trofeu. A R$249 com frete gratis e garantia de entrega antes do Natal, e mais barato que as end grain boas que vejo por ai, e o Mercado Livre me devolve o dinheiro se vier errado." (P012) |
+| timing | 1 | "Preciso resolver o presente do meu marido para o Natal e isso parece especial de verdade: numerada, assinada, com caixa de presente e prazo claro se eu pedir até 10/12. Por R$249 com frete grátis fica dentro do que eu gastaria num presente bom, então eu peço cedo, lá pelo fim de novembro, para ter folga." (P018) |
 
 ## What would flip a no
 
-- Ver várias avaliações com fotos reais mostrando a borda e o veio da madeira e a prateleira instalada com peso em cima, ou um cupom que deixasse o kit perto de R$110.
-- Ver umas 30 ou mais avaliações com fotos de clientes mostrando a prateleira instalada e carregada, e reputação verde no Mercado Livre.
-- Ver várias avaliações com fotos reais de clientes mostrando a prateleira instalada na parede, com o veio da madeira e o acabamento de perto.
-- Ver umas 50 avaliações ou mais, com fotos das prateleiras instaladas, e as negativas mostrando que a loja resolveu rápido.
-- Um cupom ou preço perto de R$110 com várias avaliações com foto de quem já instalou.
-- Ver dezenas de avaliações com fotos reais de clientes mostrando a prateleira carregada de livros e plantas, e poucas reclamações nas de 1 e 2 estrelas.
-- Ficar perto de R$100 com entrega Full em 1 ou 2 dias, e várias avaliações com foto mostrando que a madeira é boa mesmo.
-- Ver umas 20 ou 30 avaliações com fotos de clientes mostrando a prateleira instalada, com o acabamento e o suporte invisível de verdade.
-- Ver umas 30 ou mais avaliações boas com foto da prateleira instalada e carregada, e o anúncio no Full chegando em 1 ou 2 dias.
-- Ver umas 20 ou 30 avaliações com fotos de clientes mostrando a madeira de perto, o suporte instalado e coisa pesada em cima.
-- Fotos reais de clientes com as prateleiras instaladas, ou uma opção de acabamento fosco/tingido tipo freijó ou carvalho claro.
-- Ver umas 50 ou mais avaliações reais com fotos das prateleiras instaladas e carregadas, incluindo como a loja respondeu às reclamações.
+- Ver umas 20 avaliacoes boas com foto de quem usa no churrasco, ou o preco cair para uns R$199.
+- Se ficasse em torno de R$150 com frete gratis e a loja ja tivesse um bom numero de avaliacoes de quem comprou.
+- Ver umas 30 ou mais avaliacoes reais com foto, inclusive as negativas, de pessoas que usam a tabua ha alguns meses.
+- Ter umas 50 avaliacoes boas com foto de gente que ja usa ha meses, e o preco cair perto de R$150.
+- Ver avaliacoes de outros compradores com fotos de tabuas reais que chegaram no prazo, ou o preco perto de R$180 com a embalagem de presente incluida.
+- Ver umas 20 ou 30 avaliacoes boas com foto de gente que usa ha meses, ou o preco cair pra perto de R$180 parcelado sem juros.
+- Preco perto de R$150 com varias avaliacoes boas de quem ja comprou, e alguma explicacao simples de por que madeira de topo nao e menos higienica que plastico.
+- Ver umas 50 avaliacoes reais no Mercado Livre, inclusive as ruins, mostrando que a tabua aguenta e que a loja resolve problema, e o preco ficar perto de R$180.
+- Ver várias avaliações de gente que comprou mostrando a tábua depois de meses de uso, e um cupom que deixasse ela perto de R$170 a R$180.
+- Uma versão menor ou um cupom que deixasse ela por uns R$170, com algumas avaliações reais de compradores mostrando a tábua que chegou.
 
 Buyers say they would buy **1.0 times** in the first month on average.
 

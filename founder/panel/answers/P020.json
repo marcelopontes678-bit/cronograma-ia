@@ -1,13 +1,13 @@
 {
   "id": "P020",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "O preço de R$149 por três prateleiras de pinus maciço é bom, mas loja nova com quase nenhuma avaliação e sem foto de cliente não me convence que é madeira de verdade. E 3 dias úteis sem Full é mais do que eu costumo esperar, então eu acabaria pegando uma com selo Full e milhares de avaliações, mesmo pagando um pouco mais.",
-  "objection": "Será que é pinus maciço mesmo ou MDF com adesivo, e se o suporte invisível aguenta mesmo 15 kg? Sem avaliação de quem já comprou eu não tenho como saber.",
-  "would_change_my_mind": "Ver avaliações com fotos de clientes mostrando a madeira de perto e a prateleira instalada com peso, de preferência com envio Full chegando em 1 ou 2 dias.",
-  "price_too_cheap": 60,
-  "price_cheap": 110,
-  "price_expensive": 180,
-  "price_too_expensive": 230
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "quality",
+  "reason": "Tabua end grain de Muiracatiara, numerada e assinada, por R$249 e pouco para o que eu gasto em faca e carne; e a foto da minha tabua antes de despachar me tira o risco da loja nova. Compro uma pra mim e talvez pense em outra de presente depois de ver a primeira.",
+  "objection": "Madeira acumula bacteria? E loja nova com poucas avaliacoes, nao sei se a colagem aguenta lavagem de fim de semana todo com gordura de picanha.",
+  "would_change_my_mind": "Se a foto do topo chegar com emendas tortas ou madeira manchada, eu cancelo antes de despachar.",
+  "price_too_cheap": 120,
+  "price_cheap": 200,
+  "price_expensive": 450,
+  "price_too_expensive": 700
 }

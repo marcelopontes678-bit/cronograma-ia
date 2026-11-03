@@ -1,32 +1,32 @@
 # Resumo
 
-**Veredito: Not yet (ainda não).** Três das quatro checagens falham por causa do custo, não da demanda. O que precisa mudar, em ordem:
+**Veredito: Profitable** (calculado pelo `compile.py`), **com base em estimativas e compradores simulados.** Ainda não houve nenhuma venda real. A madeira, o frete e o tempo por tábua precisam ser cotados e medidos antes de qualquer gasto.
 
-1. **Custo por kit** (`/founder-cfo`). O kit de R$139 custa R$159,17 para produzir e entregar e **perde R$20,17 por venda**. O item mais caro são os 6 suportes invisíveis (R$48). Cote no atacado ou troque o tipo de suporte.
-2. **Estrutura** (`/founder-ops` + `/founder-cfo`). Galpão e ajudante somam R$8.300 por mês de custo fixo, contra um produto que hoje não contribui nada. Comece produzindo em casa ou numa garagem.
-3. **Mix de preço** (`/founder-pricing`). O dinheiro está no sob medida (R$169) e no tingido (R$189), não no kit pronto.
+**O negócio:** um marceneiro com 20+ anos de oficina faz em casa tábuas de corte end grain (madeira de topo), em xadrez de duas madeiras nobres brasileiras, numeradas e assinadas, e vende no Mercado Livre. O público é quem faz churrasco ou cozinha a sério e quem procura um presente marcante. O produto substituiu as prateleiras, que davam prejuízo ou margem quase nula por peça (`arquivo-prateleiras/`).
 
-**O negócio:** uma marcenaria nova vendendo prateleiras em madeira maciça de pinus pelo Mercado Livre e pela Shopee. O público são pessoas de 25 a 45 anos decorando apartamento pelo celular. A oferta é o *Kit Parede Pronta*: foto do kit do cliente antes do envio, reposição sem devolver a peça e acabamento à escolha.
+**Os três números (R$249 de lançamento, até 2 tábuas/dia):**
+- **Lucro por tábua: R$83,36 (33%).** Margem no plano: 31%.
+- **Equilíbrio: ~0,15 tábua/dia** (uns 5 por mês). A capacidade estimada é de 3/dia.
+- **Ano 1: +R$35.619 de operação.** Os R$2.000 voltam no 3º mês. A R$349, o lucro por tábua vai a R$171 e o ano 1 a +R$78.123.
 
-**Os três números (plano a R$139, 5 kits/dia):**
-- Contribuição por kit: **-R$20,17 (-15%)**. Margem no plano: **-54%**.
-- Ponto de equilíbrio: **nunca**, porque cada venda perde dinheiro.
-- Ano 1: **-R$122.291** de operação e -R$162.591 depois do investimento de R$40.300.
+**Painel e conselho:**
+- O painel da tábua subiu de **10% para 50% de compra** quando a oferta passou a nomear as madeiras, enviar a foto da tábua do cliente, numerar e assinar, e garantir o prazo de presente, junto com o preço de lançamento.
+- A renda alta comprou toda. Quem caça preço e quem compra presente com orçamento apertado não comprou.
+- O conselho avaliou a ideia anterior (prateleiras). As condições dele continuam valendo e estão atendidas: um produto, um canal, sem galpão e sem funcionário. O prejuízo por peça foi resolvido.
 
-Com suporte a ~R$4, frete a R$15, preço médio de R$169 e sem galpão nem ajudante (custo fixo de R$1.200/mês), a ferramenta dá **+R$38,43 por kit, equilíbrio em ~1 kit/dia e +R$28.834 no ano 1** de operação. Esse cenário ainda não é o plano: ele depende de uma cotação de suporte que ainda não existe.
+**Maior risco:** os números de custo e tempo. Se a madeira passar de R$60 por tábua ou o tempo passar de 5 h, a margem cai muito. No pior caso testado (R$249, madeira a R$90, frete a R$35), ainda sobram R$43 por tábua, mas sem pagar o seu trabalho de forma justa. **O que fazer:** cotar antes de comprar, cronometrar o 1º lote e subir para R$349.
 
-**O que o painel disse:**
-- Com o pitch original (R$149), compraram **2 de 20 (10%)**. Esse é o número que o compilador usa, e ele fica abaixo da meta de 25%.
-- Com o Kit Parede Pronta a R$119 (`founder/panel-v2/`), compraram **5 de 20 (25%)**. Mas R$119 perde R$36,57 por kit, e o preço mudou junto com a oferta.
-- Nas duas rodadas o principal motivo de recusa foi o mesmo: **loja nova sem avaliações** (14 e 11 recusas). O preço veio bem atrás (3 em cada rodada).
-- O conselho (`/founder-board`) não rodou, então não há com o que comparar.
+**Outros riscos:**
+- Loja nova, sem avaliações.
+- Teto do MEI estourando por volta do 8º mês.
+- Regras da Anvisa e do Inmetro para utensílio em contato com alimento.
+- Um concorrente já usa marfim e muiracatiara.
 
-**Concorrência:** existe uma lacuna real entre o MDF de R$60–72 e a madeira de R$246 ou mais. As reclamações mais comuns do setor são peça faltando e produto chegando quebrado. Isso é problema de processo e embalagem, e a oferta resolve as duas.
+**Para começar:** R$2.000, que cabem no orçamento, para o 1º lote de ~15 tábuas e os insumos. O teste real é vender 10 tábuas entre 30/11 e 13/12, com lucro por tábua ≥ R$60 e ≤ 5 h por peça (`launch.md`).
 
-**Maior risco:** confiança. Ninguém compra de loja sem avaliações, e cada avaliação inicial custa prejuízo. O plano é vender os 30 primeiros a preço de lançamento, pedir foto da prateleira instalada e não oferecer nada em troca de nota positiva. O custo desses 30 é de cerca de R$1.100 a R$119, ou zero se o custo for corrigido antes.
+**Esta semana:**
+1. Escolher o par de madeiras e **cotar na madeireira**.
+2. **Simular o frete** da caixa no Mercado Livre.
+3. Confirmar as regras da **Anvisa e do Inmetro** para tábua de madeira.
 
-**Para começar:** no modelo atual, o caixa necessário passa de R$162 mil, o que é inviável. No modelo enxuto, ele cai para cerca de R$41 mil, quase todo em máquinas e caução. Quem já tiver as máquinas precisa de bem menos. O primeiro teste real (`/founder-launch`): anunciar o kit no Mercado Livre com 10 a 20 unidades e medir visitas, conversão e reclamações.
-
-**Esta semana:** pedir **cotação de atacado do suporte invisível 20 cm** (Desicon, MFL ou distribuidor) e **simular o frete real** da caixa no Mercado Livre. São os dois números que decidem se o kit dá lucro.
-
-_O painel são compradores simulados e os números são projeções a partir de estimativas. Orçamentos e clientes reais confirmam tudo isso. Isto não é aconselhamento financeiro, jurídico nem tributário: um contador deve revisar enquadramento, folha e impostos._
+_O painel são compradores simulados e os números são projeções a partir de estimativas. Clientes e orçamentos reais confirmam ou derrubam tudo isso. Isto não é aconselhamento financeiro, jurídico nem tributário: um contador deve revisar o enquadramento e os impostos._

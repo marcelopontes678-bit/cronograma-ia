@@ -2,12 +2,12 @@
   "id": "P011",
   "buys": false,
   "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "O preço é bom pra madeira maciça e eu preciso de prateleira pro home office, mas loja nova sem avaliação e envio em até 3 dias úteis (fora o transporte) me faz ir no anúncio Full com centenas de avaliações que chega amanhã, mesmo sendo MDF.",
-  "objection": "Loja nova, quase sem avaliações: não sei se o suporte invisível aguenta mesmo 15 kg nem se a madeira chega empenada, e ainda vou esperar quase uma semana.",
-  "would_change_my_mind": "Ver umas 30 ou mais avaliações boas com foto da prateleira instalada e carregada, e o anúncio no Full chegando em 1 ou 2 dias.",
+  "reason_code": "price",
+  "reason": "Achei bonita, e a embalagem de presente com o prazo garantido pra antes do Natal ajuda muito, mas R$249 numa tabua ainda pesa no meu orcamento de presente. Por esse valor eu compro algo pro meu pai que eu tenho mais certeza que ele vai usar e valorizar, ou pego uma tabua boa de R$80 a R$120 e completo com outra coisa.",
+  "objection": "Nao consigo explicar pra mim mesma por que essa tabua vale tres vezes mais que uma de madeira comum, e a loja e nova, com poucas avaliacoes, entao estou pagando caro e ainda arriscando.",
+  "would_change_my_mind": "Ver avaliacoes de outros compradores com fotos de tabuas reais que chegaram no prazo, ou o preco perto de R$180 com a embalagem de presente incluida.",
   "price_too_cheap": 70,
-  "price_cheap": 110,
-  "price_expensive": 190,
-  "price_too_expensive": 250
+  "price_cheap": 150,
+  "price_expensive": 220,
+  "price_too_expensive": 300
 }

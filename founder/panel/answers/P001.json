@@ -2,12 +2,12 @@
   "id": "P001",
   "buys": true,
   "purchases_first_month": 1,
-  "reason_code": "need",
-  "reason": "Tenho um vão com medida certa e nunca acho prateleira pronta que encaixe; pagar R$30 a mais para vir no tamanho exato, em madeira maciça e com gabarito de furação, resolve meu problema por uns R$179. Como compro pelo Mercado Livre, se der errado tenho a garantia da plataforma.",
-  "objection": "Loja nova, com poucas avaliações, fazendo peça sob medida: tenho medo de errarem o tamanho ou de os 7 dias úteis virarem três semanas, e a troca grátis só fala de dano no transporte, não de medida errada.",
-  "would_change_my_mind": "",
-  "price_too_cheap": 80,
-  "price_cheap": 130,
-  "price_expensive": 220,
-  "price_too_expensive": 300
+  "reason_code": "quality",
+  "reason": "Numerada, assinada e com a foto do topo da minha tabua antes de mandar: isso e presente que ninguem mais vai ter, e fica lindo no Instagram. Chegando ate 23/12 e com caixa de presente, por R$249 eu resolvo o Natal.",
+  "objection": "Loja nova com quase nenhuma avaliacao, e xadrez de end grain eu ja vi um monte por ai; tenho medo de chegar uma tabua comum ou atrasar e eu ficar sem presente na vespera.",
+  "would_change_my_mind": "Se a foto que mandarem pelo chat mostrar um acabamento comum ou com falha, ou se o prazo de postagem passar de 14/12, eu desisto e compro em loja conhecida.",
+  "price_too_cheap": 120,
+  "price_cheap": 200,
+  "price_expensive": 380,
+  "price_too_expensive": 550
 }

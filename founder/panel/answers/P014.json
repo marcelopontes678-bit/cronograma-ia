@@ -1,13 +1,13 @@
 {
   "id": "P014",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "O preço está ok e a proposta parece boa, mas eu só compro de anúncio com muitas avaliações, e uma loja nova com poucas avaliações não me dá como ler as de 1 e 2 estrelas. Prateleira na parede do home office, se o suporte invisível ceder, cai monitor e livro no chão; prefiro pagar mais numa loja com histórico.",
-  "objection": "Sem avaliações não sei se o suporte invisível aguenta mesmo 15 kg, se o pinus vem empenado ou com acabamento ruim, nem se a troca por dano funciona na prática.",
-  "would_change_my_mind": "Ver umas 50 ou mais avaliações reais com fotos das prateleiras instaladas e carregadas, incluindo como a loja respondeu às reclamações.",
-  "price_too_cheap": 70,
-  "price_cheap": 110,
-  "price_expensive": 220,
-  "price_too_expensive": 320
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Preciso resolver um presente e uma tabua numerada, assinada, com foto do topo real antes de despachar, ja embrulhada, resolve bem e fica bonita em foto. R$249 pra mim e barato pra um presente desses, entao o risco e pequeno.",
+  "objection": "Xadrez end grain eu ja vi muito no Instagram, nao e tao exclusivo assim, e da trabalho: lavar a mao, secar em pe, oleo todo mes. Loja nova com poucas avaliacoes tambem me deixa com o pe atras se vai chegar antes do Natal.",
+  "would_change_my_mind": "Se a foto do topo que mandarem no chat vier com desenho sem graca ou acabamento simples, eu desisto e compro numa marca de design conhecida.",
+  "price_too_cheap": 120,
+  "price_cheap": 200,
+  "price_expensive": 450,
+  "price_too_expensive": 700
 }

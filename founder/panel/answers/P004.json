@@ -1,13 +1,13 @@
 {
   "id": "P004",
-  "buys": true,
-  "purchases_first_month": 1,
-  "reason_code": "need",
-  "reason": "Tenho um vão na parede que nenhuma prateleira pronta encaixa, e a medida sob encomenda até 120 cm por só R$30 a mais resolve exatamente isso. Por R$179 em madeira maciça, com troca garantida se chegar danificada, o risco é pequeno para mim.",
-  "objection": "Pinus com verniz pode ficar com cara de rústico e amarelado, e não tem cara de móvel de design. Como a loja é nova e tem poucas avaliações, não sei se a foto bate com o que chega nem se a medida sai certinha.",
-  "would_change_my_mind": "Se eu não achasse fotos reais de clientes ou se não desse para escolher um acabamento mais neutro (fosco, natural ou preto), eu desistiria e procuraria uma marcenaria local.",
-  "price_too_cheap": 60,
-  "price_cheap": 120,
-  "price_expensive": 280,
-  "price_too_expensive": 450
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "Achei bonita, a embalagem e a garantia de entrega antes do Natal ajudam, mas R$249 numa tabua ainda pesa demais pro meu orcamento de presente. Com esse dinheiro eu resolvo dois presentes, e tem tabua boa de madeira por R$80 a R$120.",
+  "objection": "Pagar R$249 numa tabua de uma loja nova, com quase nenhuma avaliacao. Se eu der de presente e chegar com defeito ou atrasada, quem fica mal sou eu.",
+  "would_change_my_mind": "Se ficasse em torno de R$150 com frete gratis e a loja ja tivesse um bom numero de avaliacoes de quem comprou.",
+  "price_too_cheap": 50,
+  "price_cheap": 100,
+  "price_expensive": 170,
+  "price_too_expensive": 250
 }

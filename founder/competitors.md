@@ -1,4 +1,45 @@
-# Concorrentes: marcenaria vendendo em marketplaces
+# Concorrentes: tábua de corte end grain (marketplaces)
+
+Pesquisa de 2026-11-03. Os dados vêm de **trechos de busca**, porque o Mercado Livre bloqueia acesso automatizado daqui. Os preços são de anúncio. Confira antes de decidir.
+
+## Quem já vende
+
+| Concorrente / anúncio | Canal | Preço | Madeira | Fonte |
+|---|---|---:|---|---|
+| End grain carvalho europeu | ML | — | carvalho | [ML](https://produto.mercadolivre.com.br/MLB-3813436327-tabua-de-corte-end-grain-madeira-carvalho-europeu-exclusiva-_JM) |
+| End grain teca (frete grátis) | ML | R$329 | teca | [ML end grain](https://lista.mercadolivre.com.br/tabuas-de-corte-end-grain) |
+| End grain peroba | ML | R$354,25 | peroba | [ML end grain](https://lista.mercadolivre.com.br/tabuas-de-corte-end-grain) |
+| Faixa geral end grain | ML | R$329–440 | teca, peroba, eucalipto, carvalho | [ML](https://lista.mercadolivre.com.br/tabua-end-grain) |
+| Ponciano Tábuas Artesanais (teca premium 50x30) | loja própria | R$480 (R$456 Pix) | teca | [Ponciano](https://poncianotabuasartesanais.com/products/tabua-end-grain-retangular-teca-premium) |
+| Original Woodcraft | loja própria | R$600 (R$570 Pix) | imbuia, marfim, muiracatiara | [Original Woodcraft](https://www.originalwoodcraft.com.br/157-tabua-de-corte-end-grain) |
+| Rickgreen Woodworks | loja própria | — | — | [Rickgreen](https://rickgreen.com.br/tabuas-de-corte) |
+| Cutelaria Cimo (teca) | loja própria | — | teca | [Cimo](https://www.cutelariacimo.com.br/products/tabua-end-grain-teca) |
+| Tábua artesanal de angelim (substituto) | ML | R$78,90 | angelim | [ML](https://lista.mercadolivre.com.br/tabua-de-corte-madeira) |
+| Tábuas comuns e personalizadas (substituto) | ML | R$38–240 | pinus, teca | [ML](https://lista.mercadolivre.com.br/tabua-de-frios-personalizada) |
+
+**Faixa de preço da end grain:** de R$329 (ML) a R$600 (loja artesanal). Os substitutos ficam entre R$38 e R$100.
+
+> ⚠️ **Atenção:** a Original Woodcraft já usa **marfim e muiracatiara**, as mesmas madeiras sugeridas para a nossa oferta. Para não parecer cópia, considere outro par de madeiras ou um desenho próprio.
+
+## A lacuna
+
+- O painel simulado mostrou que o comprador desconfia de **madeira tingida** e de **cola que solta**, e que acha o **xadrez genérico**.
+- Ninguém nas fontes encontradas promete, ao mesmo tempo:
+  - **foto da tábua do próprio cliente antes do envio**;
+  - **peça numerada e assinada** por um marceneiro;
+  - **prazo de presente garantido**.
+- **R$249** fica abaixo de toda end grain encontrada, mas o plano é subir para R$349.
+
+## A ameaça
+
+- Quem já vende end grain no ML (teca, peroba) pode copiar a foto antes do envio e a numeração em uma semana.
+- A defesa é a assinatura de um marceneiro real, com 20 anos de oficina mostrados no Instagram, e a mesma pessoa no chat.
+- Reclamações públicas de clientes desses concorrentes **não foram pesquisadas**. Faça isso antes de lançar.
+
+---
+
+# Arquivo: concorrentes das prateleiras (análise anterior)
+
 
 Data da pesquisa: 2026-11-03. Fontes: só páginas públicas. **Limite:** a rede desta sessão não abre o Mercado Livre, então os números do ML vêm de trechos de resultados de busca, não das páginas abertas. Preços e notas mudam o tempo todo, então confira os anúncios antes de decidir. As premissas sobre a ideia estão em `founder/idea.md`.
 

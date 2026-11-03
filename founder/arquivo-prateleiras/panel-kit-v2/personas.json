@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Julian",
+  "age": 41,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 90000,
+  "behaviour": "Precisa de medida exata",
+  "behaviour_how": "Tem um vão ou parede com medida específica e não acha o tamanho pronto.",
+  "objection": "Demora para produzir e entregar",
+  "habit": "você tem uma furadeira emprestada do vizinho"
+ },
+ {
+  "id": "P002",
+  "name": "Beatriz",
+  "age": 39,
+  "segment": "Renda alta que valoriza design, renda anual em R$",
+  "income": 185000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre.",
+  "objection": "Será que é madeira mesmo ou MDF com adesivo?",
+  "habit": "você tem uma furadeira emprestada do vizinho"
+ },
+ {
+  "id": "P003",
+  "name": "Leah",
+  "age": 30,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 101000,
+  "behaviour": "Já se queimou com MDF ruim",
+  "behaviour_how": "Já recebeu móvel quebrado ou faltando parafuso e hoje desconfia de qualquer anúncio.",
+  "objection": "Loja nova, sem avaliações: é confiável?",
+  "habit": "você compra quase tudo da casa pelo Mercado Livre e pela Shopee"
+ },
+ {
+  "id": "P004",
+  "name": "Olivia",
+  "age": 30,
+  "segment": "Renda alta que valoriza design, renda anual em R$",
+  "income": 166000,
+  "behaviour": "Precisa de medida exata",
+  "behaviour_how": "Tem um vão ou parede com medida específica e não acha o tamanho pronto.",
+  "objection": "Será que é madeira mesmo ou MDF com adesivo?",
+  "habit": "você acabou de se mudar e a casa ainda está pela metade"
+ },
+ {
+  "id": "P005",
+  "name": "Cole",
+  "age": 37,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 33000,
+  "behaviour": "Quer o visual do Pinterest",
+  "behaviour_how": "Compra pela foto e pelo acabamento, quer madeira aparente e estilo.",
+  "objection": "Por que pagar mais que o dobro de um kit de MDF de R$70?",
+  "habit": "você salva ideias de decoração no Pinterest e no Instagram"
+ },
+ {
+  "id": "P006",
+  "name": "Ruby",
+  "age": 32,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 69000,
+  "behaviour": "Lê todas as avaliações",
+  "behaviour_how": "Só compra de anúncio com muitas avaliações e lê primeiro as de 1 e 2 estrelas.",
+  "objection": "E se chegar quebrado ou faltando parafuso, como sempre acontece?",
+  "habit": "você acabou de se mudar e a casa ainda está pela metade"
+ },
+ {
+  "id": "P007",
+  "name": "Nico",
+  "age": 25,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 105000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre.",
+  "objection": "Demora para produzir e entregar",
+  "habit": "você compra quase tudo da casa pelo Mercado Livre e pela Shopee"
+ },
+ {
+  "id": "P008",
+  "name": "Mei",
+  "age": 39,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 127000,
+  "behaviour": "Lê todas as avaliações",
+  "behaviour_how": "Só compra de anúncio com muitas avaliações e lê primeiro as de 1 e 2 estrelas.",
+  "objection": "Aguenta peso de livro e planta?",
+  "habit": "você compra quase tudo da casa pelo Mercado Livre e pela Shopee"
+ },
+ {
+  "id": "P009",
+  "name": "Sam",
+  "age": 42,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 122000,
+  "behaviour": "Compra rápido",
+  "behaviour_how": "Quer chegar em 1 ou 2 dias, prefere Full e frete grátis, não espera produção.",
+  "objection": "Por que pagar mais que o dobro de um kit de MDF de R$70?",
+  "habit": "você tem uma furadeira emprestada do vizinho"
+ },
+ {
+  "id": "P010",
+  "name": "Selin",
+  "age": 39,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 56000,
+  "behaviour": "Quer o visual do Pinterest",
+  "behaviour_how": "Compra pela foto e pelo acabamento, quer madeira aparente e estilo.",
+  "objection": "E se chegar quebrado ou faltando parafuso, como sempre acontece?",
+  "habit": "você salva ideias de decoração no Pinterest e no Instagram"
+ },
+ {
+  "id": "P011",
+  "name": "Amara",
+  "age": 31,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 110000,
+  "behaviour": "Compra rápido",
+  "behaviour_how": "Quer chegar em 1 ou 2 dias, prefere Full e frete grátis, não espera produção.",
+  "objection": "Loja nova, sem avaliações: é confiável?",
+  "habit": "você está montando um home office no quarto"
+ },
+ {
+  "id": "P012",
+  "name": "Maya",
+  "age": 32,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 57000,
+  "behaviour": "Já se queimou com MDF ruim",
+  "behaviour_how": "Já recebeu móvel quebrado ou faltando parafuso e hoje desconfia de qualquer anúncio.",
+  "objection": "Será que é madeira mesmo ou MDF com adesivo?",
+  "habit": "você está montando um home office no quarto"
+ },
+ {
+  "id": "P013",
+  "name": "Liam",
+  "age": 31,
+  "segment": "Renda alta que valoriza design, renda anual em R$",
+  "income": 208000,
+  "behaviour": "Quer o visual do Pinterest",
+  "behaviour_how": "Compra pela foto e pelo acabamento, quer madeira aparente e estilo.",
+  "objection": "Será que é madeira mesmo ou MDF com adesivo?",
+  "habit": "você está montando um home office no quarto"
+ },
+ {
+  "id": "P014",
+  "name": "Kofi",
+  "age": 32,
+  "segment": "Renda alta que valoriza design, renda anual em R$",
+  "income": 228000,
+  "behaviour": "Lê todas as avaliações",
+  "behaviour_how": "Só compra de anúncio com muitas avaliações e lê primeiro as de 1 e 2 estrelas.",
+  "objection": "Loja nova, sem avaliações: é confiável?",
+  "habit": "você está montando um home office no quarto"
+ },
+ {
+  "id": "P015",
+  "name": "Bilal",
+  "age": 39,
+  "segment": "Classe média que reforma ou decora, renda anual em R$",
+  "income": 102000,
+  "behaviour": "Lê todas as avaliações",
+  "behaviour_how": "Só compra de anúncio com muitas avaliações e lê primeiro as de 1 e 2 estrelas.",
+  "objection": "Por que pagar mais que o dobro de um kit de MDF de R$70?",
+  "habit": "você tem uma furadeira emprestada do vizinho"
+ },
+ {
+  "id": "P016",
+  "name": "Wes",
+  "age": 43,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 59000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre.",
+  "objection": "Loja nova, sem avaliações: é confiável?",
+  "habit": "você está montando um home office no quarto"
+ },
+ {
+  "id": "P017",
+  "name": "Aisha",
+  "age": 30,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 44000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre.",
+  "objection": "Aguenta peso de livro e planta?",
+  "habit": "você mora num apartamento de 50 m² e quer usar a parede da sala"
+ },
+ {
+  "id": "P018",
+  "name": "Jasper",
+  "age": 38,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 41000,
+  "behaviour": "Já se queimou com MDF ruim",
+  "behaviour_how": "Já recebeu móvel quebrado ou faltando parafuso e hoje desconfia de qualquer anúncio.",
+  "objection": "Por que pagar mais que o dobro de um kit de MDF de R$70?",
+  "habit": "você tem uma furadeira emprestada do vizinho"
+ },
+ {
+  "id": "P019",
+  "name": "Maeve",
+  "age": 29,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 37000,
+  "behaviour": "Caçador de preço",
+  "behaviour_how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre.",
+  "objection": "E se chegar quebrado ou faltando parafuso, como sempre acontece?",
+  "habit": "você mora num apartamento de 50 m² e quer usar a parede da sala"
+ },
+ {
+  "id": "P020",
+  "name": "Celine",
+  "age": 36,
+  "segment": "Primeiro apê / aluguel, renda anual em R$",
+  "income": 43000,
+  "behaviour": "Compra rápido",
+  "behaviour_how": "Quer chegar em 1 ou 2 dias, prefere Full e frete grátis, não espera produção.",
+  "objection": "Será que é madeira mesmo ou MDF com adesivo?",
+  "habit": "você compra quase tudo da casa pelo Mercado Livre e pela Shopee"
+ }
+]

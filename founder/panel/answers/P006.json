@@ -1,13 +1,13 @@
 {
   "id": "P006",
-  "buys": false,
-  "purchases_first_month": 0,
-  "reason_code": "trust",
-  "reason": "Gostei da proposta e o preço está bom pra madeira maciça, mas loja nova com poucas avaliações eu não compro. Não tenho como ler as de 1 e 2 estrelas pra saber se chega torto, rachado ou faltando parafuso.",
-  "objection": "Prometer reenviar a peça é fácil; quero ver gente real dizendo que chegou inteiro e que a troca foi feita mesmo. E 15 kg num suporte invisível, sem avaliação mostrando foto instalada, eu não confio pra colocar na parede.",
-  "would_change_my_mind": "Ver umas 50 avaliações ou mais, com fotos das prateleiras instaladas, e as negativas mostrando que a loja resolveu rápido.",
-  "price_too_cheap": 69,
-  "price_cheap": 109,
-  "price_expensive": 179,
-  "price_too_expensive": 229
+  "buys": true,
+  "purchases_first_month": 1,
+  "reason_code": "need",
+  "reason": "Minha tabua ja esta riscada e com cheiro, e end grain de Muiracatiara a R$249 e mais barato que as importadas que eu vinha olhando. A foto do topo da minha tabua antes do envio e a compra pelo Mercado Livre me deixam arriscar mesmo com loja nova.",
+  "objection": "Loja com poucas avaliacoes: quero ter certeza de que e Muiracatiara macica de verdade e nao madeira tingida, e que a colagem aguenta lavagem diaria sem abrir.",
+  "would_change_my_mind": "Se a foto do topo mostrar veio irregular, frestas ou cor uniforme demais com cara de tingimento, eu cancelo.",
+  "price_too_cheap": 120,
+  "price_cheap": 220,
+  "price_expensive": 400,
+  "price_too_expensive": 650
 }

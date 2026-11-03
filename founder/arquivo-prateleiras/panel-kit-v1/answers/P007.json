@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "Quando ordeno por menor preço aparece kit de 3 prateleiras flutuantes por bem menos de R$149, e na foto do celular parece tudo igual. Pagar o dobro numa loja nova sem avaliação eu não faço, vou no mais barato que tem nota boa.",
+  "objection": "R$149 é caro perto dos kits de MDF que vejo por R$60-80, e a loja é nova com poucas avaliações, então não sei se o pinus maciço e o suporte de 15 kg são de verdade.",
+  "would_change_my_mind": "Um cupom ou preço perto de R$110 com várias avaliações com foto de quem já instalou.",
+  "price_too_cheap": 45,
+  "price_cheap": 89,
+  "price_expensive": 129,
+  "price_too_expensive": 169
+}
