@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "Achei bonita, a embalagem e a garantia de entrega antes do Natal ajudam, mas R$249 numa tabua ainda pesa demais pro meu orcamento de presente. Com esse dinheiro eu resolvo dois presentes, e tem tabua boa de madeira por R$80 a R$120.",
+  "objection": "Pagar R$249 numa tabua de uma loja nova, com quase nenhuma avaliacao. Se eu der de presente e chegar com defeito ou atrasada, quem fica mal sou eu.",
+  "would_change_my_mind": "Se ficasse em torno de R$150 com frete gratis e a loja ja tivesse um bom numero de avaliacoes de quem comprou.",
+  "price_too_cheap": 50,
+  "price_cheap": 100,
+  "price_expensive": 170,
+  "price_too_expensive": 250
+}

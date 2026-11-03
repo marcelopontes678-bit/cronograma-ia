@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "R$249 numa tabua e duas vezes e meia o que eu pago numa boa no Mercado Livre. Achei bonita e gostei da foto antes de despachar, mas pra mim tabua e tabua, nao vejo motivo pra pagar tanto mais.",
+  "objection": "Loja nova, quase sem avaliacao, cobrando R$249. Se der problema, a garantia de 12 meses vale de quem? Nao quero ser cobaia.",
+  "would_change_my_mind": "Ter umas 50 avaliacoes boas com foto de gente que ja usa ha meses, e o preco cair perto de R$150.",
+  "price_too_cheap": 60,
+  "price_cheap": 120,
+  "price_expensive": 170,
+  "price_too_expensive": 230
+}

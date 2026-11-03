@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "É bonita e a foto da minha tábua antes de mandar é um cuidado legal, mas R$249 é mais que o dobro do que eu pago numa tábua boa de R$80 a R$100. Pra cortar carne e legume em casa, a minha atual dá conta.",
+  "objection": "Pagar R$249 numa loja nova, quase sem avaliação, e não saber se a tábua vale isso tudo ou se vai rachar e eu vou ter que correr atrás da garantia.",
+  "would_change_my_mind": "Ver várias avaliações de gente que comprou mostrando a tábua depois de meses de uso, e um cupom que deixasse ela perto de R$170 a R$180.",
+  "price_too_cheap": 60,
+  "price_cheap": 120,
+  "price_expensive": 180,
+  "price_too_expensive": 260
+}

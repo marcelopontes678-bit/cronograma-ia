@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason": "Minha tabua ta riscada e preciso trocar, mas R$249 numa tabua de loja nova, sem quase nenhuma avaliacao, e muito pra arriscar quando acho tabua de madeira por R$80. Vou deixar no favorito e ver se aparecem avaliacoes de gente que usou no churrasco.",
+  "reason_code": "price",
+  "objection": "Pagar tres vezes o preco de uma tabua comum sem saber se aguenta o uso pesado de fim de semana, e a loja ainda sem historico pra eu confiar.",
+  "would_change_my_mind": "Ver umas 20 avaliacoes boas com foto de quem usa no churrasco, ou o preco cair para uns R$199.",
+  "price_too_cheap": 90,
+  "price_cheap": 180,
+  "price_expensive": 260,
+  "price_too_expensive": 350
+}
