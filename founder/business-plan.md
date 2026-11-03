@@ -113,6 +113,8 @@ Os primeiros 30 pedidos servem para gerar avaliações com foto e medir o tempo 
 
 Data da pesquisa: 2026-11-03. Fontes: só páginas públicas. **Limite:** a rede desta sessão não abre o Mercado Livre, então os números do ML vêm de trechos de resultados de busca, não das páginas abertas. Preços e notas mudam o tempo todo, então confira os anúncios antes de decidir. As premissas sobre a ideia estão em `founder/idea.md`.
 
+> **Correção (2026-11-03, `mais-vendidos.md`):** buscas posteriores acharam pinus maciço com suporte invisível a R$53,90 (120x20 cm) no Mercado Livre e kits de pinus de R$36 a R$49 na Shopee. A afirmação de que há "pouca oferta entre R$90 e R$180 em madeira real" **não se sustenta**. A lacuna real é mais estreita: sob medida, prateleira grossa ou premium e acabamento.
+
 ### 1. Quem está no mercado (do mais direto ao menos direto)
 
 Item de comparação: **kit 3 prateleiras 60x20 com suporte invisível**. Para móveis maciços, uma mesa ou um tampo.
