@@ -1,0 +1,34 @@
+{
+  "business": "Kit Parede Pronta - marcenaria nova vendendo em marketplaces (valores em R$)",
+  "unit": "kit (3 prateleiras 60x20 pinus macico)",
+  "price": 139.00,
+  "variable": [
+    {"label": "Pinus aparelhado 20cm, 2,2 m com perda (R$17/m) [publico]", "cost": 37.40},
+    {"label": "6 suportes invisiveis 20cm (R$8,00 un.) [publico]", "cost": 48.00},
+    {"label": "Lixa, selador, verniz [estimativa]", "cost": 6.00},
+    {"label": "Parafusos, buchas, gabarito impresso [estimativa]", "cost": 4.00},
+    {"label": "Caixa reforcada, cantoneiras, plastico bolha [estimativa]", "cost": 12.00},
+    {"label": "Comissao ML Classico Casa ~12% de R$139 [publico, blogs]", "cost": 16.68},
+    {"label": "Frete gratis pago pelo vendedor, caixa ~5 kg [estimativa]", "cost": 25.00},
+    {"label": "Imposto Simples Nacional ~6% de R$139 [estimativa]", "cost": 8.34},
+    {"label": "Reserva da garantia: 5% dos pedidos x R$35 de reposicao [estimativa]", "cost": 1.75}
+  ],
+  "fixed_monthly": [
+    {"label": "Aluguel galpao 100 m2 [publico, anuncio Sorocaba]", "cost": 3100},
+    {"label": "1 ajudante de marcenaria com encargos [estimativa]", "cost": 4000},
+    {"label": "Energia das maquinas [estimativa]", "cost": 600},
+    {"label": "Contador [estimativa]", "cost": 400},
+    {"label": "Internet, celular, software [estimativa]", "cost": 200}
+  ],
+  "startup": [
+    {"label": "Maquinas (serra de bancada, plaina, tupia, lixadeiras, furadeira, pistola) [estimativa]", "cost": 25000},
+    {"label": "Caucao do aluguel, 3 meses [estimativa]", "cost": 9300},
+    {"label": "Adequacao eletrica do galpao [estimativa]", "cost": 3000},
+    {"label": "Estoque inicial de madeira e ferragens [estimativa]", "cost": 2000},
+    {"label": "Fotos e video do teste de carga [estimativa]", "cost": 1000}
+  ],
+  "days_per_month": 30,
+  "capacity_per_day": 20,
+  "plan_per_day": 5,
+  "ramp_per_day": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5, 5]
+}

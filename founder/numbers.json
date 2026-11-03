@@ -1,34 +1,28 @@
 {
-  "business": "Kit Parede Pronta - marcenaria nova vendendo em marketplaces (valores em R$)",
-  "unit": "kit (3 prateleiras 60x20 pinus macico)",
-  "price": 139.00,
+  "business": "Veio Certo - prateleira grossa de pinus 30 mm sob medida, producao em casa, venda no Mercado Livre (valores em R$)",
+  "unit": "prateleira 100x20x3 cm",
+  "price": 119.00,
   "variable": [
-    {"label": "Pinus aparelhado 20cm, 2,2 m com perda (R$17/m) [publico]", "cost": 37.40},
-    {"label": "6 suportes invisiveis 20cm (R$8,00 un.) [publico]", "cost": 48.00},
-    {"label": "Lixa, selador, verniz [estimativa]", "cost": 6.00},
-    {"label": "Parafusos, buchas, gabarito impresso [estimativa]", "cost": 4.00},
-    {"label": "Caixa reforcada, cantoneiras, plastico bolha [estimativa]", "cost": 12.00},
-    {"label": "Comissao ML Classico Casa ~12% de R$139 [publico, blogs]", "cost": 16.68},
-    {"label": "Frete gratis pago pelo vendedor, caixa ~5 kg [estimativa]", "cost": 25.00},
-    {"label": "Imposto Simples Nacional ~6% de R$139 [estimativa]", "cost": 8.34},
-    {"label": "Reserva da garantia: 5% dos pedidos x R$35 de reposicao [estimativa]", "cost": 1.75}
+    {"label": "Pinus 30 mm x 20 cm, 1,15 m com perda (~R$24/m, derivado de R$17/m da tabua de 2,2 cm) [estimativa]", "cost": 27.60},
+    {"label": "Corte e aparelhamento na madeireira [estimativa, cotar]", "cost": 10.00},
+    {"label": "2 suportes invisiveis reforcados p/ 30 mm (R$10 un. varejo) [estimativa sobre preco publico R$8-15]", "cost": 20.00},
+    {"label": "Lixa, selador, verniz base dagua [estimativa]", "cost": 5.00},
+    {"label": "Parafusos e buchas (+1 de cada), gabarito [estimativa]", "cost": 3.00},
+    {"label": "Caixa longa ~110x25x8 + cantoneiras [estimativa]", "cost": 12.00},
+    {"label": "Comissao ML Classico Casa ~12% [publico, blogs]", "cost": 14.28},
+    {"label": "Frete gratis pago pelo vendedor, ~3,5 kg [estimativa]", "cost": 25.00},
+    {"label": "Reserva da garantia: 5% x R$30 [estimativa]", "cost": 1.50}
   ],
   "fixed_monthly": [
-    {"label": "Aluguel galpao 100 m2 [publico, anuncio Sorocaba]", "cost": 3100},
-    {"label": "1 ajudante de marcenaria com encargos [estimativa]", "cost": 4000},
-    {"label": "Energia das maquinas [estimativa]", "cost": 600},
-    {"label": "Contador [estimativa]", "cost": 400},
-    {"label": "Internet, celular, software [estimativa]", "cost": 200}
+    {"label": "DAS MEI 2026 (R$82,05-87,05) [publico]", "cost": 87},
+    {"label": "Energia extra das maquinas em casa [estimativa]", "cost": 100},
+    {"label": "Internet e celular [estimativa]", "cost": 200}
   ],
   "startup": [
-    {"label": "Maquinas (serra de bancada, plaina, tupia, lixadeiras, furadeira, pistola) [estimativa]", "cost": 25000},
-    {"label": "Caucao do aluguel, 3 meses [estimativa]", "cost": 9300},
-    {"label": "Adequacao eletrica do galpao [estimativa]", "cost": 3000},
-    {"label": "Estoque inicial de madeira e ferragens [estimativa]", "cost": 2000},
-    {"label": "Fotos e video do teste de carga [estimativa]", "cost": 1000}
+    {"label": "Primeiro lote, higrometro, embalagens, reserva (orcamento do fundador)", "cost": 2000}
   ],
   "days_per_month": 30,
-  "capacity_per_day": 20,
-  "plan_per_day": 5,
-  "ramp_per_day": [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5, 5]
+  "capacity_per_day": 10,
+  "plan_per_day": 4,
+  "ramp_per_day": [0.5, 1, 1.5, 2, 2.5, 3, 3, 3.5, 3.5, 4, 4, 4]
 }
