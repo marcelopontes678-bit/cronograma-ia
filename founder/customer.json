@@ -1,0 +1,36 @@
+{
+  "business": "Marcenaria que vende prateleiras e nichos em madeira de verdade pelos marketplaces (Mercado Livre, Shopee, Elo7)",
+  "target": "Brasileiros de 25 a 45 anos montando ou decorando apartamento, que compram móveis pequenos pelo celular em marketplaces (valores em reais, R$)",
+  "where": "Brasil, compra online com entrega em casa",
+  "age": [25, 45],
+  "segments": [
+    {"name": "Primeiro apê / aluguel, renda anual em R$", "share": 0.40, "income": [30000, 60000]},
+    {"name": "Classe média que reforma ou decora, renda anual em R$", "share": 0.40, "income": [60000, 140000]},
+    {"name": "Renda alta que valoriza design, renda anual em R$", "share": 0.20, "income": [140000, 300000]}
+  ],
+  "behaviours": [
+    {"name": "Caçador de preço", "share": 0.25, "how": "Ordena a busca por menor preço e compara o mesmo kit na Shopee e no Mercado Livre."},
+    {"name": "Lê todas as avaliações", "share": 0.20, "how": "Só compra de anúncio com muitas avaliações e lê primeiro as de 1 e 2 estrelas."},
+    {"name": "Quer o visual do Pinterest", "share": 0.15, "how": "Compra pela foto e pelo acabamento, quer madeira aparente e estilo."},
+    {"name": "Já se queimou com MDF ruim", "share": 0.15, "how": "Já recebeu móvel quebrado ou faltando parafuso e hoje desconfia de qualquer anúncio."},
+    {"name": "Compra rápido", "share": 0.15, "how": "Quer chegar em 1 ou 2 dias, prefere Full e frete grátis, não espera produção."},
+    {"name": "Precisa de medida exata", "share": 0.10, "how": "Tem um vão ou parede com medida específica e não acha o tamanho pronto."}
+  ],
+  "objections": [
+    "Por que pagar mais que o dobro de um kit de MDF de R$70?",
+    "E se chegar quebrado ou faltando parafuso, como sempre acontece?",
+    "Loja nova, sem avaliações: é confiável?",
+    "Será que é madeira mesmo ou MDF com adesivo?",
+    "Vou ter que furar a parede e instalar sozinho",
+    "Demora para produzir e entregar",
+    "Aguenta peso de livro e planta?"
+  ],
+  "habits": [
+    "você mora num apartamento de 50 m² e quer usar a parede da sala",
+    "você salva ideias de decoração no Pinterest e no Instagram",
+    "você compra quase tudo da casa pelo Mercado Livre e pela Shopee",
+    "você tem uma furadeira emprestada do vizinho",
+    "você está montando um home office no quarto",
+    "você acabou de se mudar e a casa ainda está pela metade"
+  ]
+}

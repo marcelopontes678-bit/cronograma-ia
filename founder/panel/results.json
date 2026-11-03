@@ -1,0 +1,148 @@
+{
+ "business": "Marcenaria que vende prateleiras e nichos em madeira de verdade pelos marketplaces (Mercado Livre, Shopee, Elo7)",
+ "seed": 493632,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 2,
+ "passes": 18,
+ "buy_rate": 0.1,
+ "by_segment": [
+  [
+   "Renda alta que valoriza design, renda anual em R$",
+   4,
+   0.25
+  ],
+  [
+   "Classe média que reforma ou decora, renda anual em R$",
+   8,
+   0.125
+  ],
+  [
+   "Primeiro apê / aluguel, renda anual em R$",
+   8,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Precisa de medida exata",
+   2,
+   1.0
+  ],
+  [
+   "Caçador de preço",
+   5,
+   0.0
+  ],
+  [
+   "Já se queimou com MDF ruim",
+   3,
+   0.0
+  ],
+  [
+   "Quer o visual do Pinterest",
+   3,
+   0.0
+  ],
+  [
+   "Lê todas as avaliações",
+   4,
+   0.0
+  ],
+  [
+   "Compra rápido",
+   3,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$57,000 to $110,000",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "$110,000 and up",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "under $57,000",
+   6,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "trust",
+   14,
+   [
+    "Ordenei por menor preço e achei kits de 3 prateleiras por bem menos de R$149; pagar mais só faria sentido se eu tivesse certeza de que é pinus maciço mesmo, e uma loja nova com quase nenhuma avaliação não me dá essa certeza. Vou favoritar e esperar.",
+    "Gostei de ser pinus maciço e não MDF, e o preço é ok, mas loja nova sem avaliação eu não arrisco de novo. Prefiro esperar ver fotos de compradores reais ou pegar de uma loja com reputação, mesmo pagando um pouco mais."
+   ],
+   [
+    "P002",
+    "P003"
+   ]
+  ],
+  [
+   "price",
+   3,
+   [
+    "Quando ordeno por menor preço aparece kit de 3 prateleiras flutuantes por bem menos de R$149, e na foto do celular parece tudo igual. Pagar o dobro numa loja nova sem avaliação eu não faço, vou no mais barato que tem nota boa.",
+    "R$149 é mais que o dobro do kit de MDF de R$70 que chega amanhã pelo Full. Pinus maciço é bonito, mas pra prateleira de sala eu não vejo diferença que valha isso, ainda mais de uma loja nova que demora até 3 dias úteis."
+   ],
+   [
+    "P007",
+    "P009"
+   ]
+  ],
+  [
+   "quality",
+   1,
+   [
+    "Pelo menos é madeira maciça e não MDF com adesivo, e o preço não me pesa. Mas pinus com verniz costuma ficar amarelado, com cara de móvel de chácara, e não é o visual de madeira clara e fosca que eu quero no home office. Numa loja nova sem avaliações e sem fotos de cliente, prefiro pagar mais numa marca que já mostra o acabamento."
+   ],
+   [
+    "P013"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "need",
+   2,
+   [
+    "Tenho um vão com medida certa e nunca acho prateleira pronta que encaixe; pagar R$30 a mais para vir no tamanho exato, em madeira maciça e com gabarito de furação, resolve meu problema por uns R$179. Como compro pelo Mercado Livre, se der errado tenho a garantia da plataforma.",
+    "Tenho um vão na parede que nenhuma prateleira pronta encaixa, e a medida sob encomenda até 120 cm por só R$30 a mais resolve exatamente isso. Por R$179 em madeira maciça, com troca garantida se chegar danificada, o risco é pequeno para mim."
+   ],
+   [
+    "P001",
+    "P004"
+   ]
+  ]
+ ],
+ "flip": [
+  "Ver várias avaliações com fotos reais mostrando a borda e o veio da madeira e a prateleira instalada com peso em cima, ou um cupom que deixasse o kit perto de R$110.",
+  "Ver umas 30 ou mais avaliações com fotos de clientes mostrando a prateleira instalada e carregada, e reputação verde no Mercado Livre.",
+  "Ver várias avaliações com fotos reais de clientes mostrando a prateleira instalada na parede, com o veio da madeira e o acabamento de perto.",
+  "Ver umas 50 avaliações ou mais, com fotos das prateleiras instaladas, e as negativas mostrando que a loja resolveu rápido.",
+  "Um cupom ou preço perto de R$110 com várias avaliações com foto de quem já instalou.",
+  "Ver dezenas de avaliações com fotos reais de clientes mostrando a prateleira carregada de livros e plantas, e poucas reclamações nas de 1 e 2 estrelas.",
+  "Ficar perto de R$100 com entrega Full em 1 ou 2 dias, e várias avaliações com foto mostrando que a madeira é boa mesmo.",
+  "Ver umas 20 ou 30 avaliações com fotos de clientes mostrando a prateleira instalada, com o acabamento e o suporte invisível de verdade.",
+  "Ver umas 30 ou mais avaliações boas com foto da prateleira instalada e carregada, e o anúncio no Full chegando em 1 ou 2 dias.",
+  "Ver umas 20 ou 30 avaliações com fotos de clientes mostrando a madeira de perto, o suporte instalado e coisa pesada em cima.",
+  "Fotos reais de clientes com as prateleiras instaladas, ou uma opção de acabamento fosco/tingido tipo freijó ou carvalho claro.",
+  "Ver umas 50 ou mais avaliações reais com fotos das prateleiras instaladas e carregadas, incluindo como a loja respondeu às reclamações.",
+  "Ver umas 50 ou mais avaliações, com fotos de clientes das prateleiras já instaladas e carregadas, e poucas reclamações nas notas baixas.",
+  "Cupom ou preço de lançamento perto de R$99, ou umas avaliações com foto de gente mostrando a prateleira carregada depois de um tempo.",
+  "Ver umas 30-50 avaliações com fotos de gente usando com livros e plantas, ou um cupom que baixasse para uns R$110.",
+  "Ver umas 30 ou mais avaliações com foto mostrando a prateleira instalada aguentando peso e chegando bem embalada.",
+  "Ver umas 50 avaliações com foto de gente que instalou e disse que chegou inteiro e completo, ou um cupom que deixasse o kit perto de R$110.",
+  "Ver avaliações com fotos de clientes mostrando a madeira de perto e a prateleira instalada com peso, de preferência com envio Full chegando em 1 ou 2 dias."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}
