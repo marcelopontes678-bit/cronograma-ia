@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "É bonita e parece um presente caprichado, mas R$349 numa tábua pesa no meu orçamento de presentes quando acho tábua de madeira por R$80. Por esse valor eu prefiro algo que a pessoa vai reconhecer na hora como especial.",
+  "objection": "Pagar mais de quatro vezes o preço de uma tábua comum numa loja nova, com poucas avaliações, sem ter certeza de que chega bonita e a tempo do Natal.",
+  "would_change_my_mind": "Um preço perto de R$220 com embalagem de presente e prazo de entrega garantido antes do Natal, ou várias avaliações reais com fotos.",
+  "price_too_cheap": 60,
+  "price_cheap": 150,
+  "price_expensive": 230,
+  "price_too_expensive": 320
+}

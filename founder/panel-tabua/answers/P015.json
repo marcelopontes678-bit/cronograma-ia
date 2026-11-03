@@ -1,0 +1,13 @@
+{
+  "id": "P015",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "R$349 é mais de três vezes o que eu pago numa tábua boa de R$80 ou R$100. Para presente até gasto um pouco mais, mas não tanto assim numa loja nova, quase sem avaliação, e ainda com aquela dúvida da madeira e bactéria.",
+  "objection": "Pagar R$349 numa tábua de uma loja que ninguém avaliou ainda, sem ter certeza de que madeira é higiênica e de que a pessoa vai ter paciência de passar óleo todo mês.",
+  "would_change_my_mind": "Ficar perto de R$180 a R$200 com várias avaliações boas de compradores mostrando a tábua depois de meses de uso.",
+  "price_too_cheap": 60,
+  "price_cheap": 120,
+  "price_expensive": 200,
+  "price_too_expensive": 280
+}

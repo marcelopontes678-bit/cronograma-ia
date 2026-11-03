@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Leila",
+  "age": 52,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 132000,
+  "behaviour": "Quer peca de design",
+  "behaviour_how": "Compra pelo visual, posta a cozinha no Instagram e quer algo que ninguem tem.",
+  "objection": "Chega antes do Natal ou do Dia dos Pais?",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P002",
+  "name": "Ben",
+  "age": 43,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 74000,
+  "behaviour": "Churrasqueiro de fim de semana",
+  "behaviour_how": "Faz churrasco quase todo fim de semana e cuida das ferramentas como se fossem trofeu.",
+  "objection": "R$349 numa tabua? Tem tabua de madeira por R$80",
+  "habit": "sua tabua atual esta riscada e com cheiro"
+ },
+ {
+  "id": "P003",
+  "name": "Tariq",
+  "age": 40,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 262000,
+  "behaviour": "Churrasqueiro de fim de semana",
+  "behaviour_how": "Faz churrasco quase todo fim de semana e cuida das ferramentas como se fossem trofeu.",
+  "objection": "Vai rachar ou descolar com o tempo?",
+  "habit": "voce compra quase tudo da casa pelo Mercado Livre"
+ },
+ {
+  "id": "P004",
+  "name": "Victor",
+  "age": 55,
+  "segment": "Renda mais apertada, compra para presentear, renda anual em R$",
+  "income": 53000,
+  "behaviour": "Procurando presente",
+  "behaviour_how": "Quer um presente de Natal ou Dia dos Pais que pareca especial e chegue no prazo.",
+  "objection": "R$349 numa tabua? Tem tabua de madeira por R$80",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P005",
+  "name": "Sam",
+  "age": 29,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 66000,
+  "behaviour": "Le todas as avaliacoes",
+  "behaviour_how": "So compra de anuncio com muitas avaliacoes e le primeiro as de 1 e 2 estrelas.",
+  "objection": "Sera que e madeira nobre de verdade ou so tingida?",
+  "habit": "voce segue perfis de culinaria e churrasco no Instagram"
+ },
+ {
+  "id": "P006",
+  "name": "Kai",
+  "age": 30,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 186000,
+  "behaviour": "Cozinheiro entusiasta",
+  "behaviour_how": "Assiste receitas, tem facas boas e quer utensilio que dure anos.",
+  "objection": "Sera que e madeira nobre de verdade ou so tingida?",
+  "habit": "sua tabua atual esta riscada e com cheiro"
+ },
+ {
+  "id": "P007",
+  "name": "Lucia",
+  "age": 29,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 188000,
+  "behaviour": "Cozinheiro entusiasta",
+  "behaviour_how": "Assiste receitas, tem facas boas e quer utensilio que dure anos.",
+  "objection": "Sera que e madeira nobre de verdade ou so tingida?",
+  "habit": "voce tem um jogo de facas que cuida bem"
+ },
+ {
+  "id": "P008",
+  "name": "Zara",
+  "age": 39,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 215000,
+  "behaviour": "Cozinheiro entusiasta",
+  "behaviour_how": "Assiste receitas, tem facas boas e quer utensilio que dure anos.",
+  "objection": "Madeira acumula bacteria, nao e menos higienica que plastico?",
+  "habit": "voce faz churrasco com os amigos quase todo sabado"
+ },
+ {
+  "id": "P009",
+  "name": "Jade",
+  "age": 42,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 74000,
+  "behaviour": "Cacador de preco",
+  "behaviour_how": "Compara com tabuas de R$50 a R$100 e so paga mais se ver motivo claro.",
+  "objection": "Loja nova, sem avaliacoes: e confiavel?",
+  "habit": "voce compra quase tudo da casa pelo Mercado Livre"
+ },
+ {
+  "id": "P010",
+  "name": "Sofia",
+  "age": 54,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 296000,
+  "behaviour": "Procurando presente",
+  "behaviour_how": "Quer um presente de Natal ou Dia dos Pais que pareca especial e chegue no prazo.",
+  "objection": "Loja nova, sem avaliacoes: e confiavel?",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P011",
+  "name": "Fatima",
+  "age": 29,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 71000,
+  "behaviour": "Procurando presente",
+  "behaviour_how": "Quer um presente de Natal ou Dia dos Pais que pareca especial e chegue no prazo.",
+  "objection": "R$349 numa tabua? Tem tabua de madeira por R$80",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P012",
+  "name": "Leah",
+  "age": 42,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 118000,
+  "behaviour": "Churrasqueiro de fim de semana",
+  "behaviour_how": "Faz churrasco quase todo fim de semana e cuida das ferramentas como se fossem trofeu.",
+  "objection": "Sera que e madeira nobre de verdade ou so tingida?",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P013",
+  "name": "Luis",
+  "age": 47,
+  "segment": "Renda mais apertada, compra para presentear, renda anual em R$",
+  "income": 43000,
+  "behaviour": "Cozinheiro entusiasta",
+  "behaviour_how": "Assiste receitas, tem facas boas e quer utensilio que dure anos.",
+  "objection": "Da trabalho cuidar, passar oleo, nao pode lavar na maquina",
+  "habit": "voce segue perfis de culinaria e churrasco no Instagram"
+ },
+ {
+  "id": "P014",
+  "name": "Diego",
+  "age": 34,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 241000,
+  "behaviour": "Quer peca de design",
+  "behaviour_how": "Compra pelo visual, posta a cozinha no Instagram e quer algo que ninguem tem.",
+  "objection": "Da trabalho cuidar, passar oleo, nao pode lavar na maquina",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P015",
+  "name": "Levi",
+  "age": 48,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 89000,
+  "behaviour": "Cacador de preco",
+  "behaviour_how": "Compara com tabuas de R$50 a R$100 e so paga mais se ver motivo claro.",
+  "objection": "Madeira acumula bacteria, nao e menos higienica que plastico?",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P016",
+  "name": "Mason",
+  "age": 43,
+  "segment": "Renda mais apertada, compra para presentear, renda anual em R$",
+  "income": 37000,
+  "behaviour": "Le todas as avaliacoes",
+  "behaviour_how": "So compra de anuncio com muitas avaliacoes e le primeiro as de 1 e 2 estrelas.",
+  "objection": "R$349 numa tabua? Tem tabua de madeira por R$80",
+  "habit": "voce tem um jogo de facas que cuida bem"
+ },
+ {
+  "id": "P017",
+  "name": "Rosa",
+  "age": 43,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 73000,
+  "behaviour": "Cacador de preco",
+  "behaviour_how": "Compara com tabuas de R$50 a R$100 e so paga mais se ver motivo claro.",
+  "objection": "Loja nova, sem avaliacoes: e confiavel?",
+  "habit": "voce segue perfis de culinaria e churrasco no Instagram"
+ },
+ {
+  "id": "P018",
+  "name": "Farah",
+  "age": 51,
+  "segment": "Classe media que cozinha em casa, renda anual em R$",
+  "income": 101000,
+  "behaviour": "Procurando presente",
+  "behaviour_how": "Quer um presente de Natal ou Dia dos Pais que pareca especial e chegue no prazo.",
+  "objection": "Chega antes do Natal ou do Dia dos Pais?",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P019",
+  "name": "Maya",
+  "age": 41,
+  "segment": "Renda mais apertada, compra para presentear, renda anual em R$",
+  "income": 52000,
+  "behaviour": "Churrasqueiro de fim de semana",
+  "behaviour_how": "Faz churrasco quase todo fim de semana e cuida das ferramentas como se fossem trofeu.",
+  "objection": "Chega antes do Natal ou do Dia dos Pais?",
+  "habit": "voce precisa resolver um presente nas proximas semanas"
+ },
+ {
+  "id": "P020",
+  "name": "Julian",
+  "age": 51,
+  "segment": "Renda alta, gosta de cozinha e design, renda anual em R$",
+  "income": 271000,
+  "behaviour": "Churrasqueiro de fim de semana",
+  "behaviour_how": "Faz churrasco quase todo fim de semana e cuida das ferramentas como se fossem trofeu.",
+  "objection": "Madeira acumula bacteria, nao e menos higienica que plastico?",
+  "habit": "voce segue perfis de culinaria e churrasco no Instagram"
+ }
+]

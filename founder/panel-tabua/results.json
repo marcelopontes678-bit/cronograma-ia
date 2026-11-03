@@ -1,0 +1,156 @@
+{
+ "business": "Veio Certo - tabua de corte end grain feita por marceneiro, vendida no Mercado Livre (valores em reais, R$)",
+ "seed": 825715,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 2,
+ "passes": 18,
+ "buy_rate": 0.1,
+ "by_segment": [
+  [
+   "Renda alta, gosta de cozinha e design, renda anual em R$",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "Classe media que cozinha em casa, renda anual em R$",
+   9,
+   0.1111111111111111
+  ],
+  [
+   "Renda mais apertada, compra para presentear, renda anual em R$",
+   4,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Quer peca de design",
+   2,
+   0.5
+  ],
+  [
+   "Churrasqueiro de fim de semana",
+   5,
+   0.2
+  ],
+  [
+   "Procurando presente",
+   4,
+   0.0
+  ],
+  [
+   "Le todas as avaliacoes",
+   2,
+   0.0
+  ],
+  [
+   "Cozinheiro entusiasta",
+   4,
+   0.0
+  ],
+  [
+   "Cacador de preco",
+   3,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$73,000 to $186,000",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "$186,000 and up",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "under $73,000",
+   6,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "trust",
+   10,
+   [
+    "R$349 nao me assusta, e tabua de topo bonita eu gosto, mas loja nova sem avaliacao vendendo peca colada em xadrez eu nao compro no escuro. Ja tenho tabua boa em casa, entao nao tenho pressa: espero ver quem comprou antes.",
+    "Achei bonita e o end grain me interessa, mas eu nao compro de loja nova sem avaliacao, ainda mais R$349 numa tabua. Sem ler as reclamacoes de 1 e 2 estrelas eu nao arrisco esse dinheiro."
+   ],
+   [
+    "P003",
+    "P005"
+   ]
+  ],
+  [
+   "price",
+   7,
+   [
+    "Minha tabua ta riscada e fedendo, preciso trocar, mas R$349 de uma loja que ninguem conhece e muito. Por esse preco eu compro uma de marca conhecida ou pego uma de R$80 e troco de novo daqui a dois anos.",
+    "R$349 numa tábua é muito para o meu orçamento de presente; com esse dinheiro eu compro um kit de churrasco ou uma tábua boa por R$120 e ainda sobra. E loja nova com poucas avaliações, para um presente que tem que chegar no prazo, me deixa com o pé atrás."
+   ],
+   [
+    "P002",
+    "P004"
+   ]
+  ],
+  [
+   "quality",
+   1,
+   [
+    "Preco nao e o problema, mas xadrez end grain eu ja vejo em todo lugar no Mercado Livre e no Instagram; nao e uma peca que ninguem tem. Pra presente marcante, loja nova com poucas avaliacoes e sem marca forte nao me passa a sensacao de objeto de design."
+   ],
+   [
+    "P014"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "need",
+   1,
+   [
+    "Preciso resolver um presente e uma tabua xadrez de topo em duas madeiras brasileiras fica linda na foto e parece feita a mao de verdade, nao coisa de shopping. Com producao em 5 dias uteis, em novembro chega bem antes do Natal, entao compro uma."
+   ],
+   [
+    "P001"
+   ]
+  ],
+  [
+   "quality",
+   1,
+   [
+    "Uma tabua end grain de 40x30x4 em xadrez de madeira nobre, feita a mao, por R$349 com frete gratis e um preco que eu pago sem pensar muito, e ela ficaria bonita na bancada da churrasqueira cortando picanha. Compro uma pra mim e vejo se vale como presente depois."
+   ],
+   [
+    "P020"
+   ]
+  ]
+ ],
+ "flip": [
+  "Ver avaliacoes de outros churrasqueiros com foto da tabua depois de meses de uso, ou um preco de lancamento perto de R$250.",
+  "Avaliacoes de compradores com foto depois de alguns meses de uso de churrasco, mostrando que nao abriu nem descolou, e o nome das madeiras e da cola no anuncio.",
+  "Uma promoção perto de R$200 com embalagem de presente e boas avaliações de outros compradores.",
+  "Ver umas 30 ou mais avaliacoes reais com fotos de quem usa ha meses, dizendo quais sao as madeiras e que nao rachou.",
+  "Dizer exatamente quais sao as duas madeiras, com fotos reais da peca e da oficina mostrando o topo sem acabamento, e algumas avaliacoes de compradores com foto.",
+  "Nomear as madeiras (tipo roxinho e pau-marfim, com origem) e mostrar fotos reais do topo e da oficina, ou algumas avaliacoes de compradores que ja usam ha meses.",
+  "Avaliacoes com fotos de quem usa a tabua ha alguns meses, e o nome das madeiras escrito no anuncio.",
+  "Um preco perto de R$180 com algumas dezenas de avaliacoes boas de quem ja usa ha meses.",
+  "Ver avaliacoes reais com fotos de compradores e um prazo de entrega garantido antes da data, de preferencia com embalagem de presente.",
+  "Um preço perto de R$220 com embalagem de presente e prazo de entrega garantido antes do Natal, ou várias avaliações reais com fotos.",
+  "Dizer exatamente quais madeiras sao (tipo roxinho com marfim) e mostrar fotos reais da oficina e da peca, mais umas avaliacoes de quem ja usou por alguns meses.",
+  "Um bom numero de avaliacoes com fotos de quem usa ha meses mostrando que nao rachou, e um preco perto de R$250 numa promocao",
+  "Um desenho realmente exclusivo ou numerado, com o nome do marceneiro, fotos de estudio bonitas e embalagem de presente caprichada, que eu possa postar e ninguem tenha igual.",
+  "Ficar perto de R$180 a R$200 com várias avaliações boas de compradores mostrando a tábua depois de meses de uso.",
+  "Ter pelo menos umas 50 avaliações com fotos de quem usa há meses, incluindo as negativas, e o preço chegar mais perto de R$200.",
+  "Ver varias avaliacoes reais com foto de quem comprou, ou um cupom de lancamento que deixasse perto de R$250.",
+  "Ver avaliações de outros compradores com fotos reais da tábua, ou a opção de embalagem de presente com prazo de entrega garantido antes do Natal.",
+  "Ver várias avaliações com foto de quem já comprou e um preço perto de R$250, ou um cupom de lançamento."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}

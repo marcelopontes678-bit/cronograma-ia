@@ -1,0 +1,13 @@
+{
+  "id": "P019",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "É bonita e chega antes do Natal, mas R$349 num presente pesa muito no meu orçamento agora. E é uma loja nova, com poucas avaliações, e eu não vou arriscar esse valor sem ver o que outras pessoas acharam.",
+  "objection": "Pagar R$349 numa tábua de uma loja que quase ninguém avaliou ainda. Se chegar torta ou com cara de produto comum, eu passo vergonha com o presente e perco um dinheiro que me faz falta.",
+  "would_change_my_mind": "Ver várias avaliações com foto de quem já comprou e um preço perto de R$250, ou um cupom de lançamento.",
+  "price_too_cheap": 90,
+  "price_cheap": 180,
+  "price_expensive": 260,
+  "price_too_expensive": 380
+}

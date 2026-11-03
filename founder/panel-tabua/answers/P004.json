@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "R$349 numa tábua é muito para o meu orçamento de presente; com esse dinheiro eu compro um kit de churrasco ou uma tábua boa por R$120 e ainda sobra. E loja nova com poucas avaliações, para um presente que tem que chegar no prazo, me deixa com o pé atrás.",
+  "objection": "Pagar R$349 numa tábua quando tem tábua de madeira por R$80, e ainda numa loja sem avaliação, sem saber se chega a tempo do Natal.",
+  "would_change_my_mind": "Uma promoção perto de R$200 com embalagem de presente e boas avaliações de outros compradores.",
+  "price_too_cheap": 60,
+  "price_cheap": 120,
+  "price_expensive": 200,
+  "price_too_expensive": 280
+}

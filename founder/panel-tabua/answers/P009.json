@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "price",
+  "reason": "R$349 numa tabua? Eu acho tabua boa de R$80 no Mercado Livre com milhares de avaliacoes. Bonita ela e, mas nao vejo motivo pra pagar mais de tres vezes isso, ainda mais numa loja que ninguem avaliou.",
+  "objection": "E caro demais pro que e, e loja nova sem avaliacao: se der problema, vou ter que brigar por garantia com quem nem sei se existe daqui a um ano.",
+  "would_change_my_mind": "Um preco perto de R$180 com algumas dezenas de avaliacoes boas de quem ja usa ha meses.",
+  "price_too_cheap": 60,
+  "price_cheap": 120,
+  "price_expensive": 200,
+  "price_too_expensive": 280
+}
