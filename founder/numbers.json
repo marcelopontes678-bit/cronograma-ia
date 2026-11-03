@@ -1,28 +1,30 @@
 {
-  "business": "Veio Certo - prateleira grossa de pinus 30 mm sob medida, producao em casa, venda no Mercado Livre (valores em R$)",
-  "unit": "prateleira 100x20x3 cm",
-  "price": 119.00,
+  "business": "Veio Certo - tabua de corte end grain 40x30x4 (marfim + muiracatiara), producao em casa, venda no Mercado Livre (valores em R$)",
+  "unit": "tabua end grain 40x30x4",
+  "price": 249.00,
   "variable": [
-    {"label": "Pinus 30 mm x 20 cm, 1,15 m com perda (~R$24/m, derivado de R$17/m da tabua de 2,2 cm) [estimativa]", "cost": 27.60},
-    {"label": "Corte e aparelhamento na madeireira [estimativa, cotar]", "cost": 10.00},
-    {"label": "2 suportes invisiveis reforcados p/ 30 mm (R$10 un. varejo) [estimativa sobre preco publico R$8-15]", "cost": 20.00},
-    {"label": "Lixa, selador, verniz base dagua [estimativa]", "cost": 5.00},
-    {"label": "Parafusos e buchas (+1 de cada), gabarito [estimativa]", "cost": 3.00},
-    {"label": "Caixa longa ~110x25x8 + cantoneiras [estimativa]", "cost": 12.00},
-    {"label": "Comissao ML Classico Casa ~12% [publico, blogs]", "cost": 14.28},
-    {"label": "Frete gratis pago pelo vendedor, ~3,5 kg [estimativa]", "cost": 25.00},
-    {"label": "Reserva da garantia: 5% x R$30 [estimativa]", "cost": 1.50}
+    {"label": "Madeira nobre: ~0,01 m3 com perda (2x o volume final) a ~R$6.000/m3 [estimativa, cotar]", "cost": 60.00},
+    {"label": "Cola Titebond III ~50 g (R$110,94 por 1,05 kg) [publico]", "cost": 5.30},
+    {"label": "Lixas (topo consome muita lixa) [estimativa]", "cost": 8.00},
+    {"label": "Oleo mineral + cera alimentar no acabamento [estimativa]", "cost": 4.00},
+    {"label": "Frasco de oleo 100 ml para o cliente (R$8,56 farmacia) [publico]", "cost": 8.56},
+    {"label": "4 pes antiderrapantes [estimativa]", "cost": 4.00},
+    {"label": "Embalagem de presente (caixa kraft + cartao) [estimativa]", "cost": 10.00},
+    {"label": "Caixa de envio e protecao [estimativa]", "cost": 6.00},
+    {"label": "Comissao ML Classico Casa ~12% [publico, blogs]", "cost": 29.88},
+    {"label": "Frete gratis pago pelo vendedor, ~4,5 kg [estimativa]", "cost": 25.00},
+    {"label": "Reserva garantia (3% x R$80) + atraso de Natal (5% x R$50 no ano) [estimativa]", "cost": 4.90}
   ],
   "fixed_monthly": [
-    {"label": "DAS MEI 2026 (R$82,05-87,05) [publico]", "cost": 87},
-    {"label": "Energia extra das maquinas em casa [estimativa]", "cost": 100},
+    {"label": "DAS MEI 2026 [publico]", "cost": 87},
+    {"label": "Energia extra das maquinas [estimativa]", "cost": 100},
     {"label": "Internet e celular [estimativa]", "cost": 200}
   ],
   "startup": [
-    {"label": "Primeiro lote, higrometro, embalagens, reserva (orcamento do fundador)", "cost": 2000}
+    {"label": "Primeiro lote de madeira nobre, cola, lixas, oleo, embalagens, ferro de marcar para numeracao (orcamento do fundador)", "cost": 2000}
   ],
   "days_per_month": 30,
-  "capacity_per_day": 10,
-  "plan_per_day": 4,
-  "ramp_per_day": [0.5, 1, 1.5, 2, 2.5, 3, 3, 3.5, 3.5, 4, 4, 4]
+  "capacity_per_day": 3,
+  "plan_per_day": 2,
+  "ramp_per_day": [0.3, 0.5, 0.8, 1, 1.2, 1.5, 1.5, 1.5, 1.8, 2, 2, 2]
 }

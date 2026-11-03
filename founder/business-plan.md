@@ -2,20 +2,20 @@
 
 **Verdict: Not yet**
 
-- ✓ Each prateleira 100x20x3 cm earns $0.62 before fixed costs (1% contribution).
-- ✗ Year 1 operating LOSS: $4,039.
-- ✗ Break-even is 21 prateleira 100x20x3 cms a day against a capacity of 10.
+- ✓ Each tabua end grain 40x30x4 earns $83.36 before fixed costs (33% contribution).
+- ✓ Year 1 operating profit: $35,619.
+- ✓ Break-even is 1 tabua end grain 40x30x4s a day against a capacity of 3.
 - ✗ 2 of 20 simulated buyers buy (10%, the bar is 25%).
 
 | key number | |
 | --- | ---: |
-| Price | $119.00 a prateleira 100x20x3 cm |
-| Profit margin at plan | -2% per prateleira 100x20x3 cm |
-| Break-even | 21 prateleira 100x20x3 cms a day |
-| Year 1 operating profit | $-4,039 |
+| Price | $249.00 a tabua end grain 40x30x4 |
+| Profit margin at plan | 31% per tabua end grain 40x30x4 |
+| Break-even | 1 tabua end grain 40x30x4s a day |
+| Year 1 operating profit | $35,619 |
 | Startup spend | $2,000 |
-| Cash needed before it pays for itself | $6,039 |
-| Startup money earned back | not in year 1 |
+| Cash needed before it pays for itself | $2,000 |
+| Startup money earned back | month 3 |
 | Buyer panel | 2 buy · 18 pass |
 
 ## The idea
@@ -466,109 +466,111 @@ São compradores simulados. A taxa de 25% é teto, não previsão, e trata-se de
 
 ## The numbers
 
-> Valores em **R$** (a ferramenta imprime "$"). Quase todos os custos são **estimativas**: madeira de 30 mm, corte, suporte reforçado, caixa e frete ainda não foram cotados. A versão anterior (kit 3x60 com galpão) está em `cfo-v1-kit-galpao.md` e `numbers-v1-kit-galpao.json`. Isto não é aconselhamento financeiro, contábil nem jurídico: um contador deve revisar.
+> Valores em **R$** (a ferramenta imprime "$"). A maior parte dos custos é **estimativa**:
+> - **madeira nobre:** a ~R$6.000/m³, com o dobro do volume final para cobrir a perda. Não achei preço público de marfim e muiracatiara, então é o primeiro número a cotar;
+> - **frete** e **embalagem**;
+> - **tempo por tábua:** 3,5 h, com produção em lote.
+>
+> Têm fonte pública: cola Titebond III, frasco de óleo, comissão do ML e DAS do MEI.
+>
+> Versões anteriores: `cfo-v1-kit-galpao.md` (kit e galpão) e `cfo-v2-prateleira-grossa.md`. Isto não é aconselhamento financeiro, contábil nem jurídico.
 
-**O modelo:**
-- Uma prateleira de pinus 100x20x3 cm sob medida a **R$119**, cerca de R$119 por metro. É acima da concorrente de 15 mm (R$45/m) e perto da grossa de 30 mm (R$115 por 150 cm, ~R$77/m).
-- Produção em casa, corte na madeireira, venda no Mercado Livre como MEI.
-- Custo fixo de R$387 por mês e investimento de R$2.000.
-- Volume: de 0,5 a 4 prateleiras por dia.
+**Modelo:** tábua 40x30x4 a **R$249** de lançamento, R$349 depois. Produção em casa, venda no ML como MEI, custo fixo de R$387/mês, investimento de R$2.000. Volume de 0,3 a 2 tábuas/dia, com capacidade de 3/dia.
 
-**O veredito: no preço base, empata e não sobra nada.**
-- Cada prateleira custa **R$118,38** e deixa **R$0,62** (1%). O equilíbrio exige 20,8 peças por dia, acima da capacidade de 10.
-- O ano 1 fecha em **-R$4.039**. O caixa necessário é de R$6.039, **acima dos R$2.000 que você tem**.
-- A R$99, o preço da concorrência, cada peça **perde R$16,98**. **Competir por preço não funciona.**
+**Veredito: é o primeiro modelo que fecha.**
+- Cada tábua custa **R$165,64** e deixa **R$83,36 (33%)**.
+- Equilíbrio: **0,15 tábua/dia** (cerca de 5 por mês).
+- Margem no plano: **31%**. Ano 1: **+R$35.619** de operação, com R$120.267 de receita.
+- Os R$2.000 voltam no **3º mês**. O caixa necessário é **R$2.000**, ou seja, cabe no seu orçamento.
 
-**O que vira o jogo** (rodado na ferramenta):
+**Cenários** (rodados na ferramenta; a comissão é recalculada pelo preço):
 
-| cenário | custo variável | lucro/peça | equilíbrio/dia | margem no plano | ano 1 | caixa |
-|---|---:|---:|---:|---:|---:|---:|
-| Base R$119 | R$118.38 | R$0.62 (1%) | 20.8 | -2% | R$-4,039 | R$6,039 |
-| R$99 (perto da concorrente) | R$115.98 | R$-16.98 (-17%) | nunca | -20% | R$-21,199 | R$23,199 |
-| R$139 | R$120.78 | R$18.22 (13%) | 0.7 | 11% | R$13,120 | R$2,114 |
-| Suporte a R$5 un. (R$10) | R$108.38 | R$10.62 (9%) | 1.2 | 6% | R$5,711 | R$2,296 |
-| Frete R$15 | R$108.38 | R$10.62 (9%) | 1.2 | 6% | R$5,711 | R$2,296 |
-| Sem corte terceirizado (você corta) | R$108.38 | R$10.62 (9%) | 1.2 | 6% | R$5,711 | R$2,296 |
-| R$119 + suporte R$10 + frete R$15 | R$98.38 | R$20.62 (17%) | 0.6 | 15% | R$15,461 | R$2,078 |
-| Volume -20% | R$118.38 | R$0.62 (1%) | 20.8 | -3% | R$-4,160 | R$6,160 |
-| R$99 + suporte R$10 + frete R$15 | R$95.98 | R$3.02 (3%) | 4.3 | -0% | R$-1,699 | R$3,699 |
+| cenário | lucro por tábua | equilíbrio/dia | ano 1 (operação) | contribuição/mês (2 tábuas × 22 dias úteis) | por hora (3,5 h/tábua) |
+|---|---:|---:|---:|---:|---:|
+| Base R$249 (lançamento) | R$83.36 (33%) | 0.15 | R$35,619 | R$3,668 | R$24/h |
+| R$349 (preço cheio) | R$171.36 (49%) | 0.08 | R$78,123 | R$7,540 | R$49/h |
+| Madeira mais cara (R$90) | R$53.36 (21%) | 0.24 | R$21,129 | R$2,348 | R$15/h |
+| Frete R$35 | R$73.36 (29%) | 0.18 | R$30,789 | R$3,228 | R$21/h |
+| Frete R$15 | R$93.36 (37%) | 0.14 | R$40,449 | R$4,108 | R$27/h |
+| Volume -20% | R$83.36 (33%) | 0.15 | R$27,566 | R$3,668 | R$24/h |
+| R$249 + madeira R$90 + frete R$35 (pior caso) | R$43.36 (17%) | 0.30 | R$16,299 | R$1,908 | R$12/h |
+| R$349 + madeira R$90 + frete R$35 | R$131.36 (38%) | 0.10 | R$58,803 | R$5,780 | R$38/h |
 
 **O que os números dizem:**
-1. **Três alavancas valem ~R$10 por peça cada:** suporte a ~R$5 a unidade, frete de R$15 e você mesmo cortando a madeira. Cada uma, sozinha, já deixa o ano 1 positivo (+R$5.711) e o caixa cabe no orçamento (R$2.296).
-2. **R$139 sozinho também resolve:** +R$18,22 por peça, equilíbrio em 0,7 peça por dia e ano 1 em +R$13.120. Com o painel, prateleira grossa e sob medida aguentam bem esse preço. **Teste R$119 contra R$139.**
-3. **Melhor combinação testada:** R$119 + suporte a R$5 + frete a R$15 → **+R$20,62 por peça (17%)**, ano 1 em **+R$15.461** e caixa de R$2.078.
+1. **O preço é a maior alavanca.** A R$349, o lucro por tábua sobe para R$171 (49%) e o ano 1 para +R$78.123. O painel mostrou que a renda alta aceita esse valor. **Teste R$249 contra R$349.**
+2. **A madeira é a linha a vigiar.** Se custar R$90 por tábua em vez de R$60, o lucro cai para R$53. Cote marfim e muiracatiara antes de tudo. **Use sobras de outros trabalhos sempre que der.**
+3. **Mesmo no pior caso testado** (R$249, madeira a R$90, frete a R$35), sobram R$43 por tábua e o ano fecha positivo (+R$16.299).
 
 **⚠️ O que estes números não mostram:**
-- **O seu trabalho não está na conta.** O "lucro" é o que sobra para pagar você. No melhor cenário, +R$15.461 no ano dá cerca de **R$1.290 por mês** para um trabalho que, com 4 peças por dia, ocupa boa parte do seu tempo. Isso é **abaixo do salário mínimo de R$1.621**. Para valer a pena, o lucro por peça precisa subir (preço de R$139, acabamento tingido, peças maiores) ou você precisa produzir mais por hora. **Cronometre suas horas por peça.**
-- **O teto do MEI estoura.** O plano fatura cerca de R$116 mil no ano 1, acima do limite de R$81 mil. Por volta do 7º ou 8º mês você precisa virar ME, e aí o imposto passa a ser percentual sobre a venda e a margem cai. Fale com o contador.
-- O frete grátis é obrigatório no Mercado Livre acima de R$79. Uma caixa longa (110 cm) pode custar bem mais que os R$25 estimados. **É a cotação que mais pode mudar o resultado.**
+- **O seu trabalho não está na conta.** A 3,5 h por tábua, o lucro por hora fica em **~R$24/h a R$249** e **~R$49/h a R$349**. Para comparar: a prateleira grossa dava perto de zero. No plano de 2 tábuas/dia, são cerca de 7 h/dia de bancada. **Cronometre as 5 primeiras tábuas:** se passar de 5 h cada, o preço precisa subir.
+- **O teto do MEI estoura.** São R$120 mil de receita no ano 1, acima do limite de R$81 mil. Por volta do 8º mês você precisa virar ME, e o imposto passa a ser percentual sobre a venda. Fale com o contador.
+- **A demanda é sazonal (Natal e Dia dos Pais),** e a rampa não modela isso. O ano real terá picos e vales.
+- **Regras para utensílio de cozinha:** confirme as exigências da Anvisa e do Inmetro para tábua de madeira em contato com alimento antes de vender.
 
 ---
 
-## Unit economics: Veio Certo - prateleira grossa de pinus 30 mm sob medida, producao em casa, venda no Mercado Livre (valores em R$)
+## Unit economics: Veio Certo - tabua de corte end grain 40x30x4 (marfim + muiracatiara), producao em casa, venda no Mercado Livre (valores em R$)
 
 Every number below comes from the input file. Nothing is looked up or guessed.
 
-### One prateleira 100x20x3 cm
+### One tabua end grain 40x30x4
 
-| line | per prateleira 100x20x3 cm |
+| line | per tabua end grain 40x30x4 |
 | --- | ---: |
-| Price | $119.00 |
-| Pinus 30 mm x 20 cm, 1,15 m com perda (~R$24/m, derivado de R$17/m da tabua de 2,2 cm) [estimativa] | -$27.60 |
-| Corte e aparelhamento na madeireira [estimativa, cotar] | -$10.00 |
-| 2 suportes invisiveis reforcados p/ 30 mm (R$10 un. varejo) [estimativa sobre preco publico R$8-15] | -$20.00 |
-| Lixa, selador, verniz base dagua [estimativa] | -$5.00 |
-| Parafusos e buchas (+1 de cada), gabarito [estimativa] | -$3.00 |
-| Caixa longa ~110x25x8 + cantoneiras [estimativa] | -$12.00 |
-| Comissao ML Classico Casa ~12% [publico, blogs] | -$14.28 |
-| Frete gratis pago pelo vendedor, ~3,5 kg [estimativa] | -$25.00 |
-| Reserva da garantia: 5% x R$30 [estimativa] | -$1.50 |
-| **Contribution** (what each prateleira 100x20x3 cm leaves to pay the fixed costs) | **$0.62** (1%) |
+| Price | $249.00 |
+| Madeira nobre: ~0,01 m3 com perda (2x o volume final) a ~R$6.000/m3 [estimativa, cotar] | -$60.00 |
+| Cola Titebond III ~50 g (R$110,94 por 1,05 kg) [publico] | -$5.30 |
+| Lixas (topo consome muita lixa) [estimativa] | -$8.00 |
+| Oleo mineral + cera alimentar no acabamento [estimativa] | -$4.00 |
+| Frasco de oleo 100 ml para o cliente (R$8,56 farmacia) [publico] | -$8.56 |
+| 4 pes antiderrapantes [estimativa] | -$4.00 |
+| Embalagem de presente (caixa kraft + cartao) [estimativa] | -$10.00 |
+| Caixa de envio e protecao [estimativa] | -$6.00 |
+| Comissao ML Classico Casa ~12% [publico, blogs] | -$29.88 |
+| Frete gratis pago pelo vendedor, ~4,5 kg [estimativa] | -$25.00 |
+| Reserva garantia (3% x R$80) + atraso de Natal (5% x R$50 no ano) [estimativa] | -$4.90 |
+| **Contribution** (what each tabua end grain 40x30x4 leaves to pay the fixed costs) | **$83.36** (33%) |
 
 ### The margin that matters
 
-Fixed costs: $387 a month (DAS MEI 2026 (R$82,05-87,05) [publico] $87, Energia extra das maquinas em casa [estimativa] $100, Internet e celular [estimativa] $200).
+Fixed costs: $387 a month (DAS MEI 2026 [publico] $87, Energia extra das maquinas [estimativa] $100, Internet e celular [estimativa] $200).
 
-- **Break-even: 21 prateleira 100x20x3 cms a day.** Below that you lose money every month.
-- **Profit margin at your plan** (4 a day): **-2%** of every sale, after every cost.
-- Capacity: 10 a day.
+- **Break-even: 1 tabua end grain 40x30x4s a day.** Below that you lose money every month.
+- **Profit margin at your plan** (2 a day): **31%** of every sale, after every cost.
+- Capacity: 3 a day.
 
 ### Year 1, month by month
 
-| month | prateleira 100x20x3 cms a day | revenue | profit | cumulative (after $2,000 startup) |
+| month | tabua end grain 40x30x4s a day | revenue | profit | cumulative (after $2,000 startup) |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 0 | $1,785 | -$378 | -$2,378 |
-| 2 | 1 | $3,570 | -$368 | -$2,746 |
-| 3 | 2 | $5,355 | -$359 | -$3,105 |
-| 4 | 2 | $7,140 | -$350 | -$3,455 |
-| 5 | 2 | $8,925 | -$340 | -$3,795 |
-| 6 | 3 | $10,710 | -$331 | -$4,127 |
-| 7 | 3 | $10,710 | -$331 | -$4,458 |
-| 8 | 4 | $12,495 | -$322 | -$4,780 |
-| 9 | 4 | $12,495 | -$322 | -$5,102 |
-| 10 | 4 | $14,280 | -$313 | -$5,414 |
-| 11 | 4 | $14,280 | -$313 | -$5,727 |
-| 12 | 4 | $14,280 | -$313 | -$6,039 |
+| 1 | 0 | $2,241 | $363 | -$1,637 |
+| 2 | 0 | $3,735 | $863 | -$773 |
+| 3 | 1 | $5,976 | $1,614 | $840 |
+| 4 | 1 | $7,470 | $2,114 | $2,954 |
+| 5 | 1 | $8,964 | $2,614 | $5,568 |
+| 6 | 2 | $11,205 | $3,364 | $8,932 |
+| 7 | 2 | $11,205 | $3,364 | $12,296 |
+| 8 | 2 | $11,205 | $3,364 | $15,661 |
+| 9 | 2 | $13,446 | $4,114 | $19,775 |
+| 10 | 2 | $14,940 | $4,615 | $24,390 |
+| 11 | 2 | $14,940 | $4,615 | $29,004 |
+| 12 | 2 | $14,940 | $4,615 | $33,619 |
 
-- **Year 1 operating profit: -$4,039** on $116,025 of revenue.
-- After the $2,000 startup spend: -$6,039.
-- Startup money earned back: not within year 1.
-- Cash you need before it pays for itself: **$6,039**.
+- **Year 1 operating profit: $35,619** on $120,267 of revenue.
+- After the $2,000 startup spend: $33,619.
+- Startup money earned back: month 3.
+- Cash you need before it pays for itself: **$2,000**.
 
 ### What if
 
 | scenario | margin at plan | break-even a day | year 1 profit |
 | --- | ---: | ---: | ---: |
-| Base plan | -2% | 21 | -$4,039 |
-| Price -10% | -14% | never | -$15,642 |
-| Volume -20% | -3% | 21 | -$4,160 |
-| Unit costs +15% | -17% | never | -$21,353 |
+| Base plan | 31% | 1 | $35,619 |
+| Price -10% | 23% | 1 | $23,592 |
+| Volume -20% | 30% | 1 | $27,566 |
+| Unit costs +15% | 21% | 1 | $23,618 |
 
-### Red flags
-
-- Break-even needs 21 prateleira 100x20x3 cms a day but capacity is 10.
-- Year 1 loses money on operations (-$4,039).
-- The startup spend is not earned back within year 1.
+No red flags in these numbers. They are only as good as the inputs: check every cost against a real quote.
 
 ## Marketing
 
