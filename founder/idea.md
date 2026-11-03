@@ -1,9 +1,7 @@
-# Ideia (rascunho — confirmar com o fundador)
+# Kit Parede Pronta (nome de trabalho)
 
-**Negócio:** marcenaria que vende produtos prontos e sob medida pelos marketplaces brasileiros (Mercado Livre, Shopee, MadeiraMadeira, Elo7, Amazon).
-
-**Premissas assumidas nesta análise (não informadas pelo fundador):**
-- Mix inicial: prateleiras, nichos e peças de decoração (alto giro, cabe em caixa), com linha de móveis em madeira maciça (mesas, tampos) como ticket alto.
-- Item de comparação principal: **kit 3 prateleiras 60x20 cm com suporte invisível**.
-- Item de comparação secundário: **mesa/tampo em madeira maciça**.
-- Comprador: pessoa que mobilia/decora apartamento, compra pelo celular, compara preço e avaliações.
+- O que é: uma marcenaria nova que fabrica prateleiras e nichos em madeira maciça e vende pelos marketplaces brasileiros (Mercado Livre, Shopee e, depois, Elo7 e MadeiraMadeira).
+- Para quem: brasileiros de 25 a 45 anos montando ou decorando apartamento, que compram móveis pequenos pelo celular em marketplaces.
+- O que vende e a que preço: kit com 3 prateleiras flutuantes 60x20 em pinus maciço, R$139 (lançamento a R$119 nos 30 primeiros pedidos ou até 31/12/2026); sob medida até 120 cm a R$169; sob medida com acabamento tingido a R$189.
+- Onde e como: online, com envio pelos Correios ou transportadora do marketplace; postagem em 1 dia útil; sob medida em 7 dias úteis.
+- Orçamento e restrições: a marcenaria começa do zero (sem oficina nem máquinas). O orçamento disponível não foi informado. Custos são estimativas até chegarem orçamentos reais.
