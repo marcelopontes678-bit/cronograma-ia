@@ -136,3 +136,26 @@ def test_expiracao(tmp_path, fake):
         time.sleep(0.01)
         enviar(c)  # novo envio limpa as triagens expiradas
         assert c.get(f"/api/triagens/{primeira}").status_code == 404
+
+
+def test_saude_sem_senha(tmp_path):
+    with cliente(tmp_path, senha="segredo") as c:
+        assert c.get("/api/saude").json() == {"ok": True}
+
+
+def test_exigir_senha_bloqueia_sem_senha_configurada(tmp_path):
+    with cliente(tmp_path, senha="", exigir_senha=True) as c:
+        r = c.get("/")
+        assert r.status_code == 503 and "TRIAGEM_SENHA" in r.json()["detail"]
+        assert c.get("/api/saude").status_code == 200
+
+
+def test_nenhum_analisado_vira_erro(tmp_path, monkeypatch):
+    class Msgs:
+        async def parse(self, **kw):
+            raise ia.ErroIA("Connection error.")
+
+    monkeypatch.setattr(ia.anthropic, "AsyncAnthropic", lambda **kw: SimpleNamespace(beta=SimpleNamespace(messages=Msgs())))
+    with cliente(tmp_path) as c:
+        t = esperar(c, enviar(c, arquivos=[("cv.txt", b"a" * 300)]).json()["id"])
+        assert t["status"] == "erro" and "Connection error" in t["mensagem"]

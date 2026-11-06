@@ -23,14 +23,34 @@ python -m triagem.web                  # abre em http://127.0.0.1:8000
 4. **Resultado**: os melhores de cada vaga, o relatório completo na própria
    página e o botão para baixar a planilha.
 
-Para publicar num servidor (Render, Railway, uma VPS):
-`uvicorn triagem.web:app --host 0.0.0.0 --port $PORT`. Use **um** processo
-só (sem `--workers`), porque o andamento das triagens fica em memória.
+### Publicar no Render
+
+O serviço `triagem-curriculos` está no `render.yaml` da raiz do repositório
+(Blueprint), com Dockerfile e checagem de saúde em `/api/saude`.
+
+1. No painel do Render, abra o Blueprint deste repositório e sincronize. O
+   serviço novo aparece e o Render pede os valores de `ANTHROPIC_API_KEY` e
+   `TRIAGEM_SENHA`.
+2. Depois do deploy, abra a URL do serviço. O navegador pede login: qualquer
+   usuário e a senha que você definiu.
+
+Sem `TRIAGEM_SENHA` o app responde 503 em vez de abrir, para ninguém usar a
+sua chave da API (`TRIAGEM_EXIGIR_SENHA=1` no `render.yaml`).
+
+No plano gratuito, o Render desliga o serviço depois de 15 minutos sem uso. O
+primeiro acesso depois disso demora cerca de 1 minuto. Os relatórios ficam no
+disco temporário e somem quando o serviço reinicia ou é publicado de novo:
+baixe a planilha logo depois da triagem.
+
+Em outro servidor: `uvicorn triagem.web:app --host 0.0.0.0 --port $PORT`, ou
+o `Dockerfile`. Use **um** processo só (sem `--workers`), porque o andamento
+das triagens fica em memória.
 
 | Variável | Para que serve |
 |---|---|
 | `ANTHROPIC_API_KEY` | Chave da API do Claude (obrigatória). |
 | `TRIAGEM_SENHA` | Se definida, o navegador pede login (qualquer usuário + esta senha). |
+| `TRIAGEM_EXIGIR_SENHA` | `1` faz o app recusar funcionar sem `TRIAGEM_SENHA`. |
 | `TRIAGEM_DADOS` | Pasta dos arquivos (padrão: `dados_web/`). |
 | `TRIAGEM_RETENCAO_HORAS` | Depois disso, relatórios são apagados (padrão: 24). |
 | `TRIAGEM_MODELO` | Modelo do Claude (padrão: `claude-opus-5-5`). |
@@ -151,7 +171,7 @@ auxiliar administrativo, vendedor interno) com perfis totalmente fora, e
 grava um `gabarito.json` para você conferir se o ranking faz sentido.
 
 ```bash
-pip install pyarrow
+pip install -r requirements-dev.txt
 python scripts/baixar_curriculos_teste.py
 python -m triagem --vagas vagas.teste.json --curriculos teste_real/curriculos --saida teste_real/saida
 ```

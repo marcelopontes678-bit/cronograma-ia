@@ -5,6 +5,7 @@ Rodar:  uvicorn triagem.web:app --port 8000   (ou: python -m triagem.web)
 Variáveis de ambiente:
   ANTHROPIC_API_KEY        chave da API do Claude (obrigatória)
   TRIAGEM_SENHA            se definida, pede login (usuário qualquer + esta senha)
+  TRIAGEM_EXIGIR_SENHA     "1" = recusa funcionar sem TRIAGEM_SENHA (use em servidor público)
   TRIAGEM_DADOS            pasta onde ficam currículos e relatórios (padrão: dados_web/)
   TRIAGEM_RETENCAO_HORAS   apaga triagens mais antigas que isso (padrão: 24)
   TRIAGEM_MODELO           modelo do Claude (padrão: claude-opus-5-5)
@@ -101,9 +102,12 @@ def criar_app(
     senha: str | None = None,
     retencao_horas: float | None = None,
     modelo: str | None = None,
+    exigir_senha: bool | None = None,
 ) -> FastAPI:
     pasta_dados = Path(pasta_dados or os.environ.get("TRIAGEM_DADOS", "dados_web")).resolve()
     senha = senha if senha is not None else os.environ.get("TRIAGEM_SENHA") or None
+    if exigir_senha is None:
+        exigir_senha = os.environ.get("TRIAGEM_EXIGIR_SENHA") == "1"
     retencao = 3600 * float(retencao_horas if retencao_horas is not None else os.environ.get("TRIAGEM_RETENCAO_HORAS", 24))
     modelo = modelo or os.environ.get("TRIAGEM_MODELO", MODELO_PADRAO)
 
@@ -114,6 +118,9 @@ def criar_app(
 
     def autenticar(cred: HTTPBasicCredentials | None = Depends(basic)) -> None:
         if not senha:
+            if exigir_senha:
+                # Servidor público sem senha: qualquer um gastaria a chave da API. Melhor não abrir.
+                raise HTTPException(503, "Configure a variável TRIAGEM_SENHA no servidor para liberar o acesso.")
             return
         if cred is None or not secrets.compare_digest(cred.password.encode(), senha.encode()):
             raise HTTPException(401, "Senha necessária.", headers={"WWW-Authenticate": 'Basic realm="triagem"'})
@@ -160,11 +167,21 @@ def criar_app(
             except Exception as e:  # noqa: BLE001 — qualquer falha vira mensagem na tela
                 t.status, t.mensagem = "erro", f"Falha inesperada: {e}"
             else:
-                t.resultado = _resumo_resultado(t.vagas, candidatos, top)
-                t.status = "concluida"
+                if candidatos and all(c.analise is None for c in candidatos):
+                    # Nada foi analisado (API fora do ar, rede, cota...): é falha, não um ranking vazio.
+                    t.status = "erro"
+                    t.mensagem = f"Nenhum currículo pôde ser analisado. Primeiro erro: {candidatos[0].erro}"
+                else:
+                    t.resultado = _resumo_resultado(t.vagas, candidatos, top)
+                    t.status = "concluida"
             finally:
                 # Os currículos originais não são mais necessários: apaga já (LGPD).
                 shutil.rmtree(t.pasta / "curriculos", ignore_errors=True)
+
+    @app.get("/api/saude")
+    async def saude():
+        # Sem senha: usado pelo health check do Render. Não expõe nada.
+        return {"ok": True}
 
     @app.get("/", response_class=HTMLResponse, dependencies=[Depends(autenticar)])
     async def pagina():
