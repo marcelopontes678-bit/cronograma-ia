@@ -1,0 +1,23 @@
+[
+  {
+    "id": "atendente",
+    "titulo": "Atendente de loja",
+    "descricao": "Loja de materiais de construção de bairro. Atendimento no balcão, caixa e reposição. Presencial, segunda a sábado.",
+    "obrigatorios": ["Experiência com atendimento ao público"],
+    "desejaveis": ["Experiência com caixa, PDV ou recebimento de pagamentos", "Experiência com vendas no varejo ou atacado", "Ensino médio completo"]
+  },
+  {
+    "id": "aux-adm",
+    "titulo": "Auxiliar administrativo-financeiro",
+    "descricao": "Apoio à rotina do escritório: contas a pagar e receber, notas fiscais, documentos de funcionários e contato com o contador.",
+    "obrigatorios": ["Experiência com rotinas administrativas, financeiras ou de departamento pessoal", "Excel"],
+    "desejaveis": ["Formação (técnica ou superior, cursando ou completa) em Administração, Contabilidade ou área relacionada", "Experiência com contas a pagar/receber ou emissão de notas fiscais", "Experiência com sistema ERP"]
+  },
+  {
+    "id": "sdr",
+    "titulo": "Vendedor interno (SDR)",
+    "descricao": "Prospecção ativa por telefone, WhatsApp e e-mail para vender a construtoras e empreiteiros. Meta mensal.",
+    "obrigatorios": ["Experiência com vendas ou prospecção de clientes", "Experiência com metas comerciais"],
+    "desejaveis": ["Uso de CRM", "Vendas B2B", "Prospecção ativa (outbound) por telefone ou mensagens"]
+  }
+]

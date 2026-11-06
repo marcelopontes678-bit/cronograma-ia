@@ -1,0 +1,4 @@
+# Saída e dados da tela web contêm dados pessoais de candidatos (LGPD): nunca versionar.
+saida/
+dados_web/
+teste_real/

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Triagem de currículos</title>
+<style>
+:root{
+  --bg:#f6f6f3;--card:#fff;--ink:#17171a;--muted:#6b6b72;--line:#e4e4df;
+  --brand:#1f4fd8;--brand-ink:#fff;--ok:#1a7f37;--warn:#9a6700;--bad:#c62828;--radius:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:880px;margin:0 auto;padding:2.5rem 1.1rem 5rem}
+h1{font-size:1.9rem;letter-spacing:-.02em;margin:0 0 .3rem}
+.lead{color:var(--muted);margin:0 0 2rem;max-width:60ch}
+section.passo{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.2rem}
+.passo h2{font-size:1.1rem;margin:0 0 .2rem;display:flex;gap:.6rem;align-items:center}
+.num{display:inline-grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--ink);color:#fff;font-size:.85rem}
+.dica{color:var(--muted);font-size:.92rem;margin:.2rem 0 1rem}
+label{display:block;font-weight:600;font-size:.9rem;margin:.9rem 0 .3rem}
+label small{font-weight:400;color:var(--muted)}
+input[type=text],textarea,select{width:100%;font:inherit;padding:.6rem .7rem;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit}
+textarea{min-height:5.2rem;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:transparent}
+.vaga{border:1px solid var(--line);border-radius:12px;padding:1rem;margin-bottom:.9rem;position:relative}
+.vaga .remover{position:absolute;top:.6rem;right:.6rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:.55rem .95rem}
+button:hover{border-color:#c9c9c2}
+button.primario{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:600;padding:.8rem 1.4rem}
+button.primario:disabled{opacity:.45;cursor:not-allowed}
+button.texto{border:none;background:none;color:var(--muted);padding:.3rem .5rem}
+button.texto:hover{color:var(--bad)}
+.linha{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.zona{border:2px dashed #cfcfc8;border-radius:12px;padding:2rem 1rem;text-align:center;color:var(--muted);transition:.15s}
+.zona.ativa{border-color:var(--brand);background:#eef2ff;color:var(--brand)}
+.zona strong{color:var(--ink)}
+.zona button{margin-top:.8rem}
+.lista{margin:.8rem 0 0;max-height:11rem;overflow:auto;font-size:.9rem;color:var(--muted);border-top:1px solid var(--line);padding-top:.5rem}
+.lista div{display:flex;justify-content:space-between;gap:1rem;padding:.12rem 0}
+.lista .ruim{color:var(--bad)}
+.barra{height:10px;background:#ececE6;border-radius:99px;overflow:hidden;margin:.8rem 0 .4rem}
+.barra>div{height:100%;background:var(--brand);width:0;transition:width .4s}
+.status{font-weight:600}
+.erro{color:var(--bad);background:#fdecec;border:1px solid #f5c2c2;border-radius:10px;padding:.7rem .9rem;margin-top:.8rem}
+.aviso{color:var(--warn);font-size:.92rem;margin-top:.5rem}
+.vaga-res{border-top:1px solid var(--line);padding:1rem 0}
+.vaga-res:first-of-type{border-top:none}
+.vaga-res h3{margin:0 0 .2rem;font-size:1.05rem}
+.vaga-res ol{margin:.5rem 0 0;padding-left:1.3rem}
+.nota{font-variant-numeric:tabular-nums;font-weight:700}
+iframe{width:100%;height:80vh;border:1px solid var(--line);border-radius:12px;background:#fff;margin-top:1rem}
+.oculto{display:none!important}
+footer{color:var(--muted);font-size:.85rem;margin-top:2rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Triagem de currículos</h1>
+  <p class="lead">Cadastre as vagas, solte os currículos e receba o ranking de cada função com um resumo dos melhores. A IA faz a primeira leitura; quem decide é você.</p>
+
+  <section class="passo" id="passo-vagas">
+    <h2><span class="num">1</span> Vagas</h2>
+    <p class="dica">Escreva requisitos que dá para conferir no currículo ("Excel intermediário", "1 ano com contas a pagar"), não qualidades vagas ("proativo"). Um por linha.</p>
+    <div id="vagas"></div>
+    <div class="linha">
+      <button type="button" id="add-vaga">+ Adicionar vaga</button>
+      <button type="button" class="texto" id="exemplo">Carregar exemplo</button>
+    </div>
+  </section>
+
+  <section class="passo" id="passo-arquivos">
+    <h2><span class="num">2</span> Currículos</h2>
+    <p class="dica">PDF (até escaneado), Word (.docx) ou texto. Até 300 arquivos de no máximo 10 MB cada.</p>
+    <div class="zona" id="zona">
+      <div><strong>Arraste os currículos para cá</strong><br>ou</div>
+      <button type="button" id="escolher">Escolher arquivos</button>
+      <input type="file" id="arquivo" multiple accept=".pdf,.docx,.txt,.md" class="oculto">
+    </div>
+    <div class="linha" style="margin-top:.6rem">
+      <span id="contagem" class="dica" style="margin:0"></span>
+      <button type="button" class="texto oculto" id="limpar">Remover todos</button>
+    </div>
+    <div class="lista oculto" id="lista"></div>
+  </section>
+
+  <section class="passo" id="passo-enviar">
+    <h2><span class="num">3</span> Triagem</h2>
+    <div class="linha" style="margin-top:.8rem">
+      <label for="top" style="margin:0">Resumir os</label>
+      <select id="top" style="width:auto"><option>3</option><option selected>5</option><option>10</option></select>
+      <span>melhores de cada vaga</span>
+    </div>
+    <div class="linha" style="margin-top:1rem">
+      <button type="button" class="primario" id="iniciar" disabled>Iniciar triagem</button>
+    </div>
+    <div id="motivo" class="dica" style="margin-top:.6rem"></div>
+    <div id="andamento" class="oculto">
+      <div class="barra"><div id="barra"></div></div>
+      <div class="status" id="status-texto"></div>
+      <div class="dica" id="status-detalhe"></div>
+    </div>
+    <div id="erro" class="erro oculto" role="alert"></div>
+  </section>
+
+  <section class="passo oculto" id="passo-resultado">
+    <h2><span class="num">4</span> Resultado</h2>
+    <div id="aviso-resultado" class="aviso"></div>
+    <div id="resumo"></div>
+    <div class="linha" style="margin-top:1rem">
+      <a id="abrir" target="_blank" rel="noopener"><button type="button" class="primario">Abrir relatório completo</button></a>
+      <a id="baixar"><button type="button">Baixar planilha (CSV)</button></a>
+      <button type="button" class="texto" id="apagar">Apagar dados desta triagem</button>
+      <button type="button" class="texto" id="nova">Nova triagem</button>
+    </div>
+    <iframe id="relatorio" title="Relatório da triagem" sandbox></iframe>
+  </section>
+
+  <footer>Os currículos enviados são apagados assim que a análise termina, e o relatório expira automaticamente. Avise os candidatos de que a triagem usa IA.</footer>
+</main>
+
+<template id="tpl-vaga">
+  <div class="vaga">
+    <button type="button" class="texto remover" title="Remover vaga">Remover</button>
+    <label>Título da vaga</label>
+    <input type="text" data-campo="titulo" placeholder="Ex.: Atendente de loja" maxlength="120">
+    <label>Descrição <small>(opcional: rotina, horário, local)</small></label>
+    <input type="text" data-campo="descricao" placeholder="Ex.: Atendimento no balcão e caixa. Presencial, seg. a sáb." maxlength="600">
+    <div class="grid2">
+      <div>
+        <label>Obrigatórios <small>(sem eles, filtra)</small></label>
+        <textarea data-campo="obrigatorios" placeholder="Ensino médio completo&#10;Experiência com atendimento ao público"></textarea>
+      </div>
+      <div>
+        <label>Desejáveis <small>(somam pontos)</small></label>
+        <textarea data-campo="desejaveis" placeholder="Experiência com caixa&#10;Vendas no varejo"></textarea>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+"use strict";
+const $ = (s) => document.querySelector(s);
+const CHAVE = "triagem.vagas.v1";
+const EXTS = [".pdf", ".docx", ".txt", ".md"];
+const MAX_ARQ = 300, MAX_MB = 10;
+const EXEMPLO = [
+  {titulo: "Atendente de loja", descricao: "Atendimento ao cliente no balcão, caixa e organização do estoque. Presencial, segunda a sábado.",
+   obrigatorios: ["Ensino médio completo", "Experiência com atendimento ao público"],
+   desejaveis: ["Experiência com caixa ou PDV", "Experiência com vendas no varejo", "Conhecimento básico de informática"]},
+  {titulo: "Auxiliar financeiro", descricao: "Contas a pagar e receber, conciliação bancária, emissão de notas fiscais e apoio ao contador.",
+   obrigatorios: ["Experiência de pelo menos 1 ano com rotinas financeiras ou administrativas", "Excel intermediário"],
+   desejaveis: ["Graduação (cursando ou completa) em Administração, Contabilidade ou Economia", "Experiência com emissão de nota fiscal", "Experiência com sistema ERP"]},
+];
+
+let arquivos = [];
+let triagemId = null;
+let consulta = null;
+let ocupado = false;
+
+// ---------------------------------------------------------------- vagas
+function linhas(t) { return t.split("\n").map((s) => s.trim()).filter(Boolean); }
+
+function addVaga(v = {}) {
+  const el = $("#tpl-vaga").content.firstElementChild.cloneNode(true);
+  for (const campo of ["titulo", "descricao"]) el.querySelector(`[data-campo=${campo}]`).value = v[campo] || "";
+  for (const campo of ["obrigatorios", "desejaveis"]) el.querySelector(`[data-campo=${campo}]`).value = (v[campo] || []).join("\n");
+  el.querySelector(".remover").onclick = () => { el.remove(); salvarVagas(); atualizar(); };
+  el.addEventListener("input", () => { salvarVagas(); atualizar(); });
+  $("#vagas").append(el);
+}
+
+function lerVagas() {
+  const usados = new Set();
+  return [...document.querySelectorAll("#vagas .vaga")].map((el) => {
+    const val = (c) => el.querySelector(`[data-campo=${c}]`).value;
+    const titulo = val("titulo").trim();
+    let base = titulo.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "vaga";
+    let id = base, n = 2;
+    while (usados.has(id)) id = `${base}-${n++}`;
+    usados.add(id);
+    return {id, titulo, descricao: val("descricao").trim(), obrigatorios: linhas(val("obrigatorios")), desejaveis: linhas(val("desejaveis"))};
+  });
+}
+
+function salvarVagas() {
+  const dados = lerVagas().map(({id, ...v}) => v);
+  try { localStorage.setItem(CHAVE, JSON.stringify(dados)); } catch {}
+}
+
+function carregarVagas() {
+  let salvas = null;
+  try { salvas = JSON.parse(localStorage.getItem(CHAVE)); } catch {}
+  if (Array.isArray(salvas) && salvas.length) salvas.forEach(addVaga); else addVaga();
+}
+
+// ------------------------------------------------------------- arquivos
+function extOk(nome) { const n = nome.toLowerCase(); return EXTS.some((e) => n.endsWith(e)); }
+
+function adicionarArquivos(lista) {
+  const chave = (f) => `${f.name}|${f.size}`;
+  const existentes = new Set(arquivos.map(chave));
+  for (const f of lista) if (!existentes.has(chave(f))) { arquivos.push(f); existentes.add(chave(f)); }
+  mostrarArquivos();
+}
+
+function problemaArquivo(f) {
+  if (!extOk(f.name)) return "formato não aceito";
+  if (f.size > MAX_MB * 1024 * 1024) return `maior que ${MAX_MB} MB`;
+  return "";
+}
+
+function mostrarArquivos() {
+  const lista = $("#lista");
+  lista.replaceChildren(...arquivos.map((f) => {
+    const d = document.createElement("div");
+    const p = problemaArquivo(f);
+    const nome = document.createElement("span"); nome.textContent = f.name;
+    const info = document.createElement("span"); info.textContent = p || `${Math.max(1, Math.round(f.size / 1024))} KB`;
+    if (p) d.className = "ruim";
+    d.append(nome, info);
+    return d;
+  }));
+  lista.classList.toggle("oculto", !arquivos.length);
+  $("#limpar").classList.toggle("oculto", !arquivos.length);
+  const validos = arquivos.filter((f) => !problemaArquivo(f)).length;
+  $("#contagem").textContent = arquivos.length ? `${validos} currículo(s) prontos` + (validos < arquivos.length ? ` · ${arquivos.length - validos} serão ignorados` : "") : "";
+  atualizar();
+}
+
+// ------------------------------------------------------------ validação
+function motivoBloqueio() {
+  const vagas = lerVagas();
+  if (!vagas.length) return "Cadastre pelo menos uma vaga.";
+  for (const v of vagas) {
+    if (!v.titulo) return "Dê um título para cada vaga.";
+    if (!v.obrigatorios.length && !v.desejaveis.length) return `A vaga "${v.titulo}" precisa de pelo menos um requisito.`;
+  }
+  const validos = arquivos.filter((f) => !problemaArquivo(f));
+  if (!validos.length) return "Adicione os currículos.";
+  if (validos.length > MAX_ARQ) return `Máximo de ${MAX_ARQ} currículos por triagem.`;
+  return "";
+}
+
+function atualizar() {
+  const motivo = motivoBloqueio();
+  $("#iniciar").disabled = Boolean(motivo) || ocupado;
+  $("#motivo").textContent = ocupado ? "" : motivo;
+}
+
+// --------------------------------------------------------------- envio
+function mostrarErro(msg) { const e = $("#erro"); e.textContent = msg; e.classList.toggle("oculto", !msg); }
+
+function iniciar() {
+  mostrarErro("");
+  const form = new FormData();
+  form.append("vagas", JSON.stringify(lerVagas()));
+  form.append("top", $("#top").value);
+  for (const f of arquivos) if (!problemaArquivo(f)) form.append("curriculos", f, f.name);
+
+  bloquear(true);
+  $("#andamento").classList.remove("oculto");
+  definirProgresso(0, "Enviando currículos…", "");
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "api/triagens");
+  xhr.upload.onprogress = (e) => {
+    if (e.lengthComputable) definirProgresso(e.loaded / e.total * 100, "Enviando currículos…", `${Math.round(e.loaded / e.total * 100)}%`);
+  };
+  xhr.onload = () => {
+    let dados = {};
+    try { dados = JSON.parse(xhr.responseText); } catch {}
+    if (xhr.status !== 200) { falhar(dados.detail || `Erro ${xhr.status} ao enviar.`); return; }
+    triagemId = dados.id;
+    acompanhar(dados);
+  };
+  xhr.onerror = () => falhar("Não foi possível enviar. Verifique a conexão.");
+  xhr.send(form);
+}
+
+function bloquear(sim) {
+  ocupado = sim;
+  for (const el of document.querySelectorAll("#passo-vagas input,#passo-vagas textarea,#passo-vagas button,#passo-arquivos button,#top"))
+    el.disabled = sim;
+  $("#iniciar").disabled = sim;
+  $("#zona").style.pointerEvents = sim ? "none" : "";
+  $("#zona").style.opacity = sim ? ".5" : "";
+}
+
+function falhar(msg) {
+  clearTimeout(consulta); consulta = null;
+  $("#andamento").classList.add("oculto");
+  mostrarErro(msg);
+  bloquear(false);
+  atualizar();
+}
+
+function definirProgresso(pct, texto, detalhe) {
+  $("#barra").style.width = `${Math.max(2, Math.min(100, pct))}%`;
+  $("#status-texto").textContent = texto;
+  $("#status-detalhe").textContent = detalhe;
+}
+
+function acompanhar(t) {
+  const textos = {
+    na_fila: ["Na fila: outra triagem está terminando…", 0],
+    analisando: [`Lendo currículos: ${t.feitos} de ${t.total}`, t.total ? t.feitos / t.total * 90 : 0],
+    resumindo: ["Comparando os melhores de cada vaga…", 95],
+  };
+  if (t.status === "concluida") { concluir(t); return; }
+  if (t.status === "erro") { falhar(t.mensagem || "A triagem falhou."); return; }
+  const [texto, pct] = textos[t.status] || ["Processando…", 50];
+  definirProgresso(pct, texto, t.com_problema ? `${t.com_problema} arquivo(s) com problema até agora (aparecem no fim do relatório).` : "Pode levar alguns minutos. Não feche esta aba.");
+  consulta = setTimeout(async () => {
+    try {
+      const r = await fetch(`api/triagens/${triagemId}`);
+      const dados = await r.json();
+      if (!r.ok) { falhar(dados.detail || "Triagem não encontrada."); return; }
+      acompanhar(dados);
+    } catch { acompanhar(t); }  // falha de rede momentânea: tenta de novo
+  }, 1500);
+}
+
+function concluir(t) {
+  consulta = null;
+  definirProgresso(100, "Pronto!", "");
+  const base = `api/triagens/${t.id}`;
+  $("#abrir").href = `${base}/relatorio`;
+  $("#baixar").href = `${base}/ranking.csv`;
+  $("#relatorio").src = `${base}/relatorio`;
+  const avisos = [t.mensagem, t.com_problema ? `${t.com_problema} arquivo(s) precisam de revisão humana (veja o fim do relatório).` : ""].filter(Boolean);
+  $("#aviso-resultado").textContent = avisos.join(" ");
+
+  $("#resumo").replaceChildren(...t.resultado.map((v) => {
+    const div = document.createElement("div"); div.className = "vaga-res";
+    const h = document.createElement("h3"); h.textContent = v.titulo;
+    const p = document.createElement("div"); p.className = "dica"; p.style.margin = "0";
+    p.textContent = `${v.aprovados} passaram no filtro · ${v.filtrados} filtrados`;
+    div.append(h, p);
+    if (v.melhores.length) {
+      const ol = document.createElement("ol");
+      for (const m of v.melhores) {
+        const li = document.createElement("li");
+        const n = document.createElement("span"); n.className = "nota"; n.textContent = m.nota;
+        li.append(`${m.nome} — `, n, "/100");
+        ol.append(li);
+      }
+      div.append(ol);
+    }
+    return div;
+  }));
+  $("#passo-resultado").classList.remove("oculto");
+  $("#passo-resultado").scrollIntoView({behavior: "smooth"});
+}
+
+async function apagar() {
+  if (!triagemId || !confirm("Apagar o relatório e a planilha desta triagem do servidor?")) return;
+  await fetch(`api/triagens/${triagemId}`, {method: "DELETE"}).catch(() => {});
+  novaTriagem();
+}
+
+function novaTriagem() {
+  triagemId = null;
+  arquivos = [];
+  $("#relatorio").removeAttribute("src");
+  $("#passo-resultado").classList.add("oculto");
+  $("#andamento").classList.add("oculto");
+  mostrarErro("");
+  bloquear(false);
+  mostrarArquivos();
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+// -------------------------------------------------------------- eventos
+$("#add-vaga").onclick = () => { addVaga(); salvarVagas(); atualizar(); };
+$("#exemplo").onclick = () => {
+  if (lerVagas().some((v) => v.titulo) && !confirm("Substituir as vagas atuais pelo exemplo?")) return;
+  $("#vagas").replaceChildren(); EXEMPLO.forEach(addVaga); salvarVagas(); atualizar();
+};
+$("#escolher").onclick = () => $("#arquivo").click();
+$("#arquivo").onchange = (e) => { adicionarArquivos(e.target.files); e.target.value = ""; };
+$("#limpar").onclick = () => { arquivos = []; mostrarArquivos(); };
+const zona = $("#zona");
+["dragenter", "dragover"].forEach((ev) => zona.addEventListener(ev, (e) => { e.preventDefault(); zona.classList.add("ativa"); }));
+["dragleave", "drop"].forEach((ev) => zona.addEventListener(ev, (e) => { e.preventDefault(); zona.classList.remove("ativa"); }));
+zona.addEventListener("drop", (e) => adicionarArquivos(e.dataTransfer.files));
+window.addEventListener("dragover", (e) => e.preventDefault());
+window.addEventListener("drop", (e) => e.preventDefault());
+$("#iniciar").onclick = iniciar;
+$("#apagar").onclick = apagar;
+$("#nova").onclick = novaTriagem;
+window.addEventListener("beforeunload", (e) => { if (consulta) { e.preventDefault(); e.returnValue = ""; } });
+
+carregarVagas();
+mostrarArquivos();
+</script>
+</body>
+</html>
