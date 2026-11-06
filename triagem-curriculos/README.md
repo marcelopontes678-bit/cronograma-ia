@@ -136,6 +136,26 @@ gasta poucos milhares de tokens. Para baixar o custo de lotes grandes, use
 `--modelo claude-haiku-5-5`. Vale comparar antes, num lote pequeno, se o
 ranking continua bom.
 
+## Teste com currículos da internet
+
+`scripts/baixar_curriculos_teste.py` monta uma caixa de entrada de teste com
+47 arquivos de fontes públicas que não expõem ninguém:
+
+- currículos **sintéticos** em PT-BR (nomes e empresas gerados), do dataset
+  `teixeira-alberto/RH-curriculos-dataset-v2` no Hugging Face;
+- 5 PDFs reais **anonimizados** do LiveCareer (`opensporks/resumes`, CC0);
+- o currículo com tentativa de manipular a IA e um arquivo que não é currículo.
+
+Mistura candidatos certos para as 3 vagas de `vagas.teste.json` (atendente,
+auxiliar administrativo, vendedor interno) com perfis totalmente fora, e
+grava um `gabarito.json` para você conferir se o ranking faz sentido.
+
+```bash
+pip install pyarrow
+python scripts/baixar_curriculos_teste.py
+python -m triagem --vagas vagas.teste.json --curriculos teste_real/curriculos --saida teste_real/saida
+```
+
 ## Testes
 
 ```bash
