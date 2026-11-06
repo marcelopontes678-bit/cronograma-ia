@@ -26,3 +26,24 @@ services:
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
+
+  # Triagem de currículos com IA (tela web). Ver triagem-curriculos/README.md.
+  - type: web
+    name: triagem-curriculos
+    runtime: docker
+    rootDir: triagem-curriculos
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/saude
+    buildFilter:
+      paths:
+        - triagem-curriculos/**
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Senha de acesso à tela (qualquer usuário + esta senha). Obrigatória:
+      # sem ela o app responde 503, para ninguém gastar a chave da API.
+      - key: TRIAGEM_SENHA
+        sync: false
+      - key: TRIAGEM_EXIGIR_SENHA
+        value: "1"
