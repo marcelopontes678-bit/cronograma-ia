@@ -42,6 +42,22 @@ primeiro acesso depois disso demora cerca de 1 minuto. Os relatórios ficam no
 disco temporário e somem quando o serviço reinicia ou é publicado de novo:
 baixe a planilha logo depois da triagem.
 
+### Publicar no Hugging Face Spaces (gratuito, sem cartão)
+
+```bash
+pip install huggingface_hub
+export HF_TOKEN=hf_...      # huggingface.co → Settings → Access Tokens → Write
+python scripts/publicar_hf_space.py --space triagem-curriculos
+```
+
+O script cria o Space (Docker) e envia só o necessário para rodar. Depois,
+no Space, abra **Settings → Variables and secrets** e crie dois **secrets**:
+`ANTHROPIC_API_KEY` e `TRIAGEM_SENHA`. O Space reinicia sozinho.
+
+Use o endereço direto, `https://<usuario>-triagem-curriculos.hf.space`. Dentro
+da página do Hugging Face o navegador não mostra a janela de senha. O Space
+gratuito dorme depois de 48 horas sem uso e acorda no próximo acesso.
+
 Em outro servidor: `uvicorn triagem.web:app --host 0.0.0.0 --port $PORT`, ou
 o `Dockerfile`. Use **um** processo só (sem `--workers`), porque o andamento
 das triagens fica em memória.
