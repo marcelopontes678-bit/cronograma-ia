@@ -97,6 +97,12 @@ RESPOSTAS = {
 }
 
 
+def vagas_do_prompt(system) -> list[Vaga]:
+    """Lê as vagas do system prompt, como a IA real faria (os ids podem não ser os do exemplo)."""
+    texto = system[0]["text"]
+    return [Vaga.model_validate(v) for v in json.loads(texto.split("VAGAS:\n", 1)[1])]
+
+
 class FakeMessages:
     def __init__(self, recusar=()):
         self.chamadas = []
@@ -124,7 +130,10 @@ class FakeMessages:
             contato=Contato(nome=arquivo.split(".")[0].replace("_", " ").title(), email="", telefone="", cidade=""),
             anos_experiencia=3,
             resumo_perfil="perfil <script>x</script>",
-            avaliacoes=[avaliacao(v, *(respostas or {}).get(v.id, (["nao"] * 3, ["nao"] * 3))) for v in VAGAS],
+            avaliacoes=[
+                avaliacao(v, *(respostas or {}).get(VAGAS[i].id, (["nao"] * 3, ["nao"] * 3)))
+                for i, v in enumerate(vagas_do_prompt(kw["system"]))
+            ],
         )
         return SimpleNamespace(stop_reason="end_turn", parsed_output=saida)
 

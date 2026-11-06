@@ -1,2 +1,3 @@
-# Saída contém dados pessoais de candidatos (LGPD): nunca versionar.
+# Saída e dados da tela web contêm dados pessoais de candidatos (LGPD): nunca versionar.
 saida/
+dados_web/

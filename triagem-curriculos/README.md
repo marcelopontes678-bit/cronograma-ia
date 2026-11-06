@@ -5,13 +5,48 @@ A IA **filtra** quem não tem os requisitos obrigatórios, **ranqueia** os
 candidatos de cada vaga, **qualifica** requisito por requisito e **resume os
 melhores**, com perguntas de entrevista para cada um.
 
-## Como usar
+## Tela web (o jeito mais fácil)
 
 ```bash
 cd triagem-curriculos
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY=sk-ant-...
+export TRIAGEM_SENHA=uma-senha-forte   # recomendado se for acessível por outras pessoas
 
+python -m triagem.web                  # abre em http://127.0.0.1:8000
+```
+
+1. **Vagas**: título, descrição e requisitos, um por linha. Ficam salvos no
+   navegador para a próxima vez. "Carregar exemplo" preenche duas vagas.
+2. **Currículos**: arraste os arquivos ou clique em "Escolher arquivos".
+3. **Iniciar triagem**: uma barra mostra quantos currículos já foram lidos.
+4. **Resultado**: os melhores de cada vaga, o relatório completo na própria
+   página e o botão para baixar a planilha.
+
+Para publicar num servidor (Render, Railway, uma VPS):
+`uvicorn triagem.web:app --host 0.0.0.0 --port $PORT`. Use **um** processo
+só (sem `--workers`), porque o andamento das triagens fica em memória.
+
+| Variável | Para que serve |
+|---|---|
+| `ANTHROPIC_API_KEY` | Chave da API do Claude (obrigatória). |
+| `TRIAGEM_SENHA` | Se definida, o navegador pede login (qualquer usuário + esta senha). |
+| `TRIAGEM_DADOS` | Pasta dos arquivos (padrão: `dados_web/`). |
+| `TRIAGEM_RETENCAO_HORAS` | Depois disso, relatórios são apagados (padrão: 24). |
+| `TRIAGEM_MODELO` | Modelo do Claude (padrão: `claude-opus-5-5`). |
+
+Proteções da tela web:
+- Os currículos são apagados do servidor assim que a análise termina. O
+  relatório expira sozinho e pode ser apagado na hora pelo botão "Apagar dados".
+- Limites: 300 arquivos, 10 MB por arquivo e 300 MB por envio. Formatos não
+  aceitos são ignorados.
+- O relatório é servido sem permissão para rodar scripts (CSP), então um
+  currículo malicioso não consegue executar código no navegador.
+- Uma triagem roda por vez; as outras esperam na fila.
+
+## Linha de comando
+
+```bash
 python -m triagem --vagas vagas.exemplo.json --curriculos exemplos/curriculos
 ```
 
@@ -109,10 +144,14 @@ python -m pytest
 
 Os testes não chamam a API: um cliente falso simula as respostas. Cobrem a
 nota, o filtro, a leitura de DOCX, o cache, a recusa, a chave inválida, o
-escape do HTML e a garantia de que o resumo não recebe dados de contato.
+escape do HTML, a garantia de que o resumo não recebe dados de contato e,
+na tela web: envio, andamento, download, exclusão, senha, limites de
+tamanho, nomes de arquivo maliciosos e expiração.
 
 ## Limitações do MVP
 
-- Linha de comando, sem interface web nem upload pelo navegador.
+- Triagens em andamento ficam na memória: se o servidor reiniciar no meio,
+  é preciso enviar de novo.
+- Login simples por senha única, sem contas separadas por empresa.
 - Não lê imagens soltas (JPG/PNG). Converta para PDF.
 - Os pesos 70/30 são fixos (`triagem/modelos.py`).
