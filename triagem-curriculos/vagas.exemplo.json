@@ -1,0 +1,30 @@
+[
+  {
+    "id": "atendente",
+    "titulo": "Atendente de loja",
+    "descricao": "Atendimento ao cliente no balcão, caixa e organização do estoque. Presencial, segunda a sábado.",
+    "obrigatorios": [
+      "Ensino médio completo",
+      "Experiência com atendimento ao público"
+    ],
+    "desejaveis": [
+      "Experiência com caixa ou PDV",
+      "Experiência com vendas no varejo",
+      "Conhecimento básico de informática"
+    ]
+  },
+  {
+    "id": "aux-financeiro",
+    "titulo": "Auxiliar financeiro",
+    "descricao": "Contas a pagar e receber, conciliação bancária, emissão de notas fiscais e apoio ao contador.",
+    "obrigatorios": [
+      "Experiência de pelo menos 1 ano com rotinas financeiras ou administrativas",
+      "Excel intermediário"
+    ],
+    "desejaveis": [
+      "Graduação (cursando ou completa) em Administração, Contabilidade ou Economia",
+      "Experiência com emissão de nota fiscal",
+      "Experiência com sistema ERP"
+    ]
+  }
+]
