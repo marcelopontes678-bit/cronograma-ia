@@ -3,6 +3,11 @@ databases:
     databaseName: smartfactory
     user: smartfactory
     plan: free
+  # Banco próprio do Pauta (separado do backend para as tabelas não colidirem).
+  - name: pauta-db
+    databaseName: pauta
+    user: pauta
+    plan: free
 
 services:
   - type: web
@@ -47,3 +52,30 @@ services:
         sync: false
       - key: TRIAGEM_EXIGIR_SENHA
         value: "1"
+
+  # Pauta — planejador de conteúdo com IA. Ver planejador-conteudo/README.md.
+  - type: web
+    name: pauta
+    runtime: docker
+    rootDir: planejador-conteudo
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/saude
+    buildFilter:
+      paths:
+        - planejador-conteudo/**
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pauta-db
+          property: connectionString
+      - key: AMBIENTE
+        value: producao
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PAUTA_LIMITE_PLANOS
+        value: "10"
+      - key: WEB_CONCURRENCY
+        value: "2"

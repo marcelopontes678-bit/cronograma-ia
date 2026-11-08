@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pauta — planejador de conteúdo com IA</title>
+  <link rel="stylesheet" href="/static/estilo.css">
+</head>
+<body>
+
+<!-- Tela de login / cadastro -->
+<main id="tela-auth" class="auth" hidden>
+  <div class="auth-card">
+    <h1 class="logo">Pauta<span>.</span></h1>
+    <p class="sub">Seu calendário de conteúdo pronto em minutos, com ganchos, roteiros e legendas.</p>
+    <div class="abas" role="tablist">
+      <button type="button" class="aba ativa" data-modo="login">Entrar</button>
+      <button type="button" class="aba" data-modo="cadastro">Criar conta</button>
+    </div>
+    <form id="form-auth">
+      <label class="so-cadastro" hidden>Nome<input name="nome" autocomplete="name"></label>
+      <label>E-mail<input name="email" type="email" required autocomplete="email"></label>
+      <label>Senha<input name="senha" type="password" required minlength="8" autocomplete="current-password"></label>
+      <p class="erro" id="erro-auth" role="alert"></p>
+      <button class="btn primario largo" type="submit" id="btn-auth">Entrar</button>
+    </form>
+  </div>
+</main>
+
+<!-- App -->
+<div id="tela-app" class="app" hidden>
+  <header class="topo">
+    <span class="logo pequeno">Pauta<span>.</span></span>
+    <div class="topo-dir">
+      <span id="uso" class="uso"></span>
+      <span id="nome-usuario" class="muted"></span>
+      <button class="btn fantasma" id="btn-sair" type="button">Sair</button>
+    </div>
+  </header>
+
+  <aside class="lateral">
+    <div class="lateral-titulo">Marcas</div>
+    <nav id="lista-marcas"></nav>
+    <button class="btn secundario largo" id="btn-nova-marca" type="button">+ Nova marca</button>
+  </aside>
+
+  <main class="conteudo" id="conteudo">
+    <div class="vazio" id="sem-marca">
+      <h2>Comece pelo perfil da sua marca</h2>
+      <p>Nicho, público e tom de voz: é o que a IA usa para planejar conteúdo com a sua cara.</p>
+      <button class="btn primario" id="btn-primeira-marca" type="button">Criar minha marca</button>
+    </div>
+
+    <section id="painel-marca" hidden>
+      <div class="cabecalho-marca">
+        <div>
+          <h2 id="marca-nome"></h2>
+          <p class="muted" id="marca-nicho"></p>
+          <div class="chips" id="marca-plataformas"></div>
+        </div>
+        <div class="acoes">
+          <button class="btn fantasma" id="btn-editar-marca" type="button">Editar marca</button>
+          <button class="btn primario" id="btn-gerar" type="button">✦ Gerar plano</button>
+        </div>
+      </div>
+
+      <div class="planos" id="lista-planos"></div>
+
+      <div id="area-plano"></div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal: marca -->
+<dialog id="modal-marca">
+  <form id="form-marca" method="dialog">
+    <h3 id="titulo-modal-marca">Nova marca</h3>
+    <label>Nome<input name="nome" required maxlength="120" placeholder="Ex.: Ana Fit"></label>
+    <label>Nicho<input name="nicho" required maxlength="200" placeholder="Ex.: treino em casa para mulheres 30+"></label>
+    <label>Público-alvo<textarea name="publico_alvo" rows="2" maxlength="1000" placeholder="Quem você quer atingir, dores e desejos"></textarea></label>
+    <div class="duas">
+      <label>Tom de voz<input name="tom_de_voz" maxlength="200" placeholder="Ex.: próximo, direto, bem-humorado"></label>
+      <label>Objetivo<input name="objetivo" maxlength="200" placeholder="Ex.: vender mentoria"></label>
+    </div>
+    <fieldset>
+      <legend>Plataformas</legend>
+      <div class="checks" id="checks-plataformas-marca"></div>
+    </fieldset>
+    <label>Pilares de conteúdo <small class="muted">(um por linha, até 8)</small>
+      <textarea name="pilares" rows="3" placeholder="Dicas práticas&#10;Bastidores&#10;Prova social"></textarea></label>
+    <p class="erro" id="erro-marca" role="alert"></p>
+    <div class="rodape-modal">
+      <button class="btn perigo fantasma" id="btn-apagar-marca" type="button" hidden>Apagar marca</button>
+      <span class="espaco"></span>
+      <button class="btn fantasma" type="button" data-fechar>Cancelar</button>
+      <button class="btn primario" type="submit">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Modal: gerar plano -->
+<dialog id="modal-plano">
+  <form id="form-plano" method="dialog">
+    <h3>Gerar plano de conteúdo</h3>
+    <div class="duas">
+      <label>Começa em<input name="data_inicio" type="date" required></label>
+      <label>Semanas
+        <select name="semanas"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+      </label>
+    </div>
+    <label>Posts por semana<input name="posts_por_semana" type="number" min="1" max="7" value="3" required></label>
+    <fieldset>
+      <legend>Plataformas</legend>
+      <div class="checks" id="checks-plataformas-plano"></div>
+    </fieldset>
+    <label>Foco do período <small class="muted">(opcional)</small>
+      <textarea name="foco" rows="2" maxlength="500" placeholder="Ex.: lançamento da mentoria dia 20, Black Friday, tema do mês…"></textarea></label>
+    <p class="erro" id="erro-plano" role="alert"></p>
+    <div class="rodape-modal">
+      <span class="espaco"></span>
+      <button class="btn fantasma" type="button" data-fechar>Cancelar</button>
+      <button class="btn primario" type="submit">✦ Gerar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Modal: post -->
+<dialog id="modal-post" class="largo">
+  <form id="form-post" method="dialog">
+    <div class="cab-post">
+      <h3>Editar post</h3>
+      <select name="status" class="status-select">
+        <option value="ideia">Ideia</option><option value="rascunho">Rascunho</option>
+        <option value="aprovado">Aprovado</option><option value="publicado">Publicado</option>
+      </select>
+    </div>
+    <div class="tres">
+      <label>Data<input name="data" type="date" required></label>
+      <label>Plataforma<select name="plataforma" id="sel-plataforma-post"></select></label>
+      <label>Formato<select name="formato" id="sel-formato-post"></select></label>
+    </div>
+    <div class="duas">
+      <label>Título<input name="titulo" required maxlength="200"></label>
+      <label>Pilar<input name="pilar" maxlength="120"></label>
+    </div>
+    <label>Gancho<textarea name="gancho" rows="2"></textarea></label>
+    <label>Roteiro<textarea name="roteiro" rows="6"></textarea></label>
+    <label>Legenda<textarea name="legenda" rows="5"></textarea></label>
+    <div class="duas">
+      <label>Hashtags <small class="muted">(separadas por espaço)</small><input name="hashtags"></label>
+      <label>CTA<input name="cta"></label>
+    </div>
+    <div class="reescrever">
+      <input id="instrucao-ia" placeholder="Peça um ajuste à IA: “gancho mais polêmico”, “vire um carrossel”…" maxlength="1000">
+      <button class="btn secundario" type="button" id="btn-reescrever">✦ Reescrever</button>
+    </div>
+    <p class="erro" id="erro-post" role="alert"></p>
+    <div class="rodape-modal">
+      <button class="btn perigo fantasma" type="button" id="btn-apagar-post">Apagar</button>
+      <button class="btn fantasma" type="button" id="btn-copiar">Copiar legenda</button>
+      <span class="espaco"></span>
+      <button class="btn fantasma" type="button" data-fechar>Fechar</button>
+      <button class="btn primario" type="submit">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="aviso" class="aviso" role="status" hidden></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
